@@ -28,37 +28,48 @@ Start with **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 | [Architecture](docs/ARCHITECTURE.md) | The layer model and why it's shaped this way |
 | [Build plan](docs/BUILD-PLAN.md) | Phased roadmap to get the system operational |
 | [Pipeline](docs/PIPELINE.md) | Intake → provision → assemble → gate → review → promote |
+| [Intake](docs/INTAKE.md) | The form, what blocks a build, and what can arrive later |
 | [Edit loop](docs/EDIT-LOOP.md) | Why revisions take minutes, and how feedback is collected |
 | [Depth system](docs/3D-DEPTH-SYSTEM.md) | The "futuristic and expensive" look without wrecking Core Web Vitals |
+| [Component spec format](docs/COMPONENT-SPEC-FORMAT.md) | How the build specs are shaped, and the Bricks mechanics |
 | [QA gate](qa/checklist.md) | What blocks a build from reaching a client |
 | [CLAUDE.md](CLAUDE.md) | Operating rules for Claude Code in this repo |
 
 ## Repo map
 
 ```
-design-system/   tokens.json (base variables) · components.md (~23 components)
-skins/           restoration · medical · combat — variable overrides only
-layouts/         the 10 template section maps
-schemas/         client.schema.json — the intake contract
-content/voice/   per-niche copywriting guides
-qa/              quality gate
-scripts/         validate-config · qa · (provision, assemble, promote to come)
-clients/         per-project client.json (gitignored)
+design-system/
+  tokens.json      base design variables (87 tokens)
+  components/      build specs — 23 components, 87 variants (source of truth)
+  components.md    human index over the specs
+skins/             restoration · medical · combat — variable overrides only
+layouts/           the 10 template section maps
+schemas/           client.schema.json — the intake contract
+intake/form.html   self-contained intake form, outputs client.json
+content/voice/     per-niche copywriting guides
+qa/                quality gate
+scripts/           validate-config · validate-client · qa
+clients/           per-project client.json (gitignored)
 ```
 
 ## Current status
 
-Specification and tooling layer. The WordPress-side build (base snapshot, Bricks
-components, 3D assets) is Phases 0–3 of [the build plan](docs/BUILD-PLAN.md).
+Specification and tooling layer, complete and self-validating. The WordPress-side
+build — base snapshot, the Bricks components themselves, 3D assets — is Phases 0–3 of
+[the build plan](docs/BUILD-PLAN.md) and needs a live install with Novamira connected.
 
 ```bash
-node scripts/validate-config.mjs      # library consistency — run before every build & in CI
-node scripts/qa.mjs <staging-url>     # quality gate (needs playwright + @axe-core/playwright)
+node scripts/validate-config.mjs              # library consistency — before every build & in CI
+node scripts/validate-client.mjs <file.json>  # intake gate — before provisioning
+node scripts/qa.mjs <staging-url>             # quality gate (needs playwright + @axe-core/playwright)
 ```
 
-`validate-config.mjs` is the guard that keeps the library converging: it fails the
-build if a layout references a component or variant that doesn't exist in the core,
-which is exactly how "one engine" quietly degrades into ten.
+The two validators are the guards that keep the system honest. `validate-config`
+fails the build if a layout references a component or variant that doesn't exist, if
+a spec hard-codes a colour instead of using a token, or if a skin overrides a token
+that isn't there — the three ways "one engine" quietly degrades into ten.
+`validate-client` blocks provisioning on incomplete intake, unconsented medical
+testimonials, and brand colours that fail WCAG AA.
 
 ## The three rules that carry the whole system
 

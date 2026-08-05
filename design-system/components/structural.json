@@ -1,0 +1,77 @@
+{
+  "$comment": "Site chrome. Build last — these depend on the atoms and on knowing the generated page set.",
+
+  "nav": {
+    "description": "Site header. On restoration and multi-location layouts the nav is doing real conversion work, not just wayfinding.",
+    "root": "section",
+    "globalClasses": [".nav"],
+    "properties": {
+      "sticky": { "type": "checkbox", "default": true },
+      "dark": { "type": "checkbox", "default": false }
+    },
+    "slots": {
+      "logo": { "element": "image", "required": true, "source": "intake", "from": "brand.logo | brand.logoInverse" },
+      "links": { "element": "block", "repeat": true, "required": true, "source": "generated", "from": "services[] + generated page set" },
+      "cta": { "element": "button", "required": false, "source": "intake", "from": "skin.conversionRules.primaryCta" },
+      "utility": { "element": "block", "required": false, "source": "intake", "from": "contact.phone | contact.locations[] | contact.hours" }
+    },
+    "variants": {
+      "transparent-overlay": { "description": "Sits over a full-bleed hero, becoming solid on scroll. Used with fullbleed-kinetic heroes.", "structure": [{ "el": "div", "global": [".container"], "class": ["nav__inner"], "settings": { "_display": "flex", "_alignItems": "center", "_justifyContent": "space-between", "_gap": "var(--gf-space-lg)", "_minHeight": "var(--gf-layout-header-height)" }, "children": [{ "el": "image", "slot": "logo", "class": ["nav__logo"], "settings": { "_maxHeight": "44px" } }, { "el": "div", "global": [".cluster"], "class": ["nav__links"], "children": [{ "el": "text-basic", "class": ["nav__link"], "repeat": "links", "settings": { "tag": "a" } }] }, { "el": "button", "slot": "cta", "class": ["btn--accent"] }] }], "notes": ["Scroll state toggles a class at 40px — implemented once as a global behaviour, not per site.", "Logo swaps to brand.logoInverse while transparent."] },
+      "solid": { "description": "Standard opaque header. Supports a mega-menu, which resto-04 and med-02 both need.", "structure": [{ "el": "div", "global": [".container"], "class": ["nav__inner"], "settings": { "_background": "var(--gf-color-surface-0)", "_borderBottom": "1px solid var(--gf-color-border)" }, "children": [{ "el": "image", "slot": "logo", "class": ["nav__logo"] }, { "el": "div", "class": ["nav__links"], "children": [{ "el": "text-basic", "class": ["nav__link"], "repeat": "links" }] }, { "el": "button", "slot": "cta", "class": ["btn--accent"] }] }] },
+      "centered-logo": { "description": "Logo centred with links either side. Reads as editorial and premium — used by med-01 concierge.", "structure": [{ "el": "div", "global": [".container"], "class": ["nav__inner", "nav__inner--centered"], "settings": { "_display": "grid", "_gridTemplateColumns": "1fr auto 1fr", "_alignItems": "center" }, "children": [{ "el": "div", "class": ["nav__links", "nav__links--left"] }, { "el": "image", "slot": "logo", "class": ["nav__logo"] }, { "el": "div", "class": ["nav__links", "nav__links--right"] }] }] },
+      "with-cta-bar": { "description": "A thin utility bar above the main row carrying phone, hours or a location switcher. Restoration and multi-location medical default.", "structure": [{ "el": "div", "class": ["nav__utility"], "settings": { "_background": "var(--gf-color-surface-inverse)", "_paddingBlock": "var(--gf-space-2xs)" }, "children": [{ "el": "div", "global": [".container", ".cluster"], "children": [{ "el": "block", "slot": "utility", "class": ["nav__utility-inner"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "color": "var(--gf-color-text-on-inverse)" } } }] }] }, { "el": "div", "global": [".container"], "class": ["nav__inner"], "children": [{ "el": "image", "slot": "logo", "class": ["nav__logo"] }, { "el": "div", "class": ["nav__links"] }, { "el": "button", "slot": "cta", "class": ["btn--accent"] }] }], "notes": ["The phone number in the utility bar is a tel: link and is the highest-converting element on a restoration site."] }
+    },
+    "tokens": ["layout-header-height", "layout-z-header", "space-lg", "space-2xs", "color-surface-0", "color-surface-inverse", "color-border", "type-size-sm"],
+    "responsive": { "1024": "Links collapse into a drawer toggled by a hamburger. The CTA stays visible outside the drawer — burying it costs conversions.", "768": "Utility bar reduces to the phone number only." },
+    "a11y": ["Nav wrapped in <nav> with an accessible label.", "Mobile toggle is a real button with aria-expanded and aria-controls.", "Drawer traps focus while open and returns it to the toggle on close.", "Escape closes the drawer.", "Current page marked with aria-current=\"page\"."],
+    "invariants": ["Never covers content on short viewports — offset by header height, not overlapped."]
+  },
+
+  "footer": {
+    "description": "Site footer. On restoration and multi-location layouts this is a primary internal-linking surface, not an afterthought.",
+    "root": "section",
+    "globalClasses": [".footer", ".is-dark"],
+    "properties": { "depth": { "type": "number", "options": [0, 1], "default": 0 } },
+    "slots": {
+      "brand": { "element": "block", "required": true, "source": "intake", "from": "brand.logoInverse + business.tagline" },
+      "columns": { "element": "block", "repeat": true, "required": false, "source": "generated", "from": "services[] + contact.serviceAreas[] + generated page set" },
+      "nap": { "element": "block", "required": true, "source": "intake", "from": "business.name + contact.locations[] + contact.phone + contact.hours" },
+      "legal": { "element": "block", "required": true, "source": "static", "from": "copyright + privacy + accessibility statement" }
+    },
+    "variants": {
+      "minimal": { "description": "Logo, NAP, one row of links, legal. Used where the footer's only job is legitimacy — med-01 concierge.", "structure": [{ "el": "div", "global": [".container", ".stack"], "class": ["footer__inner"], "settings": { "_paddingBlock": "var(--gf-space-2xl)", "_textAlign": "center" }, "children": [{ "el": "block", "slot": "brand" }, { "el": "block", "slot": "nap", "class": ["footer__nap"] }, { "el": "block", "slot": "legal", "class": ["footer__legal"], "settings": { "typography": { "font-size": "var(--gf-type-size-xs)", "color": "var(--gf-color-text-on-inverse-muted)" } } }] }] },
+      "sitemap": { "description": "Three or four link columns plus NAP. The default.", "structure": [{ "el": "div", "global": [".container"], "class": ["footer__inner"], "settings": { "_display": "grid", "_gridTemplateColumns": "1.5fr repeat(3, 1fr)", "_gap": "var(--gf-space-xl)", "_paddingBlock": "var(--gf-space-2xl)" }, "children": [{ "el": "div", "global": [".stack"], "children": [{ "el": "block", "slot": "brand" }, { "el": "block", "slot": "nap" }] }, { "el": "div", "class": ["footer__col"], "repeat": "columns", "global": [".stack"] }] }, { "el": "div", "global": [".container"], "children": [{ "el": "block", "slot": "legal" }] }] },
+      "mega-local": { "description": "Full services × service-areas matrix. Deliberately heavy internal linking — this is what makes the programmatic local pages rank instead of orphaning. Restoration and multi-location medical.", "structure": [{ "el": "div", "global": [".container"], "class": ["footer__inner", "footer__inner--mega"], "children": [{ "el": "div", "global": [".stack"], "children": [{ "el": "block", "slot": "brand" }, { "el": "block", "slot": "nap" }] }, { "el": "div", "class": ["footer__matrix"], "settings": { "_display": "grid", "_gridTemplateColumns": "repeat(auto-fit, minmax(180px, 1fr))", "_gap": "var(--gf-space-lg)" }, "children": [{ "el": "div", "class": ["footer__col"], "repeat": "columns", "children": [{ "el": "heading", "tag": "h3", "class": ["footer__col-title"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "text-transform": "uppercase", "letter-spacing": "var(--gf-type-tracking-eyebrow)" } } }, { "el": "text-basic", "class": ["footer__link"], "repeat": "items", "settings": { "tag": "a" } }] }] }, { "el": "block", "slot": "legal" }] }], "notes": ["Cap total footer links around 120. Beyond that it stops helping and starts diluting."] }
+    },
+    "tokens": ["space-2xl", "space-xl", "space-lg", "type-size-xs", "type-size-sm", "color-surface-inverse", "color-text-on-inverse-muted", "color-border-inverse"],
+    "responsive": { "768": "Columns stack; the mega matrix becomes collapsible groups rather than an endless list." },
+    "a11y": ["Wrapped in <footer>.", "Link text is meaningful on its own — never \"click here\".", "The accessibility statement link is required on every medical build."],
+    "invariants": ["NAP here is byte-identical to the nav, the contact page and the Google Business Profile. qa.mjs checks this."]
+  },
+
+  "sticky-mobile-cta": {
+    "description": "A fixed bottom bar on mobile carrying the single most valuable action. Present on every layout in the library because in all three niches the buyer is overwhelmingly on a phone.",
+    "root": "div",
+    "globalClasses": [".sticky-cta"],
+    "properties": { "showAfter": { "type": "number", "default": 400, "description": "Scroll offset in px before it appears — immediate display competes with the hero CTA." } },
+    "slots": {
+      "label": { "element": "text-basic", "required": true, "source": "intake", "from": "skin.conversionRules.primaryCta" },
+      "target": { "element": "button", "required": true, "source": "intake", "from": "contact.phone | integrations.bookingUrl" },
+      "secondary": { "element": "button", "required": false, "source": "intake", "from": "skin.conversionRules.secondaryCta" }
+    },
+    "variants": {
+      "call-now": { "description": "Restoration. Single full-width tel: button. The highest-converting element on the site.", "structure": [{ "el": "div", "class": ["sticky-cta__inner"], "children": [{ "el": "button", "slot": "target", "class": ["btn--accent", "btn--block", "btn--lg"], "settings": { "tag": "a", "_href": "tel:{{contact.emergencyPhone | contact.phone}}" } }] }] },
+      "book-appointment": { "description": "Medical. Split: book (primary) and call (secondary).", "structure": [{ "el": "div", "class": ["sticky-cta__inner"], "settings": { "_display": "grid", "_gridTemplateColumns": "1fr auto" }, "children": [{ "el": "button", "slot": "target", "class": ["btn--accent", "btn--block"] }, { "el": "button", "slot": "secondary", "class": ["btn--ghost"], "settings": { "tag": "a", "_href": "tel:{{contact.phone}}" } }] }] },
+      "claim-trial": { "description": "Combat. Free-trial button plus schedule link — the two things a gym visitor is actually looking for.", "structure": [{ "el": "div", "class": ["sticky-cta__inner"], "settings": { "_display": "grid", "_gridTemplateColumns": "1fr auto" }, "children": [{ "el": "button", "slot": "target", "class": ["btn--accent", "btn--block"] }, { "el": "button", "slot": "secondary", "class": ["btn--outline-light"] }] }] }
+    },
+    "tokens": ["layout-z-sticky-cta", "space-2xs", "space-sm", "color-accent", "color-surface-inverse", "shadow-lg"],
+    "responsive": { "base": "Rendered below 768px only. Hidden entirely on desktop, where the nav CTA covers this job." },
+    "a11y": [
+      "Body gets bottom padding equal to the bar height so it never covers the footer or the last section.",
+      "Real <a>/<button> elements with discernible text — an icon alone is not enough.",
+      "Minimum 44×44px touch target.",
+      "Respects prefers-reduced-motion — appears without a slide animation."
+    ],
+    "invariants": ["Never overlaps a form field or the footer's legal links.", "Tap target is at least 44px tall."]
+  }
+}

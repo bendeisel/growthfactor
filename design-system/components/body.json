@@ -1,0 +1,257 @@
+{
+  "$comment": "Body sections. Build the atoms (service-card, team-card) before the grids that compose them.",
+
+  "service-card": {
+    "description": "Atom. One service. Composed by service-grid — never placed directly in a layout.",
+    "root": "div",
+    "globalClasses": [".card"],
+    "properties": { "depth": { "type": "number", "options": [0, 1, 2], "default": 1 } },
+    "slots": {
+      "icon": { "element": "icon", "required": false, "source": "asset", "from": "services[].icon" },
+      "image": { "element": "image", "required": false, "source": "asset", "from": "services[].image" },
+      "title": { "element": "heading", "tag": "h3", "required": true, "source": "intake", "from": "services[].name" },
+      "body": { "element": "text-basic", "required": true, "source": "generated", "from": "services[].summary" },
+      "link": { "element": "button", "required": true, "source": "generated", "from": "services[].slug" }
+    },
+    "variants": {
+      "icon-top": { "description": "Icon, title, body, link. The default. Cheapest and fastest.", "structure": [{ "el": "div", "global": [".stack"], "class": ["card__inner"], "settings": { "_padding": "var(--gf-space-lg)", "_borderRadius": "var(--gf-radius-md)", "_border": "1px solid var(--gf-color-border)" }, "children": [{ "el": "icon", "slot": "icon", "class": ["card__icon"], "settings": { "_fill": "var(--gf-color-accent)", "_width": "32px" } }, { "el": "heading", "tag": "h3", "slot": "title", "class": ["card__title"], "settings": { "typography": { "font-size": "var(--gf-type-size-xl)", "font-family": "var(--gf-type-font-display)" } } }, { "el": "text-basic", "slot": "body", "class": ["card__body"] }, { "el": "button", "slot": "link", "class": ["card__link", "btn--link"] }] }] },
+      "image-top": { "description": "Photo above the title. Use when the service is visually distinctive — reconstruction, procedures, programs.", "structure": [{ "el": "div", "class": ["card__inner"], "children": [{ "el": "image", "slot": "image", "class": ["card__image"], "settings": { "_aspectRatio": "4/3", "_objectFit": "cover", "loading": "lazy" } }, { "el": "div", "global": [".stack"], "class": ["card__content"], "settings": { "_padding": "var(--gf-space-lg)" }, "children": [{ "el": "heading", "tag": "h3", "slot": "title" }, { "el": "text-basic", "slot": "body" }, { "el": "button", "slot": "link", "class": ["btn--link"] }] }] }] },
+      "glass": { "description": "Depth 2. Translucent fill, 1px inner highlight, hover tilt. The single most 'expensive-looking' cheap effect in the library.", "structure": [{ "el": "div", "global": [".stack"], "class": ["card__inner", "card__inner--glass"], "settings": { "_backdropFilter": "blur(var(--gf-depth-glass-blur))", "_background": "var(--gf-depth-glass-fill)", "_border": "1px solid var(--gf-depth-glass-border)", "_boxShadow": "var(--gf-shadow-rim)", "_borderRadius": "var(--gf-radius-md)", "_padding": "var(--gf-space-lg)", "_transition": "transform var(--gf-motion-dur-base) var(--gf-motion-ease-out)" }, "children": [{ "el": "icon", "slot": "icon" }, { "el": "heading", "tag": "h3", "slot": "title" }, { "el": "text-basic", "slot": "body" }, { "el": "button", "slot": "link", "class": ["btn--link"] }] }], "notes": ["Hover: rotateX/rotateY at var(--gf-depth-tilt-deg) with perspective on the grid parent. Sub-degree amounts read premium; large amounts read as a 2013 jQuery plugin.", "Requires something behind it — glass over a flat white surface just looks grey."] },
+      "numbered": { "description": "Large ordinal instead of an icon. Good where services form a sequence or a tiered offering.", "structure": [{ "el": "div", "global": [".stack"], "class": ["card__inner"], "children": [{ "el": "text-basic", "class": ["card__number"], "settings": { "typography": { "font-size": "var(--gf-type-size-3xl)", "font-family": "var(--gf-type-font-display)", "color": "var(--gf-color-accent)", "line-height": "1" } } }, { "el": "heading", "tag": "h3", "slot": "title" }, { "el": "text-basic", "slot": "body" }] }] }
+    },
+    "tokens": ["space-lg", "radius-md", "color-border", "color-accent", "depth-glass-blur", "depth-glass-fill", "depth-glass-border", "depth-tilt-deg", "shadow-rim", "motion-dur-base"],
+    "a11y": ["Heading level is h3 — cards live under an h2 section heading.", "The whole card may be clickable, but the link text must still be discernible; do not rely on the card as the only affordance.", "Icons are aria-hidden; the title carries the meaning.", "Tilt and transitions are disabled under prefers-reduced-motion."]
+  },
+
+  "service-grid": {
+    "description": "The services section. The most-used body component in the library — every layout has one.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0, 1, 2], "default": 1 }, "dark": { "type": "checkbox", "default": false } },
+    "slots": {
+      "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated", "from": "services[] + business.differentiator" },
+      "intro": { "element": "text-basic", "required": false, "source": "generated", "from": "business.differentiator" },
+      "items": { "element": "block", "repeat": "services", "required": true, "source": "intake", "from": "services[]" }
+    },
+    "variants": {
+      "cards-3up": { "description": "Three service-cards per row. The default.", "structure": [{ "el": "div", "global": [".container", ".stack"], "settings": { "_paddingBlock": "var(--gf-space-section-y)" }, "children": [{ "el": "heading", "tag": "h2", "slot": "heading", "settings": { "typography": { "font-size": "var(--gf-type-size-2xl)", "font-family": "var(--gf-type-font-display)" } } }, { "el": "text-basic", "slot": "intro", "settings": { "_maxWidth": "var(--gf-type-measure)" } }, { "el": "div", "global": [".grid-3"], "class": ["service-grid__items"], "settings": { "_gap": "var(--gf-space-lg)", "_perspective": "1200px" }, "children": [{ "el": "div", "repeat": "items", "settings": { "_component": "service-card", "variant": "icon-top", "depth": "{{depth}}" } }] }] }] },
+      "cards-2up-large": { "description": "Two large image-topped cards per row. For premium residential and boutique practices where each service deserves real space.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-2"], "children": [{ "el": "div", "repeat": "items", "settings": { "_component": "service-card", "variant": "image-top" } }] }] }] },
+      "list-detailed": { "description": "Vertical list with longer copy per service. Medical and commercial buyers read — give them something to read.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".stack"], "class": ["service-grid__list"], "children": [{ "el": "div", "class": ["service-grid__row"], "repeat": "items", "settings": { "_display": "grid", "_gridTemplateColumns": "auto 1fr auto", "_gap": "var(--gf-space-md)", "_paddingBlock": "var(--gf-space-md)", "_borderBottom": "1px solid var(--gf-color-border)" } }] }] }] },
+      "programs-4up": { "description": "Four compact cards. Combat programs, medical specialties, or a multi-service restoration routing grid.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-4"], "settings": { "_perspective": "1200px" }, "children": [{ "el": "div", "repeat": "items", "settings": { "_component": "service-card", "variant": "glass" } }] }] }] },
+      "alternating-rows": { "description": "Full-width rows alternating image side. Long-form, high-trust. Commercial restoration and capability statements.", "structure": [{ "el": "div", "global": [".container", ".stack"], "settings": { "_gap": "var(--gf-space-3xl)" }, "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["service-grid__alt-row"], "repeat": "items", "settings": { "_display": "grid", "_gridTemplateColumns": "1fr 1fr", "_gap": "var(--gf-space-xl)", "_alignItems": "center" } }] }] }
+    },
+    "tokens": ["space-section-y", "space-lg", "space-xl", "space-3xl", "type-size-2xl", "type-font-display", "type-measure", "color-border"],
+    "responsive": { "1024": "grid-4 becomes 2 columns; grid-3 becomes 2.", "768": "All grids become single column. alternating-rows stacks image above copy consistently — do not alternate on mobile, it reads as a bug." },
+    "a11y": ["Section h2 precedes the card h3s. Never skip a level.", "Perspective on the parent must not create a scroll container — check for horizontal overflow at every width."]
+  },
+
+  "proof-stats": {
+    "description": "Numeric credibility band. Usually a dark full-bleed section, which also gives the page vertical rhythm.",
+    "root": "section",
+    "globalClasses": [".section", ".is-dark"],
+    "properties": { "depth": { "type": "number", "options": [0, 1, 2], "default": 1 } },
+    "slots": { "items": { "element": "block", "repeat": "business.stats", "required": true, "source": "intake", "from": "business.stats[]" } },
+    "variants": {
+      "band-4up": { "description": "Four stats across a dark band. The workhorse.", "structure": [{ "el": "div", "class": ["proof__depth"], "if": "depth > 0", "settings": { "_component": "depth-layer", "variant": "mesh-gradient", "tier": "{{depth}}" } }, { "el": "div", "global": [".container", ".grid-4"], "settings": { "_paddingBlock": "var(--gf-space-2xl)", "_position": "relative" }, "children": [{ "el": "div", "global": [".stack"], "class": ["proof__item"], "repeat": "items", "children": [{ "el": "text-basic", "class": ["proof__value"], "settings": { "typography": { "font-size": "var(--gf-type-size-3xl)", "font-family": "var(--gf-type-font-display)", "color": "var(--gf-color-accent)", "line-height": "1" } } }, { "el": "text-basic", "class": ["proof__label"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "color": "var(--gf-color-text-on-inverse-muted)" } } }] }] }] },
+      "inline-3up": { "description": "Three stats on a light surface, no band. Quieter — used on interior pages.", "structure": [{ "el": "div", "global": [".container", ".grid-3"], "children": [{ "el": "div", "class": ["proof__item"], "repeat": "items" }] }] },
+      "oversized-2up": { "description": "Two enormous numbers. Maximum impact, minimum content — good when the client only has two numbers worth showing.", "structure": [{ "el": "div", "global": [".container", ".grid-2"], "children": [{ "el": "div", "class": ["proof__item", "proof__item--xl"], "repeat": "items", "children": [{ "el": "text-basic", "class": ["proof__value"], "settings": { "typography": { "font-size": "var(--gf-type-size-hero)", "line-height": "0.9" } } }, { "el": "text-basic", "class": ["proof__label"] }] }] }] }
+    },
+    "tokens": ["space-2xl", "type-size-3xl", "type-size-hero", "type-size-sm", "type-font-display", "color-accent", "color-text-on-inverse-muted"],
+    "responsive": { "768": "grid-4 becomes 2×2. Never a single column — four stacked numbers lose all their impact." },
+    "a11y": ["Value and label are read together — group them so a screen reader does not announce a bare number.", "Accent-on-dark must pass AA; the medical and restoration skins both need checking here."],
+    "invariants": ["Every stat comes from business.stats[]. Never invent or round up a number — this is a published claim about the client's business."]
+  },
+
+  "process-steps": {
+    "description": "Ordered explanation of what happens next. One of the highest-value sections in all three niches because it directly reduces anxiety: 'what happens after I call' / 'what happens at the first visit' / 'what happens in my first class'.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0, 1], "default": 0 } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" }, "steps": { "element": "block", "repeat": true, "required": true, "source": "generated", "from": "business.differentiator + services[] + niche voice guide" } },
+    "variants": {
+      "horizontal-3": { "description": "Three steps side by side with connecting rule. Best for a simple, reassuring sequence.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "class": ["process__steps"], "children": [{ "el": "div", "global": [".stack"], "class": ["process__step"], "repeat": "steps", "children": [{ "el": "text-basic", "class": ["process__num"], "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "font-size": "var(--gf-type-size-2xl)", "color": "var(--gf-color-accent)" } } }, { "el": "heading", "tag": "h3", "class": ["process__title"] }, { "el": "text-basic", "class": ["process__body"] }] }] }] }] },
+      "vertical-timeline": { "description": "Vertical with a connecting spine. For longer sequences — insurance claims, procedure recovery, membership onboarding.", "structure": [{ "el": "div", "global": [".container-narrow", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["process__timeline"], "children": [{ "el": "div", "class": ["process__step", "process__step--row"], "repeat": "steps", "settings": { "_display": "grid", "_gridTemplateColumns": "auto 1fr", "_gap": "var(--gf-space-md)" } }] }] }] },
+      "numbered-cards": { "description": "Steps as cards. Use when each step needs an image or more copy than a timeline row can hold.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "children": [{ "el": "div", "repeat": "steps", "settings": { "_component": "service-card", "variant": "numbered" } }] }] }] }
+    },
+    "tokens": ["space-md", "type-size-2xl", "type-font-display", "color-accent", "color-border"],
+    "responsive": { "768": "horizontal-3 becomes vertical-timeline styling rather than three stacked cards — the connecting spine is what communicates sequence." },
+    "a11y": ["Use an ordered list where the order is meaningful.", "The step number must not be the only indicator of sequence — the copy carries it too.", "Connecting lines are decorative and aria-hidden."]
+  },
+
+  "before-after": {
+    "description": "Visual proof. The single most persuasive section on a restoration site, and legally sensitive on a medical one.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0], "default": 0, "description": "Always 0. The photographs are the effect; depth would compete with them." } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" }, "pairs": { "element": "block", "repeat": true, "required": true, "source": "asset", "from": "brand.photos (before/after pairs)" } },
+    "variants": {
+      "slider": { "description": "Draggable divider over a single pair. Highest engagement.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["ba__slider"], "repeat": "pairs", "settings": { "_aspectRatio": "3/2", "_position": "relative", "_overflow": "hidden" } }] }], "notes": ["Handle is keyboard operable via arrow keys with role=\"slider\".", "Both images are the same dimensions or the reveal misaligns."] },
+      "side-by-side": { "description": "Labelled pair, no interaction. Fastest and most accessible. Use where the transformation is obvious.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["ba__pair"], "repeat": "pairs", "global": [".grid-2"], "children": [{ "el": "image", "class": ["ba__img"], "settings": { "_aspectRatio": "3/2", "_objectFit": "cover", "loading": "lazy" } }] }] }] },
+      "grid-gallery": { "description": "Multiple pairs in a grid, each opening a lightbox. The centrepiece of resto-03.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "children": [{ "el": "div", "class": ["ba__cell"], "repeat": "pairs" }] }] }] }
+    },
+    "tokens": ["space-md", "radius-md", "color-border"],
+    "responsive": { "768": "side-by-side stacks vertically with labels retained. Slider keeps working — it is touch-friendly by nature." },
+    "a11y": ["Every image has descriptive alt naming the condition, not \"before\" and \"after\" alone.", "Slider handle is focusable, arrow-key operable, with role=\"slider\" and aria-valuenow.", "A non-interactive fallback view is available — never lock the content behind a drag gesture."],
+    "invariants": ["Medical use requires documented patient consent per pair and, in most states, a results-vary disclaimer. validate-client.mjs cannot verify consent — the human must."]
+  },
+
+  "testimonial-set": {
+    "description": "Social proof. Four variants tuned to how much weight one quote should carry.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0, 1], "default": 0 }, "dark": { "type": "checkbox", "default": false } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": false, "source": "generated" }, "items": { "element": "block", "repeat": "testimonials", "required": true, "source": "intake", "from": "testimonials[]" } },
+    "variants": {
+      "grid-3up": { "description": "Three cards. The default.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "children": [{ "el": "div", "global": [".stack"], "class": ["quote"], "repeat": "items", "settings": { "_padding": "var(--gf-space-lg)", "_border": "1px solid var(--gf-color-border)", "_borderRadius": "var(--gf-radius-md)" }, "children": [{ "el": "icon", "class": ["quote__stars"] }, { "el": "text-basic", "class": ["quote__body"], "settings": { "tag": "blockquote" } }, { "el": "text-basic", "class": ["quote__author"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "font-weight": "var(--gf-type-weight-bold)" } } }] }] }] }] },
+      "carousel": { "description": "Nestable slider. Use when there are more than six quotes worth showing.", "structure": [{ "el": "div", "global": [".container"], "children": [{ "el": "slider-nested", "class": ["quote__slider"], "children": [{ "el": "div", "class": ["quote"], "repeat": "items" }] }] }], "notes": ["slider-nested, not the legacy slider — its children stay editable and stylable with our tokens."] },
+      "single-feature": { "description": "One long quote, large type, optional portrait. One specific emotional story beats six generic ones — the right choice for premium residential and concierge medical.", "structure": [{ "el": "div", "global": [".container-narrow", ".stack"], "settings": { "_textAlign": "center" }, "children": [{ "el": "text-basic", "class": ["quote__body", "quote__body--xl"], "settings": { "tag": "blockquote", "typography": { "font-size": "var(--gf-type-size-xl)", "font-family": "var(--gf-type-font-display)", "line-height": "var(--gf-type-leading-snug)" } } }, { "el": "text-basic", "class": ["quote__author"] }] }] },
+      "quote-wall": { "description": "Masonry of many short quotes. Reads as volume of goodwill rather than individual stories. Good for gyms and commercial restoration.", "structure": [{ "el": "div", "global": [".container"], "class": ["quote__wall"], "settings": { "_columns": "3", "_columnGap": "var(--gf-space-lg)" }, "children": [{ "el": "div", "class": ["quote", "quote--compact"], "repeat": "items" }] }] }
+    },
+    "tokens": ["space-lg", "type-size-xl", "type-size-sm", "type-font-display", "radius-md", "color-border"],
+    "responsive": { "768": "Grids and walls become single column. Carousel shows one slide." },
+    "a11y": ["Use <blockquote> with <cite> for attribution.", "Star ratings need a text equivalent — an icon row alone is not accessible.", "Carousel has visible pause control and is keyboard navigable; it does not autoplay under prefers-reduced-motion."],
+    "invariants": ["Medical testimonials require consentOnFile: true. validate-client.mjs blocks the build otherwise."]
+  },
+
+  "team-card": {
+    "description": "Atom. One person. Composed by team-grid.",
+    "root": "div",
+    "globalClasses": [".card"],
+    "properties": { "depth": { "type": "number", "options": [0, 1], "default": 0 } },
+    "slots": {
+      "photo": { "element": "image", "required": false, "source": "asset", "from": "team[].photo" },
+      "name": { "element": "heading", "tag": "h3", "required": true, "source": "intake", "from": "team[].name" },
+      "role": { "element": "text-basic", "required": true, "source": "intake", "from": "team[].role" },
+      "credentials": { "element": "block", "repeat": true, "required": false, "source": "intake", "from": "team[].credentials | team[].record" },
+      "bio": { "element": "text-basic", "required": false, "source": "generated", "from": "team[].bio" },
+      "link": { "element": "button", "required": false, "source": "generated", "from": "team[].name (slugified)" }
+    },
+    "variants": {
+      "photo-overlay": { "description": "Name and role over the portrait on hover or gradient. Editorial and confident.", "structure": [{ "el": "div", "class": ["person", "person--overlay"], "settings": { "_position": "relative", "_aspectRatio": "3/4", "_overflow": "hidden", "_borderRadius": "var(--gf-radius-md)" }, "children": [{ "el": "image", "slot": "photo", "settings": { "_objectFit": "cover", "loading": "lazy" } }, { "el": "div", "class": ["person__meta"], "settings": { "_position": "absolute", "_inset": "auto 0 0 0", "_background": "linear-gradient(transparent, rgb(0 0 0 / 0.8))", "_padding": "var(--gf-space-md)" } }] }] },
+      "photo-above": { "description": "Portrait, then name, role, credentials. The default — clearest and most scannable.", "structure": [{ "el": "div", "global": [".stack"], "class": ["person"], "children": [{ "el": "image", "slot": "photo", "settings": { "_aspectRatio": "1/1", "_objectFit": "cover", "_borderRadius": "var(--gf-radius-md)", "loading": "lazy" } }, { "el": "heading", "tag": "h3", "slot": "name" }, { "el": "text-basic", "slot": "role", "settings": { "typography": { "color": "var(--gf-color-text-muted)" } } }, { "el": "block", "slot": "credentials", "class": ["person__creds"], "settings": { "typography": { "font-size": "var(--gf-type-size-xs)" } } }] }] },
+      "horizontal": { "description": "Photo beside a longer bio. For directory and provider pages where the bio does the selling.", "structure": [{ "el": "div", "class": ["person", "person--row"], "settings": { "_display": "grid", "_gridTemplateColumns": "auto 1fr", "_gap": "var(--gf-space-md)" }, "children": [{ "el": "image", "slot": "photo", "settings": { "_width": "120px", "_aspectRatio": "1/1", "_objectFit": "cover", "_borderRadius": "var(--gf-radius-pill)" } }, { "el": "div", "global": [".stack"], "children": [{ "el": "heading", "tag": "h3", "slot": "name" }, { "el": "text-basic", "slot": "role" }, { "el": "text-basic", "slot": "bio" }, { "el": "button", "slot": "link", "class": ["btn--link"] }] }] }] }
+    },
+    "tokens": ["space-md", "radius-md", "radius-pill", "type-size-xs", "color-text-muted"],
+    "a11y": ["Portrait alt is the person's name and role, not \"team member\".", "Credentials are plain text, never image-only.", "If the card is a link, the accessible name includes the person's name."],
+    "invariants": ["Credentials, rank, lineage and competition records come from client.json verbatim. In the combat niche these claims are checkable by the audience — inventing one destroys the gym's credibility."]
+  },
+
+  "team-grid": {
+    "description": "The people section. Optional in the schema but one of the highest-impact sections on any of these sites — real faces outperform anything copy can do.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0, 1], "default": 0 }, "filterable": { "type": "checkbox", "default": false, "description": "Provider directories only." } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" }, "members": { "element": "block", "repeat": "team", "required": true, "source": "intake", "from": "team[]" } },
+    "variants": {
+      "cards-3up": { "description": "Three per row. The default.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "children": [{ "el": "div", "repeat": "members", "settings": { "_component": "team-card", "variant": "photo-above" } }] }] }] },
+      "cards-4up": { "description": "Four per row. Larger practices and coaching staffs.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-4"], "children": [{ "el": "div", "repeat": "members", "settings": { "_component": "team-card", "variant": "photo-above" } }] }] }] },
+      "list-bio": { "description": "Vertical list of horizontal cards with full bios. Provider and coach index pages.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".stack"], "settings": { "_gap": "var(--gf-space-xl)" }, "children": [{ "el": "div", "repeat": "members", "settings": { "_component": "team-card", "variant": "horizontal" } }] }] }] },
+      "feature-lead": { "description": "One person featured large, the rest in a smaller grid below. For practices and academies where one individual IS the product — concierge physicians, head professors.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["team__lead"], "settings": { "_display": "grid", "_gridTemplateColumns": "0.8fr 1.2fr", "_gap": "var(--gf-space-xl)", "_alignItems": "center" } }, { "el": "div", "global": [".grid-4"], "class": ["team__rest"] }] }] }
+    },
+    "tokens": ["space-xl", "space-lg"],
+    "responsive": { "1024": "grid-4 becomes 2 columns.", "768": "All single column; feature-lead stacks photo above bio." },
+    "a11y": ["Section h2 above card h3s.", "Filter controls, where present, are real form controls with labels and announce result counts."]
+  },
+
+  "pricing-tiers": {
+    "description": "Pricing. Showing prices converts better than hiding them in all three niches — push back on clients who want them hidden.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0, 1, 2], "default": 1 } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" }, "tiers": { "element": "block", "repeat": "pricing", "required": true, "source": "intake", "from": "pricing[]" } },
+    "variants": {
+      "three-column": { "description": "Three tiers, middle featured. The conventional shape and it works.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "class": ["pricing__tiers"], "settings": { "_alignItems": "start" }, "children": [{ "el": "div", "global": [".stack"], "class": ["tier"], "repeat": "tiers", "settings": { "_padding": "var(--gf-space-lg)", "_border": "1px solid var(--gf-color-border)", "_borderRadius": "var(--gf-radius-lg)" }, "children": [{ "el": "text-basic", "class": ["tier__name"] }, { "el": "text-basic", "class": ["tier__price"], "settings": { "typography": { "font-size": "var(--gf-type-size-3xl)", "font-family": "var(--gf-type-font-display)" } } }, { "el": "text-basic", "class": ["tier__period"] }, { "el": "div", "class": ["tier__features"], "children": [{ "el": "text-basic", "repeat": "features" }] }, { "el": "button", "class": ["btn--accent", "btn--block"] }] }] }] }], "notes": ["Featured tier gets var(--gf-shadow-rim) and, at depth 2, var(--gf-shadow-glow). Only the featured one — glow on all three is what makes a design look cheap."] },
+      "two-column-featured": { "description": "Two options, one recommended. Best for memberships and concierge plans where choice paralysis is the enemy.", "structure": [{ "el": "div", "global": [".container", ".grid-2"], "children": [{ "el": "div", "class": ["tier"], "repeat": "tiers" }] }] },
+      "single-offer": { "description": "One offer, one price, one button. The highest-converting shape when there is genuinely one product.", "structure": [{ "el": "div", "global": [".container-narrow", ".stack"], "settings": { "_textAlign": "center" }, "children": [{ "el": "div", "class": ["tier", "tier--solo"], "repeat": "tiers" }] }] },
+      "comparison-table": { "description": "Feature matrix. For the dedicated pricing page, not the homepage.", "structure": [{ "el": "div", "global": [".container"], "children": [{ "el": "div", "class": ["pricing__table"], "settings": { "_overflowX": "auto" } }] }], "notes": ["Wrapped in an overflow-x container so a wide table scrolls itself rather than the page."] }
+    },
+    "tokens": ["space-lg", "type-size-3xl", "type-font-display", "radius-lg", "color-border", "shadow-rim", "shadow-glow"],
+    "responsive": { "768": "Tiers stack with the featured tier first — not in its original middle position." },
+    "a11y": ["Comparison table uses real <table> markup with <th scope>.", "Price is readable text, never an image.", "Each tier's CTA has a distinct accessible name — three buttons all called \"Choose\" is a failure."],
+    "invariants": ["Contract terms and commitment length appear in plain text near the price. Burying them in fine print is the pattern this system exists to avoid."]
+  },
+
+  "schedule-table": {
+    "description": "Class timetable. One of the most-visited pages on any gym site, and the thing prospects check before they ever call.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0], "default": 0 } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" }, "entries": { "element": "block", "repeat": "schedule", "required": true, "source": "intake", "from": "schedule[]" } },
+    "variants": {
+      "weekly-grid": { "description": "Days as columns, times as rows. Scannable at a glance, which is what people want.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["schedule__wrap"], "settings": { "_overflowX": "auto" }, "children": [{ "el": "code", "class": ["schedule__grid"], "settings": { "_role": "table" } }] }] }] },
+      "by-program": { "description": "Grouped under program headings. Better on a program page than a full week grid.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".stack"], "children": [{ "el": "div", "class": ["schedule__group"], "repeat": "entries" }] }] }] },
+      "embed": { "description": "Third-party booking widget where the gym already runs one. Iframe in a reserved-height container so it cannot shift the page.", "structure": [{ "el": "div", "global": [".container"], "children": [{ "el": "code", "class": ["schedule__embed"], "settings": { "_minHeight": "640px" } }] }], "notes": ["Reserved min-height is mandatory — third-party embeds are the most common CLS source on these sites.", "Embed styling is outside our control; do not promise the client it will match the skin."] }
+    },
+    "tokens": ["space-md", "color-border", "type-size-sm"],
+    "responsive": { "768": "weekly-grid scrolls horizontally inside its own container — the page itself must never scroll sideways. Below 480px, switch to by-program." },
+    "a11y": ["Real <table> with <th scope=\"col\"> for days.", "Times include am/pm — never a bare 24-hour number in a US context.", "The scroll container is keyboard focusable so it can be scrolled without a mouse."],
+    "invariants": ["An out-of-date schedule is worse than none. Flag it in the handover as the client's responsibility to maintain, and make it editable without the builder."]
+  },
+
+  "gallery": {
+    "description": "Photography. Where the client has real photos this is one of the strongest sections available; where they do not, omit it rather than filling it with stock.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0], "default": 0 } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": false, "source": "generated" }, "images": { "element": "image", "repeat": true, "required": true, "source": "asset", "from": "brand.photos[]" } },
+    "variants": {
+      "masonry": { "description": "CSS columns masonry. Handles mixed aspect ratios gracefully, which real client photo dumps always have.", "structure": [{ "el": "div", "global": [".container"], "class": ["gallery__masonry"], "settings": { "_columns": "3", "_columnGap": "var(--gf-space-sm)" }, "children": [{ "el": "image", "repeat": "images", "settings": { "loading": "lazy", "_marginBottom": "var(--gf-space-sm)" } }] }] },
+      "carousel": { "description": "slider-nested. For a curated sequence rather than a dump.", "structure": [{ "el": "div", "global": [".container"], "children": [{ "el": "slider-nested", "children": [{ "el": "image", "repeat": "images" }] }] }] },
+      "grid-lightbox": { "description": "Uniform grid opening a lightbox. Project portfolios and large-loss galleries.", "structure": [{ "el": "div", "global": [".container", ".grid-3"], "children": [{ "el": "image", "repeat": "images", "settings": { "_aspectRatio": "1/1", "_objectFit": "cover", "loading": "lazy" } }] }] },
+      "fullbleed-strip": { "description": "Edge-to-edge horizontally scrolling strip. Kinetic and cheap — combat layouts.", "structure": [{ "el": "div", "class": ["gallery__strip"], "settings": { "_display": "flex", "_overflowX": "auto", "_gap": "var(--gf-space-2xs)", "_scrollSnapType": "x mandatory" }, "children": [{ "el": "image", "repeat": "images", "settings": { "_flex": "0 0 auto", "_width": "clamp(240px, 30vw, 420px)", "loading": "lazy" } }] }] }
+    },
+    "tokens": ["space-sm", "space-2xs", "radius-md"],
+    "responsive": { "1024": "masonry to 2 columns.", "768": "masonry to 1 column; grid-lightbox to 2." },
+    "a11y": ["Every image needs real alt text. A gallery of 20 images with empty alt is a serious violation, and axe will fail the build.", "Lightbox traps focus, closes on Escape, and returns focus to the trigger.", "The scrolling strip is keyboard scrollable."],
+    "invariants": ["All images lazy-loaded except any that could be the LCP element. A gallery must never be the LCP."]
+  },
+
+  "faq": {
+    "description": "Objection handling disguised as help. In all three niches this section directly answers what people actually search for, so it earns both conversions and rankings.",
+    "root": "section",
+    "globalClasses": [".section"],
+    "properties": { "depth": { "type": "number", "options": [0], "default": 0 }, "schema": { "type": "checkbox", "default": true, "description": "Emit FAQPage structured data." } },
+    "slots": { "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" }, "items": { "element": "block", "repeat": true, "required": true, "source": "generated", "from": "services[] + business.differentiator + niche voice guide" } },
+    "variants": {
+      "accordion": { "description": "Nestable accordion. The default.", "structure": [{ "el": "div", "global": [".container-narrow", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "accordion-nested", "class": ["faq__list"], "children": [{ "el": "div", "class": ["faq__item"], "repeat": "items" }] }] }], "notes": ["accordion-nested, not the legacy accordion — the nestable version's children are real elements we can style with tokens."] },
+      "two-column": { "description": "Questions and answers laid out open in two columns. No interaction, everything scannable and indexable.", "structure": [{ "el": "div", "global": [".container", ".grid-2"], "children": [{ "el": "div", "class": ["faq__item"], "repeat": "items", "children": [{ "el": "heading", "tag": "h3", "class": ["faq__q"] }, { "el": "text-basic", "class": ["faq__a"] }] }] }] },
+      "grouped": { "description": "Accordions grouped under subheadings — by service line, by specialty, by program.", "structure": [{ "el": "div", "global": [".container-narrow", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "class": ["faq__group"], "repeat": "groups", "children": [{ "el": "heading", "tag": "h3", "class": ["faq__group-title"] }, { "el": "accordion-nested" }] }] }] }
+    },
+    "tokens": ["space-md", "color-border", "type-size-lg", "motion-dur-base"],
+    "responsive": { "768": "two-column becomes single column." },
+    "a11y": ["Accordion triggers are <button> with aria-expanded and aria-controls.", "Panels are not hidden from search engines — use height/visibility, and never display:none on indexable content.", "First item may be open by default; all closed is also fine. Never all open in the accordion variant."],
+    "invariants": ["Answers must be truthful and traceable to client.json. FAQPage structured data containing an invented claim is a compliance problem, not just an SEO one."]
+  },
+
+  "rich-content": {
+    "description": "Long-form prose. The workhorse of service pages, procedure pages and service-area pages — which is where most of the organic traffic actually lands.",
+    "root": "section",
+    "globalClasses": [".section", ".prose"],
+    "properties": { "depth": { "type": "number", "options": [0], "default": 0 } },
+    "slots": { "body": { "element": "text", "required": true, "source": "generated", "from": "services[].detail + business.differentiator + niche voice guide" }, "aside": { "element": "block", "required": false, "source": "generated", "from": "contact.phone + services[] + business.certifications" } },
+    "variants": {
+      "single-column": { "description": "One measured column. The default and usually the right answer.", "structure": [{ "el": "div", "global": [".container-narrow"], "class": ["prose__body"], "settings": { "_maxWidth": "var(--gf-type-measure)" }, "children": [{ "el": "text", "slot": "body" }] }] },
+      "with-sidebar": { "description": "Prose plus a sticky aside carrying a CTA, service links or credentials. Best for service and procedure pages where the reader is deep in research.", "structure": [{ "el": "div", "global": [".container"], "settings": { "_display": "grid", "_gridTemplateColumns": "minmax(0, 1fr) 320px", "_gap": "var(--gf-space-xl)", "_alignItems": "start" }, "children": [{ "el": "text", "slot": "body", "class": ["prose__body"] }, { "el": "block", "slot": "aside", "class": ["prose__aside"], "settings": { "_position": "sticky", "_top": "calc(var(--gf-layout-header-height) + var(--gf-space-md))" } }] }] },
+      "two-column": { "description": "Prose flowing across two columns. For capability statements and methodology sections where density signals substance.", "structure": [{ "el": "div", "global": [".container"], "class": ["prose__body"], "settings": { "_columns": "2", "_columnGap": "var(--gf-space-xl)" }, "children": [{ "el": "text", "slot": "body" }] }] }
+    },
+    "tokens": ["type-measure", "type-size-base", "type-leading-body", "space-xl", "layout-header-height"],
+    "responsive": { "1024": "Sidebar drops below the prose and loses its sticky positioning.", "768": "two-column becomes one — never two narrow columns on a phone." },
+    "a11y": ["Heading levels inside the prose continue the page hierarchy — the generator must not emit an h1 here.", "Line length capped at var(--gf-type-measure). Full-width body text is a readability failure.", "Links inside prose are underlined, not colour-only."]
+  },
+
+  "logo-strip": {
+    "description": "Client, carrier, affiliation or accreditation logos. Cheap credibility where the logos are genuinely recognisable — and clutter where they are not.",
+    "root": "section",
+    "globalClasses": [".section", ".section--tight"],
+    "properties": { "depth": { "type": "number", "options": [0], "default": 0 }, "grayscale": { "type": "checkbox", "default": true } },
+    "slots": { "heading": { "element": "text-basic", "required": false, "source": "static" }, "logos": { "element": "image", "repeat": true, "required": true, "source": "asset", "from": "business.affiliations | client-supplied logos" } },
+    "variants": {
+      "static": { "description": "A wrapping centred row. Preferred — it does not move, so it does not distract.", "structure": [{ "el": "div", "global": [".container", ".cluster"], "settings": { "_justifyContent": "center", "_gap": "var(--gf-space-xl)" }, "children": [{ "el": "image", "repeat": "logos", "settings": { "_maxHeight": "36px", "_filter": "grayscale(1)", "_opacity": "0.65", "loading": "lazy" } }] }] },
+      "marquee": { "description": "Continuous horizontal scroll. Use only with eight or more logos — fewer looks like padding.", "structure": [{ "el": "div", "class": ["logo-strip__marquee"], "settings": { "_overflow": "hidden", "_maskImage": "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)" }, "children": [{ "el": "div", "class": ["logo-strip__track"], "settings": { "_display": "flex", "_gap": "var(--gf-space-xl)", "_animation": "gf-marquee 40s linear infinite" } }] }], "notes": ["Duplicate the logo set once in the track so the loop is seamless.", "Pauses on hover and does not animate at all under prefers-reduced-motion."] }
+    },
+    "tokens": ["space-xl", "space-md"],
+    "responsive": { "768": "static wraps to a tighter gap; marquee speeds are unchanged." },
+    "a11y": ["Alt text is the organisation name.", "Marquee stops under prefers-reduced-motion and on hover/focus.", "Never the only place a credential appears — logos are reinforcement, not the claim itself."],
+    "invariants": ["Only use a logo the client has the right to display. Carrier and manufacturer logos frequently have usage restrictions; confirm before publishing."]
+  }
+}

@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website Intake — Growth Factor</title>
+<style>
+  :root {
+    --bg: #f7f8fa; --surface: #fff; --ink: #12161d; --body: #4a5361; --muted: #7c8694;
+    --line: #e0e4ea; --accent: #1d4ed8; --accent-soft: #eaf0ff;
+    --ok: #15803d; --warn: #b45309; --bad: #b91c1c;
+    --radius: 10px; --shadow: 0 1px 2px rgb(18 22 29 / .05), 0 8px 24px -12px rgb(18 22 29 / .12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1117; --surface: #151b23; --ink: #f0f3f7; --body: #b6c0cc; --muted: #7d8794;
+      --line: #262d38; --accent: #6b93ff; --accent-soft: #182238;
+      --ok: #4ade80; --warn: #fbbf24; --bad: #f87171;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--body);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 2rem 1.25rem 6rem; }
+  h1 { font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem); line-height: 1.15; color: var(--ink); margin: 0 0 .5rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.1rem; color: var(--ink); margin: 0; letter-spacing: -.01em; }
+  .lede { font-size: 1.05rem; margin: 0 0 2rem; max-width: 60ch; }
+
+  /* readiness meter */
+  .meter { position: sticky; top: 0; z-index: 10; background: var(--surface); border: 1px solid var(--line);
+           border-radius: var(--radius); padding: .9rem 1.1rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+  .meter-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .meter strong { color: var(--ink); font-size: 1rem; }
+  .bar { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; margin-top: .7rem; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s cubic-bezier(.16,1,.3,1); }
+  .bar.done > i { background: var(--ok); }
+  #blockers { margin: .7rem 0 0; padding-left: 1.1rem; font-size: .875rem; color: var(--warn); }
+  #blockers:empty { display: none; }
+  #blockers li { margin: .15rem 0; }
+
+  fieldset { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius);
+             padding: 1.4rem; margin: 0 0 1.25rem; box-shadow: var(--shadow); }
+  legend { padding: 0 .5rem; }
+  .sec-head { display: flex; align-items: center; gap: .6rem; }
+  .tag { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; padding: .18rem .45rem;
+         border-radius: 4px; font-weight: 600; }
+  .tag.req { background: var(--accent-soft); color: var(--accent); }
+  .tag.opt { background: var(--line); color: var(--muted); }
+  .sec-note { font-size: .9rem; color: var(--muted); margin: .4rem 0 1.1rem; }
+
+  label { display: block; margin-bottom: 1rem; }
+  label > span.lbl { display: block; font-weight: 600; color: var(--ink); font-size: .9rem; margin-bottom: .3rem; }
+  label > span.lbl em { font-style: normal; color: var(--bad); }
+  label > span.help { display: block; font-size: .825rem; color: var(--muted); margin-bottom: .4rem; }
+  input, textarea, select {
+    width: 100%; padding: .6rem .7rem; font: inherit; font-size: .95rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+  }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  textarea { min-height: 4.5rem; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+  .item { border: 1px dashed var(--line); border-radius: 8px; padding: 1.1rem 1.1rem .1rem; margin-bottom: 1rem; position: relative; }
+  .item-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .9rem; }
+  .item-head b { color: var(--ink); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+  button { font: inherit; cursor: pointer; border-radius: 6px; border: 1px solid var(--line);
+           background: var(--surface); color: var(--ink); padding: .45rem .8rem; font-size: .875rem; }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button.add { border-style: dashed; width: 100%; padding: .6rem; }
+  button.rm { border: 0; background: none; color: var(--muted); padding: .2rem .4rem; }
+  button.rm:hover { color: var(--bad); }
+
+  .actions { position: sticky; bottom: 0; background: var(--surface); border: 1px solid var(--line);
+             border-radius: var(--radius); padding: 1rem; margin-top: 2rem; box-shadow: var(--shadow);
+             display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; padding: .6rem 1.1rem; }
+  button.primary:hover { filter: brightness(1.1); color: #fff; }
+  .saved { font-size: .8rem; color: var(--muted); margin-left: auto; }
+  footer { margin-top: 2.5rem; font-size: .85rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Website intake</h1>
+  <p class="lede">
+    This is everything we need to build your first draft. It takes about 15 minutes.
+    Your answers save automatically as you type, so you can close this and come back.
+  </p>
+
+  <div class="meter" role="status" aria-live="polite">
+    <div class="meter-row">
+      <strong id="meter-label">Getting started</strong>
+      <span id="meter-count" style="font-size:.875rem;color:var(--muted)"></span>
+    </div>
+    <div class="bar" id="bar"><i></i></div>
+    <ul id="blockers"></ul>
+  </div>
+
+  <form id="form" novalidate></form>
+
+  <div class="actions">
+    <button type="button" class="primary" id="download">Download client.json</button>
+    <button type="button" id="copy">Copy to clipboard</button>
+    <button type="button" id="reset">Start over</button>
+    <span class="saved" id="saved"></span>
+  </div>
+
+  <footer>
+    Nothing is uploaded anywhere. Everything stays in this browser until you download
+    the file and send it to us.
+  </footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * Form definition. Mirrors schemas/client.schema.json.
+ * `niche` restricts a section/field to specific niches.
+ * `req: true` means it blocks the build.
+ * ------------------------------------------------------------------ */
+const DEF = [
+  {
+    id: 'agency', title: 'Project setup', note: 'We normally fill this in for you.', agency: true,
+    fields: [
+      { path: 'meta.slug', label: 'Project slug', req: true, help: 'lowercase-with-hyphens' },
+      { path: 'meta.niche', label: 'Niche', req: true, type: 'select',
+        options: ['restoration', 'medical', 'combat'] },
+      { path: 'meta.skin', label: 'Skin', type: 'select', options: ['restoration', 'medical', 'combat'] },
+      { path: 'meta.layout', label: 'Layout', help: 'e.g. resto-01-emergency' }
+    ]
+  },
+  {
+    id: 'business', title: 'About the business', req: true,
+    fields: [
+      { path: 'business.name', label: 'Business name', req: true },
+      { path: 'business.legalName', label: 'Legal entity name', help: 'If different. Used in the footer.' },
+      { path: 'business.tagline', label: 'One-line description', req: true, max: 90,
+        help: 'How you would describe yourself to a stranger in one sentence.' },
+      { path: 'business.yearsInBusiness', label: 'Years in business', req: true, type: 'number' },
+      { path: 'business.differentiator', label: 'Why do people pick you over the guy down the road?',
+        req: true, type: 'textarea',
+        help: 'The most important answer on this form. Be specific and honest — "we answer the phone at 2am and we do not subcontract" beats "quality and integrity". Most of your website copy comes from this.' },
+      { path: 'business.licenses', label: 'Licence numbers', type: 'list', help: 'One per line.' },
+      { path: 'business.certifications', label: 'Certifications', type: 'list',
+        help: 'One per line. We will only put on the site what you list here.' },
+      { path: 'business.affiliations', label: 'Affiliations / associations', type: 'list', help: 'One per line.' }
+    ],
+    repeat: {
+      path: 'business.stats', label: 'Numbers worth bragging about', min: 0,
+      note: 'Only numbers you can stand behind — these go on the site as claims.',
+      fields: [
+        { path: 'value', label: 'Number', req: true, help: 'e.g. 60 min, 1,200+, 24/7' },
+        { path: 'label', label: 'What it means', req: true, help: 'e.g. Average response time' }
+      ]
+    }
+  },
+  {
+    id: 'contact', title: 'Contact details', req: true,
+    fields: [
+      { path: 'contact.phone', label: 'Main phone', req: true },
+      { path: 'contact.emergencyPhone', label: 'Emergency / after-hours phone', niche: ['restoration'] },
+      { path: 'contact.email', label: 'Email', req: true, type: 'email' },
+      { path: 'contact.hours', label: 'Opening hours', req: true, help: 'e.g. Mon–Fri 8–6, 24/7 emergency' },
+      { path: 'contact.serviceAreas', label: 'Towns and cities you serve', type: 'list', req: true,
+        help: 'One per line. We build a dedicated local page for each one, so list every area you genuinely cover — 10 to 30 works well.' }
+    ],
+    repeat: {
+      path: 'contact.locations', label: 'Locations', min: 1,
+      fields: [
+        { path: 'label', label: 'Location name', req: true, help: 'e.g. Main office' },
+        { path: 'street', label: 'Street', req: true },
+        { path: 'street2', label: 'Suite / unit' },
+        { path: 'city', label: 'City', req: true, half: true },
+        { path: 'state', label: 'State', req: true, half: true },
+        { path: 'zip', label: 'ZIP', req: true, half: true },
+        { path: 'phone', label: 'Phone for this location', half: true },
+        { path: 'hours', label: 'Hours for this location' },
+        { path: 'gbpUrl', label: 'Google Business Profile URL' }
+      ]
+    }
+  },
+  {
+    id: 'services', title: 'Services', req: true,
+    note: 'List the five you actually want to sell, most important first. Each one gets its own page.',
+    repeat: {
+      path: 'services', label: 'Service', min: 1,
+      fields: [
+        { path: 'name', label: 'Service name', req: true },
+        { path: 'slug', label: 'URL slug', req: true, help: 'lowercase-with-hyphens' },
+        { path: 'summary', label: 'One-line summary', req: true, max: 200 },
+        { path: 'detail', label: 'Anything specific we should say about it', type: 'textarea',
+          help: 'Optional. We will write the page copy — this is for details we could not guess.' },
+        { path: 'priceFrom', label: 'Starting price', half: true, help: 'Leave blank to omit.' }
+      ]
+    }
+  },
+  {
+    id: 'testimonials', title: 'Testimonials', req: true,
+    note: 'Three minimum. Copy them straight from Google or Facebook reviews — we do not need them polished.',
+    repeat: {
+      path: 'testimonials', label: 'Testimonial', min: 3,
+      fields: [
+        { path: 'quote', label: 'What they said', req: true, type: 'textarea' },
+        { path: 'author', label: 'Their name', req: true, half: true },
+        { path: 'context', label: 'Context', half: true, help: 'e.g. Water damage, Tulsa' },
+        { path: 'rating', label: 'Rating out of 5', type: 'number', half: true },
+        { path: 'source', label: 'Source', half: true, help: 'e.g. Google' },
+        { path: 'consentOnFile', label: 'We have written permission to publish this', type: 'checkbox',
+          niche: ['medical'], help: 'Required before we can publish a patient testimonial.' }
+      ]
+    }
+  },
+  {
+    id: 'team', title: 'Your people',
+    note: 'Optional, but it is one of the highest-impact sections on the site. Real names and real photos beat anything we can write.',
+    repeat: {
+      // min 1 so the client sees the fields rather than just an "add" button —
+      // this section is optional but high-impact, and an empty card invites filling it.
+      path: 'team', label: 'Person', min: 1,
+      fields: [
+        { path: 'name', label: 'Name', req: true, half: true },
+        { path: 'role', label: 'Role', req: true, half: true },
+        { path: 'credentials', label: 'Credentials', type: 'list', help: 'One per line.' },
+        { path: 'record', label: 'Rank, lineage or competition record', niche: ['combat'],
+          help: 'e.g. Black belt under Marcelo Garcia · 12-4 pro' },
+        { path: 'specialties', label: 'Specialties', type: 'list', niche: ['medical'], help: 'One per line.' },
+        { path: 'bio', label: 'A few lines about them', type: 'textarea',
+          help: 'Rough notes are fine. One genuinely human detail is worth more than a list of qualifications.' },
+        { path: 'photo', label: 'Photo filename or URL' }
+      ]
+    }
+  },
+  {
+    id: 'pricing', title: 'Pricing', niche: ['combat', 'medical'],
+    note: 'Showing prices converts better than hiding them. We strongly recommend filling this in.',
+    repeat: {
+      path: 'pricing', label: 'Plan', min: 0,
+      fields: [
+        { path: 'name', label: 'Plan name', req: true, half: true },
+        { path: 'price', label: 'Price', req: true, half: true, help: 'e.g. $149' },
+        { path: 'period', label: 'Per', half: true, help: 'e.g. month' },
+        { path: 'cta', label: 'Button text', half: true },
+        { path: 'features', label: "What's included", type: 'list', help: 'One per line.' },
+        { path: 'featured', label: 'Highlight this as the recommended plan', type: 'checkbox' }
+      ]
+    }
+  },
+  {
+    id: 'schedule', title: 'Class schedule', niche: ['combat'],
+    note: 'Your current timetable. This is one of the most-visited pages on a gym site.',
+    repeat: {
+      path: 'schedule', label: 'Class', min: 0,
+      fields: [
+        { path: 'day', label: 'Day', req: true, half: true },
+        { path: 'time', label: 'Time', req: true, half: true, help: 'e.g. 6:00pm' },
+        { path: 'program', label: 'Program', req: true, half: true },
+        { path: 'level', label: 'Level', half: true, help: 'e.g. Beginner, All levels' },
+        { path: 'coach', label: 'Coach', half: true }
+      ]
+    }
+  },
+  {
+    id: 'brand', title: 'Logo, colours and photos', req: true,
+    fields: [
+      { path: 'brand.logo', label: 'Logo file or URL', req: true, help: 'SVG or PNG with a transparent background if you have one.' },
+      { path: 'brand.logoInverse', label: 'Light/reversed logo', help: 'For dark sections. We can make one if you do not have it.' },
+      { path: 'brand.colors.primary', label: 'Primary brand colour', half: true, help: 'Hex, e.g. #1a2b3c. Leave blank and we will choose.' },
+      { path: 'brand.colors.accent', label: 'Accent colour', half: true, help: 'Leave blank and we will choose.' },
+      { path: 'brand.photos', label: 'Link to your photos', type: 'list',
+        help: 'A Google Drive or Dropbox folder link is ideal. Real photos of your team, your premises and your work are the single biggest thing that makes a site look expensive. If you do not have any yet, we will use stock for the first draft and swap them in later.' },
+      { path: 'brand.voiceNotes', label: 'Anything about how you talk', type: 'textarea',
+        help: 'Words you always use, words you hate, anything a competitor says that makes you cringe.' }
+    ]
+  },
+  {
+    id: 'integrations', title: 'Technical bits',
+    note: 'Skip anything you are not sure about — we can sort it out later.',
+    fields: [
+      { path: 'integrations.formRecipients', label: 'Who should receive form enquiries?', type: 'list', help: 'One email per line.' },
+      { path: 'integrations.bookingUrl', label: 'Online booking link', help: 'If you already use a booking system.' },
+      { path: 'integrations.crm', label: 'CRM you use' },
+      { path: 'integrations.analyticsId', label: 'Google Analytics ID' },
+      { path: 'integrations.callTrackingNumber', label: 'Call tracking number' }
+    ]
+  },
+  {
+    id: 'compliance', title: 'Compliance', niche: ['medical'],
+    note: 'Medical sites have rules the rest do not. Flag anything here and we will work around it.',
+    fields: [
+      { path: 'compliance.hipaaIntakeRequired', label: 'Patient forms must go through a HIPAA-compliant system', type: 'checkbox' },
+      { path: 'compliance.stateBoardRules', label: 'State medical board advertising rules we should know about', type: 'textarea' },
+      { path: 'compliance.notes', label: 'Anything else', type: 'textarea' }
+    ]
+  }
+];
+
+/* ------------------------------ state ------------------------------ */
+const KEY = 'gf-intake-v1';
+const params = new URLSearchParams(location.search);
+let data = load();
+
+function load() {
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+  for (const k of ['slug', 'niche', 'skin', 'layout']) {
+    if (params.get(k)) setPath(d, `meta.${k}`, params.get(k));
+  }
+  return d;
+}
+const agencyPrefilled = ['slug', 'niche'].every((k) => params.get(k));
+
+function setPath(obj, path, val) {
+  const parts = path.split('.');
+  let cur = obj;
+  for (const p of parts.slice(0, -1)) cur = cur[p] ??= {};
+  const last = parts.at(-1);
+  if (val === '' || val === undefined || val === null || (Array.isArray(val) && !val.length)) delete cur[last];
+  else cur[last] = val;
+}
+function getPath(obj, path) {
+  return path.split('.').reduce((o, p) => (o == null ? undefined : o[p]), obj);
+}
+const niche = () => getPath(data, 'meta.niche') || '';
+const visible = (def) => !def.niche || def.niche.includes(niche());
+
+/* ------------------------------ render ------------------------------ */
+const form = document.getElementById('form');
+
+function fieldEl(f, value, onInput) {
+  const label = document.createElement('label');
+  if (f.half) label.style.marginBottom = '1rem';
+
+  const lbl = document.createElement('span');
+  lbl.className = 'lbl';
+  lbl.textContent = f.label;
+  if (f.req) lbl.insertAdjacentHTML('beforeend', ' <em title="Required">*</em>');
+  label.append(lbl);
+
+  if (f.help) {
+    const h = document.createElement('span');
+    h.className = 'help';
+    h.textContent = f.help;
+    label.append(h);
+  }
+
+  let input;
+  if (f.type === 'textarea' || f.type === 'list') {
+    input = document.createElement('textarea');
+    if (f.type === 'list') input.rows = 4;
+    input.value = f.type === 'list' ? (value || []).join('\n') : value ?? '';
+  } else if (f.type === 'select') {
+    input = document.createElement('select');
+    input.append(new Option('Choose…', ''));
+    for (const o of f.options) input.append(new Option(o, o));
+    input.value = value ?? '';
+  } else if (f.type === 'checkbox') {
+    input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = !!value;
+    input.style.width = 'auto';
+    lbl.style.display = 'inline';
+    label.style.display = 'flex';
+    label.style.gap = '.5rem';
+    label.style.alignItems = 'flex-start';
+    label.prepend(input);
+    input.addEventListener('change', () => onInput(input.checked || undefined));
+    return label;
+  } else {
+    input = document.createElement('input');
+    input.type = f.type === 'number' ? 'number' : f.type === 'email' ? 'email' : 'text';
+    input.value = value ?? '';
+  }
+  if (f.max) input.maxLength = f.max;
+
+  input.addEventListener('input', () => {
+    let v = input.value.trim();
+    if (f.type === 'list') v = input.value.split('\n').map((s) => s.trim()).filter(Boolean);
+    else if (f.type === 'number') v = v === '' ? undefined : Number(v);
+    onInput(v);
+  });
+  label.append(input);
+  return label;
+}
+
+function render() {
+  form.replaceChildren();
+
+  for (const sec of DEF) {
+    if (!visible(sec)) continue;
+    if (sec.agency && agencyPrefilled) continue;
+
+    const fs = document.createElement('fieldset');
+    const lg = document.createElement('legend');
+    lg.className = 'sec-head';
+    const h2 = document.createElement('h2');
+    h2.textContent = sec.title;
+    const tag = document.createElement('span');
+    tag.className = 'tag ' + (sec.req ? 'req' : 'opt');
+    tag.textContent = sec.req ? 'Needed to start' : 'Can come later';
+    lg.append(h2, tag);
+    fs.append(lg);
+
+    if (sec.note) {
+      const n = document.createElement('p');
+      n.className = 'sec-note';
+      n.textContent = sec.note;
+      fs.append(n);
+    }
+
+    // flat fields, grouped so `half` fields sit side by side
+    let row = null;
+    for (const f of sec.fields ?? []) {
+      if (!visible(f)) continue;
+      const el = fieldEl(f, getPath(data, f.path), (v) => {
+        setPath(data, f.path, v);
+        save();
+        if (f.path === 'meta.niche') render();
+      });
+      if (f.half) {
+        if (!row) { row = document.createElement('div'); row.className = 'row'; fs.append(row); }
+        row.append(el);
+      } else { row = null; fs.append(el); }
+    }
+
+    if (sec.repeat) fs.append(repeatEl(sec.repeat));
+    form.append(fs);
+  }
+  updateMeter();
+}
+
+function repeatEl(rep) {
+  const box = document.createElement('div');
+  const items = getPath(data, rep.path) ?? [];
+  while (items.length < rep.min) items.push({});
+  setPath(data, rep.path, items);
+
+  if (rep.note) {
+    const n = document.createElement('p');
+    n.className = 'sec-note';
+    n.textContent = rep.note;
+    box.append(n);
+  }
+
+  items.forEach((item, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'item';
+    const head = document.createElement('div');
+    head.className = 'item-head';
+    const b = document.createElement('b');
+    b.textContent = `${rep.label} ${i + 1}`;
+    head.append(b);
+    if (items.length > rep.min) {
+      const rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'rm';
+      rm.textContent = 'Remove';
+      rm.onclick = () => { items.splice(i, 1); save(); render(); };
+      head.append(rm);
+    }
+    wrap.append(head);
+
+    let row = null;
+    for (const f of rep.fields) {
+      if (!visible(f)) continue;
+      const el = fieldEl(f, item[f.path], (v) => {
+        if (v === undefined || v === '' || (Array.isArray(v) && !v.length)) delete item[f.path];
+        else item[f.path] = v;
+        save();
+      });
+      if (f.half) {
+        if (!row) { row = document.createElement('div'); row.className = 'row'; wrap.append(row); }
+        row.append(el);
+      } else { row = null; wrap.append(el); }
+    }
+    box.append(wrap);
+  });
+
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'add';
+  add.textContent = `+ Add ${rep.label.toLowerCase()}`;
+  add.onclick = () => { items.push({}); save(); render(); };
+  box.append(add);
+  return box;
+}
+
+/* --------------------------- readiness --------------------------- */
+function blockers() {
+  const out = [];
+  for (const sec of DEF) {
+    if (!visible(sec) || !sec.req) continue;
+    if (sec.agency && agencyPrefilled) continue;
+
+    for (const f of sec.fields ?? []) {
+      if (!f.req || !visible(f)) continue;
+      const v = getPath(data, f.path);
+      if (v === undefined || v === '' || (Array.isArray(v) && !v.length)) out.push(f.label);
+    }
+    if (sec.repeat) {
+      const items = getPath(data, sec.repeat.path) ?? [];
+      const complete = items.filter((it) =>
+        sec.repeat.fields.filter((f) => f.req && visible(f)).every((f) => {
+          const v = it[f.path];
+          return !(v === undefined || v === '' || (Array.isArray(v) && !v.length));
+        })
+      );
+      if (complete.length < sec.repeat.min) {
+        out.push(`${sec.repeat.label}s (${complete.length} of ${sec.repeat.min} complete)`);
+      }
+    }
+  }
+  return out;
+}
+
+function updateMeter() {
+  const b = blockers();
+  const total = countRequired();
+  const done = Math.max(0, total - b.length);
+  const pct = total ? Math.round((done / total) * 100) : 0;
+
+  document.querySelector('#bar > i').style.width = pct + '%';
+  document.getElementById('bar').classList.toggle('done', !b.length);
+  document.getElementById('meter-label').textContent = b.length
+    ? 'Still needed before we can start'
+    : 'Ready to build — download the file and send it over';
+  document.getElementById('meter-count').textContent = b.length ? `${done}/${total}` : '';
+
+  const ul = document.getElementById('blockers');
+  ul.replaceChildren();
+  for (const item of b.slice(0, 8)) {
+    const li = document.createElement('li');
+    li.textContent = item;
+    ul.append(li);
+  }
+  if (b.length > 8) {
+    const li = document.createElement('li');
+    li.textContent = `…and ${b.length - 8} more`;
+    ul.append(li);
+  }
+}
+
+function countRequired() {
+  let n = 0;
+  for (const sec of DEF) {
+    if (!visible(sec) || !sec.req) continue;
+    if (sec.agency && agencyPrefilled) continue;
+    n += (sec.fields ?? []).filter((f) => f.req && visible(f)).length;
+    // Only repeats with a minimum can block, so only those belong in the denominator.
+    if (sec.repeat?.min > 0) n += 1;
+  }
+  return n;
+}
+
+/* ---------------------------- output ---------------------------- */
+function clean(v) {
+  if (Array.isArray(v)) {
+    const a = v.map(clean).filter((x) => x !== undefined);
+    return a.length ? a : undefined;
+  }
+  if (v && typeof v === 'object') {
+    const o = {};
+    for (const [k, val] of Object.entries(v)) {
+      const c = clean(val);
+      if (c !== undefined) o[k] = c;
+    }
+    return Object.keys(o).length ? o : undefined;
+  }
+  if (v === '' || v === null) return undefined;
+  return v;
+}
+
+function output() {
+  const d = clean(structuredClone(data)) ?? {};
+  if (d.meta && !d.meta.skin && d.meta.niche) d.meta.skin = d.meta.niche;
+  return JSON.stringify(d, null, 2);
+}
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(data));
+  document.getElementById('saved').textContent = 'Saved';
+  updateMeter();
+}
+
+document.getElementById('download').onclick = () => {
+  const slug = getPath(data, 'meta.slug') || 'client';
+  const blob = new Blob([output()], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${slug}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById('copy').onclick = async () => {
+  await navigator.clipboard.writeText(output());
+  const btn = document.getElementById('copy');
+  btn.textContent = 'Copied';
+  setTimeout(() => (btn.textContent = 'Copy to clipboard'), 1500);
+};
+
+document.getElementById('reset').onclick = () => {
+  if (!confirm('Clear everything and start over?')) return;
+  localStorage.removeItem(KEY);
+  data = load();
+  render();
+};
+
+render();
+</script>
+</body>
+</html>

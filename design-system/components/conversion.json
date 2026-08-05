@@ -1,0 +1,181 @@
+{
+  "$comment": "Conversion surfaces. These are the reason the site exists. Every rule here is biased toward reliability over decoration — depth 0, no experiments, nothing clever.",
+
+  "cta-band": {
+    "description": "A full-width call to action between sections and before the footer. The one place in the library where depth is encouraged, because it should interrupt.",
+    "root": "section",
+    "globalClasses": [".section", ".cta-band", ".is-dark"],
+    "properties": {
+      "depth": { "type": "number", "options": [0, 1, 2], "default": 1 },
+      "dark": { "type": "checkbox", "default": true }
+    },
+    "slots": {
+      "headline": { "element": "heading", "tag": "h2", "required": true, "source": "generated", "from": "business.differentiator + skin.conversionRules.primaryCta" },
+      "body": { "element": "text-basic", "required": false, "source": "generated", "from": "business.differentiator" },
+      "cta-primary": { "element": "button", "required": true, "source": "intake", "from": "contact.phone | integrations.bookingUrl" },
+      "cta-secondary": { "element": "button", "required": false, "source": "intake", "from": "skin.conversionRules.secondaryCta" },
+      "media": { "element": "image", "required": false, "source": "asset", "from": "brand.photos[]" }
+    },
+    "variants": {
+      "emergency": {
+        "description": "Restoration. Phone-first, high urgency, accent-heavy. The number is enormous and it is a tel: link.",
+        "structure": [
+          { "el": "div", "class": ["cta-band__depth"], "if": "depth > 0", "settings": { "_component": "depth-layer", "variant": "mesh-gradient", "tier": "{{depth}}" } },
+          { "el": "div", "global": [".container", ".stack"], "class": ["cta-band__inner"], "settings": { "_position": "relative", "_textAlign": "center", "_paddingBlock": "var(--gf-space-2xl)", "_gap": "var(--gf-space-md)" }, "children": [
+            { "el": "heading", "tag": "h2", "slot": "headline", "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "font-size": "var(--gf-type-size-2xl)", "color": "var(--gf-color-text-on-inverse)" } } },
+            { "el": "text-basic", "slot": "body", "settings": { "_marginInline": "auto", "_maxWidth": "56ch" } },
+            { "el": "button", "slot": "cta-primary", "class": ["btn--accent", "btn--xl"], "settings": { "tag": "a", "_href": "tel:{{contact.emergencyPhone | contact.phone}}", "typography": { "font-size": "var(--gf-type-size-xl)" } } },
+            { "el": "text-basic", "class": ["cta-band__note"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "color": "var(--gf-color-text-on-inverse-muted)" } }, "notes": "Carries the 24/7 / insurance-billing reassurance under the button." }
+          ]}
+        ]
+      },
+      "appointment": {
+        "description": "Medical. Calm, dual-action: book online (primary) and call the office (secondary). Never urgent-sounding.",
+        "structure": [
+          { "el": "div", "global": [".container-narrow", ".stack"], "settings": { "_textAlign": "center", "_paddingBlock": "var(--gf-space-2xl)" }, "children": [
+            { "el": "heading", "tag": "h2", "slot": "headline" },
+            { "el": "text-basic", "slot": "body" },
+            { "el": "div", "global": [".cluster"], "settings": { "_justifyContent": "center" }, "children": [
+              { "el": "button", "slot": "cta-primary", "class": ["btn--accent", "btn--lg"] },
+              { "el": "button", "slot": "cta-secondary", "class": ["btn--outline-light"], "settings": { "tag": "a", "_href": "tel:{{contact.phone}}" } }
+            ]}
+          ]}
+        ]
+      },
+      "free-trial": {
+        "description": "Combat. The offer is the headline. Big, loud, unambiguous, zero friction between the visitor and the trial.",
+        "structure": [
+          { "el": "div", "class": ["cta-band__depth"], "if": "depth > 0", "settings": { "_component": "depth-layer", "variant": "prerendered-video", "tier": "{{depth}}" } },
+          { "el": "div", "class": ["cta-band__scrim"], "settings": { "_background": "linear-gradient(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.75))", "_position": "absolute", "_inset": "0" } },
+          { "el": "div", "global": [".container", ".stack"], "settings": { "_position": "relative", "_textAlign": "center", "_paddingBlock": "var(--gf-space-3xl)" }, "children": [
+            { "el": "heading", "tag": "h2", "slot": "headline", "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "font-size": "var(--gf-type-size-3xl)", "text-transform": "uppercase", "line-height": "var(--gf-type-leading-tight)" } } },
+            { "el": "text-basic", "slot": "body" },
+            { "el": "button", "slot": "cta-primary", "class": ["btn--accent", "btn--xl"] }
+          ]}
+        ],
+        "notes": ["Headline states the offer plainly — \"Claim your free trial week\", not \"Begin your journey\"."]
+      },
+      "split-image": {
+        "description": "Copy one side, photograph the other. Calmer than the full-bleed variants and works well mid-page.",
+        "structure": [
+          { "el": "div", "class": ["cta-band__split"], "settings": { "_display": "grid", "_gridTemplateColumns": "1fr 1fr", "_alignItems": "stretch" }, "children": [
+            { "el": "div", "global": [".stack"], "settings": { "_justifyContent": "center", "_padding": "var(--gf-space-2xl)" }, "children": [
+              { "el": "heading", "tag": "h2", "slot": "headline" },
+              { "el": "text-basic", "slot": "body" },
+              { "el": "div", "global": [".cluster"], "children": [
+                { "el": "button", "slot": "cta-primary", "class": ["btn--accent", "btn--lg"] },
+                { "el": "button", "slot": "cta-secondary", "class": ["btn--ghost"] }
+              ]}
+            ]},
+            { "el": "image", "slot": "media", "settings": { "_objectFit": "cover", "_height": "100%", "loading": "lazy" } }
+          ]}
+        ]
+      },
+      "minimal-centered": {
+        "description": "One line and one button on a plain surface. For concierge and premium contexts where a loud CTA would undercut the positioning.",
+        "structure": [
+          { "el": "div", "global": [".container-narrow", ".stack"], "settings": { "_textAlign": "center", "_paddingBlock": "var(--gf-space-2xl)" }, "children": [
+            { "el": "heading", "tag": "h2", "slot": "headline", "settings": { "typography": { "font-size": "var(--gf-type-size-xl)" } } },
+            { "el": "button", "slot": "cta-primary", "class": ["btn--accent"] }
+          ]}
+        ]
+      }
+    },
+    "tokens": ["space-2xl", "space-3xl", "space-md", "type-size-3xl", "type-size-2xl", "type-size-xl", "type-size-sm", "type-font-display", "color-accent", "color-text-on-inverse", "color-text-on-inverse-muted"],
+    "responsive": { "768": "split-image stacks with copy first. Buttons become full-width. Padding steps down via the fluid scale." },
+    "a11y": ["Button text is specific — \"Call now, 24/7\" not \"Click here\".", "Contrast measured against the scrim, never against variable media.", "Phone CTAs are tel: links.", "At depth > 0 the video is decoration only; the headline must be legible from the scrim alone."],
+    "invariants": ["Only one cta-band per viewport-height of scroll. Stacking two adjacent reads as desperate."]
+  },
+
+  "contact-block": {
+    "description": "The conversion surface. Where the lead is actually captured.",
+    "root": "section",
+    "globalClasses": [".section", ".contact"],
+    "properties": {
+      "depth": { "type": "number", "options": [0], "default": 0, "description": "ALWAYS 0. validate-config.mjs fails the build if a layout sets this higher." }
+    },
+    "slots": {
+      "heading": { "element": "heading", "tag": "h2", "required": true, "source": "generated" },
+      "form": { "element": "form", "required": true, "source": "static", "from": "lead-form component" },
+      "map": { "element": "map", "required": false, "source": "intake", "from": "contact.locations[].lat/lng" },
+      "hours": { "element": "block", "required": true, "source": "intake", "from": "contact.hours" },
+      "nap": { "element": "block", "required": true, "source": "intake", "from": "business.name + contact.locations[] + contact.phone" }
+    },
+    "variants": {
+      "form-map-split": {
+        "description": "Form one side, map and NAP the other. The default.",
+        "structure": [
+          { "el": "div", "global": [".container"], "settings": { "_display": "grid", "_gridTemplateColumns": "1fr 1fr", "_gap": "var(--gf-space-xl)", "_paddingBlock": "var(--gf-space-section-y)" }, "children": [
+            { "el": "div", "global": [".stack"], "children": [
+              { "el": "heading", "tag": "h2", "slot": "heading" },
+              { "el": "form", "slot": "form", "settings": { "_component": "lead-form" } }
+            ]},
+            { "el": "div", "global": [".stack"], "children": [
+              { "el": "map", "slot": "map", "settings": { "_aspectRatio": "4/3", "_borderRadius": "var(--gf-radius-md)", "loading": "lazy" }, "notes": "Lazy-loaded, with a reserved aspect ratio. An eagerly-loaded map iframe is a classic CLS and LCP disaster." },
+              { "el": "block", "slot": "nap", "class": ["contact__nap"] },
+              { "el": "block", "slot": "hours", "class": ["contact__hours"] }
+            ]}
+          ]}
+        ]
+      },
+      "form-only": { "description": "Form on a plain surface, no map. Fastest, and correct where the business is not location-dependent.", "structure": [{ "el": "div", "global": [".container-narrow", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "form", "slot": "form" }, { "el": "block", "slot": "nap" }] }] },
+      "multi-location": { "description": "One card per location with its own map link, hours and phone. Group practices and multi-site restoration firms — often the most-used block on the whole site.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-3"], "children": [{ "el": "div", "global": [".stack"], "class": ["contact__loc"], "repeat": "contact.locations", "settings": { "_padding": "var(--gf-space-lg)", "_border": "1px solid var(--gf-color-border)", "_borderRadius": "var(--gf-radius-md)" } }] }, { "el": "form", "slot": "form" }] }] },
+      "card-stack": { "description": "Phone, email, address and hours as separate cards above the form. Scannable when someone wants to call rather than type.", "structure": [{ "el": "div", "global": [".container", ".stack"], "children": [{ "el": "heading", "tag": "h2", "slot": "heading" }, { "el": "div", "global": [".grid-4"], "children": [{ "el": "div", "class": ["contact__card"], "repeat": "items" }] }, { "el": "form", "slot": "form" }] }] }
+    },
+    "tokens": ["space-section-y", "space-xl", "space-lg", "radius-md", "color-border"],
+    "responsive": { "768": "Splits stack with the form first. The map moves below — nobody fills in a form after scrolling past a map on a phone." },
+    "a11y": ["Every input has a visible, associated <label>. Placeholder-only labelling is a failure.", "Errors are announced via aria-live and linked to their field with aria-describedby.", "The map iframe has a title, and the full address is available as text so the map is never the only source.", "Phone and email are real tel:/mailto: links."],
+    "invariants": [
+      "depth is 0. No exceptions — this is enforced in validate-config.mjs.",
+      "No depth-layer, no video, no canvas, no entrance animation on this section.",
+      "NAP here is byte-identical to the nav, the footer and the Google Business Profile."
+    ]
+  },
+
+  "lead-form": {
+    "description": "The form itself. Every field added costs conversions, so the default is short. Compliance constraints here are real, particularly in medical.",
+    "root": "form",
+    "globalClasses": [".form"],
+    "properties": {
+      "recipients": { "type": "text", "source": "integrations.formRecipients" },
+      "honeypot": { "type": "checkbox", "default": true, "description": "Prefer a honeypot plus timing check over a CAPTCHA — CAPTCHAs cost real leads." }
+    },
+    "slots": {
+      "fields": { "element": "block", "repeat": true, "required": true, "source": "static" },
+      "submit": { "element": "button", "required": true, "source": "intake", "from": "skin.conversionRules.primaryCta" },
+      "consent": { "element": "block", "required": false, "source": "static", "description": "Required where the niche or jurisdiction demands it." }
+    },
+    "variants": {
+      "short-3-field": {
+        "description": "Name, phone, and one free-text field. Restoration and gym trial signups. Highest completion rate of anything in the library.",
+        "structure": [
+          { "el": "div", "global": [".stack"], "children": [
+            { "el": "block", "class": ["form__field"], "settings": { "type": "text", "name": "name", "label": "Your name", "required": true } },
+            { "el": "block", "class": ["form__field"], "settings": { "type": "tel", "name": "phone", "label": "Phone", "required": true, "autocomplete": "tel" } },
+            { "el": "block", "class": ["form__field"], "settings": { "type": "textarea", "name": "message", "label": "What happened?", "required": false } },
+            { "el": "button", "slot": "submit", "class": ["btn--accent", "btn--block", "btn--lg"] }
+          ]}
+        ],
+        "notes": ["Field labels are niche-specific: \"What happened?\" for restoration, \"Which class interests you?\" for a gym."]
+      },
+      "standard": { "description": "Name, email, phone, service select, message. The general-purpose form.", "structure": [{ "el": "div", "global": [".stack"], "children": [{ "el": "block", "class": ["form__field"], "settings": { "type": "text", "name": "name", "required": true } }, { "el": "block", "class": ["form__field"], "settings": { "type": "email", "name": "email", "required": true, "autocomplete": "email" } }, { "el": "block", "class": ["form__field"], "settings": { "type": "tel", "name": "phone", "autocomplete": "tel" } }, { "el": "block", "class": ["form__field"], "settings": { "type": "select", "name": "service", "options": "{{services[].name}}" } }, { "el": "block", "class": ["form__field"], "settings": { "type": "textarea", "name": "message" } }, { "el": "button", "slot": "submit", "class": ["btn--accent", "btn--block"] }] }] },
+      "multi-step": { "description": "Two or three steps with a progress indicator. Only worth it where the form is genuinely long — it trades a little friction for lower perceived effort.", "structure": [{ "el": "div", "class": ["form__steps"], "children": [{ "el": "div", "class": ["form__step"], "repeat": "steps" }] }], "notes": ["Each step is reachable and completable by keyboard, and progress is announced.", "Never lose entered data when navigating back a step."] },
+      "quote-request": { "description": "Longer, qualifying form for commercial restoration and reconstruction, where a qualified lead is worth the added friction.", "structure": [{ "el": "div", "global": [".stack"], "children": [{ "el": "block", "class": ["form__field"], "repeat": "fields" }, { "el": "block", "slot": "consent" }, { "el": "button", "slot": "submit", "class": ["btn--accent", "btn--block"] }] }] }
+    },
+    "tokens": ["space-sm", "space-md", "radius-sm", "color-border", "color-accent", "color-danger", "type-size-base"],
+    "responsive": { "base": "Inputs are at least 16px on mobile — anything smaller triggers iOS zoom-on-focus, which feels broken.", "768": "Submit becomes full-width." },
+    "a11y": [
+      "Visible <label> for every field. Placeholders are hints, never labels.",
+      "Required fields marked in text as well as with the required attribute.",
+      "Validation errors: announced with aria-live, associated via aria-describedby, and never colour-only.",
+      "Autocomplete attributes on name, tel, email.",
+      "44px minimum touch targets.",
+      "Focus moves to the success or error message on submit."
+    ],
+    "invariants": [
+      "MEDICAL: no PHI in a standard form. No symptom, condition, medication or history fields. Route anything clinical to a HIPAA-compliant intake or booking system. validate-client.mjs warns when neither is configured.",
+      "Submissions go to integrations.formRecipients and deliverability is tested before promotion — a silently broken form is the worst possible failure mode for these businesses.",
+      "COMBAT: link the liability waiver rather than embedding it. Do not collect a signature through this form."
+    ]
+  }
+}

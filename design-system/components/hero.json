@@ -1,0 +1,152 @@
+{
+  "$comment": "Above-the-fold components. The hero carries the LCP element on every page in the library, so its rules are the strictest in the system.",
+
+  "hero": {
+    "description": "The first viewport. Five variants covering every layout in the library. Slot names are identical across variants so a layout can swap one for another without re-mapping content.",
+    "root": "section",
+    "globalClasses": [".section", ".hero"],
+    "properties": {
+      "depth": { "type": "number", "options": [0, 1, 2, 3], "default": 1 },
+      "dark": { "type": "checkbox", "default": false, "description": "Applies .is-dark. Independent of depth." },
+      "height": { "type": "select", "options": ["auto", "svh-80", "svh-100"], "default": "auto", "description": "Use svh not vh — vh breaks on mobile browsers with dynamic toolbars." }
+    },
+    "slots": {
+      "eyebrow": { "element": "text-basic", "tag": "p", "required": false, "source": "generated", "from": "business.tagline" },
+      "headline": { "element": "heading", "tag": "h1", "required": true, "source": "generated", "from": "business.differentiator + services[0].name + contact.locations[0].city" },
+      "subhead": { "element": "text-basic", "tag": "p", "required": false, "source": "generated", "from": "business.differentiator" },
+      "cta-primary": { "element": "button", "required": true, "source": "intake", "from": "skin.conversionRules.primaryCta + contact.phone | integrations.bookingUrl" },
+      "cta-secondary": { "element": "button", "required": false, "source": "intake", "from": "skin.conversionRules.secondaryCta" },
+      "media": { "element": "image", "required": false, "source": "asset", "from": "brand.photos[0] | assets/images/<niche>/hero-*" },
+      "trust-strip": { "element": "block", "required": false, "source": "intake", "from": "business.certifications | business.stats" }
+    },
+    "variants": {
+      "split-urgent": {
+        "description": "Restoration default. Copy left, media right. Phone button is primary and visually dominant; the form is secondary. Built for someone panicking on a phone.",
+        "structure": [
+          { "el": "div", "class": ["hero__depth"], "global": [".depth-layer"], "if": "depth > 0", "settings": { "_component": "depth-layer", "tier": "{{depth}}", "aspect": "16/9" } },
+          { "el": "div", "global": [".container"], "class": ["hero__inner"], "settings": { "_display": "grid", "_gridTemplateColumns": "1.1fr 0.9fr", "_gap": "var(--gf-space-xl)", "_alignItems": "center", "_paddingBlock": "var(--gf-space-section-y)" }, "children": [
+            { "el": "div", "global": [".stack"], "class": ["hero__copy"], "children": [
+              { "el": "text-basic", "slot": "eyebrow", "class": ["hero__eyebrow"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "letter-spacing": "var(--gf-type-tracking-eyebrow)", "text-transform": "uppercase", "color": "var(--gf-color-accent)" } } },
+              { "el": "heading", "tag": "h1", "slot": "headline", "class": ["hero__title"], "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "font-size": "var(--gf-type-size-4xl)", "line-height": "var(--gf-type-leading-tight)", "letter-spacing": "var(--gf-type-tracking-display)" } } },
+              { "el": "text-basic", "slot": "subhead", "class": ["hero__subhead"], "settings": { "typography": { "font-size": "var(--gf-type-size-lg)", "line-height": "var(--gf-type-leading-body)" }, "_maxWidth": "var(--gf-type-measure)" } },
+              { "el": "div", "global": [".cluster"], "class": ["hero__actions"], "children": [
+                { "el": "button", "slot": "cta-primary", "class": ["hero__cta", "btn--accent", "btn--lg"], "settings": { "tag": "a", "_href": "tel:{{contact.phone}}" } },
+                { "el": "button", "slot": "cta-secondary", "class": ["hero__cta", "btn--ghost"] }
+              ]},
+              { "el": "block", "slot": "trust-strip", "class": ["hero__trust"] }
+            ]},
+            { "el": "image", "slot": "media", "class": ["hero__media"], "settings": { "_aspectRatio": "4/3", "_objectFit": "cover", "_borderRadius": "var(--gf-radius-lg)", "loading": "eager", "fetchpriority": "high" } }
+          ]}
+        ],
+        "notes": [
+          "Phone CTA is tel: and must be reachable in the first viewport on a 390px screen.",
+          "Media has an explicit aspect-ratio so it reserves space before the image decodes."
+        ]
+      },
+      "centered-calm": {
+        "description": "Medical default. Centred, narrow measure, enormous whitespace, one soft depth layer. Restraint is the product signal — this variant does its work by what it leaves out.",
+        "structure": [
+          { "el": "div", "class": ["hero__depth"], "if": "depth > 0", "settings": { "_component": "depth-layer", "tier": "{{depth}}", "variant": "mesh-gradient" } },
+          { "el": "div", "global": [".container-narrow", ".stack"], "class": ["hero__inner", "hero__inner--center"], "settings": { "_textAlign": "center", "_paddingBlock": "var(--gf-space-section-y)", "_gap": "var(--gf-space-md)" }, "children": [
+            { "el": "text-basic", "slot": "eyebrow", "class": ["hero__eyebrow"] },
+            { "el": "heading", "tag": "h1", "slot": "headline", "class": ["hero__title"], "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "font-size": "var(--gf-type-size-3xl)", "line-height": "var(--gf-type-leading-snug)" } } },
+            { "el": "text-basic", "slot": "subhead", "class": ["hero__subhead"], "settings": { "_marginInline": "auto", "_maxWidth": "58ch" } },
+            { "el": "div", "global": [".cluster"], "settings": { "_justifyContent": "center" }, "children": [
+              { "el": "button", "slot": "cta-primary", "class": ["hero__cta", "btn--accent", "btn--lg"] },
+              { "el": "button", "slot": "cta-secondary", "class": ["hero__cta", "btn--ghost"] }
+            ]},
+            { "el": "block", "slot": "trust-strip", "class": ["hero__trust"] }
+          ]}
+        ],
+        "notes": ["Also used by med-03 with a find-a-provider search in the trust-strip slot — utility over poetry for group practices."]
+      },
+      "fullbleed-kinetic": {
+        "description": "Combat and premium-residential default. Full-bleed media behind oversized display type. The loudest thing in the library and the most likely to fail the CWV gate — the poster budget is not negotiable here.",
+        "structure": [
+          { "el": "div", "class": ["hero__depth", "hero__depth--full"], "settings": { "_component": "depth-layer", "tier": "{{depth}}", "variant": "prerendered-video", "aspect": "16/9", "_position": "absolute", "_inset": "0" } },
+          { "el": "div", "class": ["hero__scrim"], "settings": { "_background": "linear-gradient(180deg, rgb(0 0 0 / 0.25) 0%, rgb(0 0 0 / 0.75) 100%)", "_position": "absolute", "_inset": "0" }, "notes": "Required — it is what makes the headline pass AA over arbitrary media." },
+          { "el": "div", "global": [".container", ".stack"], "class": ["hero__inner"], "settings": { "_position": "relative", "_minHeight": "80svh", "_display": "flex", "_flexDirection": "column", "_justifyContent": "flex-end", "_paddingBlock": "var(--gf-space-3xl)" }, "children": [
+            { "el": "text-basic", "slot": "eyebrow", "class": ["hero__eyebrow"] },
+            { "el": "heading", "tag": "h1", "slot": "headline", "class": ["hero__title", "hero__title--display"], "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "font-size": "var(--gf-type-size-hero)", "line-height": "var(--gf-type-leading-tight)", "text-transform": "uppercase", "color": "var(--gf-color-text-on-inverse)" } } },
+            { "el": "text-basic", "slot": "subhead", "class": ["hero__subhead"] },
+            { "el": "div", "global": [".cluster"], "children": [
+              { "el": "button", "slot": "cta-primary", "class": ["hero__cta", "btn--accent", "btn--lg"] },
+              { "el": "button", "slot": "cta-secondary", "class": ["hero__cta", "btn--outline-light"] }
+            ]}
+          ]}
+        ],
+        "notes": [
+          "Contrast is checked against the scrim, not the media — the media varies per client, the scrim does not.",
+          "minHeight uses svh. Never vh.",
+          "The h1 text is the LCP element here, not the poster. That is the ideal case — keep it that way by not putting the headline inside the media container."
+        ]
+      },
+      "split-visual": {
+        "description": "Photography-led. Media is roughly half the viewport and carries the emotional weight; copy is deliberately restrained. Used where the work itself is the argument — restoration reconstruction, procedure pages, program pages.",
+        "structure": [
+          { "el": "div", "class": ["hero__inner", "hero__inner--split"], "settings": { "_display": "grid", "_gridTemplateColumns": "1fr 1fr", "_minHeight": "70svh", "_alignItems": "stretch" }, "children": [
+            { "el": "div", "global": [".stack"], "class": ["hero__copy"], "settings": { "_justifyContent": "center", "_paddingInline": "var(--gf-space-gutter)", "_paddingBlock": "var(--gf-space-section-y)" }, "children": [
+              { "el": "text-basic", "slot": "eyebrow" },
+              { "el": "heading", "tag": "h1", "slot": "headline", "class": ["hero__title"], "settings": { "typography": { "font-size": "var(--gf-type-size-3xl)" } } },
+              { "el": "text-basic", "slot": "subhead" },
+              { "el": "div", "global": [".cluster"], "children": [
+                { "el": "button", "slot": "cta-primary", "class": ["btn--accent", "btn--lg"] },
+                { "el": "button", "slot": "cta-secondary", "class": ["btn--ghost"] }
+              ]}
+            ]},
+            { "el": "image", "slot": "media", "class": ["hero__media", "hero__media--bleed"], "settings": { "_objectFit": "cover", "_height": "100%", "loading": "eager", "fetchpriority": "high" } }
+          ]}
+        ]
+      },
+      "stacked-editorial": {
+        "description": "Interior-page default. Headline over a wide short media band. Quiet, fast, cheap. Used for about, service-area, portfolio and index pages — anywhere the hero's job is orientation rather than persuasion.",
+        "structure": [
+          { "el": "div", "global": [".container", ".stack"], "class": ["hero__inner"], "settings": { "_paddingBlock": "var(--gf-space-section-y-tight)" }, "children": [
+            { "el": "text-basic", "slot": "eyebrow" },
+            { "el": "heading", "tag": "h1", "slot": "headline", "class": ["hero__title"], "settings": { "typography": { "font-size": "var(--gf-type-size-2xl)" }, "_maxWidth": "24ch" } },
+            { "el": "text-basic", "slot": "subhead", "settings": { "_maxWidth": "var(--gf-type-measure)" } },
+            { "el": "image", "slot": "media", "class": ["hero__media", "hero__media--band"], "settings": { "_aspectRatio": "21/9", "_objectFit": "cover", "_borderRadius": "var(--gf-radius-lg)" } }
+          ]}
+        ],
+        "notes": ["No CTA slots rendered — interior pages carry their CTA in a cta-band lower down, which keeps this variant cheap."]
+      }
+    },
+    "tokens": ["space-section-y", "space-xl", "type-size-hero", "type-size-4xl", "type-size-3xl", "type-font-display", "type-leading-tight", "color-accent", "color-text-on-inverse", "radius-lg"],
+    "responsive": {
+      "1024": "split variants collapse to one column; media moves below copy.",
+      "768": "type steps down via the clamp() scale automatically — no breakpoint overrides needed. depth caps at 1.",
+      "390": "cta-primary becomes full-width. The phone CTA must remain inside the first viewport for restoration."
+    },
+    "a11y": [
+      "Exactly one h1 per page, and it is this component's headline slot.",
+      "Headline contrast is measured against the scrim or surface, never against variable media.",
+      "Buttons are real <a> or <button> elements — never styled divs.",
+      "Decorative media has empty alt; meaningful media takes alt from client.json."
+    ],
+    "invariants": [
+      "The LCP element is the h1 or the poster image. Never a video, never a canvas.",
+      "Media always declares aspect-ratio or height before load."
+    ]
+  },
+
+  "trust-bar": {
+    "description": "A thin strip of credibility markers immediately below the hero. Depth is always 0 — it must be instantly legible, and it is often the thing that decides whether the visitor keeps scrolling.",
+    "root": "section",
+    "globalClasses": [".section", ".section--tight"],
+    "properties": { "dark": { "type": "checkbox", "default": false } },
+    "slots": {
+      "items": { "element": "block", "repeat": true, "required": true, "source": "intake", "from": "business.certifications | business.licenses | business.stats | integrations.insuranceLogos" }
+    },
+    "variants": {
+      "certifications": { "description": "Restoration. Text-plus-icon pairs: IICRC, licensed & insured, insurance direct billing, response time.", "structure": [{ "el": "div", "global": [".container", ".cluster"], "class": ["trust-bar__inner"], "settings": { "_justifyContent": "space-between", "_gap": "var(--gf-space-lg)", "_paddingBlock": "var(--gf-space-md)" }, "children": [{ "el": "div", "class": ["trust-bar__item"], "repeat": "items", "global": [".cluster"], "children": [{ "el": "icon", "class": ["trust-bar__icon"], "settings": { "_fill": "var(--gf-color-accent)" } }, { "el": "text-basic", "class": ["trust-bar__label"], "settings": { "typography": { "font-size": "var(--gf-type-size-sm)", "font-weight": "var(--gf-type-weight-bold)" } } }] }] }] },
+      "insurance-logos": { "description": "Medical. Accepted-insurance logos — the number one filter question for this buyer, so it belongs this high on the page.", "structure": [{ "el": "div", "global": [".container"], "class": ["trust-bar__inner"], "children": [{ "el": "text-basic", "class": ["trust-bar__eyebrow"], "settings": { "typography": { "font-size": "var(--gf-type-size-xs)", "text-transform": "uppercase", "letter-spacing": "var(--gf-type-tracking-eyebrow)" } } }, { "el": "div", "global": [".cluster"], "class": ["trust-bar__logos"], "children": [{ "el": "image", "class": ["trust-bar__logo"], "repeat": "items", "settings": { "_maxHeight": "40px", "_filter": "grayscale(1)", "_opacity": "0.7" } }] }] }] },
+      "credentials": { "description": "Combat. Affiliations, coach records, years running.", "structure": [{ "el": "div", "global": [".container", ".cluster"], "class": ["trust-bar__inner"], "children": [{ "el": "text-basic", "class": ["trust-bar__cred"], "repeat": "items", "settings": { "typography": { "font-family": "var(--gf-type-font-display)", "text-transform": "uppercase", "letter-spacing": "var(--gf-type-tracking-eyebrow)" } } }] }] },
+      "review-scores": { "description": "Star rating plus source plus count, pulled from real review platforms.", "structure": [{ "el": "div", "global": [".container", ".cluster"], "class": ["trust-bar__inner"], "children": [{ "el": "div", "class": ["trust-bar__score"], "repeat": "items", "children": [{ "el": "icon", "class": ["trust-bar__stars"] }, { "el": "text-basic", "class": ["trust-bar__label"] }] }] }] },
+      "stat-inline": { "description": "Three or four bare numbers with labels. The cheapest credibility section in the library.", "structure": [{ "el": "div", "global": [".container", ".cluster"], "class": ["trust-bar__inner"], "children": [{ "el": "div", "class": ["trust-bar__stat"], "repeat": "items", "children": [{ "el": "text-basic", "class": ["trust-bar__value"], "settings": { "typography": { "font-size": "var(--gf-type-size-xl)", "font-family": "var(--gf-type-font-display)" } } }, { "el": "text-basic", "class": ["trust-bar__label"] }] }] }] }
+    },
+    "tokens": ["space-md", "space-lg", "type-size-sm", "type-size-xs", "color-accent", "color-border"],
+    "responsive": { "768": "Items wrap; on the narrowest widths this becomes a horizontally scrollable cluster rather than a cramped wrap." },
+    "a11y": ["Logos carry the insurer/certifier name as alt — they are informative, not decorative.", "Never encode a claim in an image alone."],
+    "invariants": ["depth is always 0.", "Every item traces to client.json. A certification that is not in the intake data does not appear here."]
+  }
+}

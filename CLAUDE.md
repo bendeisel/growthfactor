@@ -8,15 +8,27 @@ Stack: WordPress · Bricks Builder · Novamira Pro (MCP) · Claude Code
 ## Repo map
 
 ```
-docs/                 architecture, pipeline, edit loop, build plan, 3D system
-design-system/        tokens.json (base), components.md (inventory)
+docs/                 architecture, pipeline, intake, edit loop, build plan, 3D, spec format
+design-system/
+  tokens.json         base variables — everything a skin can override
+  components/*.json   build specs, 23 components / 87 variants — SOURCE OF TRUTH
+  components.md       human index (deliberately does not duplicate the spec data)
 skins/                restoration / medical / combat — variable overrides only
 layouts/              the 10 template section maps
 schemas/              client.schema.json — intake contract
+intake/form.html      self-contained intake form, outputs client.json
 content/voice/        per-niche copy voice guides
 qa/                   the quality gate
-scripts/              provision / assemble / qa / promote
+scripts/              validate-config / validate-client / qa
 clients/              per-project client.json (gitignored)
+```
+
+## Run the gates
+
+```bash
+node scripts/validate-config.mjs              # after ANY change to tokens/skins/layouts/specs
+node scripts/validate-client.mjs <file.json>  # before provisioning. exit 1 = do not build
+node scripts/qa.mjs <staging-url>             # after assembly. exit 1 = do not send
 ```
 
 ## The rules that keep this system fast
@@ -49,8 +61,8 @@ sign a component variant is missing.
 
 ## Common tasks
 
-**New site build** → `docs/PIPELINE.md`. Validate `client.json` against the schema
-*before* provisioning; incomplete intake is the main cause of blown timelines.
+**New site build** → `docs/PIPELINE.md`. Run `validate-client.mjs` *before*
+provisioning; incomplete intake is the main cause of blown timelines.
 
 **Client edits** → `docs/EDIT-LOOP.md`. Triage every item as A (token) / B (content)
 / C (layout) / D (custom) first. Apply A→B→C, re-assemble as one batch, re-run the
@@ -60,8 +72,10 @@ costs you on every future round.
 **New layout** → copy the closest existing one, change the section map. If it needs
 a component that doesn't exist, add the component to the core first.
 
-**New component variant** → core first, then document it in `components.md`, then
-use it. Never the other way round.
+**New component variant** → add it to the spec in `design-system/components/*.json`
+first, run `validate-config.mjs`, then build it in Bricks, then use it in a layout.
+Never the other way round — the validator will reject a layout that gets ahead of the
+core, and that rejection is the feature.
 
 ## Honest expectations
 

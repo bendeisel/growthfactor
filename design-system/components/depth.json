@@ -1,0 +1,100 @@
+{
+  "$comment": "Build first — most other components compose with depth-layer. See docs/3D-DEPTH-SYSTEM.md for why the tiers are shaped this way.",
+
+  "depth-layer": {
+    "description": "Background decoration layer other components compose with. Never a section on its own. Enforces the rules that keep 3D off the critical path: reserved space, poster-first loading, reduced-motion fallback, mobile downgrade.",
+    "root": "div",
+    "globalClasses": [".depth-layer"],
+    "properties": {
+      "tier": { "type": "number", "options": [0, 1, 2, 3], "default": 1, "description": "Inherited from the section's depth property." },
+      "aspect": { "type": "text", "default": "16/9", "description": "Required. Reserves space so the layer can never shift the page." }
+    },
+    "slots": {
+      "media": { "element": "video", "source": "asset", "from": "assets/3d/<niche>/<scene>/loop.webm", "required": false },
+      "poster": { "element": "image", "source": "asset", "from": "assets/3d/<niche>/<scene>/poster.webp", "required": true }
+    },
+    "variants": {
+      "grain-only": {
+        "description": "Tier 0. Tiled noise over whatever is behind. ~2KB, no layout risk. The cheapest way to stop a gradient looking like a default.",
+        "structure": [
+          { "el": "div", "class": ["depth-layer__grain"], "settings": { "_background": { "image": "var(--gf-asset-noise-tile)", "repeat": "repeat" }, "_opacity": "var(--gf-depth-grain-opacity)", "_pointerEvents": "none" } }
+        ]
+      },
+      "mesh-gradient": {
+        "description": "Tier 0. Two or three large blurred radial gradients at low opacity. Reads as atmospheric lighting. Zero bytes.",
+        "structure": [
+          { "el": "div", "class": ["depth-layer__mesh"], "settings": { "_background": { "image": "radial-gradient(60% 60% at 20% 10%, var(--gf-color-accent) 0%, transparent 60%), radial-gradient(50% 50% at 85% 30%, var(--gf-color-surface-inverse-2) 0%, transparent 65%)" }, "_opacity": "var(--gf-depth-mesh-opacity)", "_filter": "blur(60px)", "_pointerEvents": "none" } },
+          { "el": "div", "class": ["depth-layer__grain"] }
+        ],
+        "notes": ["Blur radius stays large — a small blur reads as a mistake, a 60px+ blur reads as lighting."]
+      },
+      "parallax-image": {
+        "description": "Tier 0. Background image drifting at a different rate to content, via native CSS scroll-driven animation. No JS, no scroll listener, no jank.",
+        "structure": [
+          { "el": "div", "class": ["depth-layer__parallax"], "settings": { "_animationTimeline": "view()", "_animationName": "gf-parallax", "_animationRange": "cover", "_willChange": "transform" } }
+        ],
+        "notes": [
+          "Uses animation-timeline: view(). Browsers without support simply render it static — an acceptable degradation, not a broken layout.",
+          "Translate distance is var(--gf-depth-parallax-strength) of the container height. Subtle beats dramatic."
+        ]
+      },
+      "prerendered-video": {
+        "description": "Tier 1. THE DEFAULT FOR HEROES. A 3D scene modelled in Spline or Blender and rendered out as a seamless loop. Visually identical to real-time for a non-interactive hero, at ~200-500KB with no runtime and no main-thread cost.",
+        "structure": [
+          { "el": "image", "slot": "poster", "class": ["depth-layer__poster"], "settings": { "_objectFit": "cover", "loading": "eager", "fetchpriority": "high" }, "notes": "This is the LCP element. Optimise it like any hero image — under 150KB." },
+          { "el": "video", "slot": "media", "class": ["depth-layer__video"], "settings": { "autoplay": true, "muted": true, "loop": true, "playsinline": true, "preload": "none", "_objectFit": "cover" }, "if": "tier > 0" }
+        ],
+        "notes": [
+          "Render AV1 primary with VP9/WebM fallback, ~1600px wide, 6-10s seamless loop.",
+          "preload=\"none\" is deliberate: the poster paints, then the video fetches. Never preload=\"auto\".",
+          "prefers-reduced-motion: reduce -> the video element is not rendered at all, poster only.",
+          "Save-Data or effectiveType 2g/3g -> poster only."
+        ]
+      },
+      "shader-canvas": {
+        "description": "Tier 2. A single fragment shader (~5KB, no library) for animated aurora/gradient fields. Enormous perceived production value per byte.",
+        "structure": [
+          { "el": "image", "slot": "poster", "class": ["depth-layer__poster"] },
+          { "el": "code", "class": ["depth-layer__canvas"], "settings": { "_script": "assets/shaders/<name>.js" }, "if": "tier > 1" }
+        ],
+        "notes": [
+          "Init on IntersectionObserver, never at page load. Pause the render loop when off-screen.",
+          "Never above the fold on mobile — poster only there.",
+          "Hard cap 10KB including the loader."
+        ]
+      },
+      "interactive-3d": {
+        "description": "Tier 3. Real Spline or three.js with interaction. PAID ADD-ON ONLY. Most likely thing in the library to fail the CWV gate.",
+        "structure": [
+          { "el": "image", "slot": "poster", "class": ["depth-layer__poster"] },
+          { "el": "code", "class": ["depth-layer__scene"], "if": "tier > 2" }
+        ],
+        "notes": [
+          "Lazy-load on intersection. Never in the initial bundle.",
+          "Poster stays visible until the scene is interactive.",
+          "Mobile falls back to prerendered-video. No exceptions.",
+          "Hard budget 1.5MB, and it must still pass qa/checklist.md. If it cannot, it does not ship — including when the client loves it."
+        ]
+      }
+    },
+    "tokens": ["depth-grain-opacity", "depth-mesh-opacity", "depth-parallax-strength", "color-accent", "color-surface-inverse-2"],
+    "responsive": {
+      "base": "Tier is capped at 1 below 768px regardless of the section's setting — mobile gets the poster, not the runtime."
+    },
+    "a11y": [
+      "aria-hidden=\"true\" on the whole layer — it is decoration and must never be announced.",
+      "pointer-events: none so it cannot intercept clicks.",
+      "prefers-reduced-motion: reduce disables every animation and prevents video/canvas from loading."
+    ],
+    "depthBehaviour": {
+      "0": "grain-only or mesh-gradient. No network cost.",
+      "1": "prerendered-video, poster-first.",
+      "2": "prerendered-video plus mesh-gradient, or shader-canvas.",
+      "3": "interactive-3d. Paid add-on, desktop only."
+    },
+    "invariants": [
+      "The container ALWAYS has a reserved aspect-ratio or fixed height. This is the single rule that keeps CLS at zero.",
+      "The poster is ALWAYS the LCP candidate. A video or canvas as LCP is a build failure — qa.mjs checks this."
+    ]
+  }
+}
