@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/*
+  Command Center design tokens.
+  Dark-only by design: this is a wall-mounted / always-open ops screen,
+  so we commit to one look instead of styling both schemes.
+*/
+@theme {
+  --color-bg: #05070c;
+  --color-bg-elevated: #0a0e17;
+  --color-panel: #0c1220;
+  --color-panel-hover: #111a2b;
+  --color-line: #1a2439;
+  --color-line-bright: #27344f;
+
+  --color-ink: #e8edf7;
+  --color-ink-muted: #94a3b8;
+  --color-ink-dim: #5f6d84;
+
+  --color-accent: #22d3ee;
+  --color-accent-deep: #0891b2;
+  --color-violet: #8b5cf6;
+  --color-up: #34d399;
+  --color-down: #f87171;
+  --color-warn: #fbbf24;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background:
+    radial-gradient(
+      1200px 600px at 12% -10%,
+      color-mix(in oklab, var(--color-accent) 8%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 92% 0%,
+      color-mix(in oklab, var(--color-violet) 8%, transparent),
+      transparent 55%
+    ),
+    var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Thin, dark scrollbars so panels don't get chunky OS chrome. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-bright) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line-bright);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@utility panel {
+  background: color-mix(in oklab, var(--color-panel) 88%, transparent);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(8px);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Slow pulse for "live" indicators — calmer than Tailwind's animate-pulse. */
+@keyframes cc-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@utility breathe {
+  animation: cc-breathe 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breathe {
+    animation: none;
+  }
+}
