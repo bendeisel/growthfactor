@@ -1,0 +1,29 @@
+{
+  "id": "med-01-concierge",
+  "name": "Concierge / Boutique Practice",
+  "skin": "medical",
+  "bestFor": "Direct-primary-care, concierge medicine, functional medicine, boutique wellness. Selling access, time and relationship — not procedures. Quietest, most editorial layout in the library.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "centered-logo" },
+      { "component": "hero", "variant": "centered-calm", "depth": 1, "notes": "Serif headline, enormous whitespace, one soft depth layer. Restraint is the product signal." },
+      { "component": "rich-content", "variant": "single-column", "notes": "The philosophy statement. On this layout, prose does the selling." },
+      { "component": "proof-stats", "variant": "inline-3up", "depth": 0, "notes": "Patients per physician, average appointment length, same-day availability." },
+      { "component": "service-grid", "variant": "list-detailed", "depth": 0 },
+      { "component": "team-grid", "variant": "feature-lead", "depth": 1, "notes": "The physician IS the product. Big portrait, real bio, credentials." },
+      { "component": "process-steps", "variant": "horizontal-3", "notes": "How membership works. Removes the main friction." },
+      { "component": "pricing-tiers", "variant": "two-column-featured", "depth": 1, "notes": "Membership pricing. Transparency is a differentiator in this category." },
+      { "component": "testimonial-set", "variant": "single-feature", "depth": 0 },
+      { "component": "faq", "variant": "two-column", "notes": "Do you take insurance? What if I need a specialist? What's included?" },
+      { "component": "cta-band", "variant": "minimal-centered", "depth": 1 },
+      { "component": "contact-block", "variant": "form-only" },
+      { "component": "footer", "variant": "minimal" },
+      { "component": "sticky-mobile-cta", "variant": "book-appointment" }
+    ],
+    "about": ["nav", "hero:stacked-editorial", "rich-content:single-column", "team-grid:feature-lead", "gallery:carousel", "cta-band:minimal-centered", "footer"],
+    "service": ["nav", "hero:centered-calm", "rich-content:with-sidebar", "faq:accordion", "cta-band:appointment", "footer"],
+    "membership": ["nav", "hero:stacked-editorial", "pricing-tiers:comparison-table", "process-steps:numbered-cards", "faq:grouped", "cta-band:appointment", "footer"],
+    "contact": ["nav", "contact-block:form-map-split", "footer"]
+  },
+  "compliance": ["No PHI in the standard form", "WCAG 2.2 AA hard gate", "No outcome guarantees in copy"]
+}

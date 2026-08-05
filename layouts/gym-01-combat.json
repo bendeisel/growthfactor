@@ -1,0 +1,32 @@
+{
+  "id": "gym-01-combat",
+  "name": "Combat Gym / MMA & Boxing",
+  "skin": "combat",
+  "bestFor": "MMA gyms, boxing clubs, muay thai. Sells identity and intensity. Loudest layout in the library — heavy type, full-bleed motion, hard contrast. The offer is always a free trial.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "transparent-overlay" },
+      { "component": "hero", "variant": "fullbleed-kinetic", "depth": 3, "notes": "Pre-rendered loop or full-bleed training footage behind oversized display type. Poster is LCP; video never blocks. Free-trial CTA above fold." },
+      { "component": "trust-bar", "variant": "credentials", "depth": 0, "notes": "Affiliations, coach records, years running." },
+      { "component": "service-grid", "variant": "programs-4up", "depth": 1, "notes": "MMA / Boxing / Muay Thai / Kids. Each to a program page." },
+      { "component": "rich-content", "variant": "single-column", "notes": "The anti-intimidation block. 'Never trained before? Most of our members hadn't either.' This single section moves more trials than anything else on the page." },
+      { "component": "team-grid", "variant": "cards-3up", "depth": 1, "notes": "Coaches with actual competition records. Credibility currency in this niche." },
+      { "component": "proof-stats", "variant": "oversized-2up", "depth": 2, "notes": "Members, classes per week, champions produced." },
+      { "component": "schedule-table", "variant": "weekly-grid", "depth": 0, "notes": "On the homepage deliberately — hiding the schedule costs signups." },
+      { "component": "gallery", "variant": "fullbleed-strip", "depth": 0 },
+      { "component": "testimonial-set", "variant": "grid-3up", "depth": 1 },
+      { "component": "pricing-tiers", "variant": "three-column", "depth": 1, "notes": "Show pricing. Hiding it loses more leads than it protects." },
+      { "component": "faq", "variant": "accordion", "notes": "Do I need gear? Will I get hit? Am I too old/out of shape? What's the contract?" },
+      { "component": "cta-band", "variant": "free-trial", "depth": 2 },
+      { "component": "contact-block", "variant": "form-map-split" },
+      { "component": "footer", "variant": "sitemap" },
+      { "component": "sticky-mobile-cta", "variant": "claim-trial" }
+    ],
+    "program": ["nav", "hero:split-visual", "rich-content:single-column", "schedule-table:by-program", "team-grid:cards-3up", "gallery:carousel", "faq:accordion", "cta-band:free-trial", "footer"],
+    "kids": ["nav", "hero:split-visual", "rich-content:single-column", "proof-stats:inline-3up", "team-grid:cards-3up", "testimonial-set:quote-wall", "schedule-table:by-program", "faq:grouped", "cta-band:free-trial", "footer"],
+    "coaches": ["nav", "hero:stacked-editorial", "team-grid:list-bio", "cta-band:free-trial", "footer"],
+    "pricing": ["nav", "hero:centered-calm", "pricing-tiers:comparison-table", "faq:grouped", "cta-band:free-trial", "footer"],
+    "contact": ["nav", "contact-block:form-map-split", "footer"]
+  },
+  "generated": { "programPages": "one per services[]", "coachPages": "one per team[] where bio is long enough" }
+}

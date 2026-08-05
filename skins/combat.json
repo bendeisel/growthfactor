@@ -1,0 +1,99 @@
+{
+  "$comment": "Combat & fitness skin. Mood: aggressive, kinetic, forged. Covers MMA, boxing, BJJ and performance gyms. The buyer is emotional — identity and intensity sell harder than facilities lists.",
+  "id": "combat",
+  "name": "Combat Sports & Fitness",
+  "extends": "design-system/tokens.json",
+
+  "overrides": {
+    "color": {
+      "surface-0": "#0a0a0b",
+      "surface-1": "#111113",
+      "surface-2": "#191a1d",
+      "surface-inverse": "#f5f5f6",
+      "surface-inverse-2": "#e6e6e8",
+      "text-strong": "#fafafa",
+      "text-body": "#b8babf",
+      "text-muted": "#7c7f87",
+      "text-on-inverse": "#0a0a0b",
+      "text-on-inverse-muted": "#4a4d54",
+      "accent": "#dc2626",
+      "accent-hover": "#b91c1c",
+      "accent-contrast": "#ffffff",
+      "accent-soft": "#2a1113",
+      "border": "#26272b",
+      "border-inverse": "#d4d4d8"
+    },
+    "type": {
+      "font-display": "'Anton', 'Archivo Black', 'Oswald', sans-serif",
+      "font-body": "'Inter Tight', 'Inter', system-ui, sans-serif",
+      "weight-display": "400",
+      "tracking-display": "-0.02em",
+      "tracking-eyebrow": "0.22em",
+      "leading-tight": "0.95"
+    },
+    "radius": {
+      "none": "0",
+      "sm": "0",
+      "md": "2px",
+      "lg": "2px",
+      "xl": "4px"
+    },
+    "shadow": {
+      "md": "0 8px 28px -8px rgb(0 0 0 / 0.60)",
+      "lg": "0 28px 72px -16px rgb(0 0 0 / 0.75)",
+      "glow": "0 0 56px -10px var(--gf-color-accent)",
+      "rim": "inset 0 1px 0 rgb(255 255 255 / 0.14)"
+    },
+    "motion": {
+      "dur-fast": "140ms",
+      "dur-base": "280ms",
+      "dur-slow": "420ms",
+      "ease-out": "cubic-bezier(0.22, 1.2, 0.36, 1)",
+      "distance": "28px"
+    },
+    "depth": {
+      "tier": 2,
+      "grain-opacity": "0.07",
+      "glass-blur": "14px",
+      "glass-fill": "rgb(255 255 255 / 0.04)",
+      "glass-border": "rgb(255 255 255 / 0.09)",
+      "tilt-deg": "2.5deg",
+      "mesh-opacity": "0.65"
+    }
+  },
+
+  "defaults": {
+    "hero": "fullbleed-kinetic",
+    "cta-band": "free-trial",
+    "service-grid": "programs-4up",
+    "trust-bar": "credentials",
+    "sticky-mobile-cta": "claim-trial"
+  },
+
+  "artDirection": {
+    "heroScene": "combat/forged-geo",
+    "imageGrade": "high-contrast-crushed-blacks-single-accent",
+    "photographySubjects": [
+      "real training, mid-motion, sweat and grit",
+      "coaches with actual students",
+      "gym interior in hard side light",
+      "belt promotions, fight nights, competition"
+    ],
+    "avoid": ["glossy fitness-model stock", "empty spotless gym floors", "generic dumbbell close-ups"]
+  },
+
+  "conversionRules": {
+    "primaryCta": "Claim your free trial week",
+    "secondaryCta": "See the schedule",
+    "formLength": "very short (name, email, phone) — friction kills trial signups",
+    "mustSurfaceAboveFold": ["free trial offer", "disciplines taught", "location", "schedule link"],
+    "trustSignals": ["coach lineage and competition record", "affiliation (e.g. IBJJF, USA Boxing)", "member transformations", "class count per week", "beginner-friendly messaging"],
+    "notes": [
+      "Beginner intimidation is the #1 objection — address it explicitly above the fold",
+      "Schedule and pricing must be findable in one click; hiding pricing costs more leads than it protects",
+      "Kids programs are a separate high-value funnel — give them their own page, not a bullet"
+    ]
+  },
+
+  "schemaType": "SportsActivityLocation / HealthAndBeautyBusiness"
+}

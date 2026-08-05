@@ -1,0 +1,32 @@
+{
+  "id": "resto-01-emergency",
+  "name": "Emergency Response",
+  "skin": "restoration",
+  "bestFor": "24/7 water/fire/storm damage. Buyer is in crisis on a phone. Every decision optimises for one action: call now.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "with-cta-bar", "notes": "Phone in the bar, always visible, tap-to-call." },
+      { "component": "hero", "variant": "split-urgent", "depth": 2, "notes": "Headline names the emergency. Phone button is the primary CTA, form is secondary. Poster image is LCP." },
+      { "component": "trust-bar", "variant": "certifications", "depth": 0, "notes": "IICRC, licensed & insured, insurance direct billing, response time." },
+      { "component": "proof-stats", "variant": "band-4up", "depth": 1, "notes": "Dark band. Response time, jobs completed, years, service radius." },
+      { "component": "service-grid", "variant": "cards-3up", "depth": 1, "notes": "Water / Fire / Mold, each linking to its own service page." },
+      { "component": "process-steps", "variant": "horizontal-3", "depth": 0, "notes": "Call → We arrive in 60 min → We handle your insurance. Reduces panic." },
+      { "component": "before-after", "variant": "slider", "depth": 0 },
+      { "component": "testimonial-set", "variant": "grid-3up", "depth": 1 },
+      { "component": "rich-content", "variant": "single-column", "notes": "Insurance claim explainer. Real objection handler and strong local SEO surface." },
+      { "component": "faq", "variant": "accordion", "notes": "Who pays? How fast? Do you work with my insurer? Is it safe to stay?" },
+      { "component": "cta-band", "variant": "emergency", "depth": 2 },
+      { "component": "contact-block", "variant": "form-map-split", "depth": 0 },
+      { "component": "footer", "variant": "mega-local", "notes": "Service-area links for local SEO." },
+      { "component": "sticky-mobile-cta", "variant": "call-now" }
+    ],
+    "service": ["nav", "hero:split-visual", "rich-content:with-sidebar", "process-steps:vertical-timeline", "before-after:side-by-side", "faq:accordion", "cta-band:emergency", "footer"],
+    "service-area": ["nav", "hero:stacked-editorial", "rich-content:single-column", "service-grid:cards-3up", "testimonial-set:single-feature", "cta-band:emergency", "footer"],
+    "about": ["nav", "hero:stacked-editorial", "rich-content:single-column", "team-grid:cards-3up", "proof-stats:inline-3up", "cta-band:emergency", "footer"],
+    "contact": ["nav", "hero:centered-calm", "contact-block:form-map-split", "footer"]
+  },
+  "generated": {
+    "serviceAreaPages": "services[] × service_areas[]",
+    "servicePages": "one per services[]"
+  }
+}

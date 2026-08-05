@@ -1,0 +1,81 @@
+{
+  "$comment": "Restoration skin. Mood: urgent, dependable, industrial. The visitor is often in a crisis on a phone — legibility and speed beat elegance every time.",
+  "id": "restoration",
+  "name": "Restoration & Disaster Recovery",
+  "extends": "design-system/tokens.json",
+
+  "overrides": {
+    "color": {
+      "surface-0": "#ffffff",
+      "surface-1": "#f4f6f8",
+      "surface-2": "#e6eaef",
+      "surface-inverse": "#0d1420",
+      "surface-inverse-2": "#16202f",
+      "text-strong": "#0d1420",
+      "text-body": "#39434f",
+      "accent": "#f59e0b",
+      "accent-hover": "#d97706",
+      "accent-contrast": "#0d1420",
+      "accent-soft": "#fef3c7",
+      "border": "#d8dee5",
+      "border-inverse": "#243247"
+    },
+    "type": {
+      "font-display": "'Barlow Condensed', 'Oswald', system-ui, sans-serif",
+      "font-body": "'Inter', system-ui, sans-serif",
+      "weight-display": "700",
+      "tracking-display": "-0.01em"
+    },
+    "radius": {
+      "sm": "2px",
+      "md": "4px",
+      "lg": "6px",
+      "xl": "8px"
+    },
+    "shadow": {
+      "md": "0 6px 18px -6px rgb(13 20 32 / 0.20)",
+      "lg": "0 20px 48px -12px rgb(13 20 32 / 0.28)"
+    },
+    "motion": {
+      "dur-base": "240ms",
+      "dur-slow": "400ms",
+      "distance": "16px"
+    },
+    "depth": {
+      "tier": 1,
+      "grain-opacity": "0.05",
+      "tilt-deg": "1.5deg"
+    }
+  },
+
+  "defaults": {
+    "hero": "split-urgent",
+    "cta-band": "emergency",
+    "service-grid": "cards-3up",
+    "trust-bar": "certifications",
+    "sticky-mobile-cta": "call-now"
+  },
+
+  "artDirection": {
+    "heroScene": "restoration/droplet-orbit",
+    "imageGrade": "cool-desaturated-with-amber-highlight",
+    "photographySubjects": [
+      "technicians in branded gear on site",
+      "equipment in place (air movers, dehumidifiers)",
+      "before/after of real damage",
+      "trucks and signage"
+    ],
+    "avoid": ["smiling stock office workers", "generic house exteriors", "cartoon icons"]
+  },
+
+  "conversionRules": {
+    "primaryCta": "Call now — 24/7 emergency response",
+    "phoneAlwaysVisible": true,
+    "stickyMobileCallBar": true,
+    "formLength": "short (name, phone, what happened)",
+    "mustSurfaceAboveFold": ["24/7 availability", "phone number", "service area", "insurance billing"],
+    "trustSignals": ["IICRC certification", "insurance direct billing", "response time guarantee", "years in business", "licensed & insured"]
+  },
+
+  "schemaType": "LocalBusiness / EmergencyService"
+}

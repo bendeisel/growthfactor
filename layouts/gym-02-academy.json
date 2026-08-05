@@ -1,0 +1,37 @@
+{
+  "id": "gym-02-academy",
+  "name": "BJJ Academy / Traditional Martial Arts",
+  "skin": "combat",
+  "bestFor": "Brazilian jiu jitsu academies, judo, karate, traditional schools. Sells lineage, craft and community rather than intensity. Uses the combat skin but at lower depth and with more whitespace — disciplined, not loud.",
+  "skinOverrides": {
+    "depth.tier": 1,
+    "color.accent": "use the academy's belt/patch colour where one exists",
+    "motion.dur-base": "340ms"
+  },
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "solid" },
+      { "component": "hero", "variant": "split-visual", "depth": 2, "notes": "Training photograph, not a hype reel. Headline speaks to the practice, not the fight." },
+      { "component": "trust-bar", "variant": "credentials", "depth": 0, "notes": "Affiliation, professor's rank and lineage, IBJJF standing." },
+      { "component": "rich-content", "variant": "single-column", "notes": "Lineage story. In BJJ this is genuine differentiation and buyers actually read it." },
+      { "component": "service-grid", "variant": "programs-4up", "depth": 1, "notes": "Fundamentals / Advanced / No-Gi / Kids." },
+      { "component": "team-grid", "variant": "feature-lead", "depth": 1, "notes": "Head professor featured, then the coaching staff. Rank and lineage on every card." },
+      { "component": "process-steps", "variant": "numbered-cards", "notes": "Your first class: what to wear, what happens, what's expected. Removes the single biggest barrier." },
+      { "component": "schedule-table", "variant": "weekly-grid", "depth": 0 },
+      { "component": "testimonial-set", "variant": "quote-wall", "depth": 1 },
+      { "component": "gallery", "variant": "masonry", "notes": "Belt promotions and competition — community proof, not marketing shots." },
+      { "component": "pricing-tiers", "variant": "two-column-featured", "depth": 1 },
+      { "component": "faq", "variant": "two-column" },
+      { "component": "cta-band", "variant": "free-trial", "depth": 1 },
+      { "component": "contact-block", "variant": "form-map-split" },
+      { "component": "footer", "variant": "sitemap" },
+      { "component": "sticky-mobile-cta", "variant": "claim-trial" }
+    ],
+    "program": ["nav", "hero:split-visual", "rich-content:single-column", "process-steps:vertical-timeline", "schedule-table:by-program", "faq:accordion", "cta-band:free-trial", "footer"],
+    "kids": ["nav", "hero:split-visual", "rich-content:single-column", "proof-stats:inline-3up", "testimonial-set:grid-3up", "schedule-table:by-program", "faq:grouped", "cta-band:free-trial", "footer"],
+    "instructors": ["nav", "hero:stacked-editorial", "team-grid:list-bio", "gallery:carousel", "cta-band:free-trial", "footer"],
+    "schedule": ["nav", "schedule-table:weekly-grid", "pricing-tiers:two-column-featured", "cta-band:free-trial", "footer"],
+    "contact": ["nav", "contact-block:form-map-split", "footer"]
+  },
+  "generated": { "programPages": "one per services[]" }
+}

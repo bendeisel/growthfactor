@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://growth-factor.ai/schemas/client.schema.json",
+  "title": "Client Intake",
+  "description": "One file per project. Produced by the intake form, consumed by the assembler. Incomplete intake is the single most common cause of a 1-hour build becoming a 2-day build — validate before provisioning.",
+  "type": "object",
+  "required": ["meta", "business", "contact", "services", "brand"],
+
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["slug", "niche", "skin", "layout"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "niche": { "enum": ["restoration", "medical", "combat"] },
+        "skin": { "type": "string", "description": "Skin id from skins/" },
+        "layout": { "type": "string", "description": "Layout id from layouts/" },
+        "stagingUrl": { "type": "string", "format": "uri" },
+        "productionUrl": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "business": {
+      "type": "object",
+      "required": ["name", "tagline", "differentiator", "yearsInBusiness"],
+      "properties": {
+        "name": { "type": "string" },
+        "legalName": { "type": "string" },
+        "tagline": { "type": "string", "maxLength": 90 },
+        "differentiator": {
+          "type": "string",
+          "description": "Answer to: why do people pick you over the guy down the road? The most important field in the file — most generated copy leans on it."
+        },
+        "yearsInBusiness": { "type": "integer" },
+        "licenses": { "type": "array", "items": { "type": "string" } },
+        "certifications": { "type": "array", "items": { "type": "string" } },
+        "affiliations": { "type": "array", "items": { "type": "string" } },
+        "stats": {
+          "type": "array",
+          "description": "Verifiable numbers only. Never invent these.",
+          "items": {
+            "type": "object",
+            "required": ["value", "label"],
+            "properties": { "value": { "type": "string" }, "label": { "type": "string" } }
+          }
+        }
+      }
+    },
+
+    "contact": {
+      "type": "object",
+      "required": ["phone", "email", "locations", "hours"],
+      "properties": {
+        "phone": { "type": "string" },
+        "emergencyPhone": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "locations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["label", "street", "city", "state", "zip"],
+            "properties": {
+              "label": { "type": "string" },
+              "street": { "type": "string" },
+              "street2": { "type": "string" },
+              "city": { "type": "string" },
+              "state": { "type": "string" },
+              "zip": { "type": "string" },
+              "lat": { "type": "number" },
+              "lng": { "type": "number" },
+              "phone": { "type": "string" },
+              "hours": { "type": "string" },
+              "gbpUrl": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "hours": { "type": "string", "description": "Human-readable, e.g. 'Mon-Fri 8-6, 24/7 emergency'" },
+        "serviceAreas": {
+          "type": "array",
+          "description": "Drives programmatic local landing pages. 10-30 is the useful range.",
+          "items": { "type": "string" }
+        },
+        "social": { "type": "object", "additionalProperties": { "type": "string", "format": "uri" } }
+      }
+    },
+
+    "services": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["slug", "name", "summary"],
+        "properties": {
+          "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string" },
+          "summary": { "type": "string", "maxLength": 200 },
+          "detail": { "type": "string" },
+          "icon": { "type": "string" },
+          "image": { "type": "string" },
+          "priceFrom": { "type": "string" },
+          "featured": { "type": "boolean" }
+        }
+      }
+    },
+
+    "team": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "role"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "credentials": { "type": "array", "items": { "type": "string" } },
+          "bio": { "type": "string" },
+          "photo": { "type": "string" },
+          "record": { "type": "string", "description": "Combat niche: competition record / rank / lineage" },
+          "specialties": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "testimonials": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["quote", "author"],
+        "properties": {
+          "quote": { "type": "string" },
+          "author": { "type": "string" },
+          "context": { "type": "string" },
+          "rating": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "source": { "type": "string" },
+          "consentOnFile": { "type": "boolean", "description": "Required true for the medical niche before publishing." }
+        }
+      }
+    },
+
+    "pricing": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "price"],
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "string" },
+          "period": { "type": "string" },
+          "features": { "type": "array", "items": { "type": "string" } },
+          "featured": { "type": "boolean" },
+          "cta": { "type": "string" }
+        }
+      }
+    },
+
+    "schedule": {
+      "type": "array",
+      "description": "Combat/fitness niche. Class timetable.",
+      "items": {
+        "type": "object",
+        "required": ["day", "time", "program"],
+        "properties": {
+          "day": { "type": "string" },
+          "time": { "type": "string" },
+          "program": { "type": "string" },
+          "level": { "type": "string" },
+          "coach": { "type": "string" }
+        }
+      }
+    },
+
+    "brand": {
+      "type": "object",
+      "required": ["logo"],
+      "properties": {
+        "logo": { "type": "string" },
+        "logoInverse": { "type": "string" },
+        "favicon": { "type": "string" },
+        "colors": {
+          "type": "object",
+          "description": "Omit entirely to inherit the skin defaults. Any colour supplied is contrast-checked before use and adjusted if it fails AA.",
+          "properties": { "primary": { "type": "string" }, "accent": { "type": "string" } }
+        },
+        "photos": {
+          "type": "array",
+          "description": "Client-supplied photography. Highest-value asset in the file — real photos are the biggest single differentiator between a $10k-looking site and a template.",
+          "items": { "type": "string" }
+        },
+        "voiceNotes": { "type": "string", "description": "Anything about how they talk: words to use, words to never use." }
+      }
+    },
+
+    "integrations": {
+      "type": "object",
+      "properties": {
+        "bookingUrl": { "type": "string", "format": "uri" },
+        "crm": { "type": "string" },
+        "formRecipients": { "type": "array", "items": { "type": "string", "format": "email" } },
+        "analyticsId": { "type": "string" },
+        "callTrackingNumber": { "type": "string" },
+        "chatWidget": { "type": "string" }
+      }
+    },
+
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "hipaaIntakeRequired": { "type": "boolean" },
+        "stateBoardRules": { "type": "string" },
+        "waiverRequired": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "resto-04-multiservice",
+  "name": "Multi-Service Hub",
+  "skin": "restoration",
+  "bestFor": "Firms with six or more distinct service lines (water, fire, mold, storm, biohazard, reconstruction, contents). Homepage is a routing surface — get the visitor to the right service page in one click.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "solid", "notes": "Mega-menu of services. This site's navigation is doing real work." },
+      { "component": "hero", "variant": "centered-calm", "depth": 1, "notes": "Short headline plus a prominent service selector. Routing beats persuasion here." },
+      { "component": "service-grid", "variant": "programs-4up", "depth": 1, "notes": "Immediately below fold — all service lines visible without scrolling far." },
+      { "component": "trust-bar", "variant": "certifications", "depth": 0 },
+      { "component": "proof-stats", "variant": "band-4up", "depth": 1 },
+      { "component": "process-steps", "variant": "horizontal-3", "depth": 0 },
+      { "component": "testimonial-set", "variant": "carousel", "depth": 1 },
+      { "component": "before-after", "variant": "side-by-side", "depth": 0 },
+      { "component": "rich-content", "variant": "two-column", "notes": "Coverage-area copy — the main local SEO body on the homepage." },
+      { "component": "faq", "variant": "grouped", "notes": "Grouped by service line." },
+      { "component": "cta-band", "variant": "emergency", "depth": 2 },
+      { "component": "contact-block", "variant": "card-stack" },
+      { "component": "footer", "variant": "mega-local", "notes": "Full services × areas matrix. Heavy internal linking is the point." },
+      { "component": "sticky-mobile-cta", "variant": "call-now" }
+    ],
+    "service": ["nav", "hero:split-urgent", "trust-bar:certifications", "rich-content:with-sidebar", "process-steps:vertical-timeline", "before-after:slider", "faq:accordion", "cta-band:emergency", "footer"],
+    "service-area": ["nav", "hero:stacked-editorial", "rich-content:single-column", "service-grid:cards-3up", "proof-stats:inline-3up", "testimonial-set:single-feature", "cta-band:emergency", "footer"],
+    "about": ["nav", "hero:stacked-editorial", "rich-content:single-column", "team-grid:cards-4up", "cta-band:emergency", "footer"],
+    "contact": ["nav", "contact-block:card-stack", "footer"]
+  },
+  "generated": {
+    "serviceAreaPages": "services[] × service_areas[] — this layout is built for volume; 6 services × 12 cities = 72 pages generated in minutes",
+    "servicePages": "one per services[]"
+  }
+}

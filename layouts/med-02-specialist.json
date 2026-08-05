@@ -1,0 +1,30 @@
+{
+  "id": "med-02-specialist",
+  "name": "Single Specialty / Procedure-Led",
+  "skin": "medical",
+  "bestFor": "Dermatology, orthopedics, dental, ophthalmology, plastics, fertility. Patient is researching a specific procedure and comparing providers. Procedure pages are the real product; the homepage routes to them.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "solid", "notes": "Procedures mega-menu." },
+      { "component": "hero", "variant": "split-visual", "depth": 1, "notes": "Headline names the specialty and the outcome. Booking CTA above fold." },
+      { "component": "trust-bar", "variant": "insurance-logos", "depth": 0 },
+      { "component": "service-grid", "variant": "cards-3up", "depth": 1, "notes": "Top procedures, each to a full procedure page." },
+      { "component": "team-grid", "variant": "cards-3up", "depth": 0, "notes": "Board certifications visible on every card." },
+      { "component": "proof-stats", "variant": "band-4up", "depth": 1, "notes": "Procedures performed, years, satisfaction. Verifiable numbers only." },
+      { "component": "before-after", "variant": "grid-gallery", "depth": 0, "notes": "Only where legally permitted for the specialty. Requires consent and disclaimers — check state board rules." },
+      { "component": "process-steps", "variant": "horizontal-3", "notes": "Consult → Procedure → Recovery. Directly reduces anxiety." },
+      { "component": "testimonial-set", "variant": "grid-3up", "depth": 0, "notes": "Review testimonials against state medical board advertising rules before publishing." },
+      { "component": "faq", "variant": "grouped" },
+      { "component": "cta-band", "variant": "appointment", "depth": 1 },
+      { "component": "contact-block", "variant": "form-map-split" },
+      { "component": "footer", "variant": "sitemap" },
+      { "component": "sticky-mobile-cta", "variant": "book-appointment" }
+    ],
+    "procedure": ["nav", "hero:split-visual", "rich-content:with-sidebar", "process-steps:vertical-timeline", "before-after:side-by-side", "proof-stats:inline-3up", "faq:accordion", "testimonial-set:single-feature", "cta-band:appointment", "footer"],
+    "provider": ["nav", "hero:stacked-editorial", "rich-content:single-column", "service-grid:list-detailed", "testimonial-set:quote-wall", "cta-band:appointment", "footer"],
+    "about": ["nav", "hero:stacked-editorial", "rich-content:single-column", "team-grid:cards-4up", "gallery:masonry", "cta-band:appointment", "footer"],
+    "contact": ["nav", "contact-block:form-map-split", "footer"]
+  },
+  "generated": { "procedurePages": "one per services[]", "providerPages": "one per team[]" },
+  "compliance": ["No PHI in the standard form", "WCAG 2.2 AA hard gate", "No outcome guarantees", "Before/after imagery requires documented patient consent", "Testimonials must clear state board advertising rules"]
+}

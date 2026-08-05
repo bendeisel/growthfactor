@@ -1,0 +1,89 @@
+{
+  "$comment": "Medical skin. Mood: calm, precise, premium. Trust is built through restraint. Accessibility here is a legal exposure area, not a nicety — the AA gate is hard-blocking.",
+  "id": "medical",
+  "name": "Doctors' Offices & Clinics",
+  "extends": "design-system/tokens.json",
+
+  "overrides": {
+    "color": {
+      "surface-0": "#ffffff",
+      "surface-1": "#f8f7f4",
+      "surface-2": "#efede8",
+      "surface-inverse": "#12232b",
+      "surface-inverse-2": "#1b3138",
+      "text-strong": "#12232b",
+      "text-body": "#41545c",
+      "text-muted": "#7a8c94",
+      "accent": "#0f766e",
+      "accent-hover": "#115e56",
+      "accent-contrast": "#ffffff",
+      "accent-soft": "#d7efec",
+      "border": "#e2e0da"
+    },
+    "type": {
+      "font-display": "'Fraunces', 'Newsreader', Georgia, serif",
+      "font-body": "'Inter', system-ui, sans-serif",
+      "weight-display": "600",
+      "tracking-display": "-0.02em",
+      "leading-tight": "1.1"
+    },
+    "radius": {
+      "sm": "8px",
+      "md": "12px",
+      "lg": "20px",
+      "xl": "28px"
+    },
+    "shadow": {
+      "md": "0 10px 32px -12px rgb(18 35 43 / 0.10)",
+      "lg": "0 28px 72px -20px rgb(18 35 43 / 0.14)"
+    },
+    "motion": {
+      "dur-base": "480ms",
+      "dur-slow": "700ms",
+      "distance": "20px"
+    },
+    "depth": {
+      "tier": 1,
+      "grain-opacity": "0.03",
+      "glass-blur": "20px",
+      "tilt-deg": "1deg",
+      "mesh-opacity": "0.4"
+    }
+  },
+
+  "defaults": {
+    "hero": "centered-calm",
+    "cta-band": "appointment",
+    "service-grid": "list-detailed",
+    "trust-bar": "insurance-logos",
+    "sticky-mobile-cta": "book-appointment"
+  },
+
+  "artDirection": {
+    "heroScene": "medical/soft-forms",
+    "imageGrade": "warm-neutral-high-key",
+    "photographySubjects": [
+      "real providers, real rooms",
+      "warm interior architecture",
+      "hands and details rather than posed faces",
+      "front-desk and waiting area"
+    ],
+    "avoid": ["stethoscope-on-white stock", "stock smiling models", "cold blue clinical filters", "anything implying a specific outcome"]
+  },
+
+  "conversionRules": {
+    "primaryCta": "Request an appointment",
+    "secondaryCta": "Call the office",
+    "formLength": "medium — never collect health details in a non-HIPAA form",
+    "mustSurfaceAboveFold": ["specialty", "location", "booking", "insurance accepted"],
+    "trustSignals": ["board certifications", "insurance accepted", "hospital affiliations", "provider credentials", "patient reviews"],
+    "compliance": [
+      "No PHI in standard form submissions — route to a HIPAA-compliant intake or booking system",
+      "WCAG 2.2 AA is hard-blocking, not advisory",
+      "No outcome guarantees or comparative superiority claims in copy",
+      "Review any patient testimonial against state medical board advertising rules"
+    ]
+  },
+
+  "schemaType": "MedicalBusiness / Physician"
+}

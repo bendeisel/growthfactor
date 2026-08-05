@@ -1,0 +1,29 @@
+{
+  "id": "resto-03-visual",
+  "name": "Visual Proof / Premium Residential",
+  "skin": "restoration",
+  "bestFor": "Firms doing high-end residential reconstruction and remodel-after-loss. The work is beautiful and should carry the page. Closest thing in the restoration set to a design-portfolio site.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "transparent-overlay" },
+      { "component": "hero", "variant": "fullbleed-kinetic", "depth": 2, "notes": "Full-bleed restored-interior photograph. Minimal type over it. Poster-first — the photo is LCP." },
+      { "component": "trust-bar", "variant": "review-scores", "depth": 0 },
+      { "component": "before-after", "variant": "grid-gallery", "depth": 0, "notes": "The centrepiece. Depth 0 deliberately — nothing competes with the photography." },
+      { "component": "service-grid", "variant": "cards-2up-large", "depth": 1 },
+      { "component": "process-steps", "variant": "numbered-cards", "depth": 0, "notes": "Reassurance for homeowners who fear a wrecked house for six months." },
+      { "component": "testimonial-set", "variant": "single-feature", "depth": 1, "notes": "One long, specific, emotional story beats six short ones here." },
+      { "component": "gallery", "variant": "masonry" },
+      { "component": "rich-content", "variant": "with-sidebar", "notes": "Materials, craftsmanship, warranty." },
+      { "component": "faq", "variant": "accordion" },
+      { "component": "cta-band", "variant": "split-image", "depth": 1 },
+      { "component": "contact-block", "variant": "form-map-split" },
+      { "component": "footer", "variant": "sitemap" },
+      { "component": "sticky-mobile-cta", "variant": "call-now" }
+    ],
+    "service": ["nav", "hero:split-visual", "before-after:slider", "rich-content:single-column", "gallery:carousel", "faq:accordion", "cta-band:split-image", "footer"],
+    "portfolio": ["nav", "hero:stacked-editorial", "gallery:masonry", "before-after:grid-gallery", "cta-band:minimal-centered", "footer"],
+    "about": ["nav", "hero:stacked-editorial", "rich-content:single-column", "team-grid:feature-lead", "testimonial-set:quote-wall", "cta-band:split-image", "footer"],
+    "contact": ["nav", "contact-block:form-map-split", "footer"]
+  },
+  "generated": { "serviceAreaPages": "services[] × service_areas[]", "servicePages": "one per services[]" }
+}

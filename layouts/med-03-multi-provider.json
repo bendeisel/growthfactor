@@ -1,0 +1,34 @@
+{
+  "id": "med-03-multi-provider",
+  "name": "Group Practice / Multi-Location",
+  "skin": "medical",
+  "bestFor": "Group practices, multi-site clinics, urgent care networks. Two jobs: help a patient find the right provider, and help them find the nearest location. Directory-shaped, not brochure-shaped.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "with-cta-bar", "notes": "Location switcher in the bar." },
+      { "component": "hero", "variant": "centered-calm", "depth": 1, "notes": "Hero contains a find-a-provider / find-a-location search. Utility over poetry." },
+      { "component": "trust-bar", "variant": "insurance-logos", "depth": 0, "notes": "Accepted insurance is the #1 filter question for this buyer." },
+      { "component": "service-grid", "variant": "programs-4up", "depth": 1, "notes": "Specialties offered." },
+      { "component": "team-grid", "variant": "cards-4up", "depth": 0, "notes": "Provider directory preview, filterable on the full page." },
+      { "component": "contact-block", "variant": "multi-location", "depth": 0, "notes": "All locations with hours, map and phone. Often the most-used block on the site." },
+      { "component": "proof-stats", "variant": "band-4up", "depth": 1 },
+      { "component": "process-steps", "variant": "horizontal-3", "notes": "New patient onboarding." },
+      { "component": "testimonial-set", "variant": "carousel", "depth": 0 },
+      { "component": "faq", "variant": "grouped" },
+      { "component": "cta-band", "variant": "appointment", "depth": 1 },
+      { "component": "footer", "variant": "mega-local", "notes": "Locations × specialties matrix for local SEO." },
+      { "component": "sticky-mobile-cta", "variant": "book-appointment" }
+    ],
+    "provider": ["nav", "hero:stacked-editorial", "rich-content:with-sidebar", "service-grid:list-detailed", "contact-block:card-stack", "cta-band:appointment", "footer"],
+    "location": ["nav", "hero:split-visual", "contact-block:form-map-split", "team-grid:cards-3up", "service-grid:cards-3up", "faq:accordion", "cta-band:appointment", "footer"],
+    "specialty": ["nav", "hero:centered-calm", "rich-content:single-column", "team-grid:cards-3up", "faq:accordion", "cta-band:appointment", "footer"],
+    "contact": ["nav", "contact-block:multi-location", "footer"]
+  },
+  "generated": {
+    "locationPages": "one per locations[]",
+    "providerPages": "one per team[]",
+    "specialtyPages": "one per services[]",
+    "crossPages": "specialties × locations where volume justifies it"
+  },
+  "compliance": ["No PHI in the standard form", "WCAG 2.2 AA hard gate", "NAP consistency across every location page and GBP listing"]
+}

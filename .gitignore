@@ -1,0 +1,6 @@
+node_modules/
+clients/
+qa/reports/
+assets/
+.env
+.DS_Store

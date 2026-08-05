@@ -1,0 +1,29 @@
+{
+  "id": "resto-02-authority",
+  "name": "Established Authority",
+  "skin": "restoration",
+  "bestFor": "Larger regional firms with commercial and insurance-adjuster relationships. Buyer is a property manager or adjuster comparing vendors, not a panicking homeowner. Sells capability and scale.",
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "solid" },
+      { "component": "hero", "variant": "split-visual", "depth": 1, "notes": "Calmer than resto-01. Headline leads with scale and capability, not urgency." },
+      { "component": "logo-strip", "variant": "marquee", "notes": "Commercial clients and insurance carriers worked with." },
+      { "component": "proof-stats", "variant": "oversized-2up", "depth": 1, "notes": "Square footage restored, fleet size, crews available, years." },
+      { "component": "service-grid", "variant": "alternating-rows", "depth": 1, "notes": "Long-form rows — commercial buyers read." },
+      { "component": "rich-content", "variant": "two-column", "notes": "Capabilities statement. Certifications, equipment, capacity, coverage." },
+      { "component": "process-steps", "variant": "vertical-timeline", "depth": 0 },
+      { "component": "team-grid", "variant": "cards-4up", "notes": "Named leadership builds vendor confidence." },
+      { "component": "testimonial-set", "variant": "quote-wall", "depth": 1, "notes": "Weight toward commercial and adjuster quotes." },
+      { "component": "gallery", "variant": "grid-lightbox", "notes": "Large-loss project portfolio." },
+      { "component": "cta-band", "variant": "split-image", "depth": 1, "notes": "Dual CTA: emergency line + request a commercial consultation." },
+      { "component": "contact-block", "variant": "multi-location" },
+      { "component": "footer", "variant": "mega-local" },
+      { "component": "sticky-mobile-cta", "variant": "call-now" }
+    ],
+    "service": ["nav", "hero:split-visual", "rich-content:with-sidebar", "proof-stats:inline-3up", "process-steps:vertical-timeline", "gallery:grid-lightbox", "faq:two-column", "cta-band:split-image", "footer"],
+    "commercial": ["nav", "hero:stacked-editorial", "rich-content:two-column", "service-grid:list-detailed", "logo-strip:static", "testimonial-set:grid-3up", "cta-band:split-image", "footer"],
+    "about": ["nav", "hero:stacked-editorial", "rich-content:single-column", "proof-stats:band-4up", "team-grid:list-bio", "gallery:masonry", "cta-band:minimal-centered", "footer"],
+    "contact": ["nav", "contact-block:multi-location", "footer"]
+  },
+  "generated": { "serviceAreaPages": "services[] × service_areas[]", "servicePages": "one per services[]" }
+}

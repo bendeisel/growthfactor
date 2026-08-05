@@ -1,0 +1,38 @@
+{
+  "id": "gym-03-performance",
+  "name": "Performance / Strength & Conditioning",
+  "skin": "combat",
+  "bestFor": "Strength gyms, athletic performance centres, CrossFit-style boxes, premium fitness studios. The most overtly futuristic layout in the library — data, precision and technology are the aesthetic. This is where the depth system runs hardest.",
+  "skinOverrides": {
+    "color.accent": "#a3e635 or #22d3ee — an electric cool accent reads more 'performance tech' than red",
+    "depth.tier": 2,
+    "radius.md": "4px"
+  },
+  "pages": {
+    "home": [
+      { "component": "nav", "variant": "transparent-overlay" },
+      { "component": "hero", "variant": "fullbleed-kinetic", "depth": 3, "notes": "Shader-canvas or pre-rendered forged-geometry loop. Data-overlay treatment on the type. Poster is LCP, video is decoration only." },
+      { "component": "proof-stats", "variant": "band-4up", "depth": 2, "notes": "Glass cards on a dark gradient with grain. The single most 'expensive' section in the library." },
+      { "component": "service-grid", "variant": "programs-4up", "depth": 2, "notes": "Glass cards with hover tilt and rim light." },
+      { "component": "rich-content", "variant": "two-column", "notes": "The methodology. Assessment, programming, measurement — this is what justifies the premium price." },
+      { "component": "process-steps", "variant": "horizontal-3", "depth": 1, "notes": "Assess → Program → Progress." },
+      { "component": "before-after", "variant": "side-by-side", "depth": 0, "notes": "Member transformations, or performance metrics if the gym prefers not to use body imagery." },
+      { "component": "team-grid", "variant": "cards-3up", "depth": 1, "notes": "Coach certifications: CSCS, USAW, etc." },
+      { "component": "schedule-table", "variant": "by-program", "depth": 0 },
+      { "component": "testimonial-set", "variant": "carousel", "depth": 1 },
+      { "component": "pricing-tiers", "variant": "three-column", "depth": 2, "notes": "Rim light and glow on the featured tier only. Restraint is what keeps this from looking tacky." },
+      { "component": "faq", "variant": "accordion" },
+      { "component": "cta-band", "variant": "free-trial", "depth": 2 },
+      { "component": "contact-block", "variant": "form-map-split", "depth": 0, "notes": "Depth 0. The conversion surface stays boring and fast — always." },
+      { "component": "footer", "variant": "sitemap" },
+      { "component": "sticky-mobile-cta", "variant": "claim-trial" }
+    ],
+    "program": ["nav", "hero:split-visual", "rich-content:single-column", "process-steps:vertical-timeline", "schedule-table:by-program", "proof-stats:inline-3up", "faq:accordion", "cta-band:free-trial", "footer"],
+    "coaches": ["nav", "hero:stacked-editorial", "team-grid:list-bio", "cta-band:free-trial", "footer"],
+    "pricing": ["nav", "hero:centered-calm", "pricing-tiers:comparison-table", "faq:grouped", "cta-band:free-trial", "footer"],
+    "results": ["nav", "hero:stacked-editorial", "before-after:grid-gallery", "testimonial-set:quote-wall", "proof-stats:oversized-2up", "cta-band:free-trial", "footer"],
+    "contact": ["nav", "contact-block:form-map-split", "footer"]
+  },
+  "generated": { "programPages": "one per services[]" },
+  "warning": "This layout carries the most depth in the library. It is the one most likely to fail the Core Web Vitals gate. Budget check every build: hero poster under 150KB, loop under 500KB, shader under 10KB, and LCP must still land under 2.5s on throttled mobile."
+}
