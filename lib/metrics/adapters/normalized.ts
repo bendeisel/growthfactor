@@ -8,14 +8,16 @@ import type {
 import { EMPTY_WINDOW } from "@/lib/metrics/types";
 
 /**
- * Shared upstream contract for the real adapters.
+ * Shared upstream contract for real metrics, used by both directions:
  *
- * Both GHL and Glow Fox reach us through a normalizing hop (n8n workflow or a
- * thin serverless function) rather than the dashboard talking to vendor APIs
- * directly. That keeps vendor-shaped JSON — and vendor credentials — out of
- * the frontend, and means adding a source later is a new URL, not new UI.
+ * - **push** (preferred): n8n POSTs this body to `/api/ingest` on a schedule.
+ * - **pull**: an adapter fetches it when a URL is configured.
  *
- * Expected response body:
+ * Either way a normalizing hop (n8n workflow or a thin function) owns the vendor
+ * credentials and the vendor-shaped JSON, so adding a source later is a new URL
+ * rather than new UI.
+ *
+ * Expected body:
  * {
  *   "businesses": [
  *     {
@@ -32,7 +34,7 @@ import { EMPTY_WINDOW } from "@/lib/metrics/types";
  * cents so arithmetic in the UI stays exact.
  */
 
-interface UpstreamWindow {
+export interface UpstreamWindow {
   sales?: number;
   revenue?: number;
   cancellations?: number;
@@ -40,11 +42,15 @@ interface UpstreamWindow {
   pastDue?: number;
 }
 
-interface UpstreamBusiness {
+export interface UpstreamBusiness {
   id?: string;
   activeMembers?: number;
   mtd?: UpstreamWindow;
   lastMonth?: UpstreamWindow;
+}
+
+export interface UpstreamPayload {
+  businesses?: UpstreamBusiness[];
 }
 
 function num(value: unknown): number {
@@ -64,6 +70,40 @@ function toWindow(raw: UpstreamWindow | undefined): MetricWindow {
 
 export class NotConfiguredError extends Error {}
 
+/**
+ * Maps an upstream body onto our metrics shape.
+ *
+ * Businesses missing from the body come back with `quality: "error"` so a gap
+ * is visible as a gap, rather than showing zeros as if they were measured.
+ */
+export function parseNormalizedPayload(
+  source: SourceId,
+  businesses: Business[],
+  body: UpstreamPayload,
+  now = new Date(),
+): BusinessMetrics[] {
+  const byId = new Map<string, UpstreamBusiness>();
+  for (const entry of body.businesses ?? []) {
+    if (entry?.id) byId.set(entry.id, entry);
+  }
+
+  const fetchedAt = now.toISOString();
+  return businesses.map((business) => {
+    const raw = byId.get(business.accountRef ?? business.id) ?? byId.get(business.id);
+    const quality: Quality = raw ? "live" : "error";
+    return {
+      businessId: business.id,
+      source,
+      quality,
+      fetchedAt,
+      mtd: toWindow(raw?.mtd),
+      lastMonth: toWindow(raw?.lastMonth),
+      activeMembers: Math.round(num(raw?.activeMembers)),
+      note: raw ? undefined : `No row for ${business.id} in the ${source} payload.`,
+    };
+  });
+}
+
 export interface NormalizedFetchOptions {
   source: SourceId;
   url: string;
@@ -73,11 +113,7 @@ export interface NormalizedFetchOptions {
   timeoutMs?: number;
 }
 
-/**
- * Calls a normalizing endpoint and maps its payload onto our metrics shape.
- * Businesses missing from the response come back with `quality: "error"` so the
- * UI can flag a gap instead of silently showing zeros as if they were real.
- */
+/** Pull path: call a normalizing endpoint and map its payload. */
 export async function fetchNormalized({
   source,
   url,
@@ -103,25 +139,9 @@ export async function fetchNormalized({
     throw new Error(`${source}: upstream responded ${response.status}`);
   }
 
-  const body = (await response.json()) as { businesses?: UpstreamBusiness[] };
-  const byId = new Map<string, UpstreamBusiness>();
-  for (const entry of body.businesses ?? []) {
-    if (entry?.id) byId.set(entry.id, entry);
-  }
-
-  const fetchedAt = new Date().toISOString();
-  return businesses.map((business) => {
-    const raw = byId.get(business.accountRef ?? business.id) ?? byId.get(business.id);
-    const quality: Quality = raw ? "live" : "error";
-    return {
-      businessId: business.id,
-      source,
-      quality,
-      fetchedAt,
-      mtd: toWindow(raw?.mtd),
-      lastMonth: toWindow(raw?.lastMonth),
-      activeMembers: Math.round(num(raw?.activeMembers)),
-      note: raw ? undefined : `No row for ${business.id} in the ${source} payload.`,
-    };
-  });
+  return parseNormalizedPayload(
+    source,
+    businesses,
+    (await response.json()) as UpstreamPayload,
+  );
 }

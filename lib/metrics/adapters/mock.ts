@@ -51,6 +51,10 @@ interface Shape {
 
 function shapeFor(business: Business, month: string): Shape {
   const rand = rng(hash(`${business.id}:${month}`));
+  // Active members are a running total, not a monthly figure, so they're seeded
+  // per business only. Seeding them per month made a history window that
+  // crossed a month boundary look like a sudden membership collapse.
+  const members = rng(hash(business.id));
   const scale = business.membership ? 1 : 1.6; // agency/programs bill larger, less often
   const monthlyRevenueCents = Math.round(
     (18_000 + rand() * 42_000) * 100 * (business.membership ? 1 : 0.8) * scale,
@@ -62,7 +66,7 @@ function shapeFor(business: Business, month: string): Shape {
     monthlyRevenueCents,
     monthlySales,
     cancellationRate: 0.04 + rand() * 0.08,
-    activeMembers: business.membership ? Math.round(120 + rand() * 380) : 0,
+    activeMembers: business.membership ? Math.round(120 + members() * 380) : 0,
     pastDueCents: Math.round((400 + rand() * 5_200) * 100),
   };
 }
@@ -105,6 +109,35 @@ export function mockMetricsFor(business: Business, now = new Date()): BusinessMe
     activeMembers: shape.activeMembers,
     note: "Mock data — real adapter lands in Phase 2.",
   };
+}
+
+/**
+ * Mock readings are never written to the snapshot store, so there is no real
+ * history behind them. This regenerates the same deterministic shape at each
+ * past date, which is what lets the sparklines demo honestly: same numbers you
+ * would have seen on that day, still badged as mock.
+ */
+export function mockHistory(business: Business, days: number, now = new Date()) {
+  const points: Array<{
+    date: string;
+    revenueCents: number;
+    sales: number;
+    cancellations: number;
+    activeMembers: number;
+  }> = [];
+
+  for (let back = days - 1; back >= 0; back--) {
+    const at = new Date(now.getTime() - back * 86_400_000);
+    const snapshot = mockMetricsFor(business, at);
+    points.push({
+      date: at.toISOString().slice(0, 10),
+      revenueCents: snapshot.mtd.revenueCents,
+      sales: snapshot.mtd.sales,
+      cancellations: snapshot.mtd.cancellations,
+      activeMembers: snapshot.activeMembers,
+    });
+  }
+  return points;
 }
 
 export const mockAdapter: MetricsAdapter = {

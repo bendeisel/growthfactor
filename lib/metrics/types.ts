@@ -37,6 +37,8 @@ export interface MetricsSnapshot {
   businesses: BusinessMetrics[];
   /** Per-source status, for the footer readout. */
   sources: SourceStatus[];
+  /** Last write to the snapshot store, or null before the first ingest. */
+  lastIngestAt: string | null;
 }
 
 export interface SourceStatus {

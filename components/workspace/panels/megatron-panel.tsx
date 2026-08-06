@@ -2,17 +2,19 @@ import { ChatShell } from "@/components/workspace/chat-shell";
 
 /**
  * Megatron — same brain as Telegram (spec §9), embedded here.
- * Phase 3 points this at the Megatron web endpoint / WebSocket; Phase 1 ships
- * the surface and tells you what is still unwired.
+ *
+ * Runs on OpenClaw / minimax through the shared provider layer, with the live
+ * dashboard numbers in its system prompt. Phase 3 swaps the transport for the
+ * real Megatron endpoint so the Telegram thread and this one are one thread;
+ * until then this is the same model with the same context, separate history.
  */
 export function MegatronPanel() {
   return (
     <ChatShell
+      agent="megatron"
       agentLabel="Megatron"
-      endpoint="/api/chat"
-      payload={{ agent: "megatron" }}
-      placeholder="Ask Megatron anything — same context as Telegram."
-      intro="Megatron runs on OpenClaw / minimax and shares state with Telegram. The web transport is wired up in Phase 3; until then this tab reports what it needs rather than answering."
+      placeholder="Ask Megatron anything — it can see the numbers on the left."
+      intro="Megatron runs on OpenClaw / minimax and can see today's metrics and alerts. Set OPENCLAW_API_KEY to talk to it. Shared history with Telegram lands in Phase 3."
     />
   );
 }

@@ -43,3 +43,6 @@ next-env.d.ts
 
 # budget/spend logs written at runtime
 /memory/budget-*.json
+
+# runtime data written by the app
+/data/

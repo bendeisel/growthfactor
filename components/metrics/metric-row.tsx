@@ -1,3 +1,4 @@
+import { Sparkline } from "@/components/metrics/sparkline";
 import { cn } from "@/lib/utils";
 import type { Business } from "@/lib/businesses";
 import {
@@ -6,7 +7,17 @@ import {
   fractionOfMonthElapsed,
   money,
 } from "@/lib/metrics/format";
+import { dailyRevenueCents } from "@/lib/metrics/trend";
 import type { BusinessMetrics } from "@/lib/metrics/types";
+import type { HistoryPoint } from "@/lib/store/types";
+
+/**
+ * Column template, shared by the header, the rows and the totals so they stay
+ * aligned. The trend column is dropped on narrow screens rather than squeezing
+ * the numbers.
+ */
+export const ROW_GRID =
+  "grid grid-cols-[minmax(0,1fr)_3rem_5rem_3rem] sm:grid-cols-[minmax(0,1fr)_3.5rem_3rem_5.5rem_3rem] gap-2";
 
 /**
  * One business, one row. No drill-down (spec §2) — the secondary line carries
@@ -16,9 +27,11 @@ import type { BusinessMetrics } from "@/lib/metrics/types";
 export function MetricRow({
   business,
   metrics,
+  history,
 }: {
   business: Business;
   metrics: BusinessMetrics;
+  history: HistoryPoint[];
 }) {
   // MTD compared against the same slice of last month, not the whole month.
   const pacedBaseline = metrics.lastMonth.revenueCents * fractionOfMonthElapsed();
@@ -26,7 +39,10 @@ export function MetricRow({
 
   return (
     <div
-      className="grid grid-cols-[minmax(0,1fr)_3.5rem_5.5rem_3.5rem] items-center gap-2 border-b border-line/60 px-4 py-2.5 transition-colors hover:bg-panel-hover/50"
+      className={cn(
+        ROW_GRID,
+        "items-center border-b border-line/60 px-4 py-2.5 transition-colors hover:bg-panel-hover/50",
+      )}
       title={metrics.note ?? business.kind}
     >
       <div className="min-w-0">
@@ -43,14 +59,17 @@ export function MetricRow({
           <p className="truncate text-sm font-medium text-ink">{business.name}</p>
         </div>
         <p className="mt-0.5 truncate text-[11px] text-ink-dim tabular">
-          {business.membership
-            ? `${count(metrics.activeMembers)} active · `
-            : ""}
+          {business.membership ? `${count(metrics.activeMembers)} active · ` : ""}
           {money(metrics.mtd.pastDueCents)} past due
-          {metrics.mtd.newMembers > 0
-            ? ` · +${count(metrics.mtd.newMembers)} new`
-            : ""}
+          {metrics.mtd.newMembers > 0 ? ` · +${count(metrics.mtd.newMembers)} new` : ""}
         </p>
+      </div>
+
+      <div className="hidden justify-self-end text-accent/70 sm:block">
+        <Sparkline
+          points={dailyRevenueCents(history)}
+          label={`${business.name} daily revenue, last ${Math.max(0, history.length - 1)} days`}
+        />
       </div>
 
       <span className="text-right text-sm text-ink tabular">

@@ -1,10 +1,12 @@
+import { CommandCenterShell } from "@/components/command-center-shell";
 import { TopBar } from "@/components/header/top-bar";
 import { MetricsColumn } from "@/components/metrics/metrics-column";
 import { WorkspaceTabs } from "@/components/workspace/workspace-tabs";
+import { authConfigured } from "@/lib/auth/session";
 import { BUSINESSES } from "@/lib/businesses";
-import { getMetricsSnapshot } from "@/lib/metrics/registry";
+import { getDashboardState } from "@/lib/dashboard";
 
-// Metrics are live numbers; never serve them from the build.
+// Live numbers; never serve them from the build.
 export const dynamic = "force-dynamic";
 
 /**
@@ -12,16 +14,20 @@ export const dynamic = "force-dynamic";
  * Left column always visible, right column is the tabbed workspace.
  */
 export default async function CommandCenter() {
-  const snapshot = await getMetricsSnapshot();
+  const state = await getDashboardState();
 
   return (
     <main className="flex h-dvh min-h-0 flex-col">
-      <TopBar businessCount={BUSINESSES.length} />
+      <TopBar
+        businessCount={BUSINESSES.length}
+        protected={authConfigured()}
+        openAlerts={state.alerts.filter((alert) => alert.severity !== "info").length}
+      />
 
-      <div className="grid min-h-0 flex-1 gap-3 overflow-hidden p-3 lg:grid-cols-[minmax(24rem,32rem)_minmax(0,1fr)]">
-        <MetricsColumn initial={snapshot} />
-        <WorkspaceTabs />
-      </div>
+      <CommandCenterShell
+        metrics={<MetricsColumn initial={state} />}
+        workspace={<WorkspaceTabs />}
+      />
     </main>
   );
 }

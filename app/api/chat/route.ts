@@ -1,78 +1,88 @@
-import { NextResponse } from "next/server";
-
-import { DEFAULT_MODEL_ID, PROVIDERS, getModel } from "@/lib/models";
+import { runChat } from "@/lib/chat";
+import type { ChatTurn } from "@/lib/chat/types";
+import { DEFAULT_MODEL_ID } from "@/lib/models";
 
 export const dynamic = "force-dynamic";
+// Needs Node: the provider SDKs and the budget log both touch the filesystem.
+export const runtime = "nodejs";
 
 interface ChatRequest {
-  message?: unknown;
+  turns?: unknown;
   agent?: unknown;
   modelId?: unknown;
   delegateTo?: unknown;
 }
 
+function parseTurns(value: unknown): ChatTurn[] | null {
+  if (!Array.isArray(value) || value.length === 0) return null;
+  const turns: ChatTurn[] = [];
+  for (const entry of value) {
+    const role = (entry as ChatTurn)?.role;
+    const content = (entry as ChatTurn)?.content;
+    if ((role !== "user" && role !== "assistant") || typeof content !== "string") {
+      return null;
+    }
+    if (content.length > 100_000) return null;
+    turns.push({ role, content });
+  }
+  // Conversations must end on the user's turn for the model to answer it.
+  return turns.at(-1)?.role === "user" ? turns : null;
+}
+
 /**
- * Phase 1 chat endpoint.
- *
- * It deliberately does not answer as a model. Provider calls land in Phase 3;
- * until then this reports exactly which provider and credential the turn would
- * have needed, so a fake reply never gets mistaken for a real one.
+ * Streams a turn as Server-Sent Events, one JSON `ChatEvent` per frame, so the
+ * UI paints tokens as they arrive instead of waiting for a long build to finish.
  */
 export async function POST(request: Request) {
   let body: ChatRequest;
   try {
     body = (await request.json()) as ChatRequest;
   } catch {
-    return NextResponse.json({ error: "Body must be JSON." }, { status: 400 });
+    return Response.json({ error: "Body must be JSON." }, { status: 400 });
   }
 
-  const message = typeof body.message === "string" ? body.message.trim() : "";
-  if (!message) {
-    return NextResponse.json(
-      { error: "`message` is required." },
+  const turns = parseTurns(body.turns);
+  if (!turns) {
+    return Response.json(
+      { error: "`turns` must be a non-empty history ending with a user turn." },
       { status: 400 },
     );
   }
 
   const agent = body.agent === "megatron" ? "megatron" : "claude-code";
-  const requestedId =
-    typeof body.modelId === "string" ? body.modelId : DEFAULT_MODEL_ID;
-  const model =
-    agent === "megatron"
-      ? getModel(DEFAULT_MODEL_ID)
-      : (getModel(requestedId) ?? getModel(DEFAULT_MODEL_ID));
+  const modelId =
+    typeof body.modelId === "string" && agent === "claude-code"
+      ? body.modelId
+      : DEFAULT_MODEL_ID;
+  const delegateTo =
+    typeof body.delegateTo === "string" && body.delegateTo ? body.delegateTo : undefined;
 
-  if (!model) {
-    return NextResponse.json(
-      { error: `Unknown model: ${requestedId}` },
-      { status: 400 },
-    );
-  }
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    async start(controller) {
+      const send = (payload: unknown) =>
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
+      try {
+        for await (const event of runChat({ agent, modelId, turns, delegateTo })) {
+          send(event);
+        }
+      } catch (error) {
+        send({
+          type: "error",
+          text: error instanceof Error ? error.message : String(error),
+        });
+      } finally {
+        send({ type: "done" });
+        controller.close();
+      }
+    },
+  });
 
-  const provider = PROVIDERS[model.provider];
-  const configured = Boolean(process.env[model.envVar]);
-  const delegate =
-    typeof body.delegateTo === "string" ? getModel(body.delegateTo) : undefined;
-
-  const lines = [
-    `Not sent — ${provider.label} is not wired up yet (Phase 3).`,
-    `Active model: ${model.label} (${model.id}).`,
-    configured
-      ? `${model.envVar} is set, so this turn is one transport away from working.`
-      : `Missing ${model.envVar}.`,
-  ];
-  if (delegate) {
-    lines.push(
-      `Subtask would be delegated to ${delegate.label} via ${PROVIDERS[delegate.provider].label}.`,
-    );
-  }
-  if (agent === "megatron") {
-    lines.push("Megatron also needs MEGATRON_WEBHOOK_URL to share Telegram state.");
-  }
-
-  return NextResponse.json({
-    role: "system",
-    text: lines.join(" "),
-    modelLabel: model.label,
+  return new Response(stream, {
+    headers: {
+      "content-type": "text/event-stream; charset=utf-8",
+      "cache-control": "no-store, no-transform",
+      connection: "keep-alive",
+    },
   });
 }

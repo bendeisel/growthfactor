@@ -1,61 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Repeat } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChatShell } from "@/components/workspace/chat-shell";
-import {
-  DEFAULT_MODEL_ID,
-  MODELS,
-  PROVIDERS,
-  getModel,
-} from "@/lib/models";
+import { DEFAULT_MODEL_ID, MODELS, PROVIDERS, getModel } from "@/lib/models";
 import { money } from "@/lib/metrics/format";
 import { cn } from "@/lib/utils";
 import type { BudgetStatus } from "@/lib/budget";
 
 /**
- * Claude Code tab. Model switch UX is the locked hybrid (spec §7 decision C):
- * one thread with a toggle for the active model, plus a delegate target so a
- * model can hand a subtask to another.
+ * Claude Code tab. Model switch is the locked hybrid (spec §7 decision C): one
+ * thread with a toggle for the active model, plus a delegate target so the
+ * active model can hand a subtask to another before answering.
  */
 export function ClaudeCodePanel() {
   const [activeId, setActiveId] = useState(DEFAULT_MODEL_ID);
   const [delegateId, setDelegateId] = useState<string>("");
   const [budget, setBudget] = useState<BudgetStatus | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
+  const loadBudget = useCallback(() => {
     fetch("/api/budget", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
+      .then((response) => (response.ok ? response.json() : null))
       .then((body: BudgetStatus | null) => {
-        if (!cancelled && body) setBudget(body);
+        if (body) setBudget(body);
       })
       .catch(() => {
         /* the meter is informational; a failed read shouldn't break the tab */
       });
-    return () => {
-      cancelled = true;
-    };
   }, []);
+
+  useEffect(loadBudget, [loadBudget]);
 
   const active = getModel(activeId) ?? MODELS[0];
   const provider = PROVIDERS[active.provider];
 
   function cycle() {
-    const index = MODELS.findIndex((m) => m.id === activeId);
+    const index = MODELS.findIndex((model) => model.id === activeId);
     setActiveId(MODELS[(index + 1) % MODELS.length].id);
   }
 
   return (
     <ChatShell
+      agent="claude-code"
       agentLabel={active.label}
-      endpoint="/api/chat"
-      payload={{ agent: "claude-code", modelId: activeId, delegateTo: delegateId || undefined }}
+      payload={{ modelId: activeId, delegateTo: delegateId || undefined }}
       placeholder={`Message ${active.label} — ⇧⏎ for a new line.`}
-      intro="Hybrid model switch: one thread, cycle the active model with the button below, and optionally hand the next turn's subtask to a second model. Provider calls are wired up in Phase 3 — until then a send reports which credential the turn would have needed."
+      intro="One thread, cycle the active model with the button below, and optionally hand this turn's subtask to a second model first. The model can see today's metrics and open alerts."
+      onTurnComplete={loadBudget}
       toolbar={
         <>
           <Button variant="outline" size="sm" onClick={cycle} title="Cycle active model">
@@ -90,7 +84,7 @@ export function ClaudeCodePanel() {
               className="rounded-md border border-line bg-bg-elevated px-1.5 py-1 text-[11px] normal-case tracking-normal text-ink-muted"
             >
               <option value="">none</option>
-              {MODELS.filter((m) => m.id !== activeId).map((model) => (
+              {MODELS.filter((model) => model.id !== activeId).map((model) => (
                 <option key={model.id} value={model.id}>
                   {model.label}
                 </option>
@@ -106,24 +100,39 @@ export function ClaudeCodePanel() {
 }
 
 function BudgetMeter({ budget }: { budget: BudgetStatus | null }) {
-  if (!budget) {
-    return <Badge tone="neutral">budget —</Badge>;
-  }
-  const pct = Math.min(100, Math.round(budget.dayFraction * 100));
-  const tone = budget.dayFraction >= 1 ? "danger" : budget.dayFraction >= 0.7 ? "mock" : "neutral";
+  if (!budget) return <Badge tone="neutral">budget —</Badge>;
+
+  // The day meter is the one Ben watches; the month cap is the one that stops
+  // spend, so it wins the badge colour once it's the binding constraint.
+  const dayPct = Math.min(100, Math.round(budget.dayFraction * 100));
+  const tone = budget.blocked
+    ? "danger"
+    : budget.monthFraction >= 0.8 || budget.dayFraction >= 1
+      ? "mock"
+      : "neutral";
+
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className="flex items-center gap-2"
+      title={`Month: ${money(budget.spentMonthCents)} of ${money(budget.hardCapCents)} hard cap${
+        budget.unpricedToday > 0
+          ? ` · ${budget.unpricedToday} turn(s) today have no configured rate`
+          : ""
+      }`}
+    >
       <div className="h-1 w-16 overflow-hidden rounded-full bg-line">
         <div
           className={cn(
             "h-full rounded-full",
             tone === "danger" ? "bg-down" : tone === "mock" ? "bg-warn" : "bg-accent",
           )}
-          style={{ width: `${Math.max(2, pct)}%` }}
+          style={{ width: `${Math.max(2, dayPct)}%` }}
         />
       </div>
       <Badge tone={tone}>
-        {money(budget.spentTodayCents)} / {money(budget.softCapCents)} today
+        {budget.blocked
+          ? "capped"
+          : `${money(budget.spentTodayCents)} / ${money(budget.softCapCents)} today`}
       </Badge>
     </div>
   );

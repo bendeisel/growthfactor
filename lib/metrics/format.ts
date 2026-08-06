@@ -4,17 +4,24 @@ const usd = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-const usdCompact = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  notation: "compact",
-  maximumFractionDigits: 1,
-});
+/**
+ * Compact currency is hand-rolled rather than `Intl` compact notation: Node and
+ * Chrome ship different ICU versions and disagree on trailing zeros ($40.0K vs
+ * $40K), which is a hydration mismatch on every server-rendered total.
+ */
+function compactUsd(dollars: number): string {
+  const sign = dollars < 0 ? "-" : "";
+  const abs = Math.abs(dollars);
+  const [value, unit] =
+    abs >= 1_000_000 ? [abs / 1_000_000, "M"] : [abs / 1_000, "K"];
+  const rounded = Math.round(value * 10) / 10;
+  return `${sign}$${Number.isInteger(rounded) ? rounded : rounded.toFixed(1)}${unit}`;
+}
 
 export function money(cents: number, compact = false): string {
   const dollars = cents / 100;
   return compact && Math.abs(dollars) >= 10_000
-    ? usdCompact.format(dollars)
+    ? compactUsd(dollars)
     : usd.format(dollars);
 }
 
