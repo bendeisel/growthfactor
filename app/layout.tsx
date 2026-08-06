@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Command Center — Growth Factor AI",
   description:
-    "One screen for every business: live metrics plus Megatron, Claude Code, ClickUp, Drive, Gmail and Calendar.",
+    "One screen for every business: live metrics, one terminal, and every app the agent can open.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

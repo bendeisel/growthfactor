@@ -1,5 +1,5 @@
 import { anthropicProvider } from "@/lib/chat/anthropic";
-import { openAIProvider, openClawProvider } from "@/lib/chat/openai-compatible";
+import { geminiProvider, openAIProvider } from "@/lib/chat/openai-compatible";
 import { buildSystemPrompt } from "@/lib/chat/system";
 import {
   MissingCredentialError,
@@ -8,18 +8,17 @@ import {
   type Provider,
 } from "@/lib/chat/types";
 import { checkBudget, record } from "@/lib/budget";
-import { DEFAULT_MODEL_ID, getModel, type ProviderId } from "@/lib/models";
+import { getModel, listModels, type ProviderId } from "@/lib/models";
 import { costCentsFor } from "@/lib/pricing";
 import { TOOLS, runTool } from "@/lib/tools";
 
 const PROVIDERS: Record<ProviderId, Provider> = {
   anthropic: anthropicProvider,
   openai: openAIProvider,
-  openclaw: openClawProvider,
+  gemini: geminiProvider,
 };
 
 export interface ChatRunOptions {
-  agent: "megatron" | "claude-code";
   modelId: string;
   turns: ChatTurn[];
   /** Hand this turn's subtask to a second model first (hybrid switch, spec §7). */
@@ -60,9 +59,16 @@ async function logUsage(
  * that returns usage gets logged, including the subtask.
  */
 export async function* runChat(options: ChatRunOptions): AsyncGenerator<ChatEvent> {
-  const model = getModel(options.modelId) ?? getModel(DEFAULT_MODEL_ID);
+  const model = getModel(options.modelId);
   if (!model) {
-    yield { type: "error", text: `Unknown model: ${options.modelId}` };
+    // Never silently fall back to another model — that spends money on something
+    // he didn't pick.
+    yield {
+      type: "error",
+      text: `${options.modelId} isn't available on this deployment. Configured: ${listModels()
+        .map((candidate) => candidate.id)
+        .join(", ")}.`,
+    };
     return;
   }
 
@@ -75,7 +81,7 @@ export async function* runChat(options: ChatRunOptions): AsyncGenerator<ChatEven
     yield { type: "notice", text: budget.warning };
   }
 
-  const system = await buildSystemPrompt(options.agent);
+  const system = await buildSystemPrompt();
   let turns = options.turns;
 
   // --- delegated subtask ---------------------------------------------------
@@ -107,17 +113,16 @@ export async function* runChat(options: ChatRunOptions): AsyncGenerator<ChatEven
   }
 
   // --- main answer ---------------------------------------------------------
-  // Tools are Anthropic-only for now: the loop is written against Anthropic's
-  // tool_use/tool_result shape. The other providers still answer, without tools.
+  // The tool loop is written against Anthropic's tool_use/tool_result shape, so
+  // only Claude drives tools today. The others still answer.
   const approved = new Set(options.approvedTools ?? []);
-  const withTools =
-    model.provider === "anthropic"
-      ? {
-          tools: TOOLS,
-          runTool: (name: string, input: Record<string, unknown>) =>
-            runTool(name, input, approved),
-        }
-      : {};
+  const withTools = model.tools
+    ? {
+        tools: TOOLS,
+        runTool: (name: string, input: Record<string, unknown>) =>
+          runTool(name, input, approved),
+      }
+    : {};
 
   let inputTokens = 0;
   let outputTokens = 0;
@@ -140,7 +145,7 @@ export async function* runChat(options: ChatRunOptions): AsyncGenerator<ChatEven
   }
 
   if (inputTokens > 0 || outputTokens > 0) {
-    await logUsage(model.id, inputTokens, outputTokens, options.agent);
+    await logUsage(model.id, inputTokens, outputTokens, "command-center");
     yield { type: "usage", inputTokens, outputTokens };
   }
 }

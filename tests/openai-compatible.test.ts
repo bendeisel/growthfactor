@@ -153,7 +153,7 @@ describe("OpenAI-compatible provider", () => {
   });
 
   it("honours a base URL override and trims a trailing slash", async () => {
-    process.env.TEST_BASE_URL = "https://openclaw.example/v1/";
+    process.env.TEST_BASE_URL = "https://gateway.example/v1/";
     const fetchMock = vi.fn(async (_url: string | URL, _init?: RequestInit) =>
       streamingResponse(["data: [DONE]\n\n"]),
     );
@@ -161,7 +161,7 @@ describe("OpenAI-compatible provider", () => {
 
     await collect(provider.stream(request));
     expect(String(fetchMock.mock.calls[0][0])).toBe(
-      "https://openclaw.example/v1/chat/completions",
+      "https://gateway.example/v1/chat/completions",
     );
   });
 

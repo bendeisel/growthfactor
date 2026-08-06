@@ -21,8 +21,9 @@ Three columns, one screen: businesses, Command Center, apps.
 - `middleware.ts` — the single auth gate for every request.
 - `components/metrics/business-panel.tsx` — left column: selector, four KPI
   tiles, one chart, attention feed.
-- `components/command-center-panel.tsx` — middle: Jarvis core, brain selector,
-  the one chat thread.
+- `components/command-center-panel.tsx` — middle: Jarvis core, model selector,
+  the one chat thread. `lib/models.ts` decides which models exist; only ones this
+  deployment can actually call are offered.
 - `components/jarvis/jarvis-core.tsx` — the centrepiece (three.js), which is also
   the agent's status light.
 - `components/workspace/` — right column. `apps-panel.tsx` is the toggle,

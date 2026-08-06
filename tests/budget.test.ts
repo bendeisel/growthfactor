@@ -43,7 +43,7 @@ describe("budget log", () => {
     const { record, getStatus } = await budget();
     await record({
       at: new Date().toISOString(),
-      modelId: "minimax-m3",
+      modelId: "gpt-5-codex",
       inputTokens: 500,
       outputTokens: 200,
       costCents: null,

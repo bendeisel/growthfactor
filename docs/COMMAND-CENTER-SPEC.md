@@ -1,7 +1,7 @@
 # Command Center — Build Spec v0.1
 
-**Date:** 2026-08-05 · **Owner:** Ben Grove (Growth Factor AI) · **Builder:** Claude Code · **Architect:** Megatron
-**Status:** Open questions locked 2026-08-05. Converted from the hand-off `.docx`; §7 and §9 are the binding decisions.
+**Date:** 2026-08-05 · **Owner:** Ben Grove (Growth Factor AI) · **Builder:** Claude Code
+**Status:** Open questions locked 2026-08-05. Converted from the hand-off `.docx`; §7 and §9 are the binding decisions, **as amended in §10** — read that first.
 
 ## 1. Vision
 
@@ -141,3 +141,38 @@ Goal: clear the inbox in 5 minutes, not 60.
 | Calendar | Google Calendar API | Embedded agenda |
 
 Deferred: Google Photos.
+
+## 10. Amendments
+
+The sections above are the original hand-off and are kept as the record. Where
+they conflict with this section, this section wins.
+
+### 2026-08-06 — Megatron is out; Claude only
+
+Megatron and the OpenClaw / minimax routing it came with are removed from the
+product. Ben's call: it wasn't doing a good enough job.
+
+What that changes:
+
+- **§2, §3, §9:** there is no Megatron panel and no Megatron brain. The Command
+  Center is one thread run by Claude.
+- **§3:** the model switch is Claude Opus 5 and Sonnet 5. Codex (OpenAI) and
+  Gemini are optional second opinions that appear in the selector only once both
+  their API key and their model id are configured, since we won't guess a model
+  id. They answer but cannot drive the tools — the tool loop is written against
+  Anthropic's tool_use shape.
+- **§3:** "cheap model default, escalate when needed" was tied to OpenClaw being
+  the cheap tier. With Claude only, the default is Opus 5 (best at running the
+  tools) and Sonnet 5 is the cheaper option. The $5/day soft cap and $100/month
+  hard cap are unchanged and enforced before each call.
+- **§4:** email triage is still the goal; "Megatron drafts the reply" now means
+  the agent drafts it, through the `gmail_draft` tool, and Ben approves before
+  anything sends.
+
+### 2026-08-06 — Apps are summoned, not tabbed
+
+§2's tabbed workspace is replaced by tool-driven windows. Asking the Command
+Center for mail, tasks, files or deeper numbers calls a tool, and the tool call
+renders itself as a window in the right-hand column. One renderer per result
+shape, so a new source is a new tool and no new UI. Anything outward-facing
+stops for approval, granted per tool, per turn.

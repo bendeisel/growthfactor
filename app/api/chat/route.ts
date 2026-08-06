@@ -8,7 +8,6 @@ export const runtime = "nodejs";
 
 interface ChatRequest {
   turns?: unknown;
-  agent?: unknown;
   modelId?: unknown;
   delegateTo?: unknown;
   approvedTools?: unknown;
@@ -32,7 +31,8 @@ function parseTurns(value: unknown): ChatTurn[] | null {
 
 /**
  * Streams a turn as Server-Sent Events, one JSON `ChatEvent` per frame, so the
- * UI paints tokens as they arrive instead of waiting for a long build to finish.
+ * UI paints tokens and tool windows as they arrive instead of waiting for a long
+ * build to finish.
  */
 export async function POST(request: Request) {
   let body: ChatRequest;
@@ -50,11 +50,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const agent = body.agent === "megatron" ? "megatron" : "claude-code";
-  const modelId =
-    typeof body.modelId === "string" && agent === "claude-code"
-      ? body.modelId
-      : DEFAULT_MODEL_ID;
+  const modelId = typeof body.modelId === "string" ? body.modelId : DEFAULT_MODEL_ID;
   const delegateTo =
     typeof body.delegateTo === "string" && body.delegateTo ? body.delegateTo : undefined;
   // Approvals are per-request: whatever Ben ticked for this send, nothing more.
@@ -69,7 +65,6 @@ export async function POST(request: Request) {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
       try {
         for await (const event of runChat({
-          agent,
           modelId,
           turns,
           delegateTo,

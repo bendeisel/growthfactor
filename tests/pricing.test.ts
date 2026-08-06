@@ -4,6 +4,13 @@ import { costCentsFor, rateFor } from "@/lib/pricing";
 
 const ORIGINAL_ENV = { ...process.env };
 
+/** Codex only exists as a model once its key and model id are both set. */
+function enableCodex(modelId = "gpt-5-codex") {
+  process.env.OPENAI_API_KEY = "sk-test";
+  process.env.OPENAI_MODEL = modelId;
+  return modelId;
+}
+
 beforeEach(() => {
   process.env = { ...ORIGINAL_ENV };
 });
@@ -19,16 +26,17 @@ describe("pricing", () => {
     expect(costCentsFor("claude-sonnet-5", 1_000_000, 0)).toBeCloseTo(300);
   });
 
-  it("returns null rather than a guess for models with no configured rate", () => {
-    expect(rateFor("gpt-5")).toBeNull();
-    expect(costCentsFor("gpt-5", 1_000_000, 1_000_000)).toBeNull();
-    expect(costCentsFor("minimax-m3", 500, 500)).toBeNull();
+  it("returns null rather than a guess for a model with no configured rate", () => {
+    const modelId = enableCodex();
+    expect(rateFor(modelId)).toBeNull();
+    expect(costCentsFor(modelId, 1_000_000, 1_000_000)).toBeNull();
   });
 
   it("takes rates from env when set, so a price change needs no deploy", () => {
+    const modelId = enableCodex();
     process.env.OPENAI_INPUT_CENTS_PER_MTOK = "125";
     process.env.OPENAI_OUTPUT_CENTS_PER_MTOK = "1000";
-    expect(costCentsFor("gpt-5", 1_000_000, 1_000_000)).toBeCloseTo(1125);
+    expect(costCentsFor(modelId, 1_000_000, 1_000_000)).toBeCloseTo(1125);
   });
 
   it("lets an env override win over a built-in rate", () => {
@@ -37,7 +45,9 @@ describe("pricing", () => {
     expect(costCentsFor("claude-opus-5", 1_000_000, 0)).toBeCloseTo(100);
   });
 
-  it("is null for an unknown model id", () => {
+  it("is null for a model this deployment doesn't have", () => {
+    // No OPENAI_MODEL set, so there is no such model to price.
+    expect(rateFor("gpt-5-codex")).toBeNull();
     expect(rateFor("not-a-model")).toBeNull();
   });
 });

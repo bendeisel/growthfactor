@@ -28,8 +28,8 @@ const CLUSTERS: Cluster[] = [
   { label: "aeterna-club", size: 8, color: 0x34d399 },
   { label: "furst-place-mma", size: 7, color: 0x22d3ee },
   { label: "drhoward-compass", size: 7, color: 0xfbbf24 },
-  { label: "megatron", size: 10, color: 0x8b5cf6 },
-  { label: "claude-code", size: 10, color: 0x22d3ee },
+  { label: "command-center", size: 10, color: 0x22d3ee },
+  { label: "claude", size: 10, color: 0x22d3ee },
   { label: "workspace", size: 12, color: 0x64748b },
 ];
 

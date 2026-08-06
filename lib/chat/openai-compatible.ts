@@ -6,18 +6,22 @@ import {
 } from "@/lib/chat/types";
 
 /**
- * One provider for both OpenAI and OpenClaw / minimax.
- *
- * Both speak the OpenAI `/chat/completions` shape, so this is a single fetch
- * implementation with two base URLs rather than two SDKs — and it works for any
- * future OpenAI-compatible endpoint Ben wants to route to.
+ * One provider for every OpenAI-compatible endpoint — Codex today, Gemini
+ * through its OpenAI-compatibility endpoint, and anything else Ben wants to
+ * route to later. A single fetch implementation with a configurable base URL
+ * beats two SDKs.
  */
 
 export interface OpenAICompatibleConfig {
   label: string;
   apiKeyEnv: string;
   baseUrlEnv: string;
-  defaultBaseUrl: string;
+  /**
+   * Omitted for providers whose endpoint we won't guess. Gemini's
+   * OpenAI-compatibility path has moved before; making it explicit means a wrong
+   * default can't send Ben's key somewhere unexpected.
+   */
+  defaultBaseUrl?: string;
 }
 
 interface Delta {
@@ -34,6 +38,11 @@ export function createOpenAICompatibleProvider(
       throw new MissingCredentialError(`${config.apiKeyEnv} is not set.`);
     }
     const baseUrl = process.env[config.baseUrlEnv] ?? config.defaultBaseUrl;
+    if (!baseUrl) {
+      throw new MissingCredentialError(
+        `${config.baseUrlEnv} is not set. Point it at ${config.label}'s OpenAI-compatible endpoint.`,
+      );
+    }
     return { apiKey, baseUrl: baseUrl.replace(/\/$/, "") };
   }
 
@@ -137,10 +146,8 @@ export const openAIProvider = createOpenAICompatibleProvider({
   defaultBaseUrl: "https://api.openai.com/v1",
 });
 
-export const openClawProvider = createOpenAICompatibleProvider({
-  label: "OpenClaw / minimax",
-  apiKeyEnv: "OPENCLAW_API_KEY",
-  // OpenClaw fronts minimax; whoever holds the key sets the endpoint.
-  baseUrlEnv: "OPENCLAW_BASE_URL",
-  defaultBaseUrl: "https://api.minimax.io/v1",
+export const geminiProvider = createOpenAICompatibleProvider({
+  label: "Gemini",
+  apiKeyEnv: "GEMINI_API_KEY",
+  baseUrlEnv: "GEMINI_BASE_URL",
 });

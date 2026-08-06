@@ -10,7 +10,7 @@ Spec and phase plan: [`docs/COMMAND-CENTER-SPEC.md`](docs/COMMAND-CENTER-SPEC.md
 ```bash
 npm install
 npm run dev          # http://localhost:3000
-npm test             # 89 tests
+npm test             # 95 tests
 npm run build        # includes TypeScript
 ```
 
@@ -31,7 +31,7 @@ locally it runs open and shows an `unprotected` badge in the header.
 │ ────────────────    │ │  you: open ClickUp      │ │  agent just opened  │
 │ chart               │ │  ⚒ clickup_tasks        │ │                     │
 │ ────────────────    │ │  Opus 5: four open …    │ │  [Approve] [Decline]│
-│ needs attention     │ │  ▸ brain selector       │ │                     │
+│ needs attention     │ │  ▸ model selector       │ │                     │
 └─────────────────────┘ └─────────────────────────┘ └─────────────────────┘
 ```
 
@@ -42,10 +42,12 @@ month, because half a month of revenue judged against a whole one always looks
 like a collapse. Total members is a stock, so it compares to where last month
 closed.
 
-**The middle column is the only terminal.** One thread, one brain selector
-(Megatron on OpenClaw, or Opus 5 / Sonnet 5 / GPT-5 / minimax). The Jarvis core
-is also the status light: idle drifts, thinking speeds up and shifts violet,
-working runs hot.
+**The middle column is the only terminal.** One thread, run by Claude — Opus 5
+by default (best at driving the tools) or Sonnet 5 when a question is routine and
+you'd rather spend less. Codex and Gemini are optional second opinions that appear
+in the selector only once you set both their API key and their model id; they
+answer but can't drive the tools yet. The Jarvis core is also the status light:
+idle drifts, thinking speeds up and shifts violet, working runs hot.
 
 **The right column is whatever you summoned.** Nothing is a hand-built app
 screen. Ask for something, the agent calls a tool, and the tool call *is* the
@@ -73,9 +75,8 @@ Two rules hold for all of them:
 - **A tool that can't run says which credential is missing.** It never returns
   plausible-looking placeholder data.
 
-Tools currently run on the Anthropic models; the other providers still answer but
-can't act, and the panel says `chat only` rather than letting you find out by
-asking.
+Tools run on Claude. If you add Codex or Gemini later they'll answer but not act,
+and the panel says `chat only` rather than letting you find out by asking.
 
 ## Metrics: pushed, stored, then read
 
@@ -123,10 +124,14 @@ answer rather than an empty state.
 
 $5/day soft cap and $100/month hard cap, checked **before** each provider call.
 The monthly cap refuses; the daily cap warns and proceeds. Spend is logged to
-`memory/budget-YYYY-MM-DD.json` and priced from Anthropic's published rates —
-other providers need `*_INPUT_CENTS_PER_MTOK` / `*_OUTPUT_CENTS_PER_MTOK`, and
-until then those turns log tokens and report cost as *unpriced* rather than
-guessing a number into a guardrail.
+`memory/budget-YYYY-MM-DD.json` and priced from Claude's published rates. Any
+provider you add later needs `*_INPUT_CENTS_PER_MTOK` / `*_OUTPUT_CENTS_PER_MTOK`
+set, and until it is, those turns log tokens and report cost as *unpriced* rather
+than guessing a number into a guardrail.
+
+Opus 5 is the default because it's the best tool-driver, not the cheapest: at
+list rates a heavy tool-using turn is cents, but a day of them adds up against a
+$5 cap. Switch to Sonnet 5 for routine questions if the meter gets tight.
 
 ## Layout
 
@@ -140,7 +145,7 @@ app/
   api/budget            spend against the caps
 middleware.ts           one auth gate for every request
 components/
-  command-center-panel  Jarvis core + brain selector + chat
+  command-center-panel  Jarvis core + model selector + chat
   jarvis/               the core (three.js)
   metrics/              business panel, KPI grid, attention feed
   charts/               bar comparison, trend chart
@@ -149,6 +154,7 @@ components/
 lib/
   tools/                what the agent can do
   chat/                 providers, tool loop, system prompt
+  models.ts             which models this deployment can actually call
   metrics/              types, registry, adapters, rollup, trend, formatting
   store/                append-only snapshot log
   alerts.ts  budget.ts  pricing.ts  businesses.ts

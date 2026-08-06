@@ -25,8 +25,7 @@ export interface ChatMessage {
 }
 
 export interface ChatShellProps {
-  /** Storage key + payload discriminator. */
-  agent: "megatron" | "claude-code";
+  /** Shown on the agent's turns — the active model's name. */
   agentLabel: string;
   toolbar?: ReactNode;
   placeholder: string;
@@ -57,7 +56,6 @@ function nextId(prefix: string) {
 const STORAGE_KEY = "cc.thread.command-center";
 
 export function ChatShell({
-  agent,
   agentLabel,
   toolbar,
   placeholder,
@@ -126,7 +124,6 @@ export function ChatShell({
           headers: { "content-type": "application/json" },
           signal: controller.signal,
           body: JSON.stringify({
-            agent,
             ...payload,
             approvedTools: options?.approve ? [options.approve] : [],
             turns: history
@@ -187,7 +184,7 @@ export function ChatShell({
         onTurnComplete?.();
       }
     },
-    [agent, onTurnComplete, openWindow, payload, resolveWindow, setAgentState],
+    [onTurnComplete, openWindow, payload, resolveWindow, setAgentState],
   );
 
   // Let the app column and Approve buttons drive this thread.
