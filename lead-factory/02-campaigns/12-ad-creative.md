@@ -16,7 +16,7 @@ Match rates on cold B2B lists run **20–50% on Meta and lower on Google**, beca
 
 ## 2. Budget
 
-`[ASSUMPTION]` $3,100/mo total, against a $2,000 CAC ceiling (`00-strategy/03-unit-economics.md §2`).
+`[ASSUMPTION]` $3,100/mo total, against a ~$3,000 CAC ceiling (`00-strategy/03-unit-economics.md §2`).
 
 | Line | Budget | Target | Expected |
 |---|---|---|---|
@@ -25,7 +25,7 @@ Match rates on cold B2B lists run **20–50% on Meta and lower on Google**, beca
 | Retargeting — Meta + Google Display | $500 | 15% lift on all conversions | — |
 | Creative production | $300 | — | — |
 
-**Before 10 accounts** (break-even), run only the Google Search line. Paid media is the right investment *after* the outbound machine has proven the offer converts, not before — otherwise you're buying traffic for a pitch you haven't validated.
+**Before 8 accounts** (break-even), run only the Google Search line. Paid media is the right investment *after* the outbound machine has proven the offer converts, not before — otherwise you're buying traffic for a pitch you haven't validated.
 
 ## 3. Google Search
 
@@ -172,6 +172,6 @@ Angles 3 and 4 are the strongest available because they're true, specific, check
 | Meta report CPL | < $60 | > $100 → creative fatigue, rotate angle |
 | Report → meeting | > 15% | Below → the follow-up sequence, not the ad |
 | Retargeting frequency | < 4/week | Above → burning goodwill and budget |
-| Blended paid CAC | < $2,000 | Above for a full month → cut paid, reallocate to outbound and partners |
+| Blended paid CAC | < $3,000 | Above for a full month → cut paid, reallocate to outbound and partners |
 
 **Attribution:** UTM every destination, server-side conversion tracking where possible, and — most importantly — **ask on every discovery call: "how'd you come across us?"** Self-reported attribution is imprecise and still beats a platform grading its own homework. Log it as a required CRM field.

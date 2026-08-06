@@ -134,7 +134,7 @@ Re-verify anything older than 60 days before re-sequencing. Business email decay
 | Dialer | Ring 1 calling | $30–100 |
 | **Total (ex-intent data)** | | **~$550–1,000/mo** |
 
-Against a $2,000 CAC ceiling and a 5-client target, that's ~$150/client in tooling. Cheap. **Do not economize here** — a $50/mo saving that costs one deliverability incident is a catastrophic trade.
+Against a ~$3,000 CAC ceiling and a 5-client target, that is ~$150/client in tooling. Cheap. **Do not economize here** — a $50/mo saving that costs one deliverability incident is a catastrophic trade.
 
 ## 9. Hygiene calendar
 

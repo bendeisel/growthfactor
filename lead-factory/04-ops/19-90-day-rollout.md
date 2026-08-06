@@ -24,7 +24,7 @@ Almost nothing here is strategic. It's all latency removal.
 
 **Task 0.4 is the most important thing in this entire document.** One afternoon of reading 25 real enriched records answers the question the whole plan rests on: *is this data good enough to build a business on?* If the answer is no, we've spent an afternoon instead of a quarter.
 
-**Task 0.7 is a real decision, not a formality.** 5 clients/month requires 115 hours of onboarding — more than a full-time person — on top of servicing. Choosing 5 without hiring guarantees a delivery failure in month two. Choose deliberately.
+**Task 0.7 is a real decision, not a formality.** Under AI-assisted delivery (`04-ops/20-ai-delivery-stack.md`), 5 clients/month costs ~55 onboarding hours and needs one dedicated delivery person alongside a ~9-account book. Solo at ~60 delivery hours, the sustainable rate is 2/month. Choosing 5 without the hire guarantees a delivery failure in month two. Choose deliberately.
 
 **Week 1 gate:** warmup running, first real records read, target chosen.
 
@@ -63,8 +63,10 @@ Mailboxes can't send yet. Use the time.
 | 2.7 | Meta signal-report campaign live at $500/mo | D |
 | 2.8 | Retargeting audiences built (traffic now exists to retarget) | D |
 | 2.9 | Weekly scorecard running, manual spreadsheet | B |
-| 2.10 | **First client onboarded end to end** — document every friction point | D |
+| 2.10 | **First client onboarded end to end** — document every friction point, **measure actual hours per stage** | D |
 | 2.11 | Second wave: 4 more domains, 12 mailboxes, warmup started | B |
+| 2.12 | Build the one-click access-request kit (Google Ads, GA4, GSC, GBP, Meta partner) + photo checklist | D |
+| 2.13 | Document the AI production workflow and the human review gate (`20-ai-delivery-stack.md §9`) | D |
 
 **Ramp email at 50% for two weeks.** Full volume on fresh infrastructure with untested copy is how domains get burned in week one. Confirm delivery >97% and complaints <0.1% before going to 100%.
 
@@ -84,13 +86,14 @@ Mailboxes can't send yet. Use the time.
 | 3.8 | Second sales/delivery hire decision, against capacity triggers | B |
 | 3.9 | Scoring recalibration if ≥20 closed-won records exist | B |
 | 3.10 | Quarterly review: pricing, vendor, segment volumes, target | B |
+| 3.11 | **Replace the AI-delivery hour estimates with measured actuals from builds 1–3** and re-run the economics | B |
 
 **Week 13 gate — the honest checkpoint.** Four questions, answered with numbers:
 
 1. **Is the data good enough?** Segment volume vs. plan, reply rate by segment. If segments are thin, execute the gap options in `01-data/06 §3`.
 2. **Is the offer converting?** Proposal→close vs. the 45% assumption. Below 30% means the offer or the proof, not the copy.
-3. **Is delivery holding?** Hours per account vs. 10. Above 12 and margin is gone.
-4. **Is CAC under the ceiling?** Fully-loaded vs. $2,000.
+3. **Is delivery holding?** Hours per account vs. 6.75. Above 9 and the AI-assisted margin is gone.
+4. **Is CAC under the ceiling?** Fully-loaded vs. $3,000.
 
 **Any two red → stop adding volume and fix the system.** Scaling a broken funnel just spends money faster, and it's the most common failure mode for a plan like this — the machine feels like it's working because activity is high.
 
@@ -131,7 +134,7 @@ Two things to read off this diagram:
 | Paid media (from week 4) | — | $1,000 → $3,100 |
 | **Total ex-intent data** | **~$1,610** | **~$1,780 → $3,880** |
 
-Against a `[ASSUMPTION]` $2,000 CAC ceiling and a 5-client target, 90-day acquisition spend of roughly $8–12K against 10–15 clients signed is comfortably inside the model — **provided the tenure assumption holds.** It's the number to validate before scaling spend, not after.
+Against a `[ASSUMPTION]` ~$3,000 CAC ceiling and a 5-client target, 90-day acquisition spend of roughly $8–12K against 10–15 clients signed is comfortably inside the model — **provided the tenure assumption holds.** It's the number to validate before scaling spend, not after.
 
 ## What could go wrong, ranked
 
@@ -139,7 +142,9 @@ Against a `[ASSUMPTION]` $2,000 CAC ceiling and a 5-client target, 90-day acquis
 |---|---|---|---|
 | **Segment volume far below estimate** | **High** | High | Task 0.4 finds this in week 1. Gap options in `01-data/06 §3` |
 | Deliverability incident | Medium | High | Warmup discipline, volume caps, weekly monitoring, spare domains |
-| Delivery capacity blown by good sales | Medium | **High** | Hard cap 4 new clients/mo/FTE. Waitlist is a legitimate sales tool |
+| Delivery capacity blown by good sales | Medium | **High** | Combined constraint `6.75×active + 11×new ≤ 120 hrs/FTE`. Waitlist is a legitimate sales tool |
+| AI-assisted hours don't materialize as modeled | Medium | Medium | Measure builds 1–3 (task 3.11). Traditional numbers are the conservative floor — the business still works, just slower |
+| Template homogeneity erodes differentiation | Medium | Medium | Category+county exclusivity, real client content, human review gate (`20 §6`) |
 | Reply rates below 2% | Medium | Medium | Copy testing, but check targeting first — it's usually targeting |
 | No case study by week 13 | Medium | Medium | E3-alt is designed for exactly this |
 | Intent data provenance problem | Low | High | DPA + written answers before scaling (task 0.3) |

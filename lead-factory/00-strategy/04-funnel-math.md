@@ -6,9 +6,17 @@ The original blueprint describes four stages with no volumes attached. This file
 
 ## 1. The target
 
-`[ASSUMPTION]` **Goal: 5 new clients/month**, blended ~$1,205 → **+$6,025 new MRR/month**. At that rate, break-even (10 accounts) lands in month 2–3 of full operation and $36K MRR arrives around month 8, accounting for churn.
+`[ASSUMPTION]` **Goal: 5 new clients/month**, blended ~$1,205 → **+$6,025 new MRR/month**. At that rate, break-even (8 accounts) lands in month 2 of full operation and $36K MRR arrives around month 8, accounting for churn.
 
-Check it against capacity first: 5/mo × 23 onboarding hours = 115 hours. **That requires a dedicated delivery person from month one.** If it's founder-only at ~60 delivery hours, the honest target is **2–3 new clients/month.** Both scenarios are modeled below — pick one deliberately rather than discovering the constraint in month three.
+Check it against capacity first, using the combined constraint from `03-unit-economics.md §3` (`6.75 × active + 11 × new ≤ 120 hrs/FTE`):
+
+| Scenario | Delivery hours | Sustainable rate |
+|---|---|---|
+| Founder solo, split time (~60 hrs) | 60 | **2 new/month** while holding ~5 accounts |
+| One full-time delivery person | 120 | **4–5 new/month** while holding ~9–10 accounts |
+| Founder + one delivery FTE | ~180 | 5/month with room for the book to grow |
+
+**5 clients/month is achievable with one dedicated delivery person** under AI-assisted delivery — it was not achievable at all under the traditional 23-hour onboarding model, where 5/month consumed 115 of 120 hours before servicing a single existing account. Solo, the honest target remains **2–3/month.** Pick deliberately rather than discovering the constraint in month three.
 
 ## 2. Backwards from a signed client
 
@@ -46,7 +54,7 @@ Each prospect gets ~5 touches across a sequence, so 3,300 *contacts* ≈ **16,50
 16,500 sends ÷ 630 per inbox = 27 inboxes
 ```
 
-`[ASSUMPTION]` 3 inboxes per secondary domain → **9 sending domains, 27 mailboxes.** At ~$6/mailbox/mo plus domains, that's roughly **$200–250/mo of infrastructure** — trivial against a $2,000 CAC ceiling, but it takes **3–4 weeks of warmup** before any of it can send at volume.
+`[ASSUMPTION]` 3 inboxes per secondary domain → **9 sending domains, 27 mailboxes.** At ~$6/mailbox/mo plus domains, that's roughly **$200–250/mo of infrastructure** — trivial against a ~$3,000 CAC ceiling, but it takes **3–4 weeks of warmup** before any of it can send at volume.
 
 > **This is the critical path item.** Domains and warmup must start in week 1 of the rollout, before copy is finished, before Datamoon is fully configured. Nothing else in the plan can run ahead of it. See `04-ops/19-90-day-rollout.md`.
 

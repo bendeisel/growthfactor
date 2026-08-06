@@ -13,12 +13,14 @@ If everything else gets dropped in a busy month, these survive. Each maps to a s
 | # | Metric | Target | Fails if | Where it's argued |
 |---|---|---|---|---|
 | 1 | **Monthly logo churn** | < 5% | > 8% for 2 months | `00-strategy/03-unit-economics.md §2` — sets the CAC ceiling |
-| 2 | **Delivery hours per account** | ≤ 10 | > 12 | §3 — the margin lever |
-| 3 | **Fully-loaded CAC** | < $2,000 | > $2,700 | §2 — the 3:1 ratio |
-| 4 | **Time-to-live** (signed → ads running) | < 24 days | > 35 | `04-ops/17` — leading churn indicator |
+| 2 | **Delivery hours per account** | ≤ 6.75 | > 9 | §3 — the margin lever. **The number most likely to silently drift** |
+| 3 | **Fully-loaded CAC** | < $3,000 | > $4,000 | §2 — the 3:1 ratio |
+| 4 | **Time-to-live** (signed → ads running) | < 12 days | > 25 | `04-ops/17` — leading churn indicator. Now gated by client access, not build |
 | 5 | **New clients / month** | 5 (or 2–3 solo) | < 60% of target for 2 months | `00-strategy/04-funnel-math.md` |
 
 **Churn is first for a reason.** It sets the CAC ceiling, which sets the acquisition budget, which sets everything else. It is also the number we currently know least about — the 14-month tenure figure is a guess, and until there's real data every downstream projection carries that uncertainty.
+
+**Metric 2 is the one that decays quietly.** AI-assisted delivery is worth ~$225/account/month in margin only if the freed hours stay freed. Nobody notices an account creeping from 7 to 9 hours; everyone notices the margin six months later. Log hours per account monthly, per account, without exception.
 
 ## 2. Weekly scorecard — reviewed Monday, 30 minutes
 

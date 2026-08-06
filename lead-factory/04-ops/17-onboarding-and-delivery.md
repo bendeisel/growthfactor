@@ -2,7 +2,9 @@
 
 The original blueprint stops at the sale. That's the most expensive gap in it: at 14-month assumed tenure, **every month of retention is worth more than a month of prospecting** (`00-strategy/03-unit-economics.md §2`), and retention is decided in the first 30 days.
 
-Onboarding is also the capacity constraint — 23 hours per client, which is why new sales are capped at 4/month per delivery FTE.
+Onboarding is also the capacity constraint — **11 hours per client** under AI-assisted delivery ([`20-ai-delivery-stack.md`](20-ai-delivery-stack.md)), which is what makes 4 new clients/month possible for a single delivery FTE holding ~10 accounts.
+
+> **The timeline below is the traditional-build schedule (24 days to live).** Under AI-assisted production the build stages compress hard and **client access becomes the entire critical path** — target is 10–12 days. Keep this version until three builds have been measured, then revise the dates rather than guessing at them. The *sequence* doesn't change; the gaps between milestones do.
 
 ---
 
@@ -24,7 +26,9 @@ Onboarding is also the capacity constraint — 23 hours per client, which is why
 | 24 | **Ads live** | Delivery | Guarantee clock is running regardless |
 | 30 | First report + strategy call | Delivery | |
 
-**Time-to-live target: 24 days. Alert at 35.** Every day past 30 measurably increases churn risk — the client is paying and has nothing to look at, and that feeling is what they'll remember at renewal.
+**Time-to-live target: 24 days traditional, 10–12 AI-assisted. Alert at 35 either way.** Every day past 30 measurably increases churn risk — the client is paying and has nothing to look at, and that feeling is what they'll remember at renewal.
+
+Under AI-assisted delivery, **almost every day on this timeline is waiting on the client, not on us.** That makes access-collection friction the highest-value operational investment available: one-click access request links, a 15-minute screen-share slot offered at booking to collect access live, and a day-2 phone call rather than a day-3 email. See [`20-ai-delivery-stack.md §8`](20-ai-delivery-stack.md#8-where-the-constraint-moves).
 
 ## 2. Access checklist — sent day 0
 
@@ -52,7 +56,10 @@ META
   (I'll send instructions — takes 2 min)
 
 BUSINESS
-□ Logo files, best photos of your crew/work/office
+□ Logo files
+□ Photos — see the 30-minute checklist below. This one matters more
+  than you'd think; real photos of your crew and your work beat
+  anything we could buy or generate
 □ Services list with pricing ranges (if you're comfortable)
 □ Service area — which counties/zips
 □ Where should leads go? (email, phone, CRM)
@@ -62,7 +69,25 @@ I've booked us for {{kickoff}}. Anything you can't find, don't hunt —
 just flag it and I'll walk you through it on the call.
 ```
 
-**Day 3 nudge if incomplete. Day 5 phone call.** Do not let this drift silently — a client who hasn't granted access by day 7 is already a churn risk and usually doesn't know it.
+**Day 3 nudge if incomplete. Day 5 phone call.** Do not let this drift silently — a client who hasn't granted access by day 7 is already a churn risk and usually doesn't know it. Under AI-assisted delivery this is *the* schedule risk, not one of several: move the nudge to day 2 and make it a call.
+
+### Photo checklist — sent day 0, alongside access
+
+```
+30 minutes on your phone, no photographer needed
+
+□ 3 shots of your crew (working, not posed)
+□ Your truck / van with the wrap visible
+□ Storefront or office exterior
+□ 5 completed jobs — wide shot + one detail each
+□ Owner headshot, outdoors, natural light
+□ Anything with your logo on it
+
+Shoot horizontal. Good light beats a good camera.
+Send them however's easiest — text is fine.
+```
+
+We do not generate or stock-source imagery representing a client's crew, work, or premises ([`20-ai-delivery-stack.md §7`](20-ai-delivery-stack.md#7--imagery--where-id-draw-a-hard-line)). Real photos convert better for local trust, and fabricated ones are deceptive regardless of intent.
 
 ## 3. Kickoff call — 45 minutes
 
@@ -97,16 +122,18 @@ Writing these into the kickoff recap email means they can be pointed at in month
 
 ## 5. Steady-state monthly cycle
 
-| Week | Activity | Hours |
-|---|---|---|
-| 1 | Report build + strategy call · previous month review | 1.5 |
-| 2 | Campaign optimization: search terms, negatives, bid adjustments, budget shifts | 1.5 |
-| 3 | Creative rotation, landing page or site tweaks, SEO work | 2.5 |
-| 4 | Audience refresh (In-Market Match pull), technical checks, next-month plan | 2.0 |
-| Ongoing | Site change requests (2 hrs included), lead-quality feedback loop, escalations | 2.5 |
-| | **Total** | **10.0** |
+| Week | Activity | Trad. hrs | AI-assisted |
+|---|---|---|---|
+| 1 | Report build + strategy call · previous month review | 1.5 | 1.25 |
+| 2 | Campaign optimization: search terms, negatives, bid adjustments, budget shifts | 1.5 | 1.0 |
+| 3 | Creative rotation, landing page or site tweaks, SEO work | 2.5 | 1.5 |
+| 4 | Audience refresh (In-Market Match pull), technical checks, next-month plan | 2.0 | 1.25 |
+| Ongoing | Site change requests (2 hrs included), lead-quality feedback loop, escalations | 2.5 | 1.75 |
+| | **Total** | **10.0** | **6.75** |
 
-**Ten hours is the margin assumption in `00-strategy/03-unit-economics.md`.** If accounts routinely run 13–14 hours, gross margin drops from ~47% to ~30% and the business stops working. Track hours per account monthly and treat drift as a serious signal, not an accounting detail. The fix is almost always templating, not working faster.
+**6.75 hours is the margin assumption in `00-strategy/03-unit-economics.md`** (62% gross margin). If accounts routinely run 10+ hours, that margin reverts to the traditional ~47%; at 13–14 hours it drops toward 30% and the business stops working. Track hours per account monthly and treat drift as a serious signal, not an accounting detail. The fix is almost always better templating, not working faster.
+
+**Two line items that should not shrink**, whatever the tooling makes possible: the monthly strategy call and the lead-quality feedback loop. The first is retention, the second is what makes targeting improve. Compressing either trades a visible hour for an invisible cost — see [`20-ai-delivery-stack.md §4`](20-ai-delivery-stack.md#4-where-ai-does-not-go).
 
 ## 6. Monthly report — what goes in it
 

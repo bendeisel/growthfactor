@@ -54,6 +54,7 @@ Built from the one-page blueprint dated 2026-08-05 (preserved verbatim at [`sour
 | [17 · Onboarding & Delivery](04-ops/17-onboarding-and-delivery.md) | 30-day plan, kickoff, monthly cycle, retention, offboarding |
 | [18 · KPI Dashboard](04-ops/18-kpi-dashboard.md) | The five numbers, scorecards, cohorts, instrumentation |
 | [19 · 90-Day Rollout](04-ops/19-90-day-rollout.md) | Week-by-week with owners, dependencies, budget, risks |
+| [20 · AI-Assisted Delivery](04-ops/20-ai-delivery-stack.md) | What compresses, what must not, revised capacity, imagery policy |
 
 ---
 
@@ -70,7 +71,8 @@ Built from the one-page blueprint dated 2026-08-05 (preserved verbatim at [`sour
 | "Powered by Datamoon" | **In-Market Match**, vendor kept internal | A vendor-named moat is a credit card away for competitors |
 | 3 intent buckets | 14 segments on 5 dimensions | Buckets must change what we *do*, or they're one bucket |
 | Retargeting from cold list | Retargeting **built by** outbound traffic | You can't retarget a list — 20–50% match rates at best |
-| No economics | Full model + capacity caps | $2,000 CAC ceiling, 4 new clients/mo/FTE cap |
+| No economics | Full model + a single capacity constraint | ~$3,000 CAC ceiling; `6.75×active + 11×new ≤ 120 hrs/FTE` |
+| Delivery model unstated | AI-assisted production modeled explicitly | 62% margin, onboarding pays back in <1 month, break-even at 8 accounts |
 | No measurement | 5 core metrics + scorecards + cohorts | Nothing in the original could be proven wrong |
 | 6 undated next steps | 90-day plan, owners, gates, dependencies | Warmup is the critical path and nothing in the original knew that |
 
@@ -78,10 +80,11 @@ Built from the one-page blueprint dated 2026-08-05 (preserved verbatim at [`sour
 
 These need a human, not more analysis:
 
-1. **Target: 5 clients/month or 2–3?** 5 requires a delivery hire immediately. → [`19 §0.7`](04-ops/19-90-day-rollout.md)
+1. **Target: 5 clients/month or 2–3?** 5 needs one dedicated delivery person. → [`19 §0.7`](04-ops/19-90-day-rollout.md)
 2. **Is the intent data good enough?** One afternoon reading 25 enriched records answers it. → [`19 §0.4`](04-ops/19-90-day-rollout.md)
-3. **Guarantee number `N` per vertical** — cannot be set until there's real data. Use the make-good without a number until then. → [`02 §4`](00-strategy/02-offer-architecture.md)
-4. **Datamoon pricing** — the one `[TBD]` the budget can't be finalized without.
+3. **Name the AI production stack** and the human review gate, then measure builds 1–3 against the modeled hours. → [`20 §9`](04-ops/20-ai-delivery-stack.md)
+4. **Guarantee number `N` per vertical** — cannot be set until there's real data. Use the make-good without a number until then. → [`02 §4`](00-strategy/02-offer-architecture.md)
+5. **Datamoon pricing** — the one `[TBD]` the budget can't be finalized without.
 
 ## Conventions
 
