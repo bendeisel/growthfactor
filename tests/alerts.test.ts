@@ -17,6 +17,7 @@ function row(overrides: Partial<BusinessMetrics> = {}): BusinessMetrics {
     mtd: { ...EMPTY_WINDOW },
     lastMonth: { ...EMPTY_WINDOW },
     activeMembers: 300,
+    activeMembersLastMonth: 300,
     ...overrides,
   };
 }

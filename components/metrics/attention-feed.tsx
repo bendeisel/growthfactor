@@ -37,7 +37,7 @@ export function AttentionFeed({ alerts }: { alerts: Alert[] }) {
 
   if (alerts.length === 0) {
     return (
-      <div className="flex items-center gap-2 border-b border-line px-4 py-2.5 text-xs text-ink-muted">
+      <div className="flex items-center gap-2 border-t border-line px-4 py-2.5 text-xs text-ink-muted">
         <Circle className="size-3 text-up" />
         Nothing needs you. Every business is on pace.
       </div>
@@ -45,7 +45,7 @@ export function AttentionFeed({ alerts }: { alerts: Alert[] }) {
   }
 
   return (
-    <div className="border-b border-line">
+    <div className="border-t border-line">
       <div className="flex items-center justify-between gap-2 px-4 pt-3 pb-1.5">
         <h3 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-dim">
           Needs attention

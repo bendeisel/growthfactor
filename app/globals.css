@@ -2,27 +2,32 @@
 
 /*
   Command Center design tokens.
-  Dark-only by design: this is a wall-mounted / always-open ops screen,
-  so we commit to one look instead of styling both schemes.
+  Deep navy rather than near-black, hero numbers, and status colours that read
+  at a glance from across the room — this is a screen that stays open all day.
+  Dark-only by design, so we commit to one look instead of styling both schemes.
 */
 @theme {
-  --color-bg: #05070c;
-  --color-bg-elevated: #0a0e17;
-  --color-panel: #0c1220;
-  --color-panel-hover: #111a2b;
-  --color-line: #1a2439;
-  --color-line-bright: #27344f;
+  --color-bg: #071021;
+  --color-bg-elevated: #0d1c33;
+  --color-panel: #102039;
+  --color-panel-hover: #16294a;
+  --color-line: #1e3557;
+  --color-line-bright: #2b4570;
 
-  --color-ink: #e8edf7;
-  --color-ink-muted: #94a3b8;
-  --color-ink-dim: #5f6d84;
+  --color-ink: #eef4ff;
+  --color-ink-muted: #9db0cf;
+  --color-ink-dim: #6b83a8;
 
+  /* Series colours: identity only. */
   --color-accent: #22d3ee;
-  --color-accent-deep: #0891b2;
+  --color-accent-deep: #0e7490;
+  --color-blue: #3b82f6;
   --color-violet: #8b5cf6;
-  --color-up: #34d399;
-  --color-down: #f87171;
-  --color-warn: #fbbf24;
+
+  /* Status colours: reserved for status, never used as a series colour. */
+  --color-up: #22c55e;
+  --color-down: #ef4444;
+  --color-warn: #f59e0b;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -35,14 +40,14 @@ html {
 body {
   background:
     radial-gradient(
-      1200px 600px at 12% -10%,
-      color-mix(in oklab, var(--color-accent) 8%, transparent),
-      transparent 60%
+      1100px 520px at 15% -8%,
+      color-mix(in oklab, var(--color-blue) 16%, transparent),
+      transparent 62%
     ),
     radial-gradient(
-      900px 500px at 92% 0%,
-      color-mix(in oklab, var(--color-violet) 8%, transparent),
-      transparent 55%
+      900px 480px at 88% -4%,
+      color-mix(in oklab, var(--color-accent) 12%, transparent),
+      transparent 58%
     ),
     var(--color-bg);
   color: var(--color-ink);
@@ -67,13 +72,28 @@ body {
 }
 
 @utility panel {
-  background: color-mix(in oklab, var(--color-panel) 88%, transparent);
+  background: color-mix(in oklab, var(--color-panel) 92%, transparent);
   border: 1px solid var(--color-line);
   backdrop-filter: blur(8px);
 }
 
+/* Inner tile: sits on a panel and holds one number. */
+@utility tile {
+  background: color-mix(in oklab, var(--color-bg-elevated) 88%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+}
+
 @utility tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Hero figure: the number you read from across the room. */
+@utility hero-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-weight: 600;
 }
 
 /* Slow pulse for "live" indicators — calmer than Tailwind's animate-pulse. */
@@ -91,8 +111,20 @@ body {
   animation: cc-breathe 2.4s ease-in-out infinite;
 }
 
+/* Sweep used by the Jarvis core's status ring while the agent works. */
+@keyframes cc-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility sweep {
+  animation: cc-sweep 3.2s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .breathe {
+  .breathe,
+  .sweep {
     animation: none;
   }
 }

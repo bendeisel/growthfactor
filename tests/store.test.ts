@@ -29,6 +29,7 @@ function reading(
     mtd: { ...EMPTY_WINDOW, revenueCents },
     lastMonth: { ...EMPTY_WINDOW },
     activeMembers,
+    activeMembersLastMonth: activeMembers,
   };
 }
 

@@ -15,20 +15,38 @@ Single-tab operations dashboard for Growth Factor AI. Spec and phase plan:
 
 ## Layout of the code
 
-- `app/page.tsx` — the whole product: two columns, one screen, no routes to add.
+Three columns, one screen: businesses, Command Center, apps.
+
+- `app/page.tsx` — the whole product. No routes to add.
 - `middleware.ts` — the single auth gate for every request.
-- `components/metrics/` — always-visible left column: attention feed, rows, sparklines.
-- `components/workspace/` — the tabbed right column; one file per panel.
-- `components/brain/brain-graph.tsx` — the header's 3D node graph (three.js).
+- `components/metrics/business-panel.tsx` — left column: selector, four KPI
+  tiles, one chart, attention feed.
+- `components/command-center-panel.tsx` — middle: Jarvis core, brain selector,
+  the one chat thread.
+- `components/jarvis/jarvis-core.tsx` — the centrepiece (three.js), which is also
+  the agent's status light.
+- `components/workspace/` — right column. `apps-panel.tsx` is the toggle,
+  `tool-window.tsx` renders a tool result, `workspace-context.tsx` is the wire
+  between the chat and the window.
+- `lib/tools/` — what the agent can do. One file per source.
+- `lib/chat/` — providers and the Anthropic tool loop.
 - `lib/metrics/` — data layer. `registry.ts` decides stored-vs-pull;
   `adapters/*` implement one source each.
 - `lib/store/` — the append-only snapshot log behind history and trends.
 - `lib/alerts.ts` — the rules behind "needs attention".
-- `lib/chat/` — provider layer for the model switch.
 - `lib/budget.ts` — spend caps and the daily log at `memory/budget-YYYY-MM-DD.json`.
 
 ## Conventions
 
+- **New capability = new tool, not a new screen.** Add a `ToolDefinition` to
+  `lib/tools/`, register it in `lib/tools/index.ts`, and declare which `panel`
+  shape renders its result. The window it opens is free. Never build a
+  second, hand-made path to the same data.
+- **Anything outward-facing is `destructive: true`** and returns
+  `requiresApproval(...)` until `context.confirmed`. Approvals are granted per
+  tool, per turn, and never carry over.
+- **A tool that can't run says which credential is missing** via
+  `notConnected(...)`. It must never return plausible-looking placeholder data.
 - **New metrics source = new adapter.** Implement `MetricsAdapter`, register it
   in `lib/metrics/registry.ts`, point a business at it in `lib/businesses.ts`.
   No UI changes.

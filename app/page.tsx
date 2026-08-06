@@ -1,7 +1,8 @@
+import { CommandCenterPanel } from "@/components/command-center-panel";
 import { CommandCenterShell } from "@/components/command-center-shell";
 import { TopBar } from "@/components/header/top-bar";
-import { MetricsColumn } from "@/components/metrics/metrics-column";
-import { WorkspaceTabs } from "@/components/workspace/workspace-tabs";
+import { BusinessPanel } from "@/components/metrics/business-panel";
+import { AppsPanel } from "@/components/workspace/apps-panel";
 import { authConfigured } from "@/lib/auth/session";
 import { BUSINESSES } from "@/lib/businesses";
 import { getDashboardState } from "@/lib/dashboard";
@@ -10,8 +11,8 @@ import { getDashboardState } from "@/lib/dashboard";
 export const dynamic = "force-dynamic";
 
 /**
- * The whole product: one tab, two columns (spec §2).
- * Left column always visible, right column is the tabbed workspace.
+ * The whole product on one screen: businesses on the left, the Command Center in
+ * the middle, and whichever app the agent has opened on the right.
  */
 export default async function CommandCenter() {
   const state = await getDashboardState();
@@ -25,8 +26,9 @@ export default async function CommandCenter() {
       />
 
       <CommandCenterShell
-        metrics={<MetricsColumn initial={state} />}
-        workspace={<WorkspaceTabs />}
+        businesses={<BusinessPanel initial={state} />}
+        command={<CommandCenterPanel />}
+        apps={<AppsPanel />}
       />
     </main>
   );

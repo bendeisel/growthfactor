@@ -11,6 +11,7 @@ interface ChatRequest {
   agent?: unknown;
   modelId?: unknown;
   delegateTo?: unknown;
+  approvedTools?: unknown;
 }
 
 function parseTurns(value: unknown): ChatTurn[] | null {
@@ -56,6 +57,10 @@ export async function POST(request: Request) {
       : DEFAULT_MODEL_ID;
   const delegateTo =
     typeof body.delegateTo === "string" && body.delegateTo ? body.delegateTo : undefined;
+  // Approvals are per-request: whatever Ben ticked for this send, nothing more.
+  const approvedTools = Array.isArray(body.approvedTools)
+    ? body.approvedTools.filter((name): name is string => typeof name === "string")
+    : [];
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -63,7 +68,13 @@ export async function POST(request: Request) {
       const send = (payload: unknown) =>
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
       try {
-        for await (const event of runChat({ agent, modelId, turns, delegateTo })) {
+        for await (const event of runChat({
+          agent,
+          modelId,
+          turns,
+          delegateTo,
+          approvedTools,
+        })) {
           send(event);
         }
       } catch (error) {

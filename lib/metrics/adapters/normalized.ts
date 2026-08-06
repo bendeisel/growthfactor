@@ -45,6 +45,8 @@ export interface UpstreamWindow {
 export interface UpstreamBusiness {
   id?: string;
   activeMembers?: number;
+  /** Optional: total members at last month's close. */
+  activeMembersLastMonth?: number;
   mtd?: UpstreamWindow;
   lastMonth?: UpstreamWindow;
 }
@@ -99,6 +101,13 @@ export function parseNormalizedPayload(
       mtd: toWindow(raw?.mtd),
       lastMonth: toWindow(raw?.lastMonth),
       activeMembers: Math.round(num(raw?.activeMembers)),
+      // Falling back to the current count means the tile shows a flat 0% rather
+      // than inventing growth when the source doesn't send the prior figure.
+      activeMembersLastMonth: Math.round(
+        raw?.activeMembersLastMonth === undefined
+          ? num(raw?.activeMembers)
+          : num(raw.activeMembersLastMonth),
+      ),
       note: raw ? undefined : `No row for ${business.id} in the ${source} payload.`,
     };
   });

@@ -10,6 +10,7 @@ import {
 import { checkBudget, record } from "@/lib/budget";
 import { DEFAULT_MODEL_ID, getModel, type ProviderId } from "@/lib/models";
 import { costCentsFor } from "@/lib/pricing";
+import { TOOLS, runTool } from "@/lib/tools";
 
 const PROVIDERS: Record<ProviderId, Provider> = {
   anthropic: anthropicProvider,
@@ -23,6 +24,11 @@ export interface ChatRunOptions {
   turns: ChatTurn[];
   /** Hand this turn's subtask to a second model first (hybrid switch, spec §7). */
   delegateTo?: string;
+  /**
+   * Tool names Ben approved for this turn. Approvals never carry over to the
+   * next message — a granted "send the email" can't be reused later.
+   */
+  approvedTools?: string[];
 }
 
 /** Log spend for one call. Never throws — a logging failure must not eat a reply. */
@@ -101,6 +107,18 @@ export async function* runChat(options: ChatRunOptions): AsyncGenerator<ChatEven
   }
 
   // --- main answer ---------------------------------------------------------
+  // Tools are Anthropic-only for now: the loop is written against Anthropic's
+  // tool_use/tool_result shape. The other providers still answer, without tools.
+  const approved = new Set(options.approvedTools ?? []);
+  const withTools =
+    model.provider === "anthropic"
+      ? {
+          tools: TOOLS,
+          runTool: (name: string, input: Record<string, unknown>) =>
+            runTool(name, input, approved),
+        }
+      : {};
+
   let inputTokens = 0;
   let outputTokens = 0;
   try {
@@ -108,6 +126,7 @@ export async function* runChat(options: ChatRunOptions): AsyncGenerator<ChatEven
       modelId: model.id,
       system,
       turns,
+      ...withTools,
     })) {
       if (event.type === "usage") {
         inputTokens = event.inputTokens;

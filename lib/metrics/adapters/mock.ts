@@ -107,6 +107,15 @@ export function mockMetricsFor(business: Business, now = new Date()): BusinessMe
     mtd: windowFrom(shape, portion, drift),
     lastMonth: windowFrom(prevShape, 1, 1),
     activeMembers: shape.activeMembers,
+    // Net movement since last month's close: joins minus cancellations so far.
+    activeMembersLastMonth: shape.activeMembers
+      ? Math.max(
+          0,
+          shape.activeMembers -
+            (windowFrom(shape, portion, drift).newMembers -
+              windowFrom(shape, portion, drift).cancellations),
+        )
+      : 0,
     note: "Mock data — real adapter lands in Phase 2.",
   };
 }

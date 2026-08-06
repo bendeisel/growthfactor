@@ -25,7 +25,10 @@ export interface BusinessMetrics {
   fetchedAt: string;
   mtd: MetricWindow;
   lastMonth: MetricWindow;
+  /** Total members right now. A stock, not a flow — it doesn't reset monthly. */
   activeMembers: number;
+  /** Total members when last month closed, so the tile has a comparison. */
+  activeMembersLastMonth: number;
   /** Why the data is mock / stale / errored, when it is. */
   note?: string;
 }

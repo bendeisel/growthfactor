@@ -1,3 +1,5 @@
+import type { ToolDefinition, ToolResult } from "@/lib/tools/types";
+
 export interface ChatTurn {
   role: "user" | "assistant";
   content: string;
@@ -14,7 +16,11 @@ export type ChatEvent =
   | { type: "text"; text: string }
   | { type: "notice"; text: string }
   | { type: "usage"; inputTokens: number; outputTokens: number }
-  | { type: "error"; text: string };
+  | { type: "error"; text: string }
+  /** The agent reached for a tool — the UI shows this as a window opening. */
+  | { type: "tool_call"; id: string; name: string; input: Record<string, unknown> }
+  /** That tool's result, which the UI renders as the window's contents. */
+  | { type: "tool_result"; id: string; name: string; result: ToolResult };
 
 export interface CompletionRequest {
   modelId: string;
@@ -22,6 +28,13 @@ export interface CompletionRequest {
   turns: ChatTurn[];
   /** Cap on output tokens for this call. */
   maxTokens?: number;
+  /** Tools the model may call. Omit for a plain chat turn. */
+  tools?: ToolDefinition[];
+  /** Executes a tool call. Required when `tools` is set. */
+  runTool?: (
+    name: string,
+    input: Record<string, unknown>,
+  ) => Promise<ToolResult>;
 }
 
 export interface Provider {
