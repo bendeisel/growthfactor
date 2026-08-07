@@ -56,7 +56,7 @@ Three consequences worth acting on:
 Correct constraint, at 120 productive hours/month per FTE:
 
 ```
-7 × (active accounts) + 11 × (new clients this month) ≤ 120
+6.75 × (active accounts) + 11 × (new clients this month) ≤ 120
 ```
 
 | New clients/mo | Max active accounts | MRR at that point |
@@ -64,10 +64,10 @@ Correct constraint, at 120 productive hours/month per FTE:
 | 0 (steady state) | **17** | $25,500 |
 | 2 | 14 | $21,000 |
 | 3 | 12 | $18,000 |
-| **4** | **10** | **$15,000** |
+| **4** | **11** | **$16,500** |
 | 5 | 9 | $13,500 |
 
-**Read that table as a growth-rate constraint, not a headcount constraint.** One person can hold 17 accounts *or* grow fast, not both simultaneously. The traditional-model version of this table topped out at 2–3 active accounts while onboarding 4/month — genuinely unworkable. AI-assisted makes 4/month plus a 10-account book a real single-person operation.
+**Read that table as a growth-rate constraint, not a headcount constraint.** One person can hold 17 accounts *or* grow fast, not both simultaneously. The traditional-model version of this table topped out at 2–3 active accounts while onboarding 4/month — genuinely unworkable. AI-assisted makes 4/month plus an 11-account book a real single-person operation.
 
 **Revised hiring trigger:** when active accounts + (new/month × 1.6) exceeds ~15 for two consecutive months. Earlier than the traditional model implied, because growth is now the thing that consumes capacity rather than maintenance.
 

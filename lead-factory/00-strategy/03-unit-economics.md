@@ -84,7 +84,7 @@ Retention buys acquisition budget. A month of tenure is worth more than a month 
 | 0 (steady state) | **17** | $25,500 |
 | 2 | 14 | $21,000 |
 | 3 | 12 | $18,000 |
-| **4** | **10** | **$15,000** |
+| **4** | **11** | **$16,500** |
 | 5 | 9 | $13,500 |
 
 Founder splitting time at ~60 delivery hrs/mo: **5 active accounts while onboarding 2/month.**
