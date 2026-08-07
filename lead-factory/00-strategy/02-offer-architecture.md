@@ -67,6 +67,8 @@ The website/SEO half, priced honestly. **Note the build fee** — this is the co
 | Add-on | Price | Sell when |
 |---|---|---|
 | Additional ad platform | $500/mo each | They're winning on two and want a third |
+| ↳ **Microsoft/Bing — Tier A** | $500/mo | Highest-margin add-on we have. Bing skews older and homeowner-heavy, CPCs run well under Google, and it's near-zero marginal effort on our stack ([`20 §9`](../04-ops/20-ai-delivery-stack.md)) |
+| ↳ **LinkedIn — Tier C** | $500/mo | Commercial insurance, wealth management, B2B legal |
 | SEO Accelerator (content, digital PR, link acquisition) | $1,500–$3,000/mo | Ranking is the constraint, not conversion |
 | Landing page / funnel build | $1,200 one-time | Campaign needs a dedicated destination |
 | CRM & follow-up automation build | $2,500 one-time + $250/mo | They're losing leads after we deliver them — very common, very sellable |

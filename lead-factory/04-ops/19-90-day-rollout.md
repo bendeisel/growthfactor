@@ -45,6 +45,7 @@ Mailboxes can't send yet. Use the time.
 | 1.9 | MSA, privacy policy, guarantee language finalized with counsel | B/L |
 | 1.10 | Google Search campaign C1 built, live at $30/day | D |
 | 1.11 | Partner outreach: 10 conversations with web designers, ad freelancers, brokers | B |
+| 1.12 | AdKit connected to our own ad accounts + quote obtained; run C1 through it to learn the tool on our money before a client's | B |
 
 > **Weeks 2–4 can and should produce revenue.** Phone, reactivation, partners, and paid search all work on day one. Only cold email is gated on warmup. Treating this as a "build phase" with no selling is the most common way a 90-day plan produces nothing until day 60.
 
@@ -67,6 +68,7 @@ Mailboxes can't send yet. Use the time.
 | 2.11 | Second wave: 4 more domains, 12 mailboxes, warmup started | B |
 | 2.12 | Build the one-click access-request kit (Google Ads, GA4, GSC, GBP, Meta partner) + photo checklist | D |
 | 2.13 | Document the AI production workflow and the human review gate (`20-ai-delivery-stack.md §9`) | D |
+| 2.14 | AdKit: connect first client account, confirm data-handling terms, set the budget-change review threshold | D |
 
 **Ramp email at 50% for two weeks.** Full volume on fresh infrastructure with untested copy is how domains get burned in week one. Confirm delivery >97% and complaints <0.1% before going to 100%.
 

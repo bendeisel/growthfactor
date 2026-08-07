@@ -199,6 +199,7 @@ Do it well. A client who leaves cleanly refers; a client who leaves angry costs 
 - [ ] Confirm in writing, honor the 30-day notice
 - [ ] Full export: site files, database, content, all creative assets
 - [ ] Transfer ownership of domain, GBP, Google Ads, Meta assets, GA4, Search Console
+- [ ] **Disconnect their ad accounts from our tooling workspace** ([`20 §9`](20-ai-delivery-stack.md)) — we tell every prospect they own their accounts; that has to stay true the day they leave
 - [ ] Final report with baseline vs. final
 - [ ] **Exit conversation** — what would have kept them? Log it honestly
 - [ ] Move to a light nurture list. `[ASSUMPTION]` a meaningful share of churned clients return within 12 months, usually after trying something cheaper

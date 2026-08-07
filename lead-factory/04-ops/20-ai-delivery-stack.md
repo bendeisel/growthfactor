@@ -164,8 +164,61 @@ Onboarding is 11 hours of our work spread across a calendar that is mostly waiti
 
 **Do not compress the expectation-setting.** The kickoff call stays 45 minutes even if the build takes three days. A client who is live in ten days but doesn't understand the ad learning period will still panic in week two.
 
-## 9. Open items
+## 9. The production stack
 
-1. **Measure the first three builds honestly** — actual hours per stage, not estimated. Every number in §1 is a hypothesis.
-2. **Decide the tooling stack explicitly** and write it down here, including which steps are human-reviewed before anything goes live.
-3. **Set the review gate:** nothing reaches a client-visible URL without a human having read every word on it. This is the control that keeps the quality risk in §6 from becoming a reputation problem.
+| Layer | Tool | Covers | Hours it touches |
+|---|---|---|---|
+| **Site build** | Growth Factor WordPress system + Claude | Structure, page copy, service pages, schema, meta | **12h → 3.5h** (onboarding) |
+| **Ad platforms** | [AdKit](https://adkit.so/) Ads MCP | Campaign build, metrics pull, optimization drafts, creative | **5h → 2h** (onboarding) · **4h → 2.5h/mo** |
+| **SEO / content** | Claude against the site system | Content, GBP, local pages | 1.5h → 0.75h/mo |
+| **Reporting** | Platform APIs + template | Report generation (not the narrative, not the call) | 1.5h → 1.25h/mo |
+| **Tracking** | Manual, always | GA4/GTM/conversions/call tracking | 3h → 2.5h — **verification never automates** |
+
+> **Attribute the savings honestly.** Of the 12 hours cut from onboarding, AdKit accounts for ~3; the site system plus Claude accounts for ~8.5. Of the 3.25 cut monthly, AdKit accounts for ~1.5. **The bigger win is the site build, and AdKit has nothing to do with it.** Worth knowing, because it determines what actually breaks if either dependency goes away.
+
+### AdKit — what it is, operationally
+
+An MCP server (`https://mcp.adkit.so`) connecting Claude to Google, Meta, TikTok, LinkedIn, Microsoft, Reddit, and X ad accounts. Ten tools; the four that matter here:
+
+| Tool | Use |
+|---|---|
+| `adkit_manage` | Create/edit/publish campaigns, pull spend, ROAS, performance |
+| `adkit_library` | Search ~500k ads from ~1,000 advertisers on Meta, Google, LinkedIn |
+| `adkit_studio` | Generate ad images and copy from a brief |
+| `adkit_status` / `adkit_projects` | **Confirm which account you're pointed at — see the blast-radius rule below** |
+
+**Two properties that matter more than the feature list:**
+
+1. **Draft-first.** Every change stages as a draft requiring explicit human approval before going live. This turns §4's *"never automate budget and bid decisions"* from a discipline into a system property — and disciplines erode where systems don't. It's the single best thing about the tool for our purposes.
+2. **Official Meta and Google tech partner**, going through official APIs. This retires a risk that would otherwise be disqualifying: unofficial/scraped platform access risks account suspension, and a suspended *client* ad account — their history, their spend, our fault — is a business-ending event at our size.
+
+### Where it changes the offer, not just the hours
+
+**Microsoft Ads is the add-on this unlocks.** Same interface, near-zero marginal effort, and Bing skews older and homeowner-heavy — precisely Tier A home services, at meaningfully cheaper CPCs than Google. At $500/mo per additional platform (`00-strategy/02-offer-architecture.md`), this is the highest-margin add-on available. **LinkedIn** does the same job for Tier C professional services. Reddit, TikTok, and X are not relevant to local service businesses; don't chase them because they're in the list.
+
+**`adkit_library` is a sales asset before it's a delivery tool** — with one important limit. It searches ~1,000 advertisers, which means national and mid-market brands, **not Bob's HVAC down the road.** So:
+
+- **Use it for** creative pattern research — what's actually working in HVAC, med spa, or PI law nationally — to inform both our clients' creative and our own. Genuinely valuable and hard to replicate manually.
+- **Do not use it for** "here's what your local competitor is running." For that, use the free Meta Ad Library and Google Ads Transparency Center directly, per prospect. That's the version that lands in a discovery call, and it's still free.
+
+Both belong in the signal report (`02-campaigns/13-landing-pages.md §2`) and the teardown. Showing a prospect a competitor's live ads is more visceral than a search-volume number, and it partly compensates for having no case studies in months 1–3.
+
+### Controls — non-negotiable
+
+- **One client per working session.** Multi-account agency workspaces mean a misdirected action can touch the wrong client. Run `adkit_status` and confirm the account before any change. Draft-first doesn't save you from approving a correct-looking draft on the wrong account.
+- **Read every draft before approving.** The real failure mode is approval fatigue at 40 drafts a week. Any budget change above `[TBD]`% gets a second pair of eyes.
+- **`adkit_studio` output is bound by §7.** Generated imagery is fine for our own ads, and for text-led or abstract client creative. It is **never** used to depict a client's crew, trucks, or completed work. The tool makes crossing that line fast and frictionless, which is exactly why the rule needs to be explicit here.
+- **Disconnect on offboarding.** Removing a client from the workspace is a step on the offboarding checklist (`17 §9`). We tell every prospect they own their accounts; that has to remain true the day they leave.
+- **Keep it internal.** Same rule as the data vendor (`00-strategy/01-positioning.md §1`): "AI-assisted" is fine to say publicly; naming the stack hands competitors the recipe and makes our advantage rentable.
+
+### Vendor dependency
+
+~1.5h/month/account of the 6.75-hour model rests on this tool. If pricing changes or it goes away, margin reverts toward the traditional numbers — which is survivable precisely because those numbers are documented as the floor. **Do not let the manual fallback rot:** the campaign structures in `02-campaigns/12-ad-creative.md` are platform-native and buildable by hand.
+
+## 10. Open items
+
+1. **Measure the first three builds honestly** — actual hours per stage, not estimated. Every number in §1 is a hypothesis until then. (Rollout task 3.11.)
+2. **Get AdKit pricing** — currently absorbed in the $110/account software allocation with no quote behind it. Same `[TBD]` status as Datamoon.
+3. **Confirm the data-handling terms** before connecting client accounts — same diligence as `05-compliance.md §5`: what's retained, where, and whether disconnection is clean.
+4. **Set the budget-change threshold** requiring a second reviewer.
+5. **The review gate:** nothing reaches a client-visible URL, or a live ad account, without a human having read every word. This is what keeps the §6 quality risk from becoming a reputation problem.

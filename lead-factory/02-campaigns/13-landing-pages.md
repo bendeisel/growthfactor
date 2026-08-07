@@ -42,7 +42,9 @@ Every campaign in this plan needs somewhere to land. These are the four pages th
 
 **Below the fold, in order:**
 1. **Sample report image** — the single most important element on the page. Show the actual deliverable, blurred where it needs to be. People convert on seeing the thing, not reading about it.
-2. **"What's in it"** — 4 bullets: search volume by term, advertiser count and rough spend, seasonality curve, the 3 highest-opportunity terms in your category.
+2. **"What's in it"** — 5 bullets: search volume by term, advertiser count and rough spend, seasonality curve, the 3 highest-opportunity terms in your category, and **screenshots of the ads your competitors are actually running right now**.
+
+   That last bullet is the one that converts. Pull it per prospect from the free Meta Ad Library and Google Ads Transparency Center — it costs ten minutes and it's more visceral than any volume figure, because it's their actual rival on the screen. (Our tooling's ad library covers ~1,000 mostly national advertisers and is the wrong instrument for a local competitor — see [`20 §9`](../04-ops/20-ai-delivery-stack.md). Use it for creative pattern research, not for this.)
 3. **"Why we do this free"** — *"We're a Nashville agency. This is how we find clients. It's more useful than another ad about growing your business, and you keep the report either way."* Naming the motive builds more trust than hiding it.
 4. **Who it's for / not for** — self-qualification. Explicitly: *"Not useful if you're outside Middle Tennessee or spending under $1,000/mo on ads."*
 5. **One-line footer CTA** to `/leads`.

@@ -86,7 +86,18 @@ Share screen. Their county, their category. Search volume, competitor count, est
 
 You're visible for about {{x}} of these. The gap is the opportunity."
 ```
-**Do not pitch over this slide.** Let them react. The reaction — *"that many?"* or *"I had no idea Smith was spending that"* — is the buying signal, and it arrives on its own if you're quiet.
+
+**Then show them their competitors' live ads.** Pulled per prospect from the free Meta Ad Library and Google Ads Transparency Center — ten minutes of prep, and it is consistently the moment the call turns:
+
+```
+"And here's what {{competitor}} is running right now. Three variations,
+been live since {{date}}. This one's their best performer — you can tell
+because it's the one they haven't rotated out."
+```
+
+**Do not pitch over any of this.** Let them react. The reaction — *"that many?"* or *"I had no idea Smith was spending that"* — is the buying signal, and it arrives on its own if you're quiet.
+
+This section is also what carries the call in months 1–3, before a case study exists. It's proof of *competence* rather than proof of *results*, and at this deal size competence demonstrated live is worth more than a testimonial.
 
 ### Part 4 — Prescribe (3 min)
 Only now. And prescribe from *their* stated problem, in *their* words:

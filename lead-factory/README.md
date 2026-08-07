@@ -54,7 +54,7 @@ Built from the one-page blueprint dated 2026-08-05 (preserved verbatim at [`sour
 | [17 · Onboarding & Delivery](04-ops/17-onboarding-and-delivery.md) | 30-day plan, kickoff, monthly cycle, retention, offboarding |
 | [18 · KPI Dashboard](04-ops/18-kpi-dashboard.md) | The five numbers, scorecards, cohorts, instrumentation |
 | [19 · 90-Day Rollout](04-ops/19-90-day-rollout.md) | Week-by-week with owners, dependencies, budget, risks |
-| [20 · AI-Assisted Delivery](04-ops/20-ai-delivery-stack.md) | What compresses, what must not, revised capacity, imagery policy |
+| [20 · AI-Assisted Delivery](04-ops/20-ai-delivery-stack.md) | Production stack (site system + AdKit), what must not automate, capacity, imagery policy, controls |
 
 ---
 
@@ -82,9 +82,9 @@ These need a human, not more analysis:
 
 1. **Target: 5 clients/month or 2–3?** 5 needs one dedicated delivery person. → [`19 §0.7`](04-ops/19-90-day-rollout.md)
 2. **Is the intent data good enough?** One afternoon reading 25 enriched records answers it. → [`19 §0.4`](04-ops/19-90-day-rollout.md)
-3. **Name the AI production stack** and the human review gate, then measure builds 1–3 against the modeled hours. → [`20 §9`](04-ops/20-ai-delivery-stack.md)
+3. **Measure builds 1–3** against the modeled AI-assisted hours; set the budget-change review threshold. → [`20 §10`](04-ops/20-ai-delivery-stack.md)
 4. **Guarantee number `N` per vertical** — cannot be set until there's real data. Use the make-good without a number until then. → [`02 §4`](00-strategy/02-offer-architecture.md)
-5. **Datamoon pricing** — the one `[TBD]` the budget can't be finalized without.
+5. **Datamoon and AdKit pricing** — the two `[TBD]`s the budget can't be finalized without.
 
 ## Conventions
 
