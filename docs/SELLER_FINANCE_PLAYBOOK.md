@@ -87,7 +87,24 @@ Equity above roughly 40 percent and a filing on the docket is the classic save. 
 that, the strategy flips to `subject_to`, because there is not enough room for
 anything else.
 
-### 4. Bank owned and auction
+### 4. Lake places held a long time
+
+```bash
+npm run gf -- leads --market old-hickory-waterfront --sort water
+npm run gf -- leads --market old-hickory-waterfront --min-score 55
+```
+
+Old Hickory Lake waterfront held for thirty years by an out of state owner is close
+to the ideal terms lead. The basis is tiny, the capital gain is large enough that
+spreading it matters, there is usually no loan to pay off, and the property is a
+second home rather than a residence, so the emotional attachment is to the summers
+rather than to the house.
+
+Lead with the tax treatment. An installment sale spreads the gain instead of
+realizing all of it in one year, and that argument lands harder on a lake place
+bought in 1990 than on anything else in the database.
+
+### 5. Bank owned and auction
 
 ```bash
 npm run gf -- leads --strategy cash_wholesale --sort distress

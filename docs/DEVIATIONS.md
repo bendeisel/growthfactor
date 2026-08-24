@@ -37,6 +37,9 @@ match those shapes. Concretely:
 | ArcGIS, Socrata, GHL v2 request and response shapes | Modelled from published documentation, not observed live |
 | HUD REO layer URL and its field names | URL and field list came from search results, not a live fetch |
 | Nashville parcel and violation endpoints in the example config | Identified from public documentation, not fetched |
+| Tennessee statewide parcel layer URL | Confirmed to exist, exact REST endpoint not resolved, left as a placeholder that fails loudly |
+| USGS NHD layer ids for the Old Hickory Lake shoreline | Not verified, which is why the fetch probes candidates and reports what it finds |
+| Approximate town centres and county bounding boxes in the configs | Derived from general knowledge, marked approximate, easily adjusted |
 | RealEstateAPI request and response schema | Not verified at all, which is why that connector is schema agnostic and disabled |
 
 **First thing to do on your machine:** run `gf discover <source>` on each source
@@ -130,7 +133,22 @@ builtin.
 
 Nothing to audit, nothing to update, nothing to break.
 
-### 8. Skip trace is not implemented, only reserved.
+### 8. Markets and a computed waterfront filter were added.
+
+Not in the spec at all, because the spec assumed a market is a county. Two of the
+stated targets are not counties: "anything on the water on Old Hickory Lake" spans
+five counties and depends only on the shoreline, and "the Pegram area" is mostly
+unincorporated county that a city name match would discard.
+
+So a market is a county list, plus optional city names, plus an optional radius,
+plus an optional waterfront rule. City and radius are ORed with each other so an
+area behaves like an area. Waterfront distance is computed from the parcel
+coordinate and a cached USGS NHD shoreline, which means it costs nothing and can be
+re-run at will. The threshold is distance based rather than strict deeded frontage
+because the Corps of Engineers owns a shoreline strip around most of Old Hickory
+Lake.
+
+### 9. Skip trace is not implemented, only reserved.
 
 The spec's Phase 3 is an `enrich-owner` function calling a paid skip trace endpoint.
 That is the one part of the spec deliberately left unbuilt, because it is the only
@@ -147,9 +165,11 @@ and add it as its own on demand command so it can never run in bulk by accident.
 The spec's section 12 asked for five decisions. Three of them are still open, and
 the code ships with clearly marked placeholders rather than invented answers.
 
-1. **Target counties.** Only Davidson County TN is configured, as the spec's own
-   placeholder, and the parcel layer is disabled by default. This is the biggest
-   decision, since coverage is per county.
+1. ~~**Target counties.**~~ Answered: Davidson, Williamson, Cheatham, Maury,
+   Sumner, Wilson, Trousdale and Smith, expressed as seven markets in
+   `config/markets.json`. See [MARKETS.md](MARKETS.md). One item remains: the
+   Tennessee statewide parcel layer URL is a placeholder, because it was not
+   verifiable here. Run `gf find "tennessee property boundaries"` and paste it in.
 2. **Buy box.** `config/buybox.json` has placeholder ranges. Applied only with
    `--buybox`, and only at read time, so changing it never means re-pulling.
 3. **Offer formula.** `config/offer.json` has placeholder percentages. ARV comes

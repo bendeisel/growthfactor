@@ -7,9 +7,19 @@
 
 import { createServer, type Server } from 'node:http';
 
+/**
+ * A crude Old Hickory Lake stand in: a narrow east to west channel at the real
+ * lake's latitude, which is enough to test the distance and threshold logic.
+ */
+export const MOCK_LAKE_RING: Array<[number, number]> = [
+  [-86.70, 36.28], [-86.20, 36.28], [-86.20, 36.30], [-86.70, 36.30], [-86.70, 36.28],
+];
+
 export interface MockOptions {
   /** Number of synthetic parcels the ArcGIS layer should serve. */
   parcelCount?: number;
+  /** Place parcels along the lake so waterfront distance can be exercised. */
+  lakeParcels?: boolean;
   /** Whether the ArcGIS layer advertises server side pagination. */
   supportsPagination?: boolean;
   maxRecordCount?: number;
@@ -104,6 +114,28 @@ function parcel(i: number): Record<string, unknown> {
   };
 }
 
+/**
+ * Parcel footprints. In lake mode every fourth parcel sits just off the shoreline
+ * and the rest march steadily inland, so a distance threshold has something real
+ * to separate.
+ */
+function parcelGeometry(id: number, lakeMode: boolean): { rings: Array<Array<[number, number]>> } {
+  if (!lakeMode) {
+    return { rings: [[[-86.8, 36.1], [-86.8, 36.2], [-86.7, 36.2], [-86.7, 36.1], [-86.8, 36.1]]] };
+  }
+  const lon = -86.68 + (id % 40) * 0.01;
+  // Archetype 0 parcels, the long tenure absentee ones, sit on the water.
+  const lat = id % 4 === 0
+    ? 36.2795 - 0.0004 * (id % 3)   // roughly 15 to 150 feet south of the shoreline
+    : 36.2795 - 0.02 * (1 + (id % 5)); // 1.4 to 7 miles inland
+  const d = 0.0002;
+  return {
+    rings: [[
+      [lon - d, lat - d], [lon + d, lat - d], [lon + d, lat + d], [lon - d, lat + d], [lon - d, lat - d],
+    ]],
+  };
+}
+
 const SOCRATA_COLUMNS = [
   { fieldName: 'case_number', name: 'Case Number', dataTypeName: 'text' },
   { fieldName: 'request_type', name: 'Request Type', dataTypeName: 'text' },
@@ -130,6 +162,7 @@ function violation(i: number): Record<string, unknown> {
 
 export async function startMock(opts: MockOptions = {}): Promise<MockHandle> {
   const parcelCount = opts.parcelCount ?? 2500;
+  const lakeParcels = opts.lakeParcels ?? false;
   const supportsPagination = opts.supportsPagination ?? true;
   const maxRecordCount = opts.maxRecordCount ?? 1000;
   const requests: string[] = [];
@@ -179,9 +212,7 @@ export async function startMock(opts: MockOptions = {}): Promise<MockHandle> {
       return json({
         features: ids.map((id) => ({
           attributes: parcel(id),
-          geometry: wantGeom
-            ? { rings: [[[-86.8, 36.1], [-86.8, 36.2], [-86.7, 36.2], [-86.7, 36.1], [-86.8, 36.1]]] }
-            : undefined,
+          geometry: wantGeom ? parcelGeometry(id, lakeParcels) : undefined,
         })),
         exceededTransferLimit: ids.length === size && (ids[ids.length - 1] ?? 0) < parcelCount,
       });
@@ -216,6 +247,44 @@ export async function startMock(opts: MockOptions = {}): Promise<MockHandle> {
     }
     if (url.pathname.endsWith('/customFields')) {
       return json({ customFields: [{ id: 'cf_1', name: 'Property Address', fieldKey: 'contact.property_address', dataType: 'TEXT' }] });
+    }
+
+    // ---- USGS NHD stand in, for waterbody fetching ----
+    if (url.pathname === '/nhd/MapServer') {
+      return json({
+        layers: [
+          { id: 6, name: 'NHDFlowline', geometryType: 'esriGeometryPolyline' },
+          { id: 9, name: 'NHDArea', geometryType: 'esriGeometryPolygon' },
+          { id: 10, name: 'NHDWaterbody', geometryType: 'esriGeometryPolygon' },
+        ],
+      });
+    }
+    // Layer 8 does not exist, which exercises walking past a failed candidate.
+    if (url.pathname === '/nhd/MapServer/8/query') {
+      return json({ error: { code: 400, message: 'Invalid or missing input parameters', details: [] } });
+    }
+    // Layer 9 has water but not the lake, which exercises the name filter.
+    if (url.pathname === '/nhd/MapServer/9/query') {
+      return json({
+        features: [{
+          attributes: { GNIS_NAME: 'Cumberland River', FTYPE: 460 },
+          geometry: { rings: [[[-86.9, 36.15], [-86.85, 36.15], [-86.85, 36.16], [-86.9, 36.16], [-86.9, 36.15]]] },
+        }],
+      });
+    }
+    if (url.pathname === '/nhd/MapServer/10/query') {
+      return json({
+        features: [
+          {
+            attributes: { GNIS_NAME: 'Old Hickory Lake', FTYPE: 436, AREASQKM: 91.1 },
+            geometry: { rings: [MOCK_LAKE_RING] },
+          },
+          {
+            attributes: { GNIS_NAME: 'Percy Priest Lake', FTYPE: 436 },
+            geometry: { rings: [[[-86.6, 36.0], [-86.5, 36.0], [-86.5, 36.05], [-86.6, 36.05], [-86.6, 36.0]]] },
+          },
+        ],
+      });
     }
 
     // ---- failure injection, used to prove retry and backoff ----

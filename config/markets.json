@@ -1,0 +1,102 @@
+{
+  "_comment": [
+    "Named markets. Filter any list with --market <name>.",
+    "",
+    "Matching rules:",
+    "  counties    the property must be in one of them, matched on fips or name",
+    "  cities      satisfied if the property city matches any entry",
+    "  near        satisfied if the property is within radiusMiles of the point",
+    "  cities and near are ORed together, because an 'area' includes the",
+    "    unincorporated land around a town that a city name match would miss",
+    "  waterfront  the property must be within maxDistanceFt of the waterbody",
+    "",
+    "The lat and lon values below are approximate town centres. Adjust the radius",
+    "to taste: 5 miles is a reasonable reading of 'the Pegram area', and you can",
+    "widen it once you see what comes back."
+  ],
+  "markets": [
+    {
+      "name": "davidson",
+      "label": "Davidson County, Nashville metro",
+      "counties": [{ "name": "Davidson", "state": "TN", "fips": "47037" }]
+    },
+    {
+      "name": "williamson",
+      "label": "Williamson County, Franklin and Brentwood",
+      "counties": [{ "name": "Williamson", "state": "TN", "fips": "47187" }]
+    },
+    {
+      "name": "old-hickory-waterfront",
+      "label": "Old Hickory Lake, on the water",
+      "counties": [
+        { "name": "Davidson", "state": "TN", "fips": "47037" },
+        { "name": "Sumner", "state": "TN", "fips": "47165" },
+        { "name": "Wilson", "state": "TN", "fips": "47189" },
+        { "name": "Trousdale", "state": "TN", "fips": "47169" },
+        { "name": "Smith", "state": "TN", "fips": "47159" }
+      ],
+      "waterfront": { "waterbody": "old-hickory-lake", "maxDistanceFt": 1000 },
+      "notes": [
+        "Old Hickory Lake runs from Old Hickory Dam northeast to Cordell Hull Dam",
+        "and touches five counties, so the county list is wide and the waterfront",
+        "distance does the real filtering.",
+        "1000 feet is deliberate, not strict deeded frontage. The Corps of Engineers",
+        "owns a shoreline strip around most of this lake, so a large share of what",
+        "sells as lakefront is actually adjacent to Corps land with dock rights.",
+        "Testing for a parcel boundary touching the water would miss those.",
+        "Tighten to 300 feet for the truly on-the-water set, or widen to 2640 for",
+        "a half mile lake access band.",
+        "Run 'gf waterbody:fetch old-hickory-lake' before using this market."
+      ]
+    },
+    {
+      "name": "pegram",
+      "label": "Pegram area, Cheatham County",
+      "counties": [{ "name": "Cheatham", "state": "TN", "fips": "47021" }],
+      "cities": ["Pegram"],
+      "near": { "lat": 36.1017, "lon": -87.0489, "radiusMiles": 5 }
+    },
+    {
+      "name": "kingston-springs",
+      "label": "Kingston Springs area, Cheatham County",
+      "counties": [{ "name": "Cheatham", "state": "TN", "fips": "47021" }],
+      "cities": ["Kingston Springs"],
+      "near": { "lat": 36.0989, "lon": -87.1128, "radiusMiles": 5 }
+    },
+    {
+      "name": "fairview",
+      "label": "Fairview area, Williamson County",
+      "counties": [{ "name": "Williamson", "state": "TN", "fips": "47187" }],
+      "cities": ["Fairview"],
+      "near": { "lat": 35.9812, "lon": -87.1342, "radiusMiles": 6 }
+    },
+    {
+      "name": "spring-hill",
+      "label": "Spring Hill area, Williamson and Maury Counties",
+      "counties": [
+        { "name": "Williamson", "state": "TN", "fips": "47187" },
+        { "name": "Maury", "state": "TN", "fips": "47119" }
+      ],
+      "cities": ["Spring Hill"],
+      "near": { "lat": 35.7512, "lon": -86.93, "radiusMiles": 6 },
+      "notes": [
+        "Spring Hill straddles the Williamson and Maury county line, so both",
+        "counties are listed and the radius keeps the set tight."
+      ]
+    },
+    {
+      "name": "all",
+      "label": "Every target county",
+      "counties": [
+        { "name": "Davidson", "state": "TN", "fips": "47037" },
+        { "name": "Williamson", "state": "TN", "fips": "47187" },
+        { "name": "Cheatham", "state": "TN", "fips": "47021" },
+        { "name": "Maury", "state": "TN", "fips": "47119" },
+        { "name": "Sumner", "state": "TN", "fips": "47165" },
+        { "name": "Wilson", "state": "TN", "fips": "47189" },
+        { "name": "Trousdale", "state": "TN", "fips": "47169" },
+        { "name": "Smith", "state": "TN", "fips": "47159" }
+      ]
+    }
+  ]
+}

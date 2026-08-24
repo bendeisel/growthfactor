@@ -61,9 +61,35 @@ function geometryToLatLon(geom: unknown): { latitude?: number; longitude?: numbe
   return {};
 }
 
+/**
+ * An optional [minLon, minLat, maxLon, maxLat] filter, applied server side.
+ * For a lake market this is the difference between pulling five counties and
+ * pulling the strip of land around the water.
+ */
+function bboxParams(cfg: SourceConfig): Record<string, string | number | undefined> {
+  const raw = cfg.bbox as unknown;
+  if (!Array.isArray(raw) || raw.length !== 4) return {};
+  const [minLon, minLat, maxLon, maxLat] = raw.map(Number);
+  if ([minLon, minLat, maxLon, maxLat].some((n) => !Number.isFinite(n))) {
+    throw new Error(`source ${cfg.name}: bbox must be four numbers, [minLon, minLat, maxLon, maxLat]`);
+  }
+  return {
+    geometry: `${minLon},${minLat},${maxLon},${maxLat}`,
+    geometryType: 'esriGeometryEnvelope',
+    spatialRel: 'esriSpatialRelIntersects',
+    inSR: 4326,
+  };
+}
+
 function layerUrl(cfg: SourceConfig): string {
   const url = String(cfg.url ?? '').replace(/\/+$/, '');
   if (!url) throw new Error(`source ${cfg.name}: missing "url"`);
+  if (url.includes('REPLACE_ME')) {
+    throw new Error(
+      `source ${cfg.name}: the url is still a placeholder. Find the real layer with `
+      + `'gf find "tennessee property boundaries"' and paste it into the source config.`,
+    );
+  }
   return url;
 }
 
@@ -94,13 +120,16 @@ export const arcgisConnector: Connector = {
     if (!meta.advancedQueryCapabilities?.supportsPagination) {
       notes.push('server does not advertise pagination, falling back to object id windowing');
     }
+    if (Array.isArray(cfg.bbox)) {
+      notes.push(`restricted to bounding box ${(cfg.bbox as number[]).join(', ')}`);
+    }
     if (meta.maxRecordCount) notes.push(`server maxRecordCount is ${meta.maxRecordCount}`);
 
     let recordCount: number | undefined;
     try {
       const where = String(cfg.where ?? '1=1');
       const cnt = await http.getJson<ArcGisQueryResponse>(
-        `${url}/query?${qs({ where, returnCountOnly: true, f: 'json' })}`,
+        `${url}/query?${qs({ where, returnCountOnly: true, f: 'json', ...bboxParams(cfg) })}`,
       );
       assertNoError(cnt, url);
       recordCount = cnt.count;
@@ -123,6 +152,7 @@ export const arcgisConnector: Connector = {
     const supportsPaging = Boolean(meta.advancedQueryCapabilities?.supportsPagination);
     const wantGeometry = cfg.returnGeometry !== false && Boolean(meta.geometryType);
     const outFields = String(cfg.outFields ?? '*');
+    const bbox = bboxParams(cfg);
 
     let emitted = 0;
     let offset = 0;
@@ -135,6 +165,7 @@ export const arcgisConnector: Connector = {
         returnGeometry: wantGeometry,
         outSR: wantGeometry ? 4326 : undefined,
         resultRecordCount: pageSize,
+        ...bbox,
       };
       if (supportsPaging) {
         params.where = where;

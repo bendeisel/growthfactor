@@ -16,6 +16,10 @@
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { runIngest } from './core/ingest.ts';
+import { shapeBbox, toShape, vertexCount, type Shape } from './core/geo.ts';
+import { enrichWaterDistance } from './core/geoenrich.ts';
+import { findMarket, marketMatches, type Market, type MarketSubject } from './core/markets.ts';
+import { fetchWaterbody, listLayers, type WaterbodySource } from './core/waterbody.ts';
 import { DEFAULT_OFFER_CONFIG, computeOffer, type OfferConfig } from './core/offer.ts';
 import { DEFAULT_BUY_BOX, matchesBuyBox, type BuyBox } from './core/buybox.ts';
 import { scoreLead } from './core/score.ts';
@@ -114,6 +118,45 @@ function findSource(name: string): SourceConfig {
 }
 
 const loadBuyBox = (): BuyBox => readJson(join(CONFIG_DIR, 'buybox.json'), DEFAULT_BUY_BOX);
+const WATERBODY_DIR = join(CONFIG_DIR, 'waterbodies');
+
+function loadMarkets(): Market[] {
+  const body = readJson<{ markets?: Market[] }>(join(CONFIG_DIR, 'markets.json'), {});
+  return body.markets ?? [];
+}
+
+function loadWaterbodySource(name: string): WaterbodySource {
+  const path = join(WATERBODY_DIR, `${name}.source.json`);
+  if (!existsSync(path)) {
+    throw new Error(`no source config at ${path}. Create one, or copy the Old Hickory Lake example.`);
+  }
+  return JSON.parse(readFileSync(path, 'utf8')) as WaterbodySource;
+}
+
+function loadWaterbodyShape(name: string): Shape {
+  const path = join(WATERBODY_DIR, `${name}.geojson`);
+  if (!existsSync(path)) {
+    throw new Error(
+      `no shoreline cached for "${name}". Run: gf waterbody:fetch ${name}`,
+    );
+  }
+  const shape = toShape(JSON.parse(readFileSync(path, 'utf8')));
+  if (!shape) throw new Error(`${path} did not parse as a polygon`);
+  return shape;
+}
+
+/** Turn a stored lead into the shape a market test needs. */
+function marketSubject(l: LeadRecord): MarketSubject {
+  return {
+    county: l.county,
+    state: l.state,
+    city: l.city,
+    latitude: l.latitude,
+    longitude: l.longitude,
+    distanceToWaterFt: l.distanceToWaterFt,
+    waterbodyName: l.waterbodyName,
+  };
+}
 const loadOfferConfig = (): OfferConfig => readJson(join(CONFIG_DIR, 'offer.json'), DEFAULT_OFFER_CONFIG);
 const loadGhlFieldIds = (): Record<string, string> => readJson(join(CONFIG_DIR, 'ghl-fields.json'), {});
 
@@ -155,12 +198,13 @@ function leadRows(leads: LeadRecord[]): Array<Record<string, unknown>> {
     value: money(l.estimatedValue),
     'eq%': l.equityPercent == null ? '' : Math.round(l.equityPercent),
     yrs: l.yearsOwned == null ? '' : Math.round(l.yearsOwned),
+    water: l.distanceToWaterFt == null ? '' : `${Math.round(l.distanceToWaterFt)}ft`,
     signals: l.distressTypes.join(','),
     owner: (l.ownerName ?? '').slice(0, 26),
   }));
 }
 
-const LEAD_COLUMNS = ['score', 'gr', 'strategy', 'address', 'city', 'st', 'value', 'eq%', 'yrs', 'signals', 'owner'];
+const LEAD_COLUMNS = ['score', 'gr', 'strategy', 'address', 'city', 'st', 'value', 'eq%', 'yrs', 'water', 'signals', 'owner'];
 
 function listOptsFrom(flags: Args['flags']): ListLeadsOptions {
   return {
@@ -169,6 +213,7 @@ function listOptsFrom(flags: Args['flags']): ListLeadsOptions {
     state: strFlag(flags, 'state'),
     county: strFlag(flags, 'county'),
     eventType: strFlag(flags, 'event'),
+    maxWaterFt: numFlag(flags, 'max-water-ft'),
     stage: strFlag(flags, 'stage'),
     limit: numFlag(flags, 'limit') ?? 50,
     sortBy: (strFlag(flags, 'sort') as ListLeadsOptions['sortBy']) ?? 'overall',
@@ -185,8 +230,13 @@ const HELP = `growthfactor leads, distressed property pipeline
   gf pull <source> [--limit N] [--dry-run]  ingest one source
   gf pull-all [--limit N]                   ingest every enabled source
   gf score [--as-of YYYY-MM-DD]             rescore all leads, costs nothing
-  gf leads [--min-score N] [--strategy S] [--state XX] [--county C]
-           [--event T] [--sort overall|distress|seller_finance|equity|recent]
+  gf markets [name]                         list target markets
+  gf waterbody:fetch <name>                 download and cache a shoreline
+  gf waterbody:layers <serviceUrl>          list layers in a GIS service
+  gf geo [--waterbody N] [--max-miles N]    compute distance to water, free
+  gf leads [--market M] [--min-score N] [--strategy S] [--state XX] [--county C]
+           [--event T] [--max-water-ft N]
+           [--sort overall|distress|seller_finance|equity|recent|water]
            [--limit N] [--json] [--buybox]
   gf show <lead-id>                         one lead in full, with event history
   gf export [--out file.csv] [filters]      GHL ready CSV
@@ -377,11 +427,24 @@ async function cmdLeads(args: Args): Promise<void> {
   try {
     const opts = listOptsFrom(args.flags);
     const limit = opts.limit ?? 50;
-    // The buy box has to filter before the limit is applied, otherwise it only
-    // ever filters the first page and the list looks shorter than it is.
+    const marketName = strFlag(args.flags, 'market');
+    // Buy box and market filters run in memory, so they have to read past the
+    // limit first, otherwise they only ever filter the first page.
+    const widen = Boolean(args.flags.buybox || marketName);
     let leads = await store.listLeads(
-      args.flags.buybox ? { ...opts, limit: Math.max(limit * 20, 2000) } : opts,
+      widen ? { ...opts, limit: Math.max(limit * 40, 5000) } : opts,
     );
+
+    if (marketName) {
+      const market = findMarket(loadMarkets(), marketName);
+      const before = leads.length;
+      leads = leads.filter((l) => marketMatches(marketSubject(l), market).pass);
+      console.log(`market ${market.name}: ${leads.length} of ${before} leads match`);
+      if (market.waterfront && !leads.length) {
+        console.log(`No matches. Did you run "gf waterbody:fetch ${market.waterfront.waterbody}" and "gf geo"?`);
+      }
+      console.log('');
+    }
     if (args.flags.buybox) {
       const box = loadBuyBox();
       const before = leads.length;
@@ -398,8 +461,8 @@ async function cmdLeads(args: Args): Promise<void> {
         box,
       ).pass);
       console.log(`buy box filter: ${leads.length} of ${before} leads pass\n`);
-      leads = leads.slice(0, limit);
     }
+    if (widen) leads = leads.slice(0, limit);
     if (args.flags.json) {
       console.log(JSON.stringify(leads, null, 2));
       return;
@@ -435,6 +498,14 @@ async function cmdShow(args: Args): Promise<void> {
     console.log(`mailing      ${l.ownerMailingAddress ?? ''} ${l.ownerMailingCity ?? ''} ${l.ownerMailingState ?? ''} ${l.ownerMailingZip ?? ''}`);
     console.log(`tenure       ${l.yearsOwned ?? '?'} years, last sale ${l.lastSaleDate ?? '?'} for ${money(l.lastSaleAmount)}`);
     console.log(`absentee     ${l.absenteeOwner ?? 'unknown'}, out of state ${l.outOfStateOwner ?? 'unknown'}`);
+    if (l.distanceToWaterFt != null) {
+      const miles = l.distanceToWaterFt / 5280;
+      const how = miles < 0.25 ? 'on the water' : miles < 1 ? 'walk to the water' : 'inland';
+      console.log(`water        ${Math.round(l.distanceToWaterFt)} ft from ${l.waterbodyName ?? 'water'} (${how})`);
+    }
+    if (l.latitude != null && l.longitude != null) {
+      console.log(`coordinates  ${l.latitude.toFixed(5)}, ${l.longitude.toFixed(5)}`);
+    }
     console.log(`sources      ${l.sources.join(', ')}`);
     console.log(`pipeline     ${l.pipelineStage ?? '(not staged)'}`);
 
@@ -468,7 +539,14 @@ async function cmdShow(args: Args): Promise<void> {
 async function cmdExport(args: Args): Promise<void> {
   const store = await openStore(args.flags);
   try {
-    const leads = await store.listLeads({ ...listOptsFrom(args.flags), limit: numFlag(args.flags, 'limit') ?? 5000 });
+    let leads = await store.listLeads({ ...listOptsFrom(args.flags), limit: numFlag(args.flags, 'limit') ?? 5000 });
+    const marketName = strFlag(args.flags, 'market');
+    if (marketName) {
+      const market = findMarket(loadMarkets(), marketName);
+      const before = leads.length;
+      leads = leads.filter((l) => marketMatches(marketSubject(l), market).pass);
+      console.log(`market ${market.name}: ${leads.length} of ${before} leads match`);
+    }
     const csv = leadsToGhlCsv(
       leads,
       loadOfferConfig(),
@@ -595,6 +673,116 @@ async function cmdTargetsPush(args: Args): Promise<void> {
   console.log('Schedule them with supabase/schedule.sql.');
 }
 
+async function cmdMarkets(args: Args): Promise<void> {
+  const markets = loadMarkets();
+  if (!markets.length) { console.log('no markets configured in config/markets.json'); return; }
+  console.log(table(
+    markets.map((m) => ({
+      name: m.name,
+      counties: (m.counties ?? []).map((c) => c.name ?? c.fips ?? '?').join(', '),
+      places: [...(m.cities ?? []), m.near ? `within ${m.near.radiusMiles}mi` : ''].filter(Boolean).join(', '),
+      waterfront: m.waterfront ? `${m.waterfront.waterbody} <= ${m.waterfront.maxDistanceFt}ft` : '',
+      label: m.label ?? '',
+    })),
+    ['name', 'counties', 'places', 'waterfront', 'label'],
+  ));
+  const detail = args.positional[0];
+  if (detail) {
+    const m = findMarket(markets, detail);
+    console.log(`\n${m.name}: ${m.label ?? ''}`);
+    for (const n of m.notes ?? []) console.log(`  ${n}`);
+  }
+}
+
+async function cmdWaterbodyLayers(args: Args): Promise<void> {
+  const service = args.positional[0];
+  if (!service) { console.log('usage: gf waterbody:layers <serviceUrl>'); process.exitCode = 1; return; }
+  const layers = await listLayers(service, new HttpClient({ minIntervalMs: 100 }));
+  console.log(table(
+    layers.map((l) => ({ id: String(l.id), name: l.name, geometry: l.geometryType ?? '' })),
+    ['id', 'name', 'geometry'],
+  ));
+  console.log('\nPut the polygon layer id into the candidates list in the waterbody source config.');
+}
+
+async function cmdWaterbodyFetch(args: Args): Promise<void> {
+  const name = args.positional[0];
+  if (!name) { console.log('usage: gf waterbody:fetch <name>'); process.exitCode = 1; return; }
+  const src = loadWaterbodySource(name);
+  const http = new HttpClient({ minIntervalMs: 200 });
+
+  console.log(`looking for "${strFlag(args.flags, 'accept-name') ?? src.match}"...`);
+  const res = await fetchWaterbody(src, http, {
+    acceptName: strFlag(args.flags, 'accept-name'),
+    acceptAll: args.flags['all-water'] === true,
+  });
+
+  for (const a of res.attempts) {
+    console.log(`  ${a.layer}: ${a.error ? `error, ${a.error}` : `${a.features} features, ${a.matched} matched`}`);
+  }
+
+  if (!res.shape) {
+    console.log('\nNo matching polygon found.');
+    if (res.namesSeen.length) {
+      console.log('Names present in the search area:');
+      for (const n of res.namesSeen.slice(0, 40)) console.log(`  ${n}`);
+      console.log('\nRe-run with --accept-name "<one of the above>", or --all-water to take');
+      console.log('every water polygon in the bounding box.');
+    } else {
+      console.log('No features came back at all. Check the service and layer ids with:');
+      console.log(`  gf waterbody:layers <serviceUrl>`);
+    }
+    process.exitCode = 1;
+    return;
+  }
+
+  mkdirSync(WATERBODY_DIR, { recursive: true });
+  const out = join(WATERBODY_DIR, `${name}.geojson`);
+  writeFileSync(out, JSON.stringify({ type: 'Feature', properties: { name }, geometry: res.shape }));
+  const box = res.bbox!;
+  console.log(`\nfound in ${res.layerUsed}`);
+  console.log(`  ${res.featureCount} polygons, ${res.vertices} vertices`);
+  console.log(`  bounding box ${box.map((n) => n.toFixed(3)).join(', ')}`);
+  console.log(`  saved to ${out}`);
+
+  if (src.bbox) {
+    const inside = box[0] >= src.bbox[0] - 0.5 && box[1] >= src.bbox[1] - 0.5
+      && box[2] <= src.bbox[2] + 0.5 && box[3] <= src.bbox[3] + 0.5;
+    if (!inside) {
+      console.log('\nWARNING: the fetched polygon extends well outside the configured bounding box.');
+      console.log('That usually means it matched more than the intended waterbody. Inspect it before trusting it.');
+    }
+  }
+  console.log('\nNext: gf geo --waterbody ' + name);
+}
+
+async function cmdGeo(args: Args): Promise<void> {
+  const name = strFlag(args.flags, 'waterbody') ?? 'old-hickory-lake';
+  const maxMiles = numFlag(args.flags, 'max-miles') ?? 3;
+  const waterfrontFt = numFlag(args.flags, 'waterfront-ft') ?? 1000;
+  const shape = loadWaterbodyShape(name);
+  console.log(`${name}: ${vertexCount(shape)} shoreline vertices, searching within ${maxMiles} miles`);
+  console.log(`shoreline bounding box ${shapeBbox(shape).map((n) => n.toFixed(3)).join(', ')}`);
+
+  const store = await openStore(args.flags);
+  try {
+    const res = await enrichWaterDistance(store, shape, name, { maxMiles, waterfrontFt });
+    console.log(`  ${res.withCoordinates} properties had coordinates`);
+    if (res.skippedNoCoordinates) {
+      console.log(`  ${res.skippedNoCoordinates} had none and were skipped`);
+    }
+    console.log(`  ${res.measured} were inside the search band and got a distance`);
+    console.log(`  ${res.waterfront} are within ${waterfrontFt} ft of the water`);
+    if (!res.withCoordinates) {
+      console.log('\nNo coordinates at all. The parcel layer needs geometry, which the');
+      console.log('ArcGIS connector requests by default. Check "gf discover <source>".');
+    }
+    console.log(`\nSee them with: gf leads --market old-hickory-waterfront`);
+  } finally {
+    await store.close();
+  }
+}
+
 async function cmdStatus(args: Args): Promise<void> {
   const store = await openStore(args.flags);
   try {
@@ -618,6 +806,10 @@ async function main(): Promise<void> {
   const commands: Record<string, (a: Args) => Promise<void>> = {
     sources: cmdSources,
     find: cmdFind,
+    markets: cmdMarkets,
+    geo: cmdGeo,
+    'waterbody:fetch': cmdWaterbodyFetch,
+    'waterbody:layers': cmdWaterbodyLayers,
     discover: cmdDiscover,
     pull: cmdPull,
     'pull-all': cmdPullAll,

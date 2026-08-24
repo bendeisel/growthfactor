@@ -60,6 +60,49 @@ npm run gf -- export --min-score 50
 That writes `out/ghl-leads-<date>.csv`. Import it in GHL under Contacts, Import.
 No API key needed for any of the above.
 
+## Your markets
+
+Seven target areas across eight Tennessee counties, all fed by one statewide parcel
+layer. Full detail in [docs/MARKETS.md](docs/MARKETS.md).
+
+```bash
+npm run gf -- markets
+npm run gf -- leads --market pegram
+npm run gf -- export --market spring-hill
+```
+
+| Market | Counties | How it narrows |
+|---|---|---|
+| `davidson` | Davidson | whole county |
+| `williamson` | Williamson | whole county |
+| `old-hickory-waterfront` | Davidson, Sumner, Wilson, Trousdale, Smith | within 1000 ft of the lake |
+| `pegram` | Cheatham | city match or within 5 miles |
+| `kingston-springs` | Cheatham | city match or within 5 miles |
+| `fairview` | Williamson | city match or within 6 miles |
+| `spring-hill` | Williamson, Maury | city match or within 6 miles |
+
+An "area" is a radius, not a city boundary, because most of the Pegram or Fairview
+area is unincorporated county that a city name match would throw away.
+
+### On the water
+
+Waterfront is not an attribute any assessor publishes, so it is computed. Parcels
+already carry coordinates from the layer geometry; the shoreline is fetched once
+from USGS NHD and cached, and after that distance to water is a free local
+calculation.
+
+```bash
+npm run gf -- waterbody:fetch old-hickory-lake   # once
+npm run gf -- geo --waterbody old-hickory-lake   # after each parcel pull
+npm run gf -- leads --market old-hickory-waterfront
+npm run gf -- leads --sort water --max-water-ft 300
+```
+
+The default threshold is 1000 feet rather than strict deeded frontage, because the
+Corps of Engineers owns a shoreline strip around most of Old Hickory Lake and much
+of what sells as lakefront there is adjacent to Corps land with dock rights.
+Testing for a boundary touching the water would miss most of the market.
+
 ## Finding data for your county
 
 Every county publishes differently. Rather than hardcoding one county, sources are
@@ -101,6 +144,7 @@ cash play. To work that list, filter for it:
 npm run gf -- leads --strategy cash_wholesale --sort distress
 npm run gf -- leads --strategy seller_finance --min-score 60
 npm run gf -- leads --event pre_foreclosure
+npm run gf -- leads --market old-hickory-waterfront --sort water
 ```
 
 ## Commands
@@ -109,6 +153,10 @@ npm run gf -- leads --event pre_foreclosure
 |---|---|---|
 | `gf sources` | list configured sources | no |
 | `gf find "<query>"` | search public data catalogs | no |
+| `gf markets [name]` | list target markets | no |
+| `gf waterbody:fetch <name>` | download and cache a shoreline | no |
+| `gf waterbody:layers <url>` | list layers in a GIS service | no |
+| `gf geo` | measure distance to water for every parcel | no |
 | `gf discover <source>` | probe a source, show the field mapping and its confidence | no |
 | `gf pull <source>` | ingest one source | no, unless the source is a paid vendor |
 | `gf pull-all` | ingest every enabled source | same |
@@ -169,13 +217,15 @@ npm install         # only for typechecking, dev only
 npm run check       # typecheck plus tests
 ```
 
-43 tests. The connectors run against a local mock server that replicates the
+59 tests. The connectors run against a local mock server that replicates the
 documented response shapes of ArcGIS, Socrata and the GHL v2 API, covering
 pagination, retry and backoff, cross source address merging, append only event
-history, idempotency across consecutive runs, and the approval gate.
+history, idempotency across consecutive runs, the approval gate, the geometry behind the
+waterfront filter, and the shipped market definitions themselves.
 
 ## Docs
 
+- [docs/MARKETS.md](docs/MARKETS.md) your seven target areas and the waterfront filter
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) every free source, what it gives you, how to find yours
 - [docs/SELLER_FINANCE_PLAYBOOK.md](docs/SELLER_FINANCE_PLAYBOOK.md) how the scoring works and how to work the lists
 - [docs/DEVIATIONS.md](docs/DEVIATIONS.md) where this differs from the original build spec, and what is unverified

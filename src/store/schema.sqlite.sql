@@ -46,6 +46,10 @@ create table if not exists properties (
   years_owned          real,
   likely_free_and_clear integer,
 
+  -- Waterfront, computed by "gf geo" from the parcel coordinate and a shoreline.
+  distance_to_water_ft real,
+  waterbody_name       text,
+
   raw                  text,
   source               text not null,
   sources              text,
@@ -57,6 +61,7 @@ create index if not exists idx_properties_county on properties (county, state);
 create index if not exists idx_properties_zip on properties (zip);
 create index if not exists idx_properties_equity on properties (equity_percent);
 create index if not exists idx_properties_apn on properties (fips, apn);
+create index if not exists idx_properties_water on properties (distance_to_water_ft);
 
 -- Every identifier a property can be recognised by. A parcel layer supplies an
 -- APN, a code enforcement feed supplies only an address. Both point here, which
@@ -181,6 +186,7 @@ select
   p.estimated_value, p.estimated_equity, p.equity_percent, p.equity_basis,
   p.likely_free_and_clear, p.absentee_owner, p.out_of_state_owner,
   p.owner_name, p.owner_type, p.years_owned,
+  p.latitude, p.longitude, p.distance_to_water_ft, p.waterbody_name,
   p.beds, p.baths, p.sqft, p.year_built,
   (select count(distinct e.event_type) from distress_events e
      where e.property_id = p.id and e.cleared_at is null) as distress_count,

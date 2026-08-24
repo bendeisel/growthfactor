@@ -1,0 +1,119 @@
+{
+  "_comment": [
+    "Tennessee statewide parcel boundaries, one pull per target area.",
+    "",
+    "Tennessee publishes statewide parcel data for 86 counties through the",
+    "Comptroller's Division of Property Assessments, served on the TNMap portal.",
+    "One layer therefore covers every county below, which beats wiring up seven",
+    "separate county GIS servers with seven different schemas.",
+    "",
+    "SET THE URL FIRST. The exact REST endpoint was not verifiable when this was",
+    "written, so it is a placeholder on purpose rather than a guess. Find it with:",
+    "",
+    "  gf find \"tennessee property boundaries\"",
+    "  gf find \"tennessee parcels\" --kind arcgis",
+    "",
+    "then paste the FeatureServer or MapServer layer URL, the one ending in a layer",
+    "number, into the url field of each source below. Then:",
+    "",
+    "  gf discover tn-parcels-davidson",
+    "",
+    "Starting points to check: tnmap.tn.gov/arcgis/rest/services and the state open",
+    "data portal at tn-tnmap.opendata.arcgis.com.",
+    "",
+    "WHY BOUNDING BOXES INSTEAD OF A COUNTY FIELD: a where clause needs the county",
+    "column name, which differs between layers and was not verifiable either. A",
+    "bounding box needs no schema knowledge at all, is applied server side so the",
+    "pull stays small, and is slightly over inclusive by design. The market filters",
+    "in config/markets.json do the precise work afterwards, so the extra parcels",
+    "cost a little bandwidth and nothing else.",
+    "",
+    "Every box below is approximate. Widen any of them if a pull looks short."
+  ],
+  "sources": [
+    {
+      "name": "tn-parcels-davidson",
+      "kind": "arcgis",
+      "label": "TN statewide parcels, Davidson County box",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_TN_PARCEL_LAYER_URL",
+      "where": "1=1",
+      "bbox": [-87.06, 35.97, -86.51, 36.41],
+      "pageSize": 1000,
+      "minIntervalMs": 400,
+      "defaults": { "county": "Davidson", "state": "TN", "fips": "47037" },
+      "notes": [
+        "Davidson also has its own county layer in davidson-tn.json, which may carry",
+        "richer fields. Try both with gf discover and keep whichever maps better."
+      ]
+    },
+    {
+      "name": "tn-parcels-williamson",
+      "kind": "arcgis",
+      "label": "TN statewide parcels, Williamson County box, covers Fairview",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_TN_PARCEL_LAYER_URL",
+      "where": "1=1",
+      "bbox": [-87.17, 35.71, -86.61, 36.09],
+      "pageSize": 1000,
+      "minIntervalMs": 400,
+      "defaults": { "county": "Williamson", "state": "TN", "fips": "47187" }
+    },
+    {
+      "name": "tn-parcels-cheatham",
+      "kind": "arcgis",
+      "label": "TN statewide parcels, Cheatham County box, covers Pegram and Kingston Springs",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_TN_PARCEL_LAYER_URL",
+      "where": "1=1",
+      "bbox": [-87.29, 36.06, -86.94, 36.44],
+      "pageSize": 1000,
+      "minIntervalMs": 400,
+      "defaults": { "county": "Cheatham", "state": "TN", "fips": "47021" }
+    },
+    {
+      "name": "tn-parcels-spring-hill",
+      "kind": "arcgis",
+      "label": "TN statewide parcels, Spring Hill box, Maury County side",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_TN_PARCEL_LAYER_URL",
+      "where": "1=1",
+      "bbox": [-87.05, 35.66, -86.83, 35.83],
+      "pageSize": 1000,
+      "minIntervalMs": 400,
+      "defaults": { "county": "Maury", "state": "TN", "fips": "47119" },
+      "notes": [
+        "Spring Hill straddles the Williamson and Maury line. The Williamson side",
+        "comes in with tn-parcels-williamson, this covers the Maury side.",
+        "The county default here is Maury, so a parcel that is actually in Williamson",
+        "will be labelled Maury unless the layer publishes its own county column,",
+        "which the field mapper will prefer. Check that with gf discover."
+      ]
+    },
+    {
+      "name": "tn-parcels-old-hickory",
+      "kind": "arcgis",
+      "label": "TN statewide parcels, Old Hickory Lake corridor",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_TN_PARCEL_LAYER_URL",
+      "where": "1=1",
+      "bbox": [-86.72, 36.08, -85.9, 36.42],
+      "pageSize": 1000,
+      "minIntervalMs": 400,
+      "defaults": { "state": "TN" },
+      "notes": [
+        "The lake corridor crosses Davidson, Sumner, Wilson, Trousdale and Smith,",
+        "so no single county default is set here. The layer's own county column",
+        "should fill it in. Confirm with gf discover before relying on it.",
+        "This box is the whole lake corridor, which is a lot of inland parcels too.",
+        "After pulling, run 'gf geo --waterbody old-hickory-lake' and then filter",
+        "with --market old-hickory-waterfront to get down to the shoreline."
+      ]
+    }
+  ]
+}

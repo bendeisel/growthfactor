@@ -46,6 +46,10 @@ export interface LeadRecord {
   absenteeOwner?: boolean;
   outOfStateOwner?: boolean;
   yearsOwned?: number;
+  latitude?: number;
+  longitude?: number;
+  distanceToWaterFt?: number;
+  waterbodyName?: string;
   lastSaleDate?: string;
   lastSaleAmount?: number;
   distressTypes: string[];
@@ -68,8 +72,10 @@ export interface ListLeadsOptions {
   state?: string;
   county?: string;
   eventType?: string;
+  /** Only leads within this many feet of a measured waterbody. */
+  maxWaterFt?: number;
   limit?: number;
-  sortBy?: 'overall' | 'distress' | 'seller_finance' | 'equity' | 'recent';
+  sortBy?: 'overall' | 'distress' | 'seller_finance' | 'equity' | 'recent' | 'water';
   stage?: string;
 }
 
@@ -93,6 +99,9 @@ export interface Store {
   getLead(id: string): Promise<LeadRecord | null>;
   listEvents(propertyId: string): Promise<StoredEvent[]>;
   allForScoring(): Promise<Array<{ property: PropertyInput; derived: DerivedSignals; events: StoredEvent[]; id: string }>>;
+
+  /** Record how far a parcel sits from a named waterbody. Computed locally, free. */
+  setWaterDistance(propertyId: string, distanceFt: number | null, waterbodyName: string | null): Promise<void>;
 
   /** Stages an offer for human review. Cannot advance past awaiting_approval. */
   stageOffer(propertyId: string, fields: Record<string, unknown>): Promise<void>;

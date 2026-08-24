@@ -55,6 +55,12 @@ const PROPERTY_COLUMNS = [
   'out_of_state_owner', 'years_owned', 'likely_free_and_clear', 'raw', 'source',
 ] as const;
 
+/** Columns added after the first release, applied to an existing local database. */
+const LATER_COLUMNS: Array<[string, string]> = [
+  ['distance_to_water_ft', 'real'],
+  ['waterbody_name', 'text'],
+];
+
 export class SqliteStore implements Store {
   private db: DatabaseSync;
   readonly path: string;
@@ -70,6 +76,31 @@ export class SqliteStore implements Store {
     this.db.exec('pragma foreign_keys = ON');
     const here = dirname(new URL(import.meta.url).pathname);
     this.db.exec(readFileSync(join(here, 'schema.sqlite.sql'), 'utf8'));
+    this.addMissingColumns();
+  }
+
+  /**
+   * "create table if not exists" does nothing to a table that already exists, so
+   * a database created by an earlier version needs its new columns added.
+   */
+  private addMissingColumns(): void {
+    const existing = new Set(
+      (this.db.prepare('pragma table_info(properties)').all() as Array<{ name: string }>)
+        .map((r) => r.name),
+    );
+    let added = false;
+    for (const [name, type] of LATER_COLUMNS) {
+      if (existing.has(name)) continue;
+      this.db.exec(`alter table properties add column ${name} ${type}`);
+      added = true;
+    }
+    // The view was compiled against the old column list, so rebuild it.
+    if (added) {
+      const here = dirname(new URL(import.meta.url).pathname);
+      const sql = readFileSync(join(here, 'schema.sqlite.sql'), 'utf8');
+      const viewSql = sql.slice(sql.indexOf('drop view if exists stacked_leads'));
+      this.db.exec(viewSql);
+    }
   }
 
   async close(): Promise<void> {
@@ -309,6 +340,10 @@ export class SqliteStore implements Store {
       absenteeOwner: bool(r.absentee_owner),
       outOfStateOwner: bool(r.out_of_state_owner),
       yearsOwned: num(r.years_owned),
+      latitude: num(r.latitude),
+      longitude: num(r.longitude),
+      distanceToWaterFt: num(r.distance_to_water_ft),
+      waterbodyName: str(r.waterbody_name),
       lastSaleDate: str(r.last_sale_date),
       lastSaleAmount: num(r.last_sale_amount),
       distressTypes: types ? [...new Set(types.split(','))] : [],
@@ -340,6 +375,10 @@ export class SqliteStore implements Store {
     if (opts.state) { where.push('upper(p.state) = ?'); params.push(opts.state.toUpperCase()); }
     if (opts.county) { where.push('lower(p.county) like ?'); params.push(`%${opts.county.toLowerCase()}%`); }
     if (opts.stage) { where.push('op.stage = ?'); params.push(opts.stage); }
+    if (opts.maxWaterFt != null) {
+      where.push('p.distance_to_water_ft is not null and p.distance_to_water_ft <= ?');
+      params.push(opts.maxWaterFt);
+    }
     if (opts.eventType) {
       where.push(`exists (select 1 from distress_events e
         where e.property_id = p.id and e.event_type = ? and e.cleared_at is null)`);
@@ -352,6 +391,8 @@ export class SqliteStore implements Store {
       seller_finance: 'coalesce(s.seller_finance_score, 0) desc',
       equity: 'coalesce(p.equity_percent, -1) desc',
       recent: 'p.last_seen_at desc',
+      // Nulls last: an unmeasured parcel is not "closest to the water".
+      water: 'case when p.distance_to_water_ft is null then 1 else 0 end, p.distance_to_water_ft asc',
     }[opts.sortBy ?? 'overall'];
 
     const sql = `
@@ -467,6 +508,16 @@ export class SqliteStore implements Store {
       },
       events: byProp.get(String(r.id)) ?? [],
     }));
+  }
+
+  async setWaterDistance(
+    propertyId: string,
+    distanceFt: number | null,
+    waterbodyName: string | null,
+  ): Promise<void> {
+    this.db
+      .prepare('update properties set distance_to_water_ft = ?, waterbody_name = ? where id = ?')
+      .run(b(distanceFt), b(waterbodyName), propertyId);
   }
 
   async stageOffer(propertyId: string, fields: Record<string, unknown>): Promise<void> {

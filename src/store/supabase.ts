@@ -209,6 +209,10 @@ export class SupabaseStore implements Store {
       absenteeOwner: boolOf(r.absentee_owner),
       outOfStateOwner: boolOf(r.out_of_state_owner),
       yearsOwned: num(r.years_owned),
+      latitude: num(r.latitude),
+      longitude: num(r.longitude),
+      distanceToWaterFt: num(r.distance_to_water_ft),
+      waterbodyName: str(r.waterbody_name),
       lastSaleDate: str(r.last_sale_date),
       lastSaleAmount: num(r.last_sale_amount),
       distressTypes: Array.isArray(types) ? (types as string[]).filter(Boolean) : [],
@@ -233,6 +237,7 @@ export class SupabaseStore implements Store {
     if (opts.state) q.push(`state=eq.${encodeURIComponent(opts.state.toUpperCase())}`);
     if (opts.county) q.push(`county=ilike.*${encodeURIComponent(opts.county)}*`);
     if (opts.stage) q.push(`pipeline_stage=eq.${encodeURIComponent(opts.stage)}`);
+    if (opts.maxWaterFt != null) q.push(`distance_to_water_ft=lte.${opts.maxWaterFt}`);
     if (opts.eventType) q.push(`distress_types=cs.{${encodeURIComponent(opts.eventType)}}`);
 
     const order = {
@@ -241,6 +246,7 @@ export class SupabaseStore implements Store {
       seller_finance: 'seller_finance_score.desc.nullslast',
       equity: 'equity_percent.desc.nullslast',
       recent: 'most_recent_signal.desc.nullslast',
+      water: 'distance_to_water_ft.asc.nullslast',
     }[opts.sortBy ?? 'overall'];
     q.push(`order=${order}`);
     q.push(`limit=${opts.limit ?? 100}`);
@@ -343,6 +349,18 @@ export class SupabaseStore implements Store {
       },
       events: byProp.get(String(r.id)) ?? [],
     }));
+  }
+
+  async setWaterDistance(
+    propertyId: string,
+    distanceFt: number | null,
+    waterbodyName: string | null,
+  ): Promise<void> {
+    await this.http.request(`${this.rest}/properties?id=eq.${encodeURIComponent(propertyId)}`, {
+      method: 'PATCH',
+      headers: this.headers({ prefer: 'return=minimal' }),
+      body: JSON.stringify({ distance_to_water_ft: distanceFt, waterbody_name: waterbodyName }),
+    });
   }
 
   async stageOffer(propertyId: string, fields: Record<string, unknown>): Promise<void> {

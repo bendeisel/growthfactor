@@ -1,0 +1,34 @@
+{
+  "_comment": [
+    "Where to get the Old Hickory Lake shoreline. Run:",
+    "  gf waterbody:fetch old-hickory-lake",
+    "which queries the layers below in order until one returns the polygon, then",
+    "caches it to config/waterbodies/old-hickory-lake.geojson.",
+    "",
+    "The USGS National Hydrography Dataset is the authoritative free shoreline for",
+    "US inland water. NHD retired from active maintenance in October 2023 but the",
+    "data is still published and a reservoir shoreline does not move.",
+    "",
+    "The layer index for NHDWaterbody was not verifiable when this was written, so",
+    "several candidates are listed and the fetch tries each. If all of them miss,",
+    "run 'gf waterbody:layers <serviceUrl>' to list the layers in a service, then",
+    "put the right index here."
+  ],
+  "name": "old-hickory-lake",
+  "label": "Old Hickory Lake",
+  "nameFields": ["GNIS_NAME", "gnis_name", "NAME", "name"],
+  "match": "Old Hickory Lake",
+  "candidates": [
+    {
+      "service": "https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer",
+      "layers": [10, 12, 9, 11, 8, 13],
+      "note": "USGS NHD, NHDWaterbody and NHDArea are the reservoir layers"
+    }
+  ],
+  "bbox": [-86.72, 36.08, -85.9, 36.42],
+  "bboxNote": [
+    "Approximate bounding box for the lake, used to keep the query small and to",
+    "prefilter parcel pulls. Verify against the fetched polygon: the fetch prints",
+    "the real bbox and warns if it falls outside this one."
+  ]
+}

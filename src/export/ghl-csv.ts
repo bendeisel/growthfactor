@@ -17,6 +17,7 @@ export const GHL_CSV_COLUMNS = [
   'address1', 'city', 'state', 'postal_code', 'tags',
   'property_address', 'property_city', 'property_state', 'property_zip',
   'county', 'apn', 'property_type', 'beds', 'baths', 'sqft', 'year_built',
+  'distance_to_water_ft', 'waterbody', 'latitude', 'longitude',
   'estimated_value', 'estimated_equity', 'equity_percent', 'equity_basis',
   'likely_free_and_clear', 'years_owned', 'last_sale_date', 'last_sale_amount',
   'owner_type', 'absentee_owner', 'out_of_state_owner',
@@ -122,6 +123,10 @@ export function leadToGhlRow(
     baths: l.baths ?? '',
     sqft: l.sqft ?? '',
     year_built: l.yearBuilt ?? '',
+    distance_to_water_ft: l.distanceToWaterFt ?? '',
+    waterbody: l.waterbodyName ?? '',
+    latitude: l.latitude ?? '',
+    longitude: l.longitude ?? '',
 
     estimated_value: l.estimatedValue ?? '',
     estimated_equity: l.estimatedEquity ?? '',
