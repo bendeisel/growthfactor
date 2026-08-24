@@ -126,7 +126,7 @@
 
     <!-- programs strip: slow continuous roll -->
     <div style="position: absolute; bottom: 0; left: 0; width: 100%; background: #D7AD56; overflow: hidden; z-index: 5">
-      <div id="mqTrack" style="display: flex; width: max-content; animation: roll 46s linear infinite; padding: 12px 0">
+      <div id="mqTrack" style="display: flex; width: max-content; padding: 12px 0">
         <div style="display: flex; align-items: center; gap: 24px; padding-right: 24px">
           <span class="tick">Jiu-Jitsu</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
           <span class="tick">Muay Thai Kickboxing</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
@@ -554,25 +554,23 @@ class Component extends DCLogic {
       if (!self._drag && !self.state.formOpen) { self.nudge(1); }
     }, (this.props.autoplaySeconds || 6) * 1000);
 
-    // if anything in this environment freezes CSS animations, notice within
-    // two seconds and drive the strip by hand at the same pace instead
+    // the strip is driven by JS, not a CSS animation — some browsers
+    // (low-power modes, battery savers) pause CSS animations but keep
+    // requestAnimationFrame running, and this strip must always move
     var track = document.getElementById('mqTrack');
     if (track) {
-      var t0 = getComputedStyle(track).transform;
-      setTimeout(function () {
-        if (getComputedStyle(track).transform !== t0) { return; }
-        track.style.animation = 'none';
-        var w = track.scrollWidth / 2, x = 0, last = performance.now();
-        var speed = w / 46;
-        var step = function (now) {
-          x += speed * (now - last) / 1000;
-          last = now;
+      var x = 0, last = performance.now();
+      var roll = function (now) {
+        var w = track.scrollWidth / 2;           // width of one full run
+        if (w > 0) {
+          x += (w / 46) * (now - last) / 1000;   // one full run every 46s
           if (x >= w) { x -= w; }
           track.style.transform = 'translateX(' + (-x) + 'px)';
-          requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }, 2000);
+        }
+        last = now;
+        requestAnimationFrame(roll);
+      };
+      requestAnimationFrame(roll);
     }
 
     // fade sections in as they scroll into view
