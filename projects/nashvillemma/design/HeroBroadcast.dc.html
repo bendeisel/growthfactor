@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+  <style>
+    body { margin: 0; background: #000000; color: #FFFFFF;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; }
+    h1, h2, h3 { margin: 0; font-weight: 400;
+         font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    a { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #C59543; }
+    .nav { color: #FFFFFF; font-size: 12px; text-transform: uppercase;
+           letter-spacing: 0.1em; opacity: 0.78; }
+    .nav:hover { opacity: 1; color: #D7AD56; }
+    .lbl { font-size: 9px; font-weight: 700; text-transform: uppercase;
+           letter-spacing: 0.2em; color: #D7AD56; }
+    @keyframes drift { 0%,100% { transform: scale(1.06) translate(0,0); }
+                       50%     { transform: scale(1.12) translate(-1.2%,-0.8%); } }
+    @keyframes cue   { 0%   { transform: translateY(0);    opacity: 0; }
+                       35%  { opacity: 1; }
+                       100% { transform: translateY(26px); opacity: 0; } }
+    @keyframes ping  { 0%   { transform: scale(0.6); opacity: 0.9; }
+                       100% { transform: scale(2.6); opacity: 0; } }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 880px; position: relative; overflow: hidden; background: #000000">
+
+  <!-- video plate. Slow drift stands in for the footage playing. -->
+  <div style="position: absolute; inset: 0; background-image: url(./hero-bg.jpg); background-size: cover; background-position: center; animation: drift 24s ease-in-out infinite"></div>
+  <!-- legibility scrim, weighted bottom where the type sits and top for chrome -->
+  <div style="position: absolute; inset: 0; background: linear-gradient(to top, #000000 0%, rgba(0,0,0,0.70) 32%, rgba(0,0,0,0.14) 70%, rgba(0,0,0,0.55) 100%)"></div>
+
+  <!-- ── HEADER: nav + the Visit Us module with a live map tile ── -->
+  <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 4; display: flex; align-items: flex-start; justify-content: space-between; padding: 24px 40px; gap: 32px">
+
+    <div style="display: flex; align-items: center; gap: 40px; padding-top: 6px">
+      <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 72px; width: auto">
+      <div style="display: flex; align-items: center; gap: 26px">
+        <a href="#" class="nav">About</a>
+        <a href="#" class="nav">Programs</a>
+        <a href="#" class="nav">Kids Programs</a>
+        <a href="#" class="nav">Schedule</a>
+        <a href="#" class="nav">Recovery</a>
+      </div>
+    </div>
+
+    <!-- Visit Us Today, promoted into the header with a map -->
+    <div style="display: flex; align-items: stretch; gap: 0; background: rgba(19,19,19,0.82); border-left: 4px solid #D7AD56">
+      <div style="padding: 14px 20px; display: flex; flex-direction: column; gap: 8px; min-width: 210px">
+        <div class="lbl">Visit Us Today</div>
+        <div style="font-size: 12px; line-height: 1.45; color: rgba(255,255,255,0.82)">1504 Elm Hill Pike<br>Nashville, Tennessee 37210</div>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <a href="#" style="font-size: 19px; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; color: #FFFFFF; letter-spacing: 0.02em">615-297-4430</a>
+          <a href="#" style="font-size: 11px; color: rgba(255,255,255,0.6)">frontdesk@nashvillemma.com</a>
+        </div>
+      </div>
+      <!-- map tile -->
+      <a href="#" style="position: relative; width: 132px; display: block; overflow: hidden; background: #1E1E29">
+        <div style="position: absolute; inset: 0; background:
+          repeating-linear-gradient(0deg,  #262631 0 1px, transparent 1px 22px),
+          repeating-linear-gradient(90deg, #262631 0 1px, transparent 1px 22px)"></div>
+        <div style="position: absolute; top: 0; left: 30%; width: 5px; height: 100%; background: #303030; transform: rotate(12deg)"></div>
+        <div style="position: absolute; top: 54%; left: 0; width: 100%; height: 6px; background: #303030"></div>
+        <div style="position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%); width: 14px; height: 14px; border-radius: 20px; background: #D7AD56; animation: ping 2.6s ease-out infinite"></div>
+        <div style="position: absolute; top: 46%; left: 50%; transform: translate(-50%,-100%)">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#D7AD56" stroke="#131313" stroke-width="1.4"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#131313" stroke="none"/></svg>
+        </div>
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; background: #D7AD56; color: #131313; font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; text-align: center; padding: 4px 0">View Our Location</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- one enormous line, nothing competing with it -->
+  <div style="position: absolute; left: 56px; bottom: 88px; z-index: 3">
+    <div style="width: 120px; height: 4px; background: #D7AD56; margin-bottom: 26px"></div>
+    <h1 style="font-size: 168px; line-height: 0.84; letter-spacing: -0.015em">Nashville MMA<br>Training Camp</h1>
+    <div style="display: flex; align-items: center; gap: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.75); font-weight: 700; margin-top: 26px">
+      <span>Fitness</span><span style="color: #D7AD56">&bull;</span>
+      <span>Martial Arts</span><span style="color: #D7AD56">&bull;</span>
+      <span>Community</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 30px; margin-top: 30px">
+      <a href="#" style="background: #D7AD56; color: #131313; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; padding: 18px 42px; border-radius: 8px">Request more information</a>
+      <div style="max-width: 300px; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.7)">40,000 sqft Facility, World Class Coaches, and 80+ Classes per Week</div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 50%; bottom: 24px; z-index: 3; width: 2px; height: 26px; background: #D7AD56; animation: cue 2.4s ease-in-out infinite"></div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":880}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

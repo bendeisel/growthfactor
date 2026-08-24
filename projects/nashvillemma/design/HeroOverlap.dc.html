@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+  <style>
+    body { margin: 0; background: #131313; color: #FFFFFF;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; }
+    h1, h2, h3 { margin: 0; font-weight: 400;
+         font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    a { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #C59543; }
+    .nav { color: #FFFFFF; font-size: 12px; text-transform: uppercase;
+           letter-spacing: 0.1em; opacity: 0.78; }
+    .nav:hover { opacity: 1; color: #D7AD56; }
+    .lbl { font-size: 9px; font-weight: 700; text-transform: uppercase;
+           letter-spacing: 0.2em; color: #D7AD56; }
+    @keyframes slowzoom { 0%,100% { transform: scale(1.04); }
+                          50%     { transform: scale(1.14); } }
+    @keyframes ping { 0% { transform: scale(0.6); opacity: 0.9; }
+                      100% { transform: scale(2.6); opacity: 0; } }
+  </style>
+</helmet>
+
+<div style="width: 1440px; height: 880px; position: relative; overflow: hidden; background: #131313">
+
+  <!-- video plate: inset, bleeding off the right edge -->
+  <div style="position: absolute; top: 116px; right: 0; width: 900px; height: 764px; overflow: hidden">
+    <div style="position: absolute; inset: 0; background-image: url(./hero-bg.jpg); background-size: cover; background-position: center; animation: slowzoom 26s ease-in-out infinite"></div>
+    <div style="position: absolute; inset: 0; background: #000000; opacity: 0.30"></div>
+  </div>
+
+  <!-- ── HEADER ── -->
+  <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 18px 44px; background: #131313; border-bottom: 1px solid #303030">
+    <div style="display: flex; align-items: center; gap: 36px">
+      <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 62px; width: auto">
+      <div style="display: flex; align-items: center; gap: 24px">
+        <a href="#" class="nav">About</a>
+        <a href="#" class="nav">Programs</a>
+        <a href="#" class="nav">Kids Programs</a>
+        <a href="#" class="nav">Schedule</a>
+        <a href="#" class="nav">Recovery</a>
+      </div>
+    </div>
+
+    <!-- Visit Us Today in the header: map left, details right -->
+    <div style="display: flex; align-items: stretch; gap: 16px">
+      <a href="#" style="position: relative; width: 104px; height: 68px; display: block; overflow: hidden; background: #1E1E29; border: 3px solid #D7AD56">
+        <div style="position: absolute; inset: 0; background:
+          repeating-linear-gradient(0deg,  #262631 0 1px, transparent 1px 20px),
+          repeating-linear-gradient(90deg, #262631 0 1px, transparent 1px 20px)"></div>
+        <div style="position: absolute; top: 0; left: 32%; width: 5px; height: 100%; background: #303030; transform: rotate(12deg)"></div>
+        <div style="position: absolute; top: 52%; left: 0; width: 100%; height: 6px; background: #303030"></div>
+        <div style="position: absolute; top: 44%; left: 50%; transform: translate(-50%,-50%); width: 12px; height: 12px; border-radius: 20px; background: #D7AD56; animation: ping 2.6s ease-out infinite"></div>
+        <div style="position: absolute; top: 44%; left: 50%; transform: translate(-50%,-100%)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#D7AD56" stroke="#131313" stroke-width="1.4"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#131313" stroke="none"/></svg>
+        </div>
+      </a>
+      <div style="display: flex; flex-direction: column; justify-content: center; gap: 3px">
+        <div class="lbl">Visit Us Today</div>
+        <div style="font-size: 11px; line-height: 1.4; color: rgba(255,255,255,0.75)">1504 Elm Hill Pike, Nashville, TN 37210</div>
+        <div style="display: flex; align-items: baseline; gap: 14px">
+          <a href="#" style="font-size: 20px; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; color: #FFFFFF">615-297-4430</a>
+          <a href="#" style="font-size: 10px; color: rgba(255,255,255,0.55)">frontdesk@nashvillemma.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- the gold rule crosses image and ground alike, tying the halves -->
+  <div style="position: absolute; top: 486px; left: 0; width: 100%; height: 8px; background: #D7AD56; z-index: 3"></div>
+
+  <!-- headline breaks out of the dark ground and over the video's edge -->
+  <div style="position: absolute; left: 44px; top: 192px; z-index: 4; width: 880px">
+    <h1 style="font-size: 116px; line-height: 0.86; letter-spacing: -0.015em; text-shadow: 0 2px 40px rgba(0,0,0,0.55)">Nashville MMA<br>Training Camp</h1>
+    <div style="display: inline-block; border-top: 3px solid #FFFFFF; border-bottom: 3px solid #FFFFFF; margin-top: 26px; background: rgba(19,19,19,0.6)">
+      <div style="display: flex; align-items: center; gap: 16px; padding: 5px 14px">
+        <span style="font-size: 26px; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; color: #D7AD56">Fitness</span>
+        <span style="color: #FFFFFF">&bull;</span>
+        <span style="font-size: 26px; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; color: #D7AD56">Martial Arts</span>
+        <span style="color: #FFFFFF">&bull;</span>
+        <span style="font-size: 26px; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; color: #D7AD56">Community</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- lower-left block sits on the dark ground, under the rule -->
+  <div style="position: absolute; left: 44px; bottom: 68px; z-index: 4; width: 470px">
+    <div style="font-size: 19px; line-height: 1.45; color: #FFFFFF; margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 80+ Classes per Week</div>
+    <a href="#" style="display: inline-block; background: #C0883A; color: #FFFFFF; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; padding: 17px 40px; border-radius: 8px">Request more information</a>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":880}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
