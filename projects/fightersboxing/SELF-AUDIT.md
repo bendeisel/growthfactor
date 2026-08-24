@@ -1,12 +1,12 @@
-# House-style Step 5 self-audit — Fighters Boxing homepage (2026-08-24)
+# House-style Step 5 self-audit: Fighters Boxing homepage (2026-08-24)
 
 **Did any word change? Which, and why was it mechanical?**
 No. All 60 rendered strings (nav, hero, two sections, footer, legal) ship
 verbatim from the WP capture, including two sentences with apparently lost
 em dashes ("more than a gym we've built a community", "stronger not just in
-body") — left as-is and flagged in `source/copy.md`. One addition that is
-reuse, not writing: the marquee band — which the WP build ships configured
-but empty — carries the existing hero line "WHAT ARE YOU FIGHTING FOR?".
+body"): left as-is and flagged in `source/copy.md`. One addition that is
+reuse, not writing: the marquee band: which the WP build ships configured
+but empty: carries the existing hero line "WHAT ARE YOU FIGHTING FOR?".
 Meta description reuses the hero subline verbatim. Alt text (metadata, not
 copy) was written descriptively because the live alt says "nashvile-mma".
 
@@ -14,7 +14,7 @@ copy) was written descriptively because the live alt says "nashvile-mma".
 Yes. Grounds #FFFFFF/#F5F5EF/#090909/#000000; ink #181817/#ABABA3; border
 #DCDCD1; accent #CC0000/#B70000; on-dark #FFFFFF. Faces Jost / Didact
 Gothic / Josefin Sans, weights as measured. The live site's lime #B6D40E
-(theme-skin default, appears once on the email band) was NOT imported —
+(theme-skin default, appears once on the email band) was NOT imported;
 replaced with kernel white/red and flagged for the client.
 
 **For each visual decision: which existing motif is it from?**
@@ -43,6 +43,6 @@ plus the deliberate mirror: light vs dark, round (20px/pill/circle logo)
 vs square (0px containers), red vs gold.
 
 **Would this be mistaken for the last three sites shipped?**
-Only Nashville MMA is logged; no — opposite ground, different faces,
+Only Nashville MMA is logged; no: opposite ground, different faces,
 different spine, different geometry. The two read as deliberate opposites,
 which is the "Our Gyms" concept working.

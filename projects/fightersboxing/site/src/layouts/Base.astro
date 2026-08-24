@@ -1,6 +1,8 @@
 ---
-import '@fontsource/jost/500.css';
-import '@fontsource/jost/600.css';
+import '@fontsource/archivo/500.css';
+import '@fontsource/archivo/700.css';
+import '@fontsource/archivo/800.css';
+import '@fontsource/archivo/900.css';
 import '@fontsource/didact-gothic/400.css';
 import '@fontsource/josefin-sans/700.css';
 import '../styles/global.css';
@@ -62,7 +64,7 @@ const schema = {
     <LeadPopup />
 
     <script>
-      // Reveal on scroll — the entrance move measured on the WP build
+      // Reveal on scroll: the entrance move measured on the WP build
       // (opacity 0->1, y 20px->0). Vanilla so it can drop into any platform.
       const io = new IntersectionObserver(
         (entries) => {

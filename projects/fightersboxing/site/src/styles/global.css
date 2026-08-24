@@ -1,4 +1,4 @@
-/* Fighters Boxing Gym — kernel tokens and base styles.
+/* Fighters Boxing Gym: kernel tokens and base styles.
    Every hex and face here is measured from the client's WordPress build;
    see projects/fightersboxing/kernel.json. */
 
@@ -19,12 +19,14 @@
   --accent: #CC0000;
   --accent-hover: #B70000;
 
-  /* faces */
-  --font-display: 'Jost', sans-serif;
+  /* faces. Display revised per Ben (2026-08-24): the WP build's Jost read
+     too newspaper; Archivo's heavy wide cuts carry the boxing-poster punch
+     and sit opposite Nashville MMA's condensed Bebas. */
+  --font-display: 'Archivo', sans-serif;
   --font-body: 'Didact Gothic', sans-serif;
   --font-action: 'Josefin Sans', sans-serif;
 
-  /* geometry — panel radius is the popup's measured 20px, pill is the
+  /* geometry: panel radius is the popup's measured 20px, pill is the
      buttons' measured 36px; the circle motif comes from the logo ring */
   --radius-panel: 20px;
   --radius-pill: 36px;
@@ -53,8 +55,9 @@ img { max-width: 100%; display: block; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1.1;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
   margin: 0;
   text-wrap: balance;
 }
@@ -71,7 +74,7 @@ a:hover, a:focus-visible { color: var(--accent-hover); }
   padding-inline: clamp(20px, 4vw, 40px);
 }
 
-/* grain — the site's 250px noise tile at its measured 0.04 opacity */
+/* grain: the site's 250px noise tile at its measured 0.04 opacity */
 .grain { position: relative; }
 .grain::before {
   content: '';
@@ -85,7 +88,7 @@ a:hover, a:focus-visible { color: var(--accent-hover); }
 
 /* ---- buttons -------------------------------------------------------
    Pill exactly as measured (#CC0000, Josefin Sans 700 14px, ls 1px,
-   radius 36px, measured shadow), wrapped in the rotating red ring —
+   radius 36px, measured shadow), wrapped in the rotating red ring:
    the logo's red circle set in motion around the action. */
 
 .btn-ring {

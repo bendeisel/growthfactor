@@ -2,9 +2,9 @@
   "client": "Fighters Boxing Gym (Fighters Nashville)",
   "source": "WordPress build (Ring theme + Elementor) at floralwhite-woodcock-644453.hostingersite.com, captured 2026-08-24 (browser-save zip from Ben; egress proxy blocks the domain)",
   "typefaces": {
-    "display": "Jost (headings; hero H1 and section titles, sentence-case caps in copy itself)",
-    "body": "Didact Gothic (16px, --wp--preset--font-family--p-font)",
-    "action": "Josefin Sans 700, 14px, letter-spacing 1px (all buttons)"
+    "display": "Archivo 800/900 (revised per Ben 2026-08-24; WP build's Jost read too newspaper and was dropped). Wide heavy cuts, deliberately opposite Nashville MMA's condensed Bebas.",
+    "body": "Didact Gothic (16px, unchanged from WP build)",
+    "action": "Josefin Sans 700, 14px, letter-spacing 1px (all buttons; Ben approved)"
   },
   "colors": {
     "ground": "#FFFFFF",
@@ -40,11 +40,11 @@
     "body": "16px"
   },
   "motifs": [
-    "Red ring in a white diamond (logo mark): a red circle outlined inside a rotated square — the entire brand geometry (circle = round/pill, diamond = rotated square)",
-    "Pill buttons: #CC0000, radius 36px, Josefin Sans 700 caps copy, drop shadow, hover #B70000 — used 3x on the page plus header CTA",
-    "Grain texture tile (GPaZLL3k4Gmh.png 250px) at opacity 0.04 over light sections — used on 4 sections",
-    "3/4 portrait photo crops with object-fit cover — both content sections",
-    "Giant background/marquee text (trx_addons_bg_text): configured at 150px uppercase #181817 on a 150px-min-height band that currently renders EMPTY — prime amplification candidate",
+    "Red ring in a white diamond (logo mark): a red circle outlined inside a rotated square: the entire brand geometry (circle = round/pill, diamond = rotated square)",
+    "Pill buttons: #CC0000, radius 36px, Josefin Sans 700 caps copy, drop shadow, hover #B70000: used 3x on the page plus header CTA",
+    "Grain texture tile (GPaZLL3k4Gmh.png 250px) at opacity 0.04 over light sections: used on 4 sections",
+    "3/4 portrait photo crops with object-fit cover: both content sections",
+    "Giant background/marquee text (trx_addons_bg_text): configured at 150px uppercase #181817 on a 150px-min-height band that currently renders EMPTY: prime amplification candidate",
     "Parallax entrance reveals: opacity 0→1, y 20px→0 on section titles/content (trx_addons parallax params)",
     "Dark punctuation bands: #090909 pre-footer contact band + #000 footer against the white page",
     "Popup lead capture: every CTA opens Elementor popup 81729 → LeadConnector iframe https://link.growth-factor.ai/widget/form/0maCMu9uqM7cqIfqR9Mb (\"New Trial Form\"), 20px radius, 640px, 0.8 black overlay"
@@ -55,7 +55,7 @@
     "email": "support@fightersnashville.com",
     "phone": "629-289-2988"
   },
-  "hero_current": "background video fbg-header.mp4 (not in capture) + near-black overlay jpg at 0.7, padding 130px/0 — the 'short' hero Ben flagged",
+  "hero_current": "background video fbg-header.mp4 (not in capture) + near-black overlay jpg at 0.7, padding 130px/0: the 'short' hero Ben flagged",
   "assets": {
     "logo_on_dark": "NNQLhuxelcyq.png 800x284 (white FIGHTERS text)",
     "logo_on_light": "dMDrR8e3UV6j.png 400x126 (black FIGHTERS text)",
@@ -63,5 +63,8 @@
     "photo_sparring": "VpKaCo4RKC1g.webp 2560x1710 (sparring pair + FIGHTERS shirt coach; alt on live site reads 'nashvile-mma')",
     "texture": "GPaZLL3k4Gmh.png",
     "favicons": "NIrC38hlsySB.png 180 / pQ8IzUg5ZEPr.png 192 / SWx1dPgs1W73.png 32"
-  }
+  },
+  "revisions": [
+    "2026-08-24 Ben, round 1: display face Jost -> Archivo; no em dashes anywhere; no blog; hero back to background video with photos moved into sections (one use each); marquee replaced by red Our Classes ticker (Ben's class names); classes section added with 01-04 ring numerals; color worked in (dark hero, red ticker, dark classes band)."
+  ]
 }
