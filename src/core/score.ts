@@ -139,20 +139,60 @@ export function scoreLead(
   const sellerFinanceScore = Math.max(0, Math.min(100, Math.round(sf)));
 
   // ---- strategy ----
+  //
+  // What binds a distressed deal is the calendar and whether there is a loan to
+  // take over. It is NOT the due on sale clause: that is a right lenders hold and
+  // rarely exercise while the payments keep arriving, and a lease option or a land
+  // contract avoids transferring title at all. So a thin equity foreclosure is not
+  // pushed to cash just because a sale is scheduled.
+  //
+  // The capital requirement is the thing people get backwards. Taking over a loan
+  // means curing the arrears, which is a fraction of the balance. Buying the same
+  // house for cash means the whole price. So low equity plus a sale date is the
+  // cheapest deal on the board, not the hardest.
   let strategy: Strategy;
   const has = (t: DistressType) => distinctActive.has(t);
-  // A sale already on the calendar overrides everything else. Terms need weeks of
-  // negotiation and a subject to close needs a reinstatement quote and a payoff,
-  // and neither fits inside a month. Cash is what closes before the gavel.
   const daysToAuction = nextAuction ? daysBetween(asOf, nextAuction) : null;
-  const auctionImminent = daysToAuction != null && daysToAuction >= 0 && daysToAuction <= 45;
+  const scheduled = daysToAuction != null && daysToAuction >= 0;
+  // Inside two weeks, reaching the owner, getting authorization and a reinstatement
+  // figure, and recording anything is not realistic. Cash or a postponement.
+  const saleThisWeek = scheduled && daysToAuction! <= 14;
+  // Inside a month there is no room to negotiate terms with a seller, but there is
+  // still room to cure arrears on a loan that already exists.
+  const saleSoon = scheduled && daysToAuction! <= 30;
 
-  if (has('reo') || has('auction')) strategy = 'cash_wholesale';
-  else if (auctionImminent) strategy = 'cash_wholesale';
-  else if ((has('foreclosure') || has('pre_foreclosure')) && (pct ?? 0) < 40) strategy = 'subject_to';
-  else if (d.likelyFreeAndClear || (pct ?? 0) >= 70) strategy = 'seller_finance';
-  else if ((pct ?? 0) >= 40) strategy = 'novation';
-  else strategy = 'unclear';
+  // A mortgage foreclosure is proof a loan exists, which is what makes an
+  // assumption possible even when the county publishes no equity figure.
+  const loanLikely = pct != null ? pct < 65 : (has('foreclosure') || has('pre_foreclosure'));
+  const foreclosing = has('foreclosure') || has('pre_foreclosure');
+
+  if (has('reo')) {
+    strategy = 'cash_wholesale';
+    reasons.push('lender already owns it, so there is no seller to give terms');
+  } else if (has('auction')) {
+    strategy = 'cash_wholesale';
+  } else if (saleThisWeek) {
+    strategy = 'cash_wholesale';
+    reasons.push(`sale in ${daysToAuction} days, only cash or a postponement closes that fast`);
+  } else if (foreclosing && loanLikely) {
+    strategy = 'subject_to';
+    reasons.push('existing loan plus a default, so curing the arrears beats buying it outright');
+  } else if (saleSoon) {
+    strategy = 'cash_wholesale';
+    reasons.push(`sale in ${daysToAuction} days and little or no loan to assume, so cash is the lever`);
+  } else if (d.likelyFreeAndClear || (pct ?? 0) >= 70) {
+    strategy = 'seller_finance';
+  } else if ((pct ?? 0) >= 40) {
+    strategy = 'novation';
+  } else if (pct != null || loanLikely) {
+    // Thin equity, a loan in place, and no deadline. Nothing to buy and nothing to
+    // carry, but the property can still be controlled on a lease with an option,
+    // which is also the structure that never touches title.
+    strategy = 'lease_option';
+    reasons.push('thin equity over an existing loan, so control it on a lease with an option rather than buying');
+  } else {
+    strategy = 'unclear';
+  }
 
   const overall = Math.round(0.55 * sellerFinanceScore + 0.45 * distressScore);
   const grade: Scores['grade'] =

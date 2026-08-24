@@ -25,6 +25,7 @@ export const GHL_CSV_COLUMNS = [
   'strategy', 'grade', 'overall_score', 'seller_finance_score', 'distress_score',
   'arv_estimate', 'repair_estimate', 'max_cash_offer',
   'sf_price', 'sf_down_payment', 'sf_monthly_payment', 'sf_balloon_years', 'sf_balloon_balance',
+  'lo_option_fee', 'lo_monthly_rent', 'lo_option_price', 'lo_term_years', 'lo_net_at_exercise',
   'lead_reasons', 'data_sources', 'lead_id',
 ];
 
@@ -96,6 +97,7 @@ export function leadToGhlRow(
       likelyFreeAndClear: Boolean(l.likelyFreeAndClear),
     },
     offerCfg,
+    l.strategy,
   );
 
   const mail = contactAddress(l);
@@ -158,6 +160,11 @@ export function leadToGhlRow(
     sf_monthly_payment: offer.sellerFinance?.monthlyPrincipalAndInterest ?? '',
     sf_balloon_years: offer.sellerFinance?.balloonYears ?? '',
     sf_balloon_balance: offer.sellerFinance?.balloonBalance ?? '',
+    lo_option_fee: offer.leaseOption?.optionFee ?? '',
+    lo_monthly_rent: offer.leaseOption?.monthlyRent ?? '',
+    lo_option_price: offer.leaseOption?.optionPrice ?? '',
+    lo_term_years: offer.leaseOption?.termYears ?? '',
+    lo_net_at_exercise: offer.leaseOption?.netAtExercise ?? '',
 
     lead_reasons: l.reasons.join('; '),
     data_sources: l.sources.join('; '),

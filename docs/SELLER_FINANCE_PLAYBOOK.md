@@ -83,9 +83,20 @@ Move carefully and be a human being. Someone died.
 npm run gf -- leads --event pre_foreclosure --sort equity
 ```
 
-Equity above roughly 40 percent and a filing on the docket is the classic save. Below
-that, the strategy flips to `subject_to`, because there is not enough room for
-anything else.
+Equity above roughly 40 percent with a filing on the docket is the classic save,
+where there is room to pay off or short the loan and still have a deal.
+
+Below that the strategy flips to `subject_to`, and that is not a consolation prize.
+Curing the arrears on a loan that already exists costs a fraction of buying the
+house, so a leveraged seller facing a sale date is frequently the cheapest deal
+available. What kills these is the calendar, not the structure: inside about two
+weeks there is no time to reach the owner, get written authorization, obtain a
+reinstatement figure from the servicer and record anything, and the strategy flips
+again to `cash_wholesale`.
+
+On the due on sale objection: it is a right the lender holds, not an event. Servicers
+rarely exercise it while the payments keep arriving. If the risk still bothers you,
+the workaround is structural rather than legal, and it is the next list.
 
 ### 4. Lake places held a long time
 
@@ -104,7 +115,41 @@ Lead with the tax treatment. An installment sale spreads the gain instead of
 realizing all of it in one year, and that argument lands harder on a lake place
 bought in 1990 than on anything else in the database.
 
-### 5. Bank owned and auction
+### 5. Leveraged landlords, worked as a lease option
+
+```bash
+npm run gf -- leads --strategy lease_option --min-score 40
+```
+
+A tired landlord who bought recently has no equity to sell you and nothing to carry.
+Under a plain buy or carry framing that lead is dead, and it used to score as
+`unclear` here, which was a mistake.
+
+These will sit near the bottom of the default list, because the blended score leans
+on seller finance fit and thin equity scores badly on it. That is not the score
+disagreeing with the strategy, it is the score answering a different question. Filter
+by strategy rather than sorting by score for this list.
+
+The play is control rather than ownership. A lease with an option to buy leaves the
+deed and the existing loan exactly where they are, which means there is no transfer
+for a due on sale clause to catch and no lender consent to obtain. You take over the
+management, the rent covers the payment, and the option locks your price.
+
+`gf show` prints the terms: an option fee, monthly rent, a strike price, the share of
+each rent payment credited against the purchase, and what is left to finance at
+exercise. Defaults are in `config/offer.json` under `leaseOption` and they are
+placeholders like the rest.
+
+The pitch is not "I want to buy your house." It is "I will take the tenant calls and
+the vacancy risk off your hands, cover the payment every month, and buy it outright
+inside three years." For an out of state owner paying a management company eight
+percent to still get woken up about a water heater, that is the whole sale.
+
+Watch the rent against the payment. If the existing payment plus taxes and insurance
+runs above the market rent, the deal does not work no matter how motivated the owner
+is, and that is a check no free data source can do for you.
+
+### 6. Bank owned and auction
 
 ```bash
 npm run gf -- leads --strategy cash_wholesale --sort distress
@@ -113,12 +158,20 @@ npm run gf -- leads --strategy cash_wholesale --sort distress
 These rank low on the blended score by design, because there is no seller to
 negotiate terms with. Price is the only lever. Work this list separately.
 
+## A note on structure
+
+Nothing here is legal advice, and none of these structures is a form you fill in
+yourself. Lease options, land contracts and wrap notes are enforced or gutted by
+state law and by exactly how the paperwork reads, and Tennessee has its own rules
+about them. Have a real estate attorney draft the templates once, then reuse them.
+The pipeline's job is to tell you which conversation to have, not to paper it.
+
 ## Tags that arrive in GHL
 
 The CSV export sets tags so you can build workflows without touching custom fields:
 
 `gf-lead`, `gf-seller-finance`, `gf-subject-to`, `gf-cash-wholesale`,
-`gf-novation`, `gf-grade-a` through `gf-grade-f`, `gf-free-and-clear`,
+`gf-novation`, `gf-lease-option`, `gf-grade-a` through `gf-grade-f`, `gf-free-and-clear`,
 `gf-absentee`, `gf-out-of-state`, plus one per distress type such as
 `gf-pre-foreclosure` or `gf-code-violation`.
 

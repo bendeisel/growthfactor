@@ -503,6 +503,7 @@ async function cmdShow(args: Args): Promise<void> {
       { raw: {}, source: '', estimatedValue: l.estimatedValue, sqft: l.sqft, propertyType: l.propertyType },
       { equityPercent: l.equityPercent ?? null } as never,
       loadOfferConfig(),
+      l.strategy,
     );
 
     console.log(`${l.addressLine ?? '(no address)'}, ${l.city ?? ''} ${l.state ?? ''} ${l.zip ?? ''}`);
@@ -547,6 +548,11 @@ async function cmdShow(args: Args): Promise<void> {
     if (offer.sellerFinance) {
       const s = offer.sellerFinance;
       console.log(`  seller finance    ${money(s.price)} price, ${money(s.downPayment)} down, ${money(s.monthlyPrincipalAndInterest)}/mo at ${s.ratePercent}% over ${s.amortYears}y, balloon ${money(s.balloonBalance)} at year ${s.balloonYears}`);
+    }
+    if (offer.leaseOption) {
+      const o = offer.leaseOption;
+      console.log(`  lease option      ${money(o.optionFee)} option fee, ${money(o.monthlyRent)}/mo rent, strike ${money(o.optionPrice)} over ${o.termYears}y`);
+      console.log(`                    ${money(o.rentCreditPerMonth)}/mo credited, ${money(o.totalRentCredit)} total, ${money(o.netAtExercise)} left at exercise`);
     }
     for (const n of offer.notes) console.log(`  note: ${n}`);
   } finally {

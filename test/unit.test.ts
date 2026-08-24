@@ -8,7 +8,7 @@ import {
 import { FIELD_SPECS, resolveFieldMap, toProperty } from '../src/core/fieldmap.ts';
 import { derive, estimateEquity, remainingBalance } from '../src/core/derive.ts';
 import { scoreLead } from '../src/core/score.ts';
-import { computeOffer } from '../src/core/offer.ts';
+import { computeOffer, DEFAULT_OFFER_CONFIG } from '../src/core/offer.ts';
 import { matchesBuyBox } from '../src/core/buybox.ts';
 import { csvToObjects, parseCsv, toCsv } from '../src/core/csv.ts';
 import type { PropertyInput } from '../src/core/types.ts';
@@ -233,24 +233,69 @@ test('a free and clear absentee owner with soft distress is the top seller finan
   assert.ok(s.reasons.some((r) => r.includes('stacked')));
 });
 
-test('an imminent auction is a cash play, not a seller carry', () => {
+test('a thin equity foreclosure is a reinstatement play, not a cash play', () => {
   const p: PropertyInput = {
     source: 's', raw: {}, state: 'TN', propertyType: 'Single Family',
     estimatedValue: 340000, lastSaleDate: '2022-05-01', lastSaleAmount: 325000, ownerName: 'JONES ANN',
   };
-  const s = scoreLead(p, derive(p, AS_OF), [
+  const d = derive(p, AS_OF);
+  assert.ok(d.equityPercent! < 40, 'this seller is leveraged');
+
+  // Five weeks out with a loan in place. Curing the arrears costs a fraction of
+  // buying the house, so the assumption is the play, not cash.
+  const fiveWeeks = scoreLead(p, d, [
     { eventType: 'pre_foreclosure', firstSeenAt: '2026-08-10', lastSeenAt: '2026-08-22', auctionDate: '2026-10-01' },
   ], AS_OF);
-  assert.equal(s.strategy, 'cash_wholesale', 'a sale five weeks out leaves no room for terms');
-  assert.ok(s.distressScore > s.sellerFinanceScore);
-  assert.ok(s.reasons.some((r) => r.includes('auction scheduled')));
+  assert.equal(fiveWeeks.strategy, 'subject_to');
+  assert.ok(fiveWeeks.reasons.some((r) => r.includes('curing the arrears')));
+  assert.ok(fiveWeeks.distressScore > fiveWeeks.sellerFinanceScore);
 
-  // Thin equity and a filing but no sale date yet is the subject to case: there is
-  // still time to take over the existing loan.
-  const noDate = scoreLead(p, derive(p, AS_OF), [
+  // Inside two weeks there is no time to reach the owner, get authorization and a
+  // reinstatement figure, and record anything.
+  const fiveDays = scoreLead(p, d, [
+    { eventType: 'pre_foreclosure', firstSeenAt: '2026-08-10', lastSeenAt: '2026-08-22', auctionDate: '2026-08-29' },
+  ], AS_OF);
+  assert.equal(fiveDays.strategy, 'cash_wholesale');
+  assert.ok(fiveDays.reasons.some((r) => r.includes('only cash or a postponement')));
+
+  // A filing with no sale date yet is the same assumption play, with more runway.
+  const noDate = scoreLead(p, d, [
     { eventType: 'pre_foreclosure', firstSeenAt: '2026-08-10', lastSeenAt: '2026-08-22' },
   ], AS_OF);
   assert.equal(noDate.strategy, 'subject_to');
+});
+
+test('a foreclosure with no published equity still implies a loan to assume', () => {
+  // This is what a trustee sale notice looks like: an address, a date, no
+  // valuation and no sale history. A mortgage foreclosure is itself proof a loan
+  // exists, so the absence of an equity figure must not push it to cash.
+  const bare: PropertyInput = {
+    source: 's', raw: {}, addressLine: '120 Oak Ave', state: 'TN', county: 'Davidson',
+    ownerName: 'SMITH JOHN',
+  };
+  const d = derive(bare, AS_OF);
+  assert.equal(d.equityPercent, null);
+  const s = scoreLead(bare, d, [
+    { eventType: 'foreclosure', firstSeenAt: '2026-08-20', lastSeenAt: '2026-08-23', auctionDate: '2026-09-20' },
+  ], AS_OF);
+  assert.equal(s.strategy, 'subject_to');
+});
+
+test('thin equity with no deadline is a lease option, not a dead lead', () => {
+  // A leveraged owner with no distress event. There is nothing to buy at a
+  // discount and nothing for the seller to carry, but the property can still be
+  // controlled on a lease with an option, which transfers no title at all.
+  const p: PropertyInput = {
+    source: 's', raw: {}, state: 'TN', propertyType: 'Single Family',
+    estimatedValue: 300000, lastSaleDate: '2023-01-01', lastSaleAmount: 290000,
+    ownerMailingAddress: 'PO Box 9', ownerMailingState: 'GA', addressLine: '5 Elm St',
+    ownerName: 'DAVIS KAREN',
+  };
+  const d = derive(p, AS_OF);
+  assert.ok(d.equityPercent! < 40);
+  const s = scoreLead(p, d, [], AS_OF);
+  assert.equal(s.strategy, 'lease_option');
+  assert.ok(s.reasons.some((r) => r.includes('lease with an option')));
 });
 
 test('a sale already on the calendar is a cash play whatever the equity', () => {
@@ -319,6 +364,38 @@ test('offer math produces reviewable seller finance terms', () => {
   assert.ok(sf.monthlyPrincipalAndInterest > 1400 && sf.monthlyPrincipalAndInterest < 1450);
   assert.ok(sf.balloonBalance < sf.notePrincipal, 'a balloon balance must amortize down');
   assert.ok(o.notes.some((n) => n.includes('not from comps')), 'the ARV caveat must travel with the number');
+});
+
+test('lease option terms are produced and credit rent against the strike price', () => {
+  const p: PropertyInput = {
+    source: 's', raw: {}, state: 'TN', propertyType: 'Single Family',
+    sqft: 1500, estimatedValue: 300000, lastSaleDate: '2023-01-01', lastSaleAmount: 290000,
+    ownerName: 'DAVIS KAREN',
+  };
+  const o = computeOffer(p, derive(p, AS_OF), DEFAULT_OFFER_CONFIG, 'lease_option');
+  const lo = o.leaseOption!;
+  assert.equal(lo.optionFee, 6000, 'two percent of a 300k ARV');
+  assert.equal(lo.monthlyRent, 2400, 'eight tenths of a percent of ARV');
+  assert.equal(lo.optionPrice, 300000);
+  assert.equal(lo.rentCreditPerMonth, 600, 'a quarter of the rent is credited');
+  assert.equal(lo.totalRentCredit, 600 * 36);
+  assert.equal(lo.netAtExercise, 300000 - 6000 - 21600);
+  assert.ok(
+    o.notes.some((n) => n.includes('no title transfers')),
+    'the reason this structure exists should travel with the numbers',
+  );
+});
+
+test('a subject to estimate says the cash need is arrears, not price', () => {
+  const p: PropertyInput = {
+    source: 's', raw: {}, state: 'TN', estimatedValue: 340000,
+    lastSaleDate: '2022-05-01', lastSaleAmount: 325000, ownerName: 'JONES ANN',
+  };
+  const o = computeOffer(p, derive(p, AS_OF), DEFAULT_OFFER_CONFIG, 'subject_to');
+  assert.ok(o.notes.some((n) => n.includes('ARREARS')), 'the capital requirement must be stated');
+  assert.ok(o.notes.some((n) => n.includes('reinstatement quote')));
+  // And the workaround, since due on sale is the objection people raise.
+  assert.ok(o.notes.some((n) => n.includes('lease option or a land contract')));
 });
 
 test('offer math refuses to invent numbers with no value', () => {

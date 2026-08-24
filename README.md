@@ -150,18 +150,34 @@ better call for terms. Each lead also gets a recommended `strategy`:
 | strategy | when | what it means |
 |---|---|---|
 | `seller_finance` | high equity, long tenure, no deadline | ask them to carry paper |
-| `subject_to` | thin equity plus a foreclosure filing | take over the existing loan |
-| `cash_wholesale` | REO, auction, lender owned | price is the only lever |
+| `subject_to` | a loan in place plus a default, sale more than two weeks out | take over the existing loan by curing the arrears |
+| `lease_option` | thin equity over a loan, no deadline | control it on a lease with an option, no title transfer |
+| `cash_wholesale` | REO, or a sale inside two weeks, or a deadline with no loan to assume | price is the only lever |
 | `novation` | mid equity, no urgency | list it with them, split the upside |
 
-Bank owned inventory ranks low on the blended score on purpose, because it is a
-cash play. To work that list, filter for it:
+What binds a distressed deal is the calendar and whether there is a loan to take
+over. It is not the due on sale clause: that is a right lenders hold and rarely
+exercise while the payments keep arriving, and a lease option or a land contract
+never transfers title for it to catch.
+
+The number people get backwards is the capital requirement. Taking over a loan means
+curing the arrears, which is a fraction of the balance. Buying the same house for
+cash means the whole price. So thin equity plus a sale date is often the cheapest
+deal on the board, not the hardest, and it only becomes a cash problem when the
+calendar runs out.
+
+The blended score is weighted toward seller finance fit, so two useful groups sit at
+the bottom of the default list by design: bank owned inventory, where there is no
+seller to negotiate with, and thin equity lease option candidates, where there is no
+equity to score. Neither is a bad lead, they are a different conversation. Work them
+by filtering rather than by sorting:
 
 ```bash
 npm run gf -- leads --strategy cash_wholesale --sort distress
 npm run gf -- leads --strategy seller_finance --min-score 60
 npm run gf -- leads --event pre_foreclosure
 npm run gf -- leads --market old-hickory-waterfront --sort water
+npm run gf -- leads --strategy lease_option
 ```
 
 ## Commands
@@ -238,7 +254,7 @@ npm install         # only for typechecking, dev only
 npm run check       # typecheck plus tests
 ```
 
-74 tests. The connectors run against a local mock server that replicates the
+78 tests. The connectors run against a local mock server that replicates the
 documented response shapes of ArcGIS, Socrata and the GHL v2 API, covering
 pagination, retry and backoff, cross source address merging, append only event
 history, idempotency across consecutive runs, the approval gate, the geometry behind the

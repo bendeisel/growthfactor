@@ -5,7 +5,10 @@
     "often lag the market, so a county where assessments run 15 percent light",
     "would use 1.15. Check it against a handful of recent sales you know.",
     "Nothing in this system sends an offer, so a wrong number here shows up as a",
-    "wrong number on a review screen, not as a contract."
+    "wrong number on a review screen, not as a contract.",
+    "leaseOption is the rent to own structure: an option fee, monthly rent, a",
+    "strike price, and a share of each rent payment credited toward the purchase.",
+    "It transfers no title, so a due on sale clause has nothing to catch."
   ],
   "arvMultiplier": 1.0,
   "maoPercentOfArv": 0.7,
@@ -18,5 +21,12 @@
     "ratePercent": 5,
     "amortYears": 30,
     "balloonYears": 7
+  },
+  "leaseOption": {
+    "optionFeePercentOfArv": 0.02,
+    "monthlyRentPercentOfArv": 0.008,
+    "optionPricePercentOfArv": 1.0,
+    "termYears": 3,
+    "rentCreditPercent": 0.25
   }
 }

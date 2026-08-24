@@ -25,7 +25,14 @@ export const DISTRESS_TYPES: readonly DistressType[] = [
 export type OwnerType = 'individual' | 'company' | 'trust' | 'estate' | 'government' | 'unknown';
 
 /** Which strategy the numbers actually support for a given lead. */
-export type Strategy = 'seller_finance' | 'subject_to' | 'cash_wholesale' | 'novation' | 'unclear';
+export type Strategy =
+  | 'seller_finance'
+  | 'subject_to'
+  /** Lease with an option to buy. Controls the property without transferring title. */
+  | 'lease_option'
+  | 'cash_wholesale'
+  | 'novation'
+  | 'unclear';
 
 /** How much to believe an equity number. Free county data rarely carries loan balances. */
 export type EquityBasis = 'measured' | 'estimated_from_tenure' | 'unknown';

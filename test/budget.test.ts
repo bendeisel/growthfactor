@@ -321,8 +321,10 @@ test('the html connector ingests a trustee sale list end to end', async (t) => {
   assert.ok(events[0]!.auctionDate, 'a trustee sale notice carries a sale date');
   assert.match(events[0]!.auctionDate!, /^2026-09-\d\d$/);
 
-  // And the scorer should treat an imminent auction as a cash play.
-  assert.equal(leads[0]!.strategy, 'cash_wholesale');
+  // A notice publishes an address and a date and nothing else. The foreclosure
+  // itself proves a loan exists, and the first sale here is 17 days out, so this
+  // is a reinstatement play rather than a cash purchase.
+  assert.equal(leads[0]!.strategy, 'subject_to');
 });
 
 test('spend formatting', () => {

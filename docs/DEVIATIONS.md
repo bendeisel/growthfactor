@@ -97,8 +97,14 @@ distress exists, which is the wrong sort order for your stated goal.
 Seller financing needs a seller who can carry paper, which means high equity and no
 deadline. Distress and seller finance fit are computed separately, and each lead
 carries a recommended strategy. Bank owned inventory therefore ranks low on the
-blended score, correctly, because it is a cash play. Filter with
-`--strategy cash_wholesale` to work that list.
+blended score, correctly, because there is no seller to negotiate terms with. Filter
+with `--strategy cash_wholesale` to work that list.
+
+A later correction added `lease_option` as a fifth strategy and fixed the rule that
+routed thin equity foreclosures to cash. Curing arrears on an existing loan costs a
+fraction of a cash purchase, so those leads are assumption plays until the calendar
+runs out, and a leveraged owner with no deadline is a lease option rather than a dead
+lead. See the strategy table in the README.
 
 ### 5. An equity model was added, with the basis always reported.
 

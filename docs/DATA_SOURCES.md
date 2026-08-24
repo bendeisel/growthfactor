@@ -167,7 +167,7 @@ If neither finds it, in rough order of yield:
 | Signal | Usual free source | Notes |
 |---|---|---|
 | `pre_foreclosure` | **Tennessee: the free statewide notice repository, see below** | the classic list, also the most competed |
-| `foreclosure`, `auction` | trustee or sheriff sale notices, often a weekly PDF or HTML list | hard deadline, cash play |
+| `foreclosure`, `auction` | trustee or sheriff sale notices, often a weekly PDF or HTML list | hard deadline, and proof a loan exists to assume |
 | `reo` | HUD ArcGIS layer, lender inventory | already bank owned |
 | `tax_delinquent` | county trustee delinquent roll | often annual, often a CSV |
 | `probate`, `pre_probate` | probate court case search | see below |
