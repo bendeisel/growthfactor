@@ -1,0 +1,339 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Meta description reuses the hero's own subline — copy is frozen at 99%.
+const description =
+  'Join Nashville’s Best Boxing Gym and Find Something Worth Fighting For.';
+
+const heroSlides = [
+  {
+    src: '/img/sparring-1600.webp',
+    srcset: '/img/sparring-800.webp 800w, /img/sparring-1600.webp 1600w',
+    alt: 'Two boxers sparring in headgear while a Fighters coach watches from the ropes',
+  },
+  {
+    src: '/img/training-mitts-800.jpg',
+    srcset: '/img/training-mitts-800.jpg 800w',
+    alt: 'Coach guarding up while a boxer works the double-end bag at Fighters Boxing Gym',
+  },
+];
+
+const marqueeRepeats = 4;
+---
+
+<Base title="Fighters Nashville" description={description}>
+  <!-- ============ HERO ============ -->
+  <section class="hero grain">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1 class="reveal">WHAT ARE YOU FIGHTING FOR?</h1>
+        <p class="sub reveal">Join Nashville’s Best Boxing Gym and Find Something Worth Fighting For.</p>
+        <span class="btn-ring reveal">
+          <button class="btn js-open-lead" type="button">GET STARTED</button>
+        </span>
+      </div>
+
+      <div class="hero-media reveal" aria-label="Inside Fighters Boxing Gym">
+        <span class="deco-diamond" aria-hidden="true"></span>
+        <span class="deco-ring" aria-hidden="true"></span>
+        <div class="fader" data-interval="4500">
+          {
+            heroSlides.map((s, i) => (
+              <img
+                src={s.src}
+                srcset={s.srcset}
+                sizes="(max-width: 900px) 92vw, 46vw"
+                alt={s.alt}
+                class={i === 0 ? 'active' : ''}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchpriority={i === 0 ? 'high' : 'auto'}
+                width="1600"
+                height="1069"
+              />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 1 ============ -->
+  <section class="split grain">
+    <div class="wrap split-grid">
+      <div class="split-copy">
+        <h2 class="reveal">WE ARE ALL FIGHTERS: WHAT ARE YOU FIGHTING FOR?</h2>
+        <div class="reveal">
+          <p>Everyone’s fighting for something.</p>
+          <p>
+            For some, it’s fitness. For others, it’s focus, confidence, or just a little peace of
+            mind. Whatever your fight looks like, you’ll find your place here.
+          </p>
+          <p>
+            At <b>Fighters Boxing Gym</b>, we’ve built more than a gym we’ve built a community. A
+            place where people push limits, support each other, and keep showing up no matter what
+            life throws their way. Whether you’re stepping into the ring for the first time or
+            training for your next bout, you’ll get real coaching, real results, and people who’ve
+            got your back.
+          </p>
+          <p>No egos. No gimmicks. Just hard work, respect, and progress.</p>
+          <p>
+            You’ll leave every class stronger not just in body, but in mindset. When you train
+            here, you learn more than combinations and footwork. You learn to stay calm under
+            pressure, to show up when it’s hard, and to keep fighting in and out of the ring.
+          </p>
+        </div>
+        <span class="btn-ring reveal">
+          <button class="btn js-open-lead" type="button">GET STARTED</button>
+        </span>
+      </div>
+      <figure class="split-media reveal">
+        <img
+          src="/img/training-mitts-800.jpg"
+          alt="Coach guarding up while a boxer works the double-end bag at Fighters Boxing Gym"
+          loading="lazy"
+          width="800"
+          height="534"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      {
+        [0, 1].map(() => (
+          <span class="marquee-seg">
+            {Array.from({ length: marqueeRepeats }).map(() => (
+              <>
+                <span class="marquee-text">WHAT ARE YOU FIGHTING FOR?</span>
+                <svg class="marquee-mark" viewBox="0 0 40 40">
+                  <rect x="8.3" y="8.3" width="23.4" height="23.4" fill="none" stroke="#181817" stroke-width="2" transform="rotate(45 20 20)" />
+                  <circle cx="20" cy="20" r="9.5" fill="none" stroke="#CC0000" stroke-width="2.4" />
+                </svg>
+              </>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- ============ SECTION 2 (mirrored) ============ -->
+  <section class="split grain alt">
+    <div class="wrap split-grid flip">
+      <figure class="split-media reveal">
+        <img
+          src="/img/sparring-1600.webp"
+          srcset="/img/sparring-800.webp 800w, /img/sparring-1600.webp 1600w"
+          sizes="(max-width: 900px) 92vw, 44vw"
+          alt="Two boxers sparring in headgear while a Fighters coach watches from the ropes"
+          loading="lazy"
+          width="1600"
+          height="1069"
+        />
+      </figure>
+      <div class="split-copy">
+        <h2 class="reveal">NASHVILLE BOXING AT ITS BEST</h2>
+        <div class="reveal">
+          <p>Welcome to <b>Fighters Boxing Gym</b>, Nashville’s best boxing facility.</p>
+          <p>
+            We’re not just another fitness club with a few heavy bags in the corner — this is a
+            real boxing gym built for real boxers.
+          </p>
+          <p>
+            Our programs are designed for <b>all levels</b> — from total beginners to seasoned
+            fighters — with options for
+            <b>group classes, youth classes, private sessions, open gym, and sparring</b>. We’ve
+            created an environment where everyone’s welcome to learn the classic art of boxing, get
+            fit, and have fun doing it.
+          </p>
+          <p>
+            We believe boxing isn’t just a workout. It’s therapy, it’s discipline, it’s
+            empowerment. It teaches you how to breathe under pressure, stay sharp when tired, and
+            fight back when life hits hard. That’s why we’ve dropped every barrier to entry — no
+            experience needed, no ego allowed. Just show up, put in the work, and discover what
+            you’re capable of.
+          </p>
+          <p>So, what are you fighting for?</p>
+          <p>
+            Come find out inside Nashville’s best boxing gym — <b>Fighters Boxing Gym</b> — where
+            every round counts and everyone has a reason to fight.
+          </p>
+        </div>
+        <span class="btn-ring reveal">
+          <button class="btn js-open-lead" type="button">GET STARTED</button>
+        </span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- hero ---------- */
+  .hero {
+    background: var(--ground);
+    overflow: clip;
+    display: flex;
+    align-items: center;
+    /* Taller than the WP build's 130px padding band, per Ben */
+    min-height: calc(88vh - 88px);
+    padding: clamp(48px, 6vw, 96px) 0;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 72px);
+    width: 100%;
+  }
+  .hero h1 {
+    /* Measured scale: 96 / 70 / 30, Jost — set in sentence case exactly as
+       the copy string; the caps look on the live site comes from the face */
+    font-size: clamp(44px, 7vw, 96px);
+    letter-spacing: 0.5px;
+  }
+  .hero .sub {
+    font-size: clamp(17px, 2vw, 27px);
+    line-height: 1.2;
+    font-family: var(--font-display);
+    color: var(--text-dark);
+    margin: 22px 0 34px;
+  }
+
+  /* Crossfading rounded media panel. Radius is the kernel's 20px panel
+     value — rounder than anything at Nashville MMA (containers 0 / actions
+     8px), which is the differentiation Ben asked for. */
+  .hero-media { position: relative; }
+  .fader {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-panel);
+    overflow: hidden;
+    box-shadow: var(--shadow-popup);
+  }
+  .fader img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  .fader img.active { opacity: 1; }
+
+  /* Logo echoes: the red ring and the rotated-square diamond */
+  .deco-ring {
+    position: absolute;
+    width: clamp(90px, 10vw, 150px);
+    aspect-ratio: 1;
+    border: 3px solid var(--accent);
+    border-radius: 50%;
+    left: -7%;
+    bottom: -6%;
+    z-index: 2;
+  }
+  .deco-diamond {
+    position: absolute;
+    width: clamp(120px, 14vw, 210px);
+    aspect-ratio: 1;
+    border: 1.5px solid var(--border);
+    transform: rotate(45deg);
+    right: -9%;
+    top: -7%;
+  }
+
+  /* ---------- split sections ---------- */
+  .split { padding: var(--section-pad) 0; background: var(--ground); }
+  .split.alt { background: var(--ground-alt); }
+  .split-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: center;
+  }
+  .split-grid.flip { grid-template-columns: 0.9fr 1.1fr; }
+  .split h2 {
+    font-size: clamp(32px, 4.2vw, 55px);
+    margin-bottom: clamp(20px, 3vw, 36px);
+  }
+  .split-copy .btn-ring { margin-top: clamp(24px, 3vw, 40px); }
+  .split.alt .btn-ring { --ring-gap: var(--ground-alt); }
+  .split.alt :global(.btn) { border-color: var(--ground-alt); }
+  .split-media { margin: 0; }
+  .split-media img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-popup);
+  }
+
+  /* ---------- marquee ----------
+     The WP build ships this band configured (150px uppercase #181817
+     chars) but empty. Filled with the hero line, verbatim. */
+  .marquee {
+    overflow: hidden;
+    background: var(--ground);
+    padding: clamp(18px, 2.5vw, 34px) 0;
+    border-block: 1px solid var(--border);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 36s linear infinite;
+  }
+  .marquee-seg { display: flex; align-items: center; }
+  .marquee-text {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(50px, 9vw, 150px);
+    line-height: 1;
+    color: var(--text-dark);
+    white-space: nowrap;
+    padding: 0 0.35em;
+  }
+  .marquee-mark {
+    width: clamp(28px, 4.5vw, 72px);
+    height: clamp(28px, 4.5vw, 72px);
+    flex: none;
+  }
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .hero { min-height: 0; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-media { max-width: 480px; }
+    .split-grid, .split-grid.flip { grid-template-columns: 1fr; }
+    .split-grid.flip .split-media { order: 2; }
+    .deco-diamond { right: -4%; }
+    .deco-ring { left: -4%; }
+  }
+</style>
+
+<script>
+  // Hero crossfade — plain JS so it ports to any platform as a custom block.
+  // Add more <img> tags to the .fader and they join the rotation.
+  const fader = document.querySelector('.fader');
+  if (fader) {
+    const imgs = Array.from(fader.querySelectorAll('img'));
+    const interval = Number(fader.getAttribute('data-interval')) || 4500;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (imgs.length > 1 && !reduced) {
+      let i = 0;
+      setInterval(() => {
+        imgs[i].classList.remove('active');
+        i = (i + 1) % imgs.length;
+        imgs[i].classList.add('active');
+      }, interval);
+    }
+  }
+</script>

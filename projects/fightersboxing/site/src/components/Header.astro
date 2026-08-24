@@ -1,0 +1,227 @@
+---
+const nav = [
+  { label: 'Our Gyms', href: '/our-gyms/' },
+  {
+    label: 'Boxing Classes',
+    href: '/boxing-classes/',
+    children: [
+      { label: 'Beginners Boxing Class', href: '/beginners-boxing-class/' },
+      { label: 'Youth Boxing Class', href: '/youth-boxing-class/' },
+      { label: 'Competition Team Training', href: '/competition-team-training/' },
+    ],
+  },
+  { label: 'Coaches', href: '/coaches/' },
+  { label: 'Schedule', href: '/schedule/' },
+  { label: 'Boxing Blog', href: '/boxing-blog/' },
+  {
+    label: 'About Us',
+    href: '#',
+    children: [
+      { label: 'What to Expect', href: '/what-to-expect/' },
+      { label: 'FAQs', href: '/faqs/' },
+      { label: 'Contact Us', href: '/contact-us/' },
+    ],
+  },
+];
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/">
+      <img src="/img/logo-on-light.png" alt="Fighters Nashville" width="200" height="63" />
+    </a>
+
+    <nav class="main-nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li class={item.children ? 'has-sub' : ''}>
+              <a href={item.href}>
+                {item.label}
+                {item.children && (
+                  <svg class="caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                    <path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" />
+                  </svg>
+                )}
+              </a>
+              {item.children && (
+                <ul class="sub">
+                  {item.children.map((c) => (
+                    <li>
+                      <a href={c.href}>{c.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <span class="btn-ring header-cta">
+      <button class="btn btn-sm js-open-lead" type="button">GET MORE INFO</button>
+    </span>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+      <span class="sr-only">Menu</span>
+      <svg width="26" height="20" viewBox="0 0 26 20" aria-hidden="true">
+        <path d="M1 2h24M1 10h24M1 18h24" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Mobile">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+              {item.children && (
+                <ul>
+                  {item.children.map((c) => (
+                    <li>
+                      <a href={c.href}>{c.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="extras">
+      <div class="extra-item">
+        <h6>Have Questions?</h6>
+        <a href="mailto:support@fightersnashville.com">support@fightersnashville.com</a>
+      </div>
+      <div class="extra-item">
+        <h6>Where to Find Us?</h6>
+        <a href="/contact-us/">Look Here</a>
+      </div>
+      <span class="btn-ring">
+        <button class="btn js-open-lead" type="button">GET MORE INFO</button>
+      </span>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--ground);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2.5vw, 36px);
+    min-height: 88px;
+  }
+  .brand img { width: clamp(150px, 14vw, 200px); height: auto; }
+  .main-nav { margin-left: auto; }
+  .main-nav > ul {
+    display: flex;
+    gap: clamp(14px, 1.8vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .main-nav a {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--text-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0;
+  }
+  .main-nav a:hover, .main-nav a:focus-visible { color: var(--accent); }
+  .caret { color: var(--accent); }
+
+  .has-sub { position: relative; }
+  .sub {
+    position: absolute;
+    top: 100%;
+    left: -18px;
+    min-width: 240px;
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-popup);
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+  }
+  .has-sub:hover .sub,
+  .has-sub:focus-within .sub {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .sub a { display: block; padding: 8px 18px; }
+
+  .header-cta .btn-sm { padding: 14px 26px; }
+  .header-cta { --ring-gap: var(--ground); }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 0;
+    color: var(--text-dark);
+    padding: 8px;
+    cursor: pointer;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .mobile-menu {
+    border-top: 1px solid var(--border);
+    background: var(--ground);
+    padding: 20px clamp(20px, 4vw, 40px) 32px;
+    max-height: calc(100vh - 88px);
+    overflow: auto;
+  }
+  .mobile-menu ul { list-style: none; margin: 0; padding: 0; }
+  .mobile-menu li > a {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-dark);
+    padding: 10px 0;
+  }
+  .mobile-menu li ul { padding-left: 18px; border-left: 1px solid var(--border); }
+  .mobile-menu li ul a { font-size: 16px; color: var(--text-light); }
+  .extras { margin-top: 24px; display: grid; gap: 18px; }
+  .extra-item h6 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+
+  @media (max-width: 1100px) {
+    .main-nav, .header-cta { display: none; }
+    .menu-toggle { display: inline-flex; margin-left: auto; }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    if (menu) menu.hidden = open;
+  });
+</script>

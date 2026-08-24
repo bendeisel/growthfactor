@@ -1,0 +1,153 @@
+/* Fighters Boxing Gym — kernel tokens and base styles.
+   Every hex and face here is measured from the client's WordPress build;
+   see projects/fightersboxing/kernel.json. */
+
+:root {
+  /* ground */
+  --ground: #FFFFFF;
+  --ground-alt: #F5F5EF;
+  --ground-band: #090909;
+  --ground-footer: #000000;
+
+  /* ink */
+  --text-dark: #181817;
+  --text-light: #ABABA3;
+  --border: #DCDCD1;
+  --on-dark: #FFFFFF;
+
+  /* accent (logo ring red) */
+  --accent: #CC0000;
+  --accent-hover: #B70000;
+
+  /* faces */
+  --font-display: 'Jost', sans-serif;
+  --font-body: 'Didact Gothic', sans-serif;
+  --font-action: 'Josefin Sans', sans-serif;
+
+  /* geometry — panel radius is the popup's measured 20px, pill is the
+     buttons' measured 36px; the circle motif comes from the logo ring */
+  --radius-panel: 20px;
+  --radius-pill: 36px;
+  --shadow-button: 0px 4px 14px 0px rgba(0, 0, 0, 0.3);
+  --shadow-popup: 2px 8px 23px 3px rgba(0, 0, 0, 0.2);
+
+  --content-max: 1200px;
+  --section-pad: clamp(56px, 9vw, 110px);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover, a:focus-visible { color: var(--accent-hover); }
+
+.wrap {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4vw, 40px);
+}
+
+/* grain — the site's 250px noise tile at its measured 0.04 opacity */
+.grain { position: relative; }
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/img/grain.png') repeat;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.grain > * { position: relative; }
+
+/* ---- buttons -------------------------------------------------------
+   Pill exactly as measured (#CC0000, Josefin Sans 700 14px, ls 1px,
+   radius 36px, measured shadow), wrapped in the rotating red ring —
+   the logo's red circle set in motion around the action. */
+
+.btn-ring {
+  --ring-gap: var(--ground);
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  padding: 3px;
+  border-radius: calc(var(--radius-pill) + 6px);
+  background:
+    conic-gradient(from var(--ring-angle, 0turn),
+      rgba(204, 0, 0, 0) 0turn,
+      var(--accent) 0.12turn,
+      rgba(204, 0, 0, 0) 0.3turn);
+}
+
+.btn {
+  font-family: var(--font-action);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: var(--on-dark);
+  background: var(--accent);
+  border: 3px solid var(--ring-gap, var(--ground));
+  border-radius: var(--radius-pill);
+  padding: 20px 38px;
+  box-shadow: var(--shadow-button);
+  cursor: pointer;
+  transition: background 0.3s;
+  display: inline-block;
+}
+
+.btn:hover, .btn:focus-visible { background: var(--accent-hover); color: var(--on-dark); }
+
+@property --ring-angle {
+  syntax: '<angle>';
+  initial-value: 0turn;
+  inherits: false;
+}
+
+@keyframes ring-rotate { to { --ring-angle: 1turn; } }
+
+.btn-ring { animation: ring-rotate 3.2s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-ring { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---- reveal on scroll (the site's measured entrance: y 20px -> 0,
+   opacity 0 -> 1) ---------------------------------------------------- */
+
+/* Gated behind html.js so content stays visible without JavaScript */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+html.js .reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal { opacity: 1; transform: none; transition: none; }
+}
