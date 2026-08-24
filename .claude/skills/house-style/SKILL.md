@@ -114,7 +114,12 @@ used; anything used once is an amplification candidate.
 `references/axes.md`, constrained by Step 0's divergence check. This is the
 only place variation is allowed to come from outside the client.
 
-**Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified. If the
+**Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified. House
+defaults for small-business builds (standing client instruction): lead-capture
+forms open as a popup/modal from every request CTA rather than living only
+inline, and interactive showcases should be portable — vanilla JS/CSS that can
+drop into a template platform as a custom block, not framework-bound
+components. If the
 client is on a template platform, check `references/97display.md` first — the
 platform usually ships far more section archetypes than the site is using, and
 switching archetype is free restructuring that stays entirely inside the
