@@ -9,7 +9,7 @@ import type {
   DerivedSignals, DistressEventInput, PropertyInput, RunStats, Scores,
 } from '../core/types.ts';
 import type {
-  LeadRecord, ListLeadsOptions, Store, StoredEvent, UpsertResult,
+  LeadRecord, ListLeadsOptions, OwnerContact, Store, StoredEvent, UpsertResult,
 } from './index.ts';
 import { propertyToRow } from './rowmap.ts';
 
@@ -308,6 +308,69 @@ export class SqliteStore implements Store {
       estimatedCostCents: num(r.estimated_cost_cents) ?? 0,
       error: str(r.error),
     }));
+  }
+
+  async spendSince(sinceIso: string): Promise<Array<{ jobName: string; cents: number; records: number }>> {
+    const rows = this.db
+      .prepare(
+        `select job_name, sum(coalesce(estimated_cost_cents, 0)) as cents,
+                sum(coalesce(records_pulled, 0)) as records
+           from ingest_runs
+          where started_at >= ?
+          group by job_name`,
+      )
+      .all(sinceIso) as Array<Record<string, unknown>>;
+    return rows.map((r) => ({
+      jobName: String(r.job_name),
+      cents: num(r.cents) ?? 0,
+      records: num(r.records) ?? 0,
+    }));
+  }
+
+  async getOwner(propertyId: string): Promise<OwnerContact | null> {
+    const r = this.db
+      .prepare('select * from owners where property_id = ? order by skip_traced_at desc limit 1')
+      .get(propertyId) as Record<string, unknown> | undefined;
+    if (!r) return null;
+    const parse = (v: unknown): string[] => {
+      try {
+        const out = JSON.parse(String(v ?? '[]'));
+        return Array.isArray(out) ? out.map(String) : [];
+      } catch { return []; }
+    };
+    return {
+      propertyId,
+      fullName: str(r.full_name),
+      firstName: str(r.first_name),
+      lastName: str(r.last_name),
+      mailingAddress: str(r.mailing_address),
+      mailingCity: str(r.mailing_city),
+      mailingState: str(r.mailing_state),
+      mailingZip: str(r.mailing_zip),
+      phones: parse(r.phones),
+      emails: parse(r.emails),
+      skipTracedAt: str(r.skip_traced_at),
+      skipTraceCostCents: num(r.skip_trace_cost_cents),
+      source: str(r.source),
+    };
+  }
+
+  async saveOwner(owner: OwnerContact & { raw?: unknown }): Promise<void> {
+    this.db
+      .prepare(
+        `insert into owners (id, property_id, full_name, first_name, last_name,
+            mailing_address, mailing_city, mailing_state, mailing_zip,
+            phones, emails, skip_traced_at, skip_trace_cost_cents, source, raw)
+         values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      )
+      .run(
+        crypto.randomUUID(), owner.propertyId, b(owner.fullName), b(owner.firstName),
+        b(owner.lastName), b(owner.mailingAddress), b(owner.mailingCity),
+        b(owner.mailingState), b(owner.mailingZip),
+        JSON.stringify(owner.phones ?? []), JSON.stringify(owner.emails ?? []),
+        b(owner.skipTracedAt ?? nowIso()), b(owner.skipTraceCostCents ?? 0),
+        b(owner.source), b(owner.raw),
+      );
   }
 
   private rowToLead(r: Record<string, unknown>): LeadRecord {

@@ -141,7 +141,14 @@ export function scoreLead(
   // ---- strategy ----
   let strategy: Strategy;
   const has = (t: DistressType) => distinctActive.has(t);
+  // A sale already on the calendar overrides everything else. Terms need weeks of
+  // negotiation and a subject to close needs a reinstatement quote and a payoff,
+  // and neither fits inside a month. Cash is what closes before the gavel.
+  const daysToAuction = nextAuction ? daysBetween(asOf, nextAuction) : null;
+  const auctionImminent = daysToAuction != null && daysToAuction >= 0 && daysToAuction <= 45;
+
   if (has('reo') || has('auction')) strategy = 'cash_wholesale';
+  else if (auctionImminent) strategy = 'cash_wholesale';
   else if ((has('foreclosure') || has('pre_foreclosure')) && (pct ?? 0) < 40) strategy = 'subject_to';
   else if (d.likelyFreeAndClear || (pct ?? 0) >= 70) strategy = 'seller_finance';
   else if ((pct ?? 0) >= 40) strategy = 'novation';

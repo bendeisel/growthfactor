@@ -241,9 +241,37 @@ test('an imminent auction is a cash play, not a seller carry', () => {
   const s = scoreLead(p, derive(p, AS_OF), [
     { eventType: 'pre_foreclosure', firstSeenAt: '2026-08-10', lastSeenAt: '2026-08-22', auctionDate: '2026-10-01' },
   ], AS_OF);
-  assert.equal(s.strategy, 'subject_to', 'thin equity plus a deadline is a subject to play');
+  assert.equal(s.strategy, 'cash_wholesale', 'a sale five weeks out leaves no room for terms');
   assert.ok(s.distressScore > s.sellerFinanceScore);
   assert.ok(s.reasons.some((r) => r.includes('auction scheduled')));
+
+  // Thin equity and a filing but no sale date yet is the subject to case: there is
+  // still time to take over the existing loan.
+  const noDate = scoreLead(p, derive(p, AS_OF), [
+    { eventType: 'pre_foreclosure', firstSeenAt: '2026-08-10', lastSeenAt: '2026-08-22' },
+  ], AS_OF);
+  assert.equal(noDate.strategy, 'subject_to');
+});
+
+test('a sale already on the calendar is a cash play whatever the equity', () => {
+  // Foreclosure filed, sale in three weeks, and plenty of equity. Terms and a
+  // subject to close both need more runway than this seller has.
+  const rich: PropertyInput = {
+    source: 's', raw: {}, state: 'TN', propertyType: 'Single Family',
+    estimatedValue: 400000, lastSaleDate: '1994-01-01', lastSaleAmount: 60000,
+    ownerName: 'BROWN SAM',
+  };
+  const soon = scoreLead(rich, derive(rich, AS_OF), [
+    { eventType: 'foreclosure', firstSeenAt: '2026-08-01', lastSeenAt: '2026-08-23', auctionDate: '2026-09-14' },
+  ], AS_OF);
+  assert.equal(soon.strategy, 'cash_wholesale');
+  assert.ok(soon.reasons.some((r) => r.includes('auction scheduled in')));
+
+  // The same property with the sale far out is still a terms conversation.
+  const later = scoreLead(rich, derive(rich, AS_OF), [
+    { eventType: 'foreclosure', firstSeenAt: '2026-08-01', lastSeenAt: '2026-08-23', auctionDate: '2027-06-01' },
+  ], AS_OF);
+  assert.equal(later.strategy, 'seller_finance');
 });
 
 test('bank owned inventory scores as a cash wholesale play', () => {

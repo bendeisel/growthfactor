@@ -128,7 +128,7 @@ export interface Scores {
 
 export interface SourceConfig {
   name: string;
-  kind: 'arcgis' | 'socrata' | 'csv' | 'reapi';
+  kind: 'arcgis' | 'socrata' | 'csv' | 'html' | 'reapi';
   label?: string;
   enabled?: boolean;
   /** Cents per record this source costs. Free public sources are 0. */

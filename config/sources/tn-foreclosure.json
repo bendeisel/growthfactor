@@ -1,0 +1,79 @@
+{
+  "_comment": [
+    "TENNESSEE FORECLOSURE NOTICES. Free, statewide, and mandated by law.",
+    "",
+    "Tennessee changed its foreclosure notice law effective July 2025. Every",
+    "foreclosure notice published in any Tennessee newspaper must now also be",
+    "posted to a free public statewide repository. The Tennessee Press Association",
+    "runs foreclosurestn.com as that central repository. Notices are also posted by",
+    "third party posting companies under TCA 35-5-101, and all Tennessee public",
+    "notices appear at tnpublicnotice.com.",
+    "",
+    "This matters because Tennessee foreclosures are non judicial. There is no",
+    "court docket to scrape, which normally makes pre foreclosure the hardest free",
+    "signal to get in this state. The statewide repository closes that gap for all",
+    "eight of your target counties at zero cost.",
+    "",
+    "SET THE URL FIRST. The page structure was not verifiable when this was written,",
+    "so the urls are placeholders rather than guesses. Open the site, find the page",
+    "that actually lists notices for your county, and paste its url. Then:",
+    "",
+    "  gf discover tn-foreclosure-statewide",
+    "",
+    "If the table is not found, the error lists every table on the page with its",
+    "headers, so setting requireHeaders is a copy and paste. If it reports no",
+    "tables at all, the page is rendered by JavaScript and you will need the site's",
+    "own export or search-by-county url instead.",
+    "",
+    "Prefer requireHeaders over tableIndex. A site redesign moves indexes around but",
+    "rarely renames columns."
+  ],
+  "sources": [
+    {
+      "name": "tn-foreclosure-statewide",
+      "kind": "html",
+      "label": "Tennessee statewide foreclosure notice repository",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_THE_NOTICE_LIST_URL",
+      "requireHeaders": ["address"],
+      "pages": 1,
+      "minIntervalMs": 1000,
+      "impliesEvents": ["foreclosure"],
+      "defaults": { "state": "TN" },
+      "notes": [
+        "Start at foreclosurestn.com, the Tennessee Press Association repository.",
+        "Alternates worth checking: tnpublicnotice.com, foreclosuretennessee.com,",
+        "tnforeclosurenotices.com.",
+        "A substitute trustee sale notice carries a scheduled sale date, so the event",
+        "is recorded as a foreclosure rather than a pre foreclosure. The field mapper",
+        "should pick up a Sale Date column as the auction date and a Trustee column",
+        "as the lender. Confirm both with gf discover.",
+        "An auction inside 60 days adds to the distress score and flips the strategy",
+        "to subject_to or cash, since a seller on a deadline needs cash, not terms.",
+        "minIntervalMs is 1000 here. This is a press association site, not a county",
+        "API, so be gentle."
+      ]
+    },
+    {
+      "name": "tn-tax-delinquent-example",
+      "kind": "html",
+      "label": "County trustee delinquent tax list, example shape",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_YOUR_COUNTY_TRUSTEE_DELINQUENT_LIST",
+      "requireHeaders": ["owner"],
+      "minIntervalMs": 1000,
+      "impliesEvents": ["tax_delinquent"],
+      "defaults": { "state": "TN" },
+      "notes": [
+        "Most Tennessee county trustees publish a delinquent tax list, usually once a",
+        "year and often as an HTML table or a PDF. If it is a CSV, use kind csv",
+        "instead. If it is a PDF, there is no connector for that: copy it into a",
+        "spreadsheet, save as CSV, and point the csv connector at a local file url.",
+        "Tax delinquency plus high equity is one of the strongest seller finance",
+        "combinations, because the owner has a bill and no loan to pay off."
+      ]
+    }
+  ]
+}

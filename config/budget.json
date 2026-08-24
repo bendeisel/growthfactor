@@ -1,0 +1,20 @@
+{
+  "_comment": [
+    "Hard ceiling on billable spend per calendar month, enforced in code before any",
+    "paid call, not reported after the fact.",
+    "",
+    "200 dollars is set to match your own line: above that, PropStream Pro at 199",
+    "with skip tracing included is the better deal, so the system refuses to drift",
+    "past the point where it stops making sense.",
+    "",
+    "hardStop true means a run that would exceed the cap is refused outright.",
+    "Set it false to have runs trimmed to whatever the remaining budget affords",
+    "instead of failing.",
+    "",
+    "Every cost in the system flows through the ingest_runs table, so 'gf spend'",
+    "sees all of it. On the free sources this stays at zero forever."
+  ],
+  "monthlyCapUsd": 200,
+  "warnAtPercent": 75,
+  "hardStop": true
+}

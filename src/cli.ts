@@ -29,6 +29,8 @@ import { SupabaseStore } from './store/supabase.ts';
 import type { Store, LeadRecord, ListLeadsOptions } from './store/index.ts';
 import { leadsToGhlCsv } from './export/ghl-csv.ts';
 import { ghlConfigFromEnv, listCustomFields, pushLead } from './export/ghl-api.ts';
+import { centsToUsd, spendThisMonth, DEFAULT_BUDGET, type BudgetConfig } from './core/budget.ts';
+import { runSkipTrace, type SkipTraceVendor } from './enrich/skiptrace.ts';
 import type { SourceConfig } from './core/types.ts';
 
 // GF_CONFIG_DIR lets you keep several config sets side by side, for example one
@@ -119,6 +121,19 @@ function findSource(name: string): SourceConfig {
 
 const loadBuyBox = (): BuyBox => readJson(join(CONFIG_DIR, 'buybox.json'), DEFAULT_BUY_BOX);
 const WATERBODY_DIR = join(CONFIG_DIR, 'waterbodies');
+const loadBudget = (): BudgetConfig => readJson(join(CONFIG_DIR, 'budget.json'), DEFAULT_BUDGET);
+
+function loadSkipTraceVendor(): SkipTraceVendor {
+  const body = readJson<{ vendor?: SkipTraceVendor }>(join(CONFIG_DIR, 'skiptrace.json'), {});
+  const v = body.vendor;
+  if (!v || v.enabled === false || v.name === 'REPLACE_ME') {
+    throw new Error(
+      'no skip trace vendor configured. Fill in config/skiptrace.json and set enabled to true. '
+      + 'This is the only part of the system that costs money per record.',
+    );
+  }
+  return v;
+}
 
 function loadMarkets(): Market[] {
   const body = readJson<{ markets?: Market[] }>(join(CONFIG_DIR, 'markets.json'), {});
@@ -242,6 +257,9 @@ const HELP = `growthfactor leads, distressed property pipeline
   gf export [--out file.csv] [filters]      GHL ready CSV
   gf stage <lead-id> [--offer N] [--notes "..."]
   gf push <lead-id> --confirm               create GHL contact and opportunity
+  gf spend                                  monthly budget, spend and projection
+  gf trace [ids...] [--market M] [--min-score N] [--limit N] [--confirm]
+                                            skip trace, dry run unless confirmed
   gf runs [--limit N]                       ingest history and spend
   gf ghl:fields                             list GHL custom field ids
   gf targets:push [--source S]              upload source configs to Supabase
@@ -783,6 +801,98 @@ async function cmdGeo(args: Args): Promise<void> {
   }
 }
 
+async function cmdSpend(args: Args): Promise<void> {
+  const budget = loadBudget();
+  const store = await openStore(args.flags);
+  try {
+    const snap = await spendThisMonth(store, budget);
+    console.log(`month starting ${snap.monthStart.slice(0, 10)}, day ${snap.daysElapsed} of ${snap.daysInMonth}`);
+    console.log(`cap        ${centsToUsd(snap.capCents)}`);
+    console.log(`spent      ${centsToUsd(snap.spentCents)}  (${snap.percentUsed} percent)`);
+    console.log(`remaining  ${centsToUsd(snap.remainingCents)}`);
+    console.log(`projected  ${centsToUsd(snap.projectedCents)} by month end at the current rate`);
+
+    if (snap.byJob.length) {
+      console.log('');
+      console.log(table(
+        snap.byJob.map((j) => ({
+          job: j.jobName,
+          records: String(j.records),
+          cost: centsToUsd(j.cents),
+        })),
+        ['job', 'records', 'cost'],
+      ));
+    }
+    if (snap.spentCents === 0) {
+      console.log('\nNothing spent. Every enabled source is free public data.');
+    }
+    if (snap.projectedCents > snap.capCents) {
+      console.log(`\nWARNING: on pace to exceed the cap by ${centsToUsd(snap.projectedCents - snap.capCents)}.`);
+      console.log('Paid calls will be refused once the cap is reached.');
+    }
+  } finally {
+    await store.close();
+  }
+}
+
+async function cmdTrace(args: Args): Promise<void> {
+  const store = await openStore(args.flags);
+  try {
+    // Explicit ids, or a filtered slice of the working list.
+    let leads: LeadRecord[];
+    if (args.positional.length) {
+      leads = [];
+      for (const id of args.positional) {
+        const l = await store.getLead(id);
+        if (l) leads.push(l);
+        else console.log(`no lead found for "${id}"`);
+      }
+    } else {
+      const opts = listOptsFrom(args.flags);
+      const marketName = strFlag(args.flags, 'market');
+      leads = await store.listLeads({ ...opts, limit: marketName ? 5000 : (opts.limit ?? 50) });
+      if (marketName) {
+        const market = findMarket(loadMarkets(), marketName);
+        leads = leads.filter((l) => marketMatches(marketSubject(l), market).pass);
+      }
+      const cap = numFlag(args.flags, 'limit') ?? 50;
+      leads = leads.slice(0, cap);
+    }
+    if (!leads.length) { console.log('no leads selected'); return; }
+
+    const vendor = loadSkipTraceVendor();
+    const budget = loadBudget();
+    // Dry run is the default. Spending money takes an explicit --confirm.
+    const dryRun = args.flags.confirm !== true;
+
+    const res = await runSkipTrace(leads, store, vendor, budget, {
+      maxRecords: numFlag(args.flags, 'max') ?? 50,
+      cacheDays: numFlag(args.flags, 'cache-days') ?? 90,
+      dryRun,
+    });
+
+    console.log(`selected ${res.requested} leads`);
+    if (res.fromCache) console.log(`  ${res.fromCache} already traced within the cache window, free`);
+    if (res.skippedNoName) console.log(`  ${res.skippedNoName} had no owner name and cannot be traced`);
+    if (res.trimmedByBudget) console.log(`  ${res.trimmedByBudget} trimmed by the monthly budget`);
+    for (const w of res.warnings) console.log(`  note: ${w}`);
+
+    if (dryRun) {
+      console.log(`\nestimated cost ${centsToUsd(res.costCents)}. Nothing was spent.`);
+      console.log('Add --confirm to actually run it.');
+    } else {
+      console.log(`\ntraced ${res.traced} records, ${res.hits} returned contacts`);
+      console.log(`  ${res.phonesFound} phones, ${res.emailsFound} emails`);
+      console.log(`  cost ${centsToUsd(res.costCents)}`);
+      const snap = await spendThisMonth(store, budget);
+      console.log(`  month to date ${centsToUsd(snap.spentCents)} of ${centsToUsd(snap.capCents)}`);
+    }
+    for (const e of res.errors.slice(0, 5)) console.log(`  error: ${e}`);
+  } finally {
+    await store.close();
+  }
+}
+
 async function cmdStatus(args: Args): Promise<void> {
   const store = await openStore(args.flags);
   try {
@@ -822,6 +932,8 @@ async function main(): Promise<void> {
     runs: cmdRuns,
     'ghl:fields': cmdGhlFields,
     'targets:push': cmdTargetsPush,
+    spend: cmdSpend,
+    trace: cmdTrace,
     status: cmdStatus,
   };
   const fn = commands[args.cmd];

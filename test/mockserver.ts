@@ -287,6 +287,54 @@ export async function startMock(opts: MockOptions = {}): Promise<MockHandle> {
       });
     }
 
+    // ---- skip trace vendor stand in ----
+    if (url.pathname === '/skiptrace' && req.method === 'POST') {
+      if (!req.headers['x-api-key']) return json({ message: 'missing key' }, 401);
+      let body = '';
+      req.on('data', (c) => { body += c; });
+      req.on('end', () => {
+        let parsed: Record<string, unknown> = {};
+        try { parsed = JSON.parse(body || '{}'); } catch { /* ignore */ }
+        // A deliberately awkward envelope, to prove nothing depends on its shape.
+        if (String(parsed.last_name ?? '').toUpperCase() === 'NOBODY') {
+          return json({ output: { identity: {} } });
+        }
+        json({
+          output: {
+            identity: {
+              phones: [
+                { phoneNumber: '615-555-0101', type: 'Wireless' },
+                { number: '(615) 555-0102' },
+              ],
+              emails: [{ email: `${String(parsed.last_name ?? 'x').toLowerCase()}@example.com` }],
+            },
+          },
+        });
+      });
+      return undefined;
+    }
+
+    // ---- an HTML notice page, the shape trustee sale lists take ----
+    if (url.pathname === '/notices') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      const rows = Array.from({ length: 12 }, (_, i) => `
+        <tr>
+          <td>09/${String(10 + i).padStart(2, '0')}/2026</td>
+          <td>${100 + i * 4} Oak Ave<br/>Nashville, TN 37201</td>
+          <td>Davidson</td>
+          <td>Wilson &amp; Assoc. P.L.L.C.</td>
+          <td>$${(150000 + i * 1000).toLocaleString('en-US')}.00</td>
+        </tr>`).join('');
+      res.end(`<html><body>
+        <table id="nav"><tr><td>Home</td><td>Search</td></tr></table>
+        <table class="notices">
+          <thead><tr><th>Sale Date</th><th>Property Address</th><th>County</th>
+            <th>Trustee</th><th>Unpaid Balance</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table></body></html>`);
+      return undefined;
+    }
+
     // ---- failure injection, used to prove retry and backoff ----
     if (url.pathname === '/flaky') {
       const n = requests.filter((r) => r.startsWith('/flaky')).length;

@@ -11,6 +11,23 @@ county GIS, city open data,        dedupe by APN         seller finance fit    C
 HUD REO, court dockets            and by address        strategy per lead     or API push
 ```
 
+## What it costs
+
+Zero for the data. The only per record cost in the whole system is skip tracing,
+and it is opt in, cached, capped and dry run by default.
+
+```bash
+npm run gf -- spend    # cap, month to date, projection
+```
+
+`config/budget.json` sets a hard 200 dollar monthly ceiling, matching the point
+where PropStream Pro becomes the better deal. Paid calls are refused past it rather
+than trimmed, so you find out by being stopped instead of by reading a bill.
+
+Expect 20 to 75 dollars a month in practice, because the free layer filters first
+and you only trace leads that already scored well. Full numbers, including the cases
+where PropStream genuinely wins, in [docs/COSTS.md](docs/COSTS.md).
+
 ## Why this beats paying for a lead subscription
 
 A subscription mostly resells county records with a filter UI on top. Those records
@@ -166,6 +183,8 @@ npm run gf -- leads --market old-hickory-waterfront --sort water
 | `gf export` | GHL ready CSV | no |
 | `gf stage <id>` | stage an offer at `awaiting_approval` | no |
 | `gf push <id> --confirm` | create a GHL contact and opportunity | no |
+| `gf spend` | monthly budget, spend and projection | no |
+| `gf trace` | skip trace selected leads, dry run unless confirmed | **yes** |
 | `gf runs` | ingest history, record counts and spend per run | no |
 | `gf targets:push` | upload source configs to Supabase for scheduled runs | no |
 
@@ -180,8 +199,10 @@ These are enforced in code, not just documented.
   opportunity. It never calls a workflow, conversation or messaging endpoint, so
   importing a lead cannot fire an SMS or an email. A test asserts this.
 - **No skip trace during ingest.** Nothing in the ingest path can spend money per
-  record. Phone and email columns in the export are deliberately left empty rather
-  than filled with anything invented.
+  record, and `gf trace` is dry run unless you pass `--confirm`. It is cached for
+  90 days, capped at 50 records per run, and refused outright once the monthly
+  budget is reached. Phone and email columns stay empty until you trace, rather
+  than being filled with anything invented.
 - **No silent duplicate.** A record with neither an address nor a parcel number is
   counted and dropped, not stored as noise.
 
@@ -217,7 +238,7 @@ npm install         # only for typechecking, dev only
 npm run check       # typecheck plus tests
 ```
 
-59 tests. The connectors run against a local mock server that replicates the
+74 tests. The connectors run against a local mock server that replicates the
 documented response shapes of ArcGIS, Socrata and the GHL v2 API, covering
 pagination, retry and backoff, cross source address merging, append only event
 history, idempotency across consecutive runs, the approval gate, the geometry behind the
@@ -225,6 +246,7 @@ waterfront filter, and the shipped market definitions themselves.
 
 ## Docs
 
+- [docs/COSTS.md](docs/COSTS.md) what it costs, and the honest PropStream break even
 - [docs/MARKETS.md](docs/MARKETS.md) your seven target areas and the waterfront filter
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) every free source, what it gives you, how to find yours
 - [docs/SELLER_FINANCE_PLAYBOOK.md](docs/SELLER_FINANCE_PLAYBOOK.md) how the scoring works and how to work the lists

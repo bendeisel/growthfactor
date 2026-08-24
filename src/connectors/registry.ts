@@ -2,6 +2,7 @@ import type { SourceConfig } from '../core/types.ts';
 import type { Connector } from './index.ts';
 import { arcgisConnector } from './arcgis.ts';
 import { csvConnector } from './csv.ts';
+import { htmlConnector } from './html.ts';
 import { reapiConnector } from './reapi.ts';
 import { socrataConnector } from './socrata.ts';
 
@@ -9,6 +10,7 @@ export const CONNECTORS: Record<string, Connector> = {
   arcgis: arcgisConnector,
   socrata: socrataConnector,
   csv: csvConnector,
+  html: htmlConnector,
   reapi: reapiConnector,
 };
 

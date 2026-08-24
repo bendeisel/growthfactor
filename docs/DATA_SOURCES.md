@@ -95,10 +95,34 @@ in the county, and usually the least competed, because it takes effort to get.
 }
 ```
 
-### RealEstateAPI (`kind: "reapi"`) PAID, off by default
+### HTML tables (`kind: "html"`)
 
-Kept as an escape hatch for national coverage. See `config/sources/reapi.json`.
-Set `costPerRecordCents` from your real plan so `gf runs` reports true spend.
+For public data published as a page with no API behind it. Trustee sale notices,
+sheriff sale lists, delinquent tax rolls, condemnation lists. Free, and often the
+least competed data in a county precisely because pulling it takes effort.
+
+```json
+{
+  "name": "tn-foreclosure-statewide",
+  "kind": "html",
+  "url": "https://example.gov/notices?county=Davidson",
+  "requireHeaders": ["address"],
+  "minIntervalMs": 1000,
+  "impliesEvents": ["foreclosure"]
+}
+```
+
+Prefer `requireHeaders` over `tableIndex`. A site redesign moves table indexes
+around but rarely renames columns. If the table is not found, the error lists every
+table on the page with its headers, so fixing the config is a copy and paste. If it
+reports no tables at all, the page is rendered by JavaScript and you need the site's
+own export or a search url instead.
+
+### RealEstateAPI (`kind: "reapi"`) PAID, and not recommended
+
+Public pricing starts around 599 dollars a month, which is triple the entire budget.
+Left in place as an interface, disabled, and there is no reason to enable it. See
+[COSTS.md](COSTS.md).
 
 ## National sources, free, no key
 
@@ -142,7 +166,7 @@ If neither finds it, in rough order of yield:
 
 | Signal | Usual free source | Notes |
 |---|---|---|
-| `pre_foreclosure` | clerk of court lis pendens, register of deeds notice of default | the classic list, also the most competed |
+| `pre_foreclosure` | **Tennessee: the free statewide notice repository, see below** | the classic list, also the most competed |
 | `foreclosure`, `auction` | trustee or sheriff sale notices, often a weekly PDF or HTML list | hard deadline, cash play |
 | `reo` | HUD ArcGIS layer, lender inventory | already bank owned |
 | `tax_delinquent` | county trustee delinquent roll | often annual, often a CSV |
@@ -152,6 +176,20 @@ If neither finds it, in rough order of yield:
 | `vacant` | vacant property registry, utility shutoff lists, code cases | availability varies a lot |
 | `eviction` | general sessions or housing court filings | signals a tired landlord |
 | `lien` | register of deeds lien filings | weak on its own, useful stacked |
+
+### Tennessee foreclosure notices, free and statewide
+
+Tennessee forecloses non judicially, so there is no court docket to scrape. That
+normally makes pre foreclosure the hardest free signal in the state.
+
+A law change effective July 2025 requires every foreclosure notice published in a
+Tennessee newspaper to also appear on a free statewide repository. The Tennessee
+Press Association runs `foreclosurestn.com` for that. Notices also appear at
+`tnpublicnotice.com`, `foreclosuretennessee.com` and `tnforeclosurenotices.com`,
+posted under TCA 35-5-101.
+
+Use the `html` connector against whichever of those lists your counties cleanly.
+See `config/sources/tn-foreclosure.json`.
 
 ### The free probate shortcut
 

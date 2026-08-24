@@ -1,0 +1,49 @@
+{
+  "_comment": [
+    "Skip trace vendor. DISABLED until you fill this in, and billable once you do.",
+    "",
+    "This is the only per record cost in the system, and it is the one thing free",
+    "public records genuinely cannot give you. County data hands you an owner name",
+    "and a mailing address, which is everything you need for direct mail. It does",
+    "not hand you a phone number.",
+    "",
+    "PRICING SEEN IN PUBLIC SOURCES, verify against your own quote:",
+    "  pay as you go, roughly 0.07 to 0.18 per record depending on vendor",
+    "  some vendors quote per match rather than per attempt, which is cheaper",
+    "  avoid anything with a four figure monthly minimum, it blows the budget alone",
+    "",
+    "Set costPerRecordCents from YOUR quote. Every budget check uses it, so a wrong",
+    "number here means a wrong ceiling. 10 means ten cents per record.",
+    "",
+    "NO VENDOR SCHEMA IS HARDCODED. requestTemplate is filled per lead from these",
+    "placeholders, and the response is scanned for anything resembling a phone or",
+    "an email, so the vendor's field names do not matter:",
+    "  {{firstName}} {{lastName}} {{fullName}} {{companyName}}",
+    "  {{address}} {{city}} {{state}} {{zip}}                  owner mailing address",
+    "  {{propertyAddress}} {{propertyCity}} {{propertyState}} {{propertyZip}}",
+    "",
+    "The mailing address is used as the trace input rather than the property",
+    "address, because for an absentee owner the mailing address is where they live.",
+    "",
+    "Put the key in .env under the name given by apiKeyEnv. Never in this file."
+  ],
+  "vendor": {
+    "name": "REPLACE_ME",
+    "enabled": false,
+    "url": "https://api.example.com/v1/skip-trace",
+    "method": "POST",
+    "apiKeyEnv": "SKIPTRACE_API_KEY",
+    "authHeader": "x-api-key",
+    "authPrefix": "",
+    "costPerRecordCents": 10,
+    "requestTemplate": {
+      "first_name": "{{firstName}}",
+      "last_name": "{{lastName}}",
+      "address": "{{address}}",
+      "city": "{{city}}",
+      "state": "{{state}}",
+      "zip": "{{zip}}"
+    },
+    "recordPath": ""
+  }
+}

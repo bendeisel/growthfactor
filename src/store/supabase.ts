@@ -14,7 +14,7 @@ import type {
   DerivedSignals, DistressEventInput, PropertyInput, RunStats, Scores,
 } from '../core/types.ts';
 import type {
-  LeadRecord, ListLeadsOptions, Store, StoredEvent, UpsertResult,
+  LeadRecord, ListLeadsOptions, OwnerContact, Store, StoredEvent, UpsertResult,
 } from './index.ts';
 import { eventToRow, propertyToRow } from './rowmap.ts';
 
@@ -177,6 +177,73 @@ export class SupabaseStore implements Store {
       estimatedCostCents: num(r.estimated_cost_cents) ?? 0,
       error: str(r.error),
     }));
+  }
+
+  async spendSince(sinceIso: string): Promise<Array<{ jobName: string; cents: number; records: number }>> {
+    const rows = await this.http.getJson<Array<Record<string, unknown>>>(
+      `${this.rest}/ingest_runs?select=job_name,estimated_cost_cents,records_pulled`
+      + `&started_at=gte.${encodeURIComponent(sinceIso)}`,
+      { headers: this.headers() },
+    );
+    const byJob = new Map<string, { cents: number; records: number }>();
+    for (const r of rows) {
+      const key = String(r.job_name);
+      const prev = byJob.get(key) ?? { cents: 0, records: 0 };
+      byJob.set(key, {
+        cents: prev.cents + (num(r.estimated_cost_cents) ?? 0),
+        records: prev.records + (num(r.records_pulled) ?? 0),
+      });
+    }
+    return [...byJob].map(([jobName, v]) => ({ jobName, ...v }));
+  }
+
+  async getOwner(propertyId: string): Promise<OwnerContact | null> {
+    const rows = await this.http.getJson<Array<Record<string, unknown>>>(
+      `${this.rest}/owners?select=*&property_id=eq.${encodeURIComponent(propertyId)}`
+      + '&order=skip_traced_at.desc&limit=1',
+      { headers: this.headers() },
+    );
+    const r = rows[0];
+    if (!r) return null;
+    const arr = (v: unknown): string[] => (Array.isArray(v) ? v.map(String) : []);
+    return {
+      propertyId,
+      fullName: str(r.full_name),
+      firstName: str(r.first_name),
+      lastName: str(r.last_name),
+      mailingAddress: str(r.mailing_address),
+      mailingCity: str(r.mailing_city),
+      mailingState: str(r.mailing_state),
+      mailingZip: str(r.mailing_zip),
+      phones: arr(r.phones),
+      emails: arr(r.emails),
+      skipTracedAt: str(r.skip_traced_at),
+      skipTraceCostCents: num(r.skip_trace_cost_cents),
+      source: str(r.source),
+    };
+  }
+
+  async saveOwner(owner: OwnerContact & { raw?: unknown }): Promise<void> {
+    await this.http.request(`${this.rest}/owners`, {
+      method: 'POST',
+      headers: this.headers({ prefer: 'return=minimal' }),
+      body: JSON.stringify(stripNulls({
+        property_id: owner.propertyId,
+        full_name: owner.fullName,
+        first_name: owner.firstName,
+        last_name: owner.lastName,
+        mailing_address: owner.mailingAddress,
+        mailing_city: owner.mailingCity,
+        mailing_state: owner.mailingState,
+        mailing_zip: owner.mailingZip,
+        phones: owner.phones ?? [],
+        emails: owner.emails ?? [],
+        skip_traced_at: owner.skipTracedAt ?? new Date().toISOString(),
+        skip_trace_cost_cents: owner.skipTraceCostCents ?? 0,
+        source: owner.source,
+        raw: owner.raw,
+      })),
+    });
   }
 
   private rowToLead(r: Record<string, unknown>): LeadRecord {

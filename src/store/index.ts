@@ -79,6 +79,22 @@ export interface ListLeadsOptions {
   stage?: string;
 }
 
+export interface OwnerContact {
+  propertyId: string;
+  fullName?: string;
+  firstName?: string;
+  lastName?: string;
+  mailingAddress?: string;
+  mailingCity?: string;
+  mailingState?: string;
+  mailingZip?: string;
+  phones: string[];
+  emails: string[];
+  skipTracedAt?: string;
+  skipTraceCostCents?: number;
+  source?: string;
+}
+
 export interface Store {
   init(): Promise<void>;
   close(): Promise<void>;
@@ -94,11 +110,18 @@ export interface Store {
   startRun(stats: RunStats): Promise<string>;
   finishRun(id: string, stats: RunStats): Promise<void>;
   listRuns(limit?: number): Promise<Array<RunStats & { id: string }>>;
+  /** Billable spend since an ISO timestamp. Every cost in the system lands here. */
+  spendSince(sinceIso: string): Promise<Array<{ jobName: string; cents: number; records: number }>>;
 
   listLeads(opts?: ListLeadsOptions): Promise<LeadRecord[]>;
   getLead(id: string): Promise<LeadRecord | null>;
   listEvents(propertyId: string): Promise<StoredEvent[]>;
   allForScoring(): Promise<Array<{ property: PropertyInput; derived: DerivedSignals; events: StoredEvent[]; id: string }>>;
+
+  /** The cached skip trace for a property, if there is one. */
+  getOwner(propertyId: string): Promise<OwnerContact | null>;
+  /** Cache a skip trace result. The only place per record spend is recorded. */
+  saveOwner(owner: OwnerContact & { raw?: unknown }): Promise<void>;
 
   /** Record how far a parcel sits from a named waterbody. Computed locally, free. */
   setWaterDistance(propertyId: string, distanceFt: number | null, waterbodyName: string | null): Promise<void>;
