@@ -1,0 +1,9 @@
+{
+  "_comment": [
+    "Map canonical lead fields to the GHL custom field ids in your sub-account.",
+    "Create the fields in GHL first, then run 'gf ghl:fields' to list their ids and",
+    "paste them here. Ids are never guessed: an unmapped field is skipped with a",
+    "warning rather than sent to the wrong place.",
+    "The CSV export path does not need any of this."
+  ]
+}

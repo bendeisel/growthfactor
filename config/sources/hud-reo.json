@@ -1,0 +1,19 @@
+{
+  "name": "hud-reo",
+  "kind": "arcgis",
+  "label": "HUD FHA single family REO inventory",
+  "enabled": true,
+  "costPerRecordCents": 0,
+  "url": "https://egis.hud.gov/arcgis/rest/services/gotit/REOProperties/MapServer/0",
+  "where": "STATE_CODE = 'TN'",
+  "pageSize": 1000,
+  "impliesEvents": ["reo"],
+  "defaults": { "state": "TN" },
+  "notes": [
+    "Bank owned in the truest sense: HUD took these back after paying an FHA claim.",
+    "Free, national, no key. Change the where clause to your state.",
+    "This layer is thin. It publishes address and case number, not price or beds,",
+    "so pair it with the county parcel layer to get owner and value data.",
+    "Run 'gf discover hud-reo' before trusting the field mapping."
+  ]
+}

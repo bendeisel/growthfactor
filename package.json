@@ -1,0 +1,25 @@
+{
+  "name": "growthfactor-leads",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Distressed property lead pipeline. Free public data in, scored seller-finance leads out, GHL ready. No runtime dependencies.",
+  "engines": {
+    "node": ">=22.6"
+  },
+  "scripts": {
+    "gf": "node --experimental-strip-types --no-warnings src/cli.ts",
+    "test": "node --experimental-strip-types --no-warnings --test test/*.test.ts",
+    "sources": "node --experimental-strip-types --no-warnings src/cli.ts sources",
+    "pull": "node --experimental-strip-types --no-warnings src/cli.ts pull",
+    "leads": "node --experimental-strip-types --no-warnings src/cli.ts leads",
+    "export": "node --experimental-strip-types --no-warnings src/cli.ts export",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check": "npm run typecheck && npm test",
+    "build:edge": "node scripts/build-edge.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3"
+  }
+}

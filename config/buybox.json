@@ -1,0 +1,15 @@
+{
+  "_comment": [
+    "Filters applied when reading leads, never during ingest, so tightening these",
+    "never means re-pulling data. Applied only when you pass --buybox.",
+    "These are placeholders. Replace them with your real criteria."
+  ],
+  "states": ["TN"],
+  "minValue": 75000,
+  "maxValue": 500000,
+  "minEquityPercent": 40,
+  "allowUnknownEquity": true,
+  "yearBuiltFloor": 1900,
+  "propertyTypeExclude": ["vacant land", "commercial", "industrial"],
+  "minOverallScore": 40
+}

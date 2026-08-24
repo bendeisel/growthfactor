@@ -1,0 +1,22 @@
+{
+  "_comment": [
+    "Offer math placeholders. THESE NUMBERS ARE NOT YOUR NUMBERS YET.",
+    "arvMultiplier scales the published value to a market ARV. Assessor values",
+    "often lag the market, so a county where assessments run 15 percent light",
+    "would use 1.15. Check it against a handful of recent sales you know.",
+    "Nothing in this system sends an offer, so a wrong number here shows up as a",
+    "wrong number on a review screen, not as a contract."
+  ],
+  "arvMultiplier": 1.0,
+  "maoPercentOfArv": 0.7,
+  "repairPerSqft": 25,
+  "repairFloor": 5000,
+  "assignmentFee": 10000,
+  "sellerFinance": {
+    "pricePercentOfArv": 0.95,
+    "downPercent": 0.1,
+    "ratePercent": 5,
+    "amortYears": 30,
+    "balloonYears": 7
+  }
+}

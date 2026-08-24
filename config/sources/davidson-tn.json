@@ -1,0 +1,65 @@
+{
+  "_comment": [
+    "Example county bundle for Davidson County, Tennessee, which the build spec used",
+    "as its placeholder. Replace with your real target counties.",
+    "",
+    "IMPORTANT: these endpoints were identified from public documentation but the",
+    "field names were not verifiable when this was written. Run 'gf discover <name>'",
+    "on each one first. The field mapper resolves columns at runtime and prints its",
+    "confidence, so a schema surprise shows up as a low confidence guess rather than",
+    "as silently wrong data."
+  ],
+  "sources": [
+    {
+      "name": "davidson-parcels",
+      "kind": "arcgis",
+      "label": "Davidson County ownership parcels",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "https://maps.nashville.gov/arcgis/rest/services/Cadastral/Parcels/MapServer/0",
+      "where": "1=1",
+      "pageSize": 1000,
+      "minIntervalMs": 400,
+      "impliesEvents": [],
+      "defaults": { "county": "Davidson", "state": "TN", "fips": "47037" },
+      "notes": [
+        "This is the backbone. Owner name, owner mailing address, last sale date and",
+        "last sale amount all come from here, and those four columns are what produce",
+        "the absentee, tenure and equity signals.",
+        "Disabled by default because a full county pull is roughly a few hundred",
+        "requests. Enable it deliberately, ideally with a where clause that narrows to",
+        "your buy box, then let the nightly runs keep it fresh.",
+        "Be polite: minIntervalMs is set to 400 because this is a county server."
+      ]
+    },
+    {
+      "name": "davidson-codes-violations",
+      "kind": "socrata",
+      "label": "Nashville property standards violations",
+      "enabled": true,
+      "costPerRecordCents": 0,
+      "domain": "data.nashville.gov",
+      "datasetId": "479w-kw2x",
+      "pageSize": 1000,
+      "impliesEvents": ["code_violation"],
+      "eventTypeFrom": {
+        "field": "request_type",
+        "map": {
+          "DEMOLITION": "demolition",
+          "UNSAFE": "demolition",
+          "VACANT": "vacant",
+          "JUNK": "code_violation",
+          "PROPERTY MAINTENANCE": "code_violation"
+        },
+        "default": "code_violation"
+      },
+      "defaults": { "county": "Davidson", "state": "TN", "fips": "47037" },
+      "notes": [
+        "Code enforcement is the most underrated free distress signal. An owner who",
+        "will not cut the grass or fix the roof is an owner with a problem.",
+        "Confirm the eventTypeFrom field name with 'gf discover davidson-codes-violations',",
+        "then adjust the map keys to the values that dataset actually uses."
+      ]
+    }
+  ]
+}

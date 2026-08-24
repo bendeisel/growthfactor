@@ -1,0 +1,27 @@
+{
+  "name": "reapi-preforeclosure",
+  "kind": "reapi",
+  "label": "RealEstateAPI pre-foreclosure search (PAID, off by default)",
+  "enabled": false,
+  "costPerRecordCents": 0,
+  "baseUrl": "https://api.realestateapi.com",
+  "path": "/v2/PropertySearch",
+  "pageSize": 250,
+  "impliesEvents": ["pre_foreclosure"],
+  "query": {
+    "pre_foreclosure": true,
+    "state": "TN",
+    "county": "Davidson"
+  },
+  "defaults": { "county": "Davidson", "state": "TN" },
+  "notes": [
+    "OPT IN AND BILLABLE. Leave this disabled unless the free sources have a gap",
+    "you have actually hit.",
+    "Set costPerRecordCents from your real plan pricing so 'gf runs' reports true",
+    "spend. It is left at 0 so an unconfigured run never invents a number.",
+    "The request body and the response field names were NOT verifiable when this",
+    "was written. The connector samples one record and maps whatever keys come",
+    "back, so run 'gf discover reapi-preforeclosure' first: it costs one record.",
+    "Adjust the query object to match the live filter names from the vendor docs."
+  ]
+}
