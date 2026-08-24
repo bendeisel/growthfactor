@@ -1,15 +1,11 @@
 ---
 const mapsUrl =
   'https://www.google.com/maps/place/Fighters+Boxing+Gym/@36.152765,-86.837447,15z/data=!4m6!3m5!1s0x886461ed4d74f3c3:0xa3a537fa882902b1!8m2!3d36.1527649!4d-86.8374466!16s%2Fg%2F11j138pfhd?hl=en&entry=ttu';
+const mapsEmbed =
+  'https://maps.google.com/maps?q=405+42nd+Ave+N,+Nashville,+TN+37209&z=15&output=embed';
+// TODO: confirm the Facebook page URL with Ben before launch.
+const facebookUrl = 'https://www.facebook.com/fightersnashville';
 ---
-
-<section class="contact-band" id="contact">
-  <div class="wrap">
-    <h2 class="reveal">
-      <a href="mailto:support@fightersnashville.com">support@fightersnashville.com</a>
-    </h2>
-  </div>
-</section>
 
 <footer class="site-footer">
   <div class="wrap cols">
@@ -36,14 +32,35 @@ const mapsUrl =
 
     <div class="col">
       <h6>Get in touch</h6>
-      <a class="ig" href="https://www.instagram.com/fightersnashville/" rel="noopener" target="_blank">
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="currentColor" stroke-width="1.8" />
-          <circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8" />
-          <circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" />
-        </svg>
-        <span class="sr-only">Instagram</span>
-      </a>
+      <div class="social">
+        <a class="soc" href={facebookUrl} rel="noopener" target="_blank">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14 8.5V6.8c0-.8.5-1.3 1.4-1.3H17V2.4h-2.4C11.9 2.4 10.4 4 10.4 6.5V8.5H8v3.2h2.4v9.9H14v-9.9h2.6l.4-3.2H14Z" fill="currentColor" />
+          </svg>
+          <span class="sr-only">Facebook</span>
+        </a>
+        <a class="soc" href="https://www.instagram.com/fightersnashville/" rel="noopener" target="_blank">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" />
+          </svg>
+          <span class="sr-only">Instagram</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="col map-col">
+      <h6>Find us</h6>
+      <div class="map-frame">
+        <iframe
+          src={mapsEmbed}
+          title="Map to Fighters Boxing Gym, 405 42nd Ave N, Nashville"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   </div>
 
@@ -53,23 +70,6 @@ const mapsUrl =
 </footer>
 
 <style>
-  /* Pre-footer contact band: the site's dark punctuation strip. The live
-     lime #B6D40E heading is a theme default, not brand: shipped as white
-     with the red on hover (flagged in source/copy.md). */
-  .contact-band {
-    background: var(--ground-band);
-    padding: clamp(36px, 6vw, 64px) 0;
-    text-align: center;
-  }
-  .contact-band h2 {
-    font-size: clamp(22px, 5vw, 62px);
-    font-weight: 500;
-    line-height: 0.8;
-    overflow-wrap: anywhere;
-  }
-  .contact-band a { color: var(--on-dark); }
-  .contact-band a:hover, .contact-band a:focus-visible { color: var(--accent); }
-
   .site-footer {
     background: var(--ground-footer);
     color: var(--on-dark);
@@ -77,8 +77,8 @@ const mapsUrl =
   }
   .cols {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: clamp(28px, 5vw, 64px);
+    grid-template-columns: 1.5fr 0.9fr 0.8fr 1.4fr;
+    gap: clamp(28px, 4vw, 56px);
     padding-bottom: clamp(36px, 5vw, 56px);
   }
   .brand-col img { width: min(220px, 60vw); height: auto; }
@@ -96,9 +96,22 @@ const mapsUrl =
     letter-spacing: 1px;
     color: var(--text-light);
     margin-bottom: 14px;
+    font-weight: 700;
   }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .ig { display: inline-flex; padding: 4px; }
+  .social { display: flex; gap: 14px; }
+  .soc { display: inline-flex; padding: 4px; }
+  .map-frame {
+    border-radius: var(--radius-panel);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .map-frame iframe {
+    display: block;
+    width: 100%;
+    height: 220px;
+    border: 0;
+  }
   .legal {
     border-top: 1px solid rgba(255, 255, 255, 0.14);
     padding-top: 18px;
@@ -113,7 +126,11 @@ const mapsUrl =
     clip: rect(0 0 0 0);
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
+    .cols { grid-template-columns: 1fr 1fr; }
+    .map-col { grid-column: 1 / -1; }
+  }
+  @media (max-width: 560px) {
     .cols { grid-template-columns: 1fr; }
   }
 </style>

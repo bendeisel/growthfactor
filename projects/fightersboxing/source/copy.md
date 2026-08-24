@@ -111,3 +111,15 @@ Em dashes removed per Ben; replacements shown inline.
    white with red hover (kernel colors).
 5. "Masters boxing" has no page on the WP build; its card links to
    /boxing-classes/ until one exists.
+
+## Ben's revisions, round 2 (2026-08-24)
+1. Circle decorations out; the deco motif is now a boxing-ring square
+   outline with red corner posts.
+2. Pre-footer email band removed (email stays in the footer).
+3. Google Map embed and Facebook icon added to the footer; phone number
+   added to the header. Facebook URL is a guess
+   (facebook.com/fightersnashville): CONFIRM WITH CLIENT.
+4. Classes section: numbering dropped; now a self-advancing card-stack
+   slideshow. Card photos pending from Ben.
+5. Reviews section added; quotes are visible placeholders until real
+   member reviews arrive. No reviews were invented.

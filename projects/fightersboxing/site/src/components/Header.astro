@@ -58,6 +58,12 @@ const nav = [
       </ul>
     </nav>
 
+    <a class="header-phone" href="tel:6292892988">
+      <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.6 3h3l1.6 4.4-2 1.5a13.8 13.8 0 0 0 5.9 5.9l1.5-2L21 14.4v3A2.6 2.6 0 0 1 18.4 20 15.4 15.4 0 0 1 4 5.6 2.6 2.6 0 0 1 6.6 3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+      </svg>
+      629-289-2988
+    </a>
     <span class="btn-ring header-cta">
       <button class="btn btn-sm js-open-lead" type="button">GET MORE INFO</button>
     </span>
@@ -100,6 +106,7 @@ const nav = [
         <h6>Where to Find Us?</h6>
         <a href="/contact-us/">Look Here</a>
       </div>
+      <a class="mobile-phone" href="tel:6292892988">629-289-2988</a>
       <span class="btn-ring">
         <button class="btn js-open-lead" type="button">GET MORE INFO</button>
       </span>
@@ -118,10 +125,10 @@ const nav = [
   .bar {
     display: flex;
     align-items: center;
-    gap: clamp(16px, 2.5vw, 36px);
+    gap: clamp(14px, 1.6vw, 26px);
     min-height: 88px;
   }
-  .brand img { width: clamp(150px, 14vw, 200px); height: auto; }
+  .brand img { width: clamp(140px, 12vw, 180px); height: auto; }
   .main-nav { margin-left: auto; }
   .main-nav > ul {
     display: flex;
@@ -139,6 +146,7 @@ const nav = [
     align-items: center;
     gap: 6px;
     padding: 8px 0;
+    white-space: nowrap;
   }
   .main-nav a:hover, .main-nav a:focus-visible { color: var(--accent); }
   .caret { color: var(--accent); }
@@ -171,6 +179,24 @@ const nav = [
 
   .header-cta .btn-sm { padding: 14px 26px; }
   .header-cta { --ring-gap: var(--ground); }
+
+  .header-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-dark);
+    white-space: nowrap;
+  }
+  .header-phone:hover, .header-phone:focus-visible { color: var(--accent); }
+  .mobile-phone {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-dark);
+  }
 
   .menu-toggle {
     display: none;
@@ -209,6 +235,9 @@ const nav = [
   .extras { margin-top: 24px; display: grid; gap: 18px; }
   .extra-item h6 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 
+  @media (max-width: 1280px) {
+    .header-phone { display: none; }
+  }
   @media (max-width: 1100px) {
     .main-nav, .header-cta { display: none; }
     .menu-toggle { display: inline-flex; margin-left: auto; }
