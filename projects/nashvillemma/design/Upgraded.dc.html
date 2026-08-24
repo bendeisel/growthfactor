@@ -1,0 +1,566 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+  <style>
+    body { margin: 0; background: #131313; color: #FFFFFF;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+           font-size: 16px; line-height: 1.6; }
+    h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 400;
+           font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    p { margin: 0 0 18px 0; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    a { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #C59543; }
+
+    /* Buttons keep the kernel's one piece of soft geometry: 8px. Every
+       container stays square, so the radius now MEANS "you can act on this". */
+    .btn { background: #C0883A; color: #FFFFFF; border-radius: 8px;
+           display: inline-block; font-size: 13px; font-weight: 800;
+           padding: 12px 34px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .btn-ghost { background: transparent; color: #D7AD56; border-radius: 8px;
+           box-shadow: inset 0 0 0 2px #D7AD56; display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 12px 34px;
+           text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* The word band from the hero, promoted to the site's heading treatment. */
+    .band { display: inline-block; border-top: 3px solid #D7AD56;
+            border-bottom: 3px solid #D7AD56; padding: 4px 0; }
+
+    .micro { font-size: 11px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: 0.2em; color: #D7AD56; }
+    .body { color: rgba(255,255,255,0.78); }
+    .num { font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+           color: #D7AD56; line-height: 1; }
+    .navlink { color: #FFFFFF; font-size: 12.8px; text-transform: uppercase;
+               letter-spacing: 0.06em; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; overflow: hidden; background: #131313">
+
+  <!-- ═══════════ HERO — full bleed, stays large (background video) ═══════════ -->
+  <div style="position: relative; height: 880px; background: #000000">
+    <!-- video plate. Scrim graded down to 0.55 here: atmosphere, not reading. -->
+    <div style="position: absolute; inset: 0; background-image: url(./hero-bg.jpg); background-size: cover; background-position: center"></div>
+    <div style="position: absolute; inset: 0; background: #000000; opacity: 0.55"></div>
+
+    <!-- header -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 10">
+      <div style="display: grid; grid-template-columns: 1fr auto; align-items: center; border-bottom: 1px solid #303030; padding: 8px 48px; gap: 24px">
+        <div style="display: flex; align-items: center; gap: 8px" class="micro">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="color: rgba(255,255,255,0.6)">1504 Elm Hill Pike, Nashville, Tennessee 37210</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 22px" class="micro">
+          <a href="#" style="color: rgba(255,255,255,0.6); display: flex; align-items: center; gap: 7px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+            <span>Get in touch now</span>
+          </a>
+          <a href="#" style="color: #FFFFFF; display: flex; align-items: center; gap: 7px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2.1z"/></svg>
+            <span>615-297-4430</span>
+          </a>
+          <div style="display: flex; align-items: center; gap: 11px">
+            <a href="#" style="color: rgba(255,255,255,0.6)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.6)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 11v3h4.4c-.6 2-2.4 3.4-4.4 3.4A5.4 5.4 0 1 1 15.6 8l2.2-2.2A8.5 8.5 0 1 0 20.5 12v-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.6)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.6)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8A26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.2V8.8l5.2 3.2z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 48px">
+        <a href="#" style="display: block; padding: 12px 0">
+          <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; max-height: 112px; width: auto">
+        </a>
+        <div style="display: flex; align-items: center; gap: 26px">
+          <a href="#" class="navlink">About</a>
+          <a href="#" class="navlink">Fitness</a>
+          <a href="#" class="navlink">Programs</a>
+          <a href="#" class="navlink">Kids Programs</a>
+          <a href="#" class="navlink">Schedule</a>
+          <a href="#" class="navlink">Recovery</a>
+          <a href="#" class="navlink">Events &amp; Sponsorships</a>
+          <a href="#" class="btn" style="padding: 10px 22px">Request More Information</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- hero copy: left-aligned, extreme type contrast -->
+    <div style="position: absolute; left: 48px; bottom: 76px; z-index: 2; max-width: 1100px">
+      <div style="margin-bottom: 22px">
+        <span style="display: block; width: 96px; height: 4px; background: #D7AD56"></span>
+      </div>
+      <h1 style="font-size: 124px; line-height: 0.88; letter-spacing: -0.01em; color: #FFFFFF; margin-bottom: 26px">Nashville MMA<br>Training Camp</h1>
+      <div class="band" style="margin-bottom: 24px">
+        <ul style="display: flex; align-items: center; gap: 18px; padding: 2px 0">
+          <li style="font-size: 32px; text-transform: uppercase; color: #D7AD56; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; letter-spacing: 0.02em">Fitness</li>
+          <li style="color: #FFFFFF; font-size: 28px">&bull;</li>
+          <li style="font-size: 32px; text-transform: uppercase; color: #D7AD56; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; letter-spacing: 0.02em">Martial Arts</li>
+          <li style="color: #FFFFFF; font-size: 28px">&bull;</li>
+          <li style="font-size: 32px; text-transform: uppercase; color: #D7AD56; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; letter-spacing: 0.02em">Community</li>
+        </ul>
+      </div>
+      <div style="display: flex; align-items: center; gap: 28px">
+        <a href="#" class="btn" style="padding: 15px 44px; font-size: 14px">Request more information</a>
+        <div style="font-size: 20px; color: rgba(255,255,255,0.88)">40,000 sqft Facility, World Class Coaches, and 80+ Classes per Week</div>
+      </div>
+    </div>
+
+    <!-- 4px = section-break weight in the hairline hierarchy -->
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: #D7AD56; z-index: 3"></div>
+  </div>
+
+  <!-- ═══════════ LEAD FORM — full-bleed gold, first punctuation ═══════════ -->
+  <div style="background: #D7AD56; color: #FFFFFF; padding: 44px 48px">
+    <div style="display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 44px">
+      <h3 style="font-size: 54px; line-height: 0.92; max-width: 300px">REQUEST INFORMATION NOW</h3>
+      <div>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <input type="text" placeholder="First" style="background: #1E1E29; color: #FFFFFF; border: none; border-radius: 8px; font-size: 16px; height: 52px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+          <input type="text" placeholder="Last" style="background: #1E1E29; color: #FFFFFF; border: none; border-radius: 8px; font-size: 16px; height: 52px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+          <input type="text" placeholder="Email" style="background: #1E1E29; color: #FFFFFF; border: none; border-radius: 8px; font-size: 16px; height: 52px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+          <input type="tel" placeholder="Phone" style="background: #1E1E29; color: #FFFFFF; border: none; border-radius: 8px; font-size: 16px; height: 52px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+          <a href="#" class="btn" style="padding: 15px 34px; white-space: nowrap; background: #131313">Request Information</a>
+        </div>
+        <p style="font-size: 11px; line-height: 1.5; margin: 14px 0 0 0; color: rgba(255,255,255,0.9)">By submitting your information you consent to receive marketing/promotional sms &amp; email messages from Nashville MMA Training Camp. Reply HELP for more assistance. Reply STOP to opt-out of messaging. Messages &amp; Data rates may apply. Message frequency will vary. You must be 18 years of age or older.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ 01 FACILITY — rail spine begins ═══════════ -->
+  <div style="display: flex; align-items: stretch">
+    <div style="width: 180px; flex-shrink: 0; border-right: 3px solid #D7AD56; padding: 48px 26px 48px 0; text-align: right">
+      <div class="micro">Facilities</div>
+    </div>
+    <div style="flex-grow: 1; position: relative; padding: 56px 48px">
+      <div style="position: absolute; inset: 0; background-image: url(./facility-bg.jpg); background-size: cover; background-position: center"></div>
+      <div style="position: absolute; inset: 0; background: #131313; opacity: 0.55"></div>
+      <div style="position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px">
+
+        <div>
+          <!-- the disc, and a hairline running out of it toward the next item -->
+          <div style="display: flex; align-items: center; gap: 0; margin-bottom: 18px">
+            <div style="width: 120px; height: 120px; border-radius: 80px; background: #000000; color: #FFFFFF; font-size: 70px; line-height: 120px; text-align: center; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; flex-shrink: 0">1</div>
+            <div style="flex-grow: 1; height: 3px; background: #D7AD56"></div>
+          </div>
+          <!-- heading moved INSIDE the scrim: it was white-on-photo before -->
+          <div style="position: relative; padding: 22px">
+            <div style="position: absolute; inset: 0; background: #1E1E29; opacity: 0.95"></div>
+            <div style="position: relative">
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF; margin-bottom: 12px">Our Facility</h3>
+              <p class="body" style="margin: 0; font-size: 15px">At over 40,000 sqft, we are able to feature over <strong style="color: #CC9900">13,000 sqft of mats</strong> for martial arts classes, more than <strong style="color: #CC9900">10,000 sqft of fitness</strong> areas including machines, free weights &amp; kettles, and open turf area, and <strong style="color: #CC9900">80+ classes per week</strong> including adults martial arts, kids martial arts, and fitness classes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; align-items: center; gap: 0; margin-bottom: 18px">
+            <div style="width: 120px; height: 120px; border-radius: 80px; background: #000000; color: #FFFFFF; font-size: 70px; line-height: 120px; text-align: center; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; flex-shrink: 0">2</div>
+            <div style="flex-grow: 1; height: 3px; background: #D7AD56"></div>
+          </div>
+          <div style="position: relative; padding: 22px">
+            <div style="position: absolute; inset: 0; background: #1E1E29; opacity: 0.95"></div>
+            <div style="position: relative">
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF; margin-bottom: 12px">Our Programs</h3>
+              <p class="body" style="margin: 0; font-size: 15px">Dedicated to excellence, we pledge to offer innovative Martial Arts and Fitness programs that empower students, promoting their evolution into the ultimate expressions of themselves, all within the realm of our world-class MMA &amp; Fitness Training Center.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; align-items: center; gap: 0; margin-bottom: 18px">
+            <div style="width: 120px; height: 120px; border-radius: 80px; background: #000000; color: #FFFFFF; font-size: 70px; line-height: 120px; text-align: center; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; flex-shrink: 0">3</div>
+          </div>
+          <div style="position: relative; padding: 22px">
+            <div style="position: absolute; inset: 0; background: #1E1E29; opacity: 0.95"></div>
+            <div style="position: relative">
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF; margin-bottom: 12px">Our Coaches</h3>
+              <p class="body" style="margin: 0; font-size: 15px">Our world-class coaches epitomize world-class instruction in both martial arts and fitness. With a curriculum that seamlessly blends tradition and innovation, our training camp guarantees an unparalleled journey toward mastery and peak performance. We pledge to empower students and promote their evolution into the best versions of themselves.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ 02 PROGRAMS — all 13, numbered, dense ═══════════ -->
+  <div style="display: flex; align-items: stretch; background: #171820">
+    <div style="width: 180px; flex-shrink: 0; border-right: 3px solid #D7AD56; padding: 56px 26px 56px 0; text-align: right">
+      <div class="micro">Programs</div>
+    </div>
+    <div style="flex-grow: 1; padding: 56px 48px">
+      <h2 class="band" style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 34px">Our Programs</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px">
+
+        <div style="background: #1E1E29">
+          <img src="./prog-jiujitsu.png" alt="Jiu-Jitsu" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">01</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Jiu-Jitsu</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Through our renowned Jiu-Jitsu system, we'll help you gain robust fitness and learn powerful self-defense skills. From competition to casual practice, we are your source for authentic Jiu Jitsu training here in Nashville.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-muaythai.jpg" alt="Muay Thai Kickboxing" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">02</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Muay Thai Kickboxing</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Our Muay Thai classes teach you how to strike with every limb of your body and generate power and speed from any position. We're helping people of all fitness levels find success and we can't wait for you to be next.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-boxing.jpg" alt="Boxing" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">03</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Boxing</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Our boxing program in Nashville offers a comprehensive and dynamic training experience for individuals of all skill levels who are interested in learning the art of boxing and improving their overall fitness.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-mma.jpg" alt="Mixed Martial Arts" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">04</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Mixed Martial Arts</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Our courses combine techniques used in Combat Thai, Kickboxing, and Brazilian Jiu Jitsu to give you workouts that build your strength and your technique. This combination of specific martial arts disciplines will give you a well rounded skill set in each the key martial arts techniques.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-fightteam.jpg" alt="MMA Fight Team" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">05</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">MMA Fight Team</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Join our Mixed Martial Arts Fight Team at Nashville MMA and learn critical skills to become a champion!</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-women.jpg" alt="Women's Classes" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">06</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Women's Classes</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Join our women-only Muay Thai and BJJ classes in Nashville and train in a supportive, empowering environment built just for women.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-wrestling.png" alt="Wrestling" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">07</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Wrestling</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Nashville MMA Training Camp is proud to provide high-quality wrestling coaching to people from across Nashville. If you're a youth or collegiate athlete looking to develop your skills, or just seeking improved fitness through training, we can give you the coaching you need to get results.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-selfdefense.png" alt="Self Defense Classes &amp; Seminars" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">08</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Self Defense Classes &amp; Seminars</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Protect yourself and your loved ones today with our Self Defense training in Nashville. Build incredible strength while mastering these real-world strategies and stay prepared for any situation.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-personaltraining.jpg" alt="Personal Training" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">09</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Personal Training</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">With our personal training program, you'll get access to 100% customized fitness on a flexible schedule. From workouts specifically designed to help you achieve your goals to key nutrition strategies and advice on every aspect of fitness from a dedicated coach, personal training is the most holistic approach to health and wellness.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-sportsperf.jpg" alt="Sports Performance" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">10</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Sports Performance</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Sports Performance at Nashville MMA Training Camp is designed to help you become confident and proficient in weightlifting while achieving new levels of fitness and athleticism.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-kidsma.jpg" alt="Kids Martial Arts" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">11</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Kids Martial Arts</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Discover Nashville's premier Kids Martial Arts hub! Our Kids BJJ, Boxing, and Wrestling programs empower young minds and bodies. Join us for dynamic classes designed to boost confidence, discipline, and fitness. Enroll your child today!</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-kidsfitness.jpg" alt="Kids Fitness Classes" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">12</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Kids Fitness Classes</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Our Kids Fitness Classes at Nashville MMA Training Camp combine basic striking techniques with a focus on functional fitness, helping children develop motor skills, speed, agility, and a strong foundation for lifelong health. It's a fun and supportive environment where kids can learn to work out safely, build confidence, and make new friends.</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29">
+          <img src="./prog-kidsbjj.jpg" alt="Kids Brazilian Jiu-Jitsu" style="display: block; width: 100%; height: 168px; object-fit: cover">
+          <div style="padding: 20px 22px 24px 22px">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px">
+              <span class="num" style="font-size: 40px">13</span>
+              <h3 style="font-size: 30px; line-height: 1; color: #FFFFFF">Kids Brazilian Jiu-Jitsu</h3>
+            </div>
+            <div style="height: 3px; background: #D7AD56; width: 56px; margin-bottom: 14px"></div>
+            <p class="body" style="font-size: 14px; margin-bottom: 16px">Give your child the best ground-based self-defense skills with our Kids Brazilian Jiu-Jitsu Classes in Nashville. We're helping students have fun training and staying active. Learn more or get started today!</p>
+            <a href="#" class="btn-ghost" style="padding: 9px 22px; font-size: 12px">Learn More</a>
+          </div>
+        </div>
+
+        <!-- the grid's leftover slot carries the page's one repeated action -->
+        <div style="grid-column: span 2; background: #D7AD56; display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 34px 32px">
+          <div>
+            <h3 style="font-size: 44px; line-height: 0.95; color: #FFFFFF; margin-bottom: 6px">Request Information Now</h3>
+            <p style="margin: 0; font-size: 15px; color: rgba(255,255,255,0.92)">40,000 sqft Facility, World Class Coaches, and 80+ Classes per Week</p>
+          </div>
+          <a href="#" class="btn" style="background: #131313; padding: 15px 40px; white-space: nowrap">Request More Information</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ 03 ABOUT ═══════════ -->
+  <div style="display: flex; align-items: stretch">
+    <div style="width: 180px; flex-shrink: 0; border-right: 3px solid #D7AD56; padding: 56px 26px 56px 0; text-align: right">
+      <div class="micro">About</div>
+    </div>
+    <div style="flex-grow: 1; position: relative; padding: 56px 48px">
+      <div style="position: absolute; inset: 0; background-image: url(./about-bg.jpg); background-size: cover; background-position: center"></div>
+      <div style="position: absolute; inset: 0; background: #171820; opacity: 0.86"></div>
+      <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start">
+        <div>
+          <h2 class="band" style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 24px">We'll see you at the top!</h2>
+          <p class="body">Welcome to Nashville MMA Training Camp, your ultimate fitness and martial arts destination! We offer a variety of programs, including MMA, Jiu-Jitsu, Muay Thai, boxing, kids' martial arts, fitness classes, personal training, open gym, and more, all led by experienced instructors passionate about helping you succeed. Our cutting-edge facility provides a space for growth, from honing your skills to boosting your fitness levels.</p>
+          <p class="body">Whether you are a world-class fighter, jiu-jitsu or muay thai competitor, fitness enthusiast, or you just enjoy training in any of our 80+ weekly classes or open gym, NMMATC will provide you with everything you need to succeed:</p>
+        </div>
+        <div>
+          <!-- the four support lines, each on its own hairline -->
+          <ul style="display: flex; flex-direction: column; gap: 0; margin-bottom: 26px">
+            <li style="border-top: 3px solid #D7AD56; padding: 14px 0" class="body">- Coaching, instruction, advice, and support</li>
+            <li style="border-top: 3px solid #D7AD56; padding: 14px 0" class="body">- Tons of class options including adult martial arts, kids, and fitness</li>
+            <li style="border-top: 3px solid #D7AD56; padding: 14px 0" class="body">- Recovery classes like yoga and mobility</li>
+            <li style="border-top: 3px solid #D7AD56; border-bottom: 3px solid #D7AD56; padding: 14px 0" class="body">- Recovery specialists: chiropractor, performance &amp; recovery doctor, masseuse, and sports psychologist</li>
+          </ul>
+          <p class="body">Everything about Nashville MMA Training Camp has YOU in mind. Your goals, your body, and your aspirations.</p>
+          <p style="font-size: 22px; color: #D7AD56; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; margin-bottom: 22px">Let's train, thrive, and conquer together at Nashville MMA Training Camp!</p>
+          <a href="#" class="btn" style="padding: 15px 40px">Request More Information</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ 04 REVIEWS ═══════════ -->
+  <div style="display: flex; align-items: stretch; background: #131313">
+    <div style="width: 180px; flex-shrink: 0; border-right: 3px solid #D7AD56; padding: 56px 26px 56px 0; text-align: right">
+      <div class="micro">Reviews</div>
+    </div>
+    <div style="flex-grow: 1; padding: 56px 48px">
+      <h2 class="band" style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 34px">Testimonials</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px">
+
+        <div style="background: #1E1E29; border-top: 4px solid #D7AD56; padding: 28px 26px">
+          <div style="display: flex; gap: 3px; margin-bottom: 18px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          </div>
+          <p class="body" style="font-size: 15px; margin-bottom: 20px">Great experience friendly staff super clean and diverse facility beginner friendly and most of all very fun and friendly. Thanks Austin!...</p>
+          <div style="display: flex; align-items: center; gap: 14px">
+            <div style="width: 52px; height: 52px; border-radius: 60px; overflow: hidden; background: #FFFFFF; flex-shrink: 0">
+              <img src="./avatar.png" alt="Google five star review - brandon arias" style="display: block; width: 100%; height: 100%; object-fit: cover">
+            </div>
+            <h4 style="font-size: 26px; line-height: 1; color: #FFFFFF">brandon arias</h4>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29; border-top: 4px solid #D7AD56; padding: 28px 26px">
+          <div style="display: flex; gap: 3px; margin-bottom: 18px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          </div>
+          <p class="body" style="font-size: 15px; margin-bottom: 20px">By far the best gym in and around Nashville. Whether you're training to be a fighter, get in shape or learn self-defense Nashville MMA is the place to be!...</p>
+          <div style="display: flex; align-items: center; gap: 14px">
+            <div style="width: 52px; height: 52px; border-radius: 60px; overflow: hidden; background: #FFFFFF; flex-shrink: 0">
+              <img src="./avatar.png" alt="Google five star review - patcrumpton" style="display: block; width: 100%; height: 100%; object-fit: cover">
+            </div>
+            <h4 style="font-size: 26px; line-height: 1; color: #FFFFFF">patcrumpton</h4>
+          </div>
+        </div>
+
+        <div style="background: #1E1E29; border-top: 4px solid #D7AD56; padding: 28px 26px">
+          <div style="display: flex; gap: 3px; margin-bottom: 18px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          </div>
+          <p class="body" style="font-size: 15px; margin-bottom: 20px">This place has it all. The rounds at open mat were excellent, very welcoming and friendly environment. If I were a Nashville resident I would be training here permanently....</p>
+          <div style="display: flex; align-items: center; gap: 14px">
+            <div style="width: 52px; height: 52px; border-radius: 60px; overflow: hidden; background: #FFFFFF; flex-shrink: 0">
+              <img src="./avatar.png" alt="Google five star review - Zakkery Root" style="display: block; width: 100%; height: 100%; object-fit: cover">
+            </div>
+            <h4 style="font-size: 26px; line-height: 1; color: #FFFFFF">Zakkery Root</h4>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SLOGAN — full bleed, the punctuation ═══════════ -->
+  <div style="background: #C59543; color: #FFFFFF; padding: 76px 48px; text-align: center">
+    <h2 style="font-size: 82px; line-height: 0.98"><strong style="font-weight: 400">We build champions!<br><span style="color: #000000">Training</span> for your goals.<br><span style="color: #000000">community</span> for your success.</strong></h2>
+  </div>
+
+  <!-- ═══════════ 05 VISIT ═══════════ -->
+  <div style="display: flex; align-items: stretch; background: #131313">
+    <div style="width: 180px; flex-shrink: 0; border-right: 3px solid #D7AD56; padding: 56px 26px 56px 0; text-align: right">
+      <div class="micro">Visit Us Today</div>
+    </div>
+    <div style="flex-grow: 1; display: flex; align-items: stretch">
+      <div style="width: 50%; padding: 56px 48px">
+        <div class="micro" style="margin-bottom: 12px">Our Location</div>
+        <h2 class="band" style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 28px">Visit Us Today</h2>
+        <ul style="display: flex; flex-direction: column; gap: 0; margin-bottom: 28px">
+          <li style="border-top: 3px solid #303030; padding: 16px 0; display: grid; grid-template-columns: 110px 1fr; gap: 16px">
+            <span class="micro">Phone</span>
+            <a href="#" style="color: #FFFFFF">615-297-4430</a>
+          </li>
+          <li style="border-top: 3px solid #303030; padding: 16px 0; display: grid; grid-template-columns: 110px 1fr; gap: 16px">
+            <span class="micro">Email</span>
+            <a href="#" style="color: #FFFFFF">frontdesk@nashvillemma.com</a>
+          </li>
+          <li style="border-top: 3px solid #303030; border-bottom: 3px solid #303030; padding: 16px 0; display: grid; grid-template-columns: 110px 1fr; gap: 16px">
+            <span class="micro">Address</span>
+            <span class="body">1504 Elm Hill Pike<br>Nashville, Tennessee 37210</span>
+          </li>
+        </ul>
+        <h2 style="font-size: 44px; line-height: 1; color: #D7AD56; margin-bottom: 18px">Nashville</h2>
+        <a href="#" class="btn-ghost" style="padding: 14px 34px">View Our Location</a>
+      </div>
+      <div style="width: 50%; position: relative; overflow: hidden; background: #1E1E29; min-height: 480px">
+        <div style="position: absolute; inset: 0; background:
+          repeating-linear-gradient(0deg, #262631 0 1px, transparent 1px 48px),
+          repeating-linear-gradient(90deg, #262631 0 1px, transparent 1px 48px)"></div>
+        <div style="position: absolute; top: 0; left: 34%; width: 8px; height: 100%; background: #303030; transform: rotate(9deg)"></div>
+        <div style="position: absolute; top: 46%; left: 0; width: 100%; height: 10px; background: #303030"></div>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%)">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="#D7AD56" stroke="#131313" stroke-width="1.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#131313" stroke="none"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <div style="background: #131313; color: #FFFFFF; font-size: 13px; border-top: 4px solid #D7AD56">
+    <div style="padding: 44px 48px 24px 48px">
+      <div style="position: relative; display: block; width: 100%; margin-bottom: 30px; text-align: center">
+        <div style="position: absolute; top: 50%; left: 0; width: 100%; height: 4px; background: #D7AD56"></div>
+        <a href="#" style="position: relative; display: inline-block; background: #131313; padding: 0 28px">
+          <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; max-height: 92px; width: auto">
+        </a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: start">
+        <div>
+          <ul style="display: flex; flex-direction: column; gap: 8px">
+            <li><a href="#" style="color: rgba(255,255,255,0.55)">About</a></li>
+            <li><a href="#" style="color: rgba(255,255,255,0.55)">Fitness</a></li>
+            <li><a href="#" style="color: rgba(255,255,255,0.55)">Kids Programs</a></li>
+            <li><a href="#" style="color: rgba(255,255,255,0.55)">Schedule</a></li>
+            <li><a href="#" style="color: rgba(255,255,255,0.55)">Events &amp; Sponsorships</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="micro" style="margin-bottom: 14px">Text Us Here!</div>
+          <p style="margin-bottom: 8px"><a href="#" style="color: #FFFFFF; font-size: 22px; font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif">615-297-4430</a></p>
+          <p style="margin-bottom: 0"><a href="#" style="color: rgba(255,255,255,0.55)">frontdesk@nashvillemma.com</a></p>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 16px">
+            <a href="#" style="color: rgba(255,255,255,0.55)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.55)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 11v3h4.4c-.6 2-2.4 3.4-4.4 3.4A5.4 5.4 0 1 1 15.6 8l2.2-2.2A8.5 8.5 0 1 0 20.5 12v-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.55)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.55)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8A26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.2V8.8l5.2 3.2z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <p style="margin: 30px 0 0 0; padding-top: 20px; border-top: 1px solid #303030; color: rgba(255,255,255,0.4)">Copyright &copy; 2026 - Martial Arts Websites Developed by 97Display Websites / Privacy Policy</p>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":7200}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

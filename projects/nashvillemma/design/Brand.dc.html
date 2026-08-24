@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+  <style>
+    body { margin: 0; background: #FFFFFF; color: #000000;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+           font-size: 16px; line-height: 1.6; }
+    h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 400;
+           font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    p { margin: 0; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    a { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #C0883A; }
+    .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+               color: #8A8A93; font-weight: 700; }
+    .sw { height: 96px; border-radius: 4px; }
+    .swname { font-size: 13px; font-weight: 700; margin-top: 10px; }
+    .swhex { font-size: 12px; color: #55555C; font-variant-numeric: tabular-nums; }
+    .swvar { font-size: 11px; color: #8A8A93; font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; }
+    .rule { height: 1px; background: #E4E2DD; }
+  </style>
+</helmet>
+
+<div style="width: 1100px; background: #FFFFFF">
+
+  <!-- masthead -->
+  <div style="background: #131313; color: #FFFFFF; padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; gap: 32px">
+    <div>
+      <div class="eyebrow" style="color: #D7AD56; margin-bottom: 8px">Brand &amp; UI Reference</div>
+      <h1 style="font-size: 56px; line-height: 1; margin-bottom: 8px">Nashville MMA Training Camp</h1>
+      <p style="font-size: 14px; color: rgba(255,255,255,0.55)">Colors, type and controls as they exist on nashvillemma.com today.</p>
+    </div>
+    <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; max-height: 110px; width: auto">
+  </div>
+
+  <div style="padding: 44px 48px; display: flex; flex-direction: column; gap: 44px">
+
+    <!-- palette -->
+    <div>
+      <div class="eyebrow" style="margin-bottom: 4px">01 — Palette</div>
+      <h2 style="font-size: 34px; line-height: 1.1; margin-bottom: 20px">Color</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px">
+        <div>
+          <div class="sw" style="background: #D7AD56"></div>
+          <div class="swname">Gold — primary accent</div>
+          <div class="swhex">#D7AD56</div>
+          <div class="swvar">--dynamic</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #C0883A"></div>
+          <div class="swname">Button</div>
+          <div class="swhex">#C0883A</div>
+          <div class="swvar">--buttonBg</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #C59543"></div>
+          <div class="swname">Slogan band</div>
+          <div class="swhex">#C59543</div>
+          <div class="swvar">--sloganBg</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #CC9900"></div>
+          <div class="swname">Inline emphasis</div>
+          <div class="swhex">#CC9900</div>
+          <div class="swvar">inline copy only</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #FFFFFF; border: 1px solid #E4E2DD"></div>
+          <div class="swname">Page background</div>
+          <div class="swhex">#FFFFFF</div>
+          <div class="swvar">--bgcolor</div>
+        </div>
+
+        <div>
+          <div class="sw" style="background: #131313"></div>
+          <div class="swname">Header / footer</div>
+          <div class="swhex">#131313</div>
+          <div class="swvar">--bgHeader, --bgFooter</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #171820"></div>
+          <div class="swname">Alt section</div>
+          <div class="swhex">#171820</div>
+          <div class="swvar">--sectionAltColor</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #1E1E29"></div>
+          <div class="swname">Cards &amp; inputs</div>
+          <div class="swhex">#1E1E29</div>
+          <div class="swvar">--leadformInputBg</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #303030"></div>
+          <div class="swname">Separator</div>
+          <div class="swhex">#303030</div>
+          <div class="swvar">--separator</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #000000"></div>
+          <div class="swname">Body text / hero base</div>
+          <div class="swhex">#000000</div>
+          <div class="swvar">--color, --sliderBgColor</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+
+    <!-- type -->
+    <div>
+      <div class="eyebrow" style="margin-bottom: 4px">02 — Typography</div>
+      <h2 style="font-size: 34px; line-height: 1.1; margin-bottom: 20px">Type</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-bottom: 28px">
+        <div style="border: 1px solid #E4E2DD; padding: 24px">
+          <div class="eyebrow" style="margin-bottom: 10px">Headings</div>
+          <div style="font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 52px; line-height: 1">Bebas Neue</div>
+          <p style="font-size: 13px; color: #55555C; margin-top: 8px">All of h1–h6. One weight, uppercase by nature. Fallback: Oswald, Arial Narrow.</p>
+        </div>
+        <div style="border: 1px solid #E4E2DD; padding: 24px">
+          <div class="eyebrow" style="margin-bottom: 10px">Body</div>
+          <div style="font-size: 34px; line-height: 1.2">Montserrat</div>
+          <p style="font-size: 13px; color: #55555C; margin-top: 8px">400 / 700 / 900. Body copy 16px / 1.6. Fallback: Helvetica Neue, Arial.</p>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0">
+        <div style="display: flex; align-items: baseline; gap: 20px; padding: 12px 0; border-bottom: 1px solid #F0EEEA">
+          <div style="width: 190px; flex-shrink: 0"><span class="swvar">h1 · 72 / 72</span><br><span class="swhex">mobile 36 · phone 25</span></div>
+          <div style="font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 72px; line-height: 1">We build champions</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px; padding: 12px 0; border-bottom: 1px solid #F0EEEA">
+          <div style="width: 190px; flex-shrink: 0"><span class="swvar">h2 · 60 / 60</span><br><span class="swhex">mobile 36 · phone 30</span></div>
+          <div style="font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 60px; line-height: 1">Visit Us Today</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px; padding: 12px 0; border-bottom: 1px solid #F0EEEA">
+          <div style="width: 190px; flex-shrink: 0"><span class="swvar">h3 · 40 / 50</span><br><span class="swhex">mobile 30 · phone 26</span></div>
+          <div style="font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 40px; line-height: 1.25">Request Information Now</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px; padding: 12px 0; border-bottom: 1px solid #F0EEEA">
+          <div style="width: 190px; flex-shrink: 0"><span class="swvar">h4 · 30 / 30</span><br><span class="swhex">mobile 24 · phone 20</span></div>
+          <div style="font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 30px; line-height: 1">Testimonial name</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px; padding: 12px 0; border-bottom: 1px solid #F0EEEA">
+          <div style="width: 190px; flex-shrink: 0"><span class="swvar">body · 16 / 1.6</span></div>
+          <div style="max-width: 620px">Montserrat carries every paragraph, list and form label on the site. Section copy caps at 500–800px for readability.</div>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 20px; padding: 12px 0">
+          <div style="width: 190px; flex-shrink: 0"><span class="swvar">nav · 12.8 upper</span><br><span class="swhex">top bar 11</span></div>
+          <div style="font-size: 12.8px; text-transform: uppercase; letter-spacing: 0.03em">Programs &nbsp; Kids Programs &nbsp; Schedule &nbsp; Recovery</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+
+    <!-- controls -->
+    <div>
+      <div class="eyebrow" style="margin-bottom: 4px">03 — Controls</div>
+      <h2 style="font-size: 34px; line-height: 1.1; margin-bottom: 20px">Buttons &amp; fields</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+        <div style="display: flex; flex-direction: column; gap: 18px">
+          <div>
+            <div class="eyebrow" style="margin-bottom: 10px">Default</div>
+            <span style="background: #C0883A; color: #FFFFFF; border-radius: 8px; display: inline-block; font-size: 13px; font-weight: 800; padding: 6px 20px; text-transform: uppercase">Request More Information</span>
+            <p class="swvar" style="margin-top: 8px">13px / 800 · padding 6&times;20 · radius 8px</p>
+          </div>
+          <div>
+            <div class="eyebrow" style="margin-bottom: 10px">Large</div>
+            <span style="background: #C0883A; color: #FFFFFF; border-radius: 8px; display: inline-block; font-size: 13px; font-weight: 800; padding: 10px 40px; text-transform: uppercase">Learn More</span>
+            <p class="swvar" style="margin-top: 8px">padding 10&times;40</p>
+          </div>
+          <div>
+            <div class="eyebrow" style="margin-bottom: 10px">Hover — inverts to outline</div>
+            <span style="background: #FFFFFF; color: #C0883A; border-radius: 8px; display: inline-block; font-size: 13px; font-weight: 800; padding: 6px 20px; text-transform: uppercase; box-shadow: 0 0 0 1px #C0883A">Request More Information</span>
+          </div>
+        </div>
+
+        <div style="background: #D7AD56; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+          <div class="eyebrow" style="color: rgba(255,255,255,0.85)">Lead form — on gold band</div>
+          <input type="text" placeholder="First" style="background: #1E1E29; color: #FFFFFF; border: none; border-radius: 8px; font-size: 16px; height: 44px; padding: 0 15px; width: 100%; box-sizing: border-box; font-family: inherit">
+          <input type="text" placeholder="Email" style="background: #1E1E29; color: #FFFFFF; border: none; border-radius: 8px; font-size: 16px; height: 44px; padding: 0 15px; width: 100%; box-sizing: border-box; font-family: inherit">
+          <span style="background: #C0883A; color: #FFFFFF; border-radius: 8px; display: block; font-size: 13px; font-weight: 800; padding: 10px 40px; text-transform: uppercase; text-align: center">Request Information</span>
+          <p style="color: #FFFFFF; font-size: 11px; line-height: 1.4">Field height 44px · radius 8px · placeholder and value both #FFFFFF on #1E1E29.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule"></div>
+
+    <!-- layout + icons -->
+    <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 4px">04 — Layout</div>
+        <h2 style="font-size: 34px; line-height: 1.1; margin-bottom: 18px">Spacing</h2>
+        <div style="display: flex; flex-direction: column; gap: 0">
+          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #F0EEEA"><span class="swvar">--sectionGap</span><span class="swhex">80px (30px on phone)</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #F0EEEA"><span class="swvar">--sectionBoxed</span><span class="swhex">1600px max, 20px gutter</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #F0EEEA"><span class="swvar">--buttonRadius</span><span class="swhex">8px</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #F0EEEA"><span class="swvar">--cornerRadius</span><span class="swhex">0px — panels are square</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #F0EEEA"><span class="swvar">--dotCorner</span><span class="swhex">80px — 120px number discs</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 0"><span class="swvar">overlay opacity</span><span class="swhex">0.8 panels · 0.8 hero image</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom: 4px">05 — Icons</div>
+        <h2 style="font-size: 34px; line-height: 1.1; margin-bottom: 18px">Marks</h2>
+        <p style="font-size: 13px; color: #55555C; margin-bottom: 16px">The live site uses an icon font; these are stroke equivalents at 24px, gold on dark or white in the header.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 18px; background: #131313; padding: 20px; border-radius: 4px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2.1z"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 11v3h4.4c-.6 2-2.4 3.4-4.4 3.4A5.4 5.4 0 1 1 15.6 8l2.2-2.2A8.5 8.5 0 1 0 20.5 12v-1z"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="#FFFFFF" stroke="none"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8A26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.2V8.8l5.2 3.2z"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1100,"height":2450}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

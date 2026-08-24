@@ -21,6 +21,11 @@ sites/<client>/
 └── robots.txt
 ```
 
+For multi-page sites, build with **Astro**: components and layouts while
+authoring, plain static HTML/CSS/JS out the other end — it emits exactly the
+structure above, so nothing about deployment changes. Single-pagers can skip
+the build step entirely.
+
 Why static: nothing to patch, nothing to hack, nothing that breaks at 2am
 across thousands of sites. Perfect Lighthouse scores are the default rather
 than an optimization project. And the house components were deliberately built

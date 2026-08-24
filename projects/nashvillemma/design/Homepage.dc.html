@@ -1,0 +1,717 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+  <style>
+    body { margin: 0; background: #000000; color: #FFFFFF;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+           font-size: 16px; line-height: 1.7; }
+    h1,h2,h3,h4 { margin: 0; font-weight: 400;
+           font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    p  { margin: 0 0 18px 0; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    a  { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #FFFFFF; }
+    .body { color: rgba(255,255,255,0.66); }
+    .micro { font-size: 10px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: 0.24em; color: #D7AD56; }
+    .btn { background: #D7AD56; color: #0A0A0A; border-radius: 8px; display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 16px 36px; text-transform: uppercase;
+           letter-spacing: 0.12em; cursor: pointer; }
+    .btn:hover { background: #FFFFFF; }
+    .btn-line { background: transparent; color: #FFFFFF; border-radius: 8px;
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 16px 30px; text-transform: uppercase;
+           letter-spacing: 0.12em; cursor: pointer; }
+    .btn-line:hover { box-shadow: inset 0 0 0 1px #D7AD56; color: #D7AD56; }
+    .nav { color: rgba(255,255,255,0.78); font-size: 12.8px; text-transform: uppercase;
+           letter-spacing: 0.05em; }
+    .nav:hover { color: #D7AD56; }
+    .tick { font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 38px;
+            color: #0A0A0A; letter-spacing: 0.03em; white-space: nowrap; }
+    .ctl { width: 46px; height: 46px; border-radius: 8px; background: rgba(255,255,255,0.06);
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); display: flex; align-items: center;
+           justify-content: center; cursor: pointer; color: #FFFFFF; }
+    .ctl:hover { background: #D7AD56; color: #0A0A0A; box-shadow: inset 0 0 0 1px #D7AD56; }
+    /* hover link-preview: gold word, small popup card above it */
+    .lp { color: #D7AD56; font-weight: 700; position: relative; cursor: pointer;
+          border-bottom: 1px dotted rgba(215,173,86,0.55); white-space: nowrap; }
+    .lp-card { position: absolute; bottom: calc(100% + 12px); left: 50%;
+          transform: translate(-50%, 10px) scale(0.9); opacity: 0; pointer-events: none;
+          transition: opacity 0.22s ease, transform 0.22s ease; width: 232px;
+          background: #0F0F10; box-shadow: 0 20px 50px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.16);
+          padding: 6px; z-index: 30; display: block; }
+    .lp:hover .lp-card { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    .lp-card img { display: block; width: 220px; height: 130px; object-fit: cover; border-radius: 6px; }
+    .lp-lab { display: block; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.18em; color: #D7AD56; padding: 8px 4px 4px 4px;
+          white-space: normal; }
+    @keyframes roll  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
+    @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
+    @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</helmet>
+
+<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <div style="position: relative; height: 880px; overflow: hidden; background: #000000">
+    <div style="position: absolute; inset: 0; background-image: url(./hero-bg.jpg); background-size: cover; background-position: center; animation: drift 30s ease-in-out infinite"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.84) 0%, rgba(0,0,0,0.34) 40%, rgba(0,0,0,0.56) 74%, rgba(0,0,0,0.92) 100%)"></div>
+
+    <!-- header -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; z-index: 6">
+      <div style="display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 9px 48px; border-bottom: 1px solid rgba(255,255,255,0.1)">
+        <div class="micro" style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="1.8" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>1504 Elm Hill Pike, Nashville, Tennessee 37210</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 18px">
+          <a href="#" style="display: flex; align-items: center; gap: 7px; color: #FFFFFF; font-size: 13px; font-weight: 800; letter-spacing: 0.06em">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2.1z"/></svg>
+            <span>615-297-4430</span>
+          </a>
+          <div style="display: flex; align-items: center; gap: 11px">
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 11v3h4.4c-.6 2-2.4 3.4-4.4 3.4A5.4 5.4 0 1 1 15.6 8l2.2-2.2A8.5 8.5 0 1 0 20.5 12v-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8A26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.2V8.8l5.2 3.2z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 14px 48px">
+        <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 108px; width: auto">
+        <div style="display: flex; align-items: center; gap: 20px">
+          <a href="#" class="nav">About</a>
+          <a href="#" class="nav">Fitness</a>
+          <a href="#" class="nav">Programs</a>
+          <a href="#" class="nav">Kids Programs</a>
+          <a href="#" class="nav">Schedule</a>
+          <a href="#" class="nav">Recovery</a>
+          <a href="#" class="nav">Events &amp; Sponsorships</a>
+          <div class="btn" style="padding: 12px 22px; font-size: 12px" onClick="{{ openForm }}">Request Info</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- hero copy, vertically centred, gold class band back under the h1 -->
+    <div style="position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 200px 70px 90px 70px; box-sizing: border-box; animation: rise 1000ms ease-out both">
+      <h1 style="font-size: 138px; line-height: 0.85; letter-spacing: -0.005em">Nashville MMA<br>Training Camp</h1>
+      <div style="display: inline-block; border-top: 3px solid #FFFFFF; border-bottom: 3px solid #FFFFFF; margin-top: 32px">
+        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; padding: 4px 16px">
+          <span style="font-size: 30px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56; letter-spacing: 0.02em">MMA</span>
+          <span style="color: #FFFFFF; font-size: 24px">&bull;</span>
+          <span style="font-size: 30px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56; letter-spacing: 0.02em">Jiu Jitsu</span>
+          <span style="color: #FFFFFF; font-size: 24px">&bull;</span>
+          <span style="font-size: 30px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56; letter-spacing: 0.02em">Boxing</span>
+          <span style="color: #FFFFFF; font-size: 24px">&bull;</span>
+          <span style="font-size: 30px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56; letter-spacing: 0.02em">Muay Thai</span>
+          <span style="color: #FFFFFF; font-size: 24px">&bull;</span>
+          <span style="font-size: 30px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56; letter-spacing: 0.02em">Youth Martial Arts</span>
+        </div>
+      </div>
+      <div style="font-size: 19px; line-height: 1.6; color: rgba(255,255,255,0.8); margin-top: 28px; max-width: 640px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</div>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 34px">
+        <div class="btn" onClick="{{ openForm }}">Request more information</div>
+        <a href="#" class="btn-line">Schedule</a>
+      </div>
+    </div>
+
+    <!-- programs strip: slow continuous roll -->
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; background: #D7AD56; overflow: hidden; z-index: 5">
+      <div id="mqTrack" style="display: flex; width: max-content; animation: roll 46s linear infinite; padding: 12px 0">
+        <div style="display: flex; align-items: center; gap: 24px; padding-right: 24px">
+          <span class="tick">Jiu-Jitsu</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Muay Thai Kickboxing</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Boxing</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Mixed Martial Arts</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">MMA Fight Team</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Women's Classes</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Wrestling</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Self Defense</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Personal Training</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Sports Performance</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Kids Martial Arts</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Kids Fitness</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Kids Brazilian Jiu-Jitsu</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px; padding-right: 24px">
+          <span class="tick">Jiu-Jitsu</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Muay Thai Kickboxing</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Boxing</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Mixed Martial Arts</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">MMA Fight Team</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Women's Classes</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Wrestling</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Self Defense</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Personal Training</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Sports Performance</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Kids Martial Arts</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Kids Fitness</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+          <span class="tick">Kids Brazilian Jiu-Jitsu</span><span style="color: #0A0A0A; opacity: 0.4">&#9670;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ FACILITY FIGURES ═══════════════ -->
+  <div class="rv" style="background: radial-gradient(900px 420px at 10% -20%, rgba(215,173,86,0.14), transparent 62%), #000000; padding: 84px 48px 74px 48px">
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0">
+      <div style="padding-right: 34px">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 72px; color: #FFFFFF; line-height: 1">40,000</div>
+        <div class="micro" style="margin-top: 8px">Sqft Facility</div>
+      </div>
+      <div style="padding: 0 34px; border-left: 1px solid rgba(255,255,255,0.1)">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 72px; color: #FFFFFF; line-height: 1">13,000</div>
+        <div class="micro" style="margin-top: 8px">Sqft Of Mats</div>
+      </div>
+      <div style="padding: 0 34px; border-left: 1px solid rgba(255,255,255,0.1)">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 72px; color: #FFFFFF; line-height: 1">10,000</div>
+        <div class="micro" style="margin-top: 8px">Sqft Of Fitness</div>
+      </div>
+      <div style="padding-left: 34px; border-left: 1px solid rgba(255,255,255,0.1)">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 72px; color: #D7AD56; line-height: 1">90+</div>
+        <div class="micro" style="margin-top: 8px">Classes Per Week</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PROGRAMS — coverflow: drag, flick, arrows, auto-rotate ═══════════════ -->
+  <div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.18) 0%, rgba(215,173,86,0.06) 34%, rgba(0,0,0,0) 62%), radial-gradient(1200px 640px at 82% -12%, rgba(215,173,86,0.26), transparent 62%), #0A0A0A; padding: 84px 0 64px 0">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 6px; padding: 0 48px">
+      <div>
+        <div class="micro" style="margin-bottom: 14px">13 Programs</div>
+        <h2 style="font-size: 66px; line-height: 1">Find your discipline</h2>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <div class="ctl" onClick="{{ prev }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+        <div class="ctl" onClick="{{ next }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div id="cfFrame" onPointerDown="{{ pDown }}" onPointerMove="{{ pMove }}" onPointerUp="{{ pUp }}" onPointerCancel="{{ pUp }}"
+         style="perspective: 960px; overflow: hidden; padding: 46px 0; cursor: grab; touch-action: pan-y">
+      <div style="position: relative; height: 400px; transform-style: preserve-3d">
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-jiujitsu.png" alt="Jiu-Jitsu classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">01</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Jiu-Jitsu</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-muaythai.jpg" alt="Muay Thai Kickboxing classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">02</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Muay Thai Kickboxing</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-boxing.jpg" alt="Boxing classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">03</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Boxing</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-mma.jpg" alt="Mixed Martial Arts classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">04</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Mixed Martial Arts</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-fightteam.jpg" alt="MMA Fight Team classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">05</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">MMA Fight Team</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-women.jpg" alt="Women's Classes classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">06</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Women's Classes</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-wrestling.png" alt="Wrestling classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">07</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Wrestling</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-selfdefense.png" alt="Self Defense classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">08</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Self Defense</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-personaltraining.jpg" alt="Personal Training classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">09</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Personal Training</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-sportsperf.jpg" alt="Sports Performance classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">10</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Sports Performance</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-kidsma.jpg" alt="Kids Martial Arts classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">11</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Kids Martial Arts</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-kidsfitness.jpg" alt="Kids Fitness Classes classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">12</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Kids Fitness Classes</h3>
+            </div>
+          </div>
+          <div data-cf="1" style="position: absolute; left: 50%; top: 0; width: 320px; height: 400px; border-radius: 8px; overflow: hidden; background: #131313; box-shadow: 0 24px 60px rgba(0,0,0,0.55); will-change: transform; opacity: 0; cursor: pointer">
+            <img src="prog-kidsbjj.jpg" alt="Kids Brazilian Jiu-Jitsu classes in Nashville" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.05) 55%)"></div>
+            <div style="position: absolute; left: 20px; bottom: 16px; right: 20px">
+              <div class="micro" style="margin-bottom: 6px">13</div>
+              <h3 style="font-size: 32px; line-height: 1; color: #FFFFFF">Kids Brazilian Jiu-Jitsu</h3>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; padding: 0 48px">
+      <h3 id="cfTitle" style="font-size: 44px; line-height: 1; margin-bottom: 8px">Jiu-Jitsu</h3>
+      <p id="cfTeaser" class="body" style="font-size: 15px; margin-bottom: 18px">Gi and no-gi, all levels</p>
+      <a href="#" class="btn-line" style="padding: 12px 26px; font-size: 12px">Learn More</a>
+      <div id="cfDots" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 26px">
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+          <div style="width: 12px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease"></div>
+      </div>
+      <div class="micro" style="color: rgba(255,255,255,0.3); margin-top: 18px">Drag, swipe or use the arrows — it turns on its own</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ABOUT — copy left, picture right ═══════════════ -->
+  <div class="rv" style="background: #000000; padding: 0 0 90px 0">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 0">
+      <div style="padding: 40px 60px 40px 48px">
+        <div class="micro" style="margin-bottom: 16px">Our Coaches</div>
+        <h2 style="font-size: 68px; line-height: 1; margin-bottom: 24px">We'll see you at the top!</h2>
+        <p class="body" style="font-size: 17px">Welcome to Nashville MMA Training Camp, your ultimate fitness and martial arts destination! We offer a variety of programs, including <span class="lp">MMA<span class="lp-card"><img src="./prog-mma.jpg" alt="Mixed Martial Arts in Nashville"><span class="lp-lab">Mixed Martial Arts</span></span></span>, <span class="lp">Jiu-Jitsu<span class="lp-card"><img src="./prog-jiujitsu.png" alt="Jiu-Jitsu in Nashville"><span class="lp-lab">Jiu-Jitsu</span></span></span>, <span class="lp">Muay Thai<span class="lp-card"><img src="./prog-muaythai.jpg" alt="Muay Thai Kickboxing in Nashville"><span class="lp-lab">Muay Thai Kickboxing</span></span></span>, <span class="lp">boxing<span class="lp-card"><img src="./prog-boxing.jpg" alt="Boxing in Nashville"><span class="lp-lab">Boxing</span></span></span>, <span class="lp">kids' martial arts<span class="lp-card"><img src="./prog-kidsma.jpg" alt="Kids Martial Arts in Nashville"><span class="lp-lab">Kids Martial Arts</span></span></span>, fitness classes, <span class="lp">personal training<span class="lp-card"><img src="./prog-personaltraining.jpg" alt="Personal Training in Nashville"><span class="lp-lab">Personal Training</span></span></span>, open gym, and more, all led by experienced instructors passionate about helping you succeed.</p>
+        <p class="body">Everything about Nashville MMA Training Camp has YOU in mind. Your goals, your body, and your aspirations.</p>
+        <div style="display: flex; align-items: center; justify-content: flex-start; gap: 14px; margin-top: 32px">
+          <div class="btn" onClick="{{ openForm }}">Request more information</div>
+          <a href="#" class="btn-line">About Us</a>
+        </div>
+      </div>
+      <div style="position: relative; min-height: 620px; overflow: hidden; border-radius: 8px; margin-right: 48px">
+        <img src="./about-bg.jpg" alt="Training at Nashville MMA Training Camp" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+        <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 40%)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ REVIEWS ═══════════════ -->
+  <div class="rv" style="background: radial-gradient(1000px 500px at 8% 110%, rgba(215,173,86,0.11), transparent 60%), #000000; padding: 90px 48px">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px">
+      <div>
+        <div class="micro" style="margin-bottom: 14px">Google Reviews</div>
+        <h2 style="font-size: 68px; line-height: 1">Five stars, repeatedly</h2>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <div style="display: flex; gap: 3px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#D7AD56"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+        </div>
+        <span style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 42px; color: #FFFFFF">5.0</span>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px">
+      <div style="background: #0F0F10; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); border-top: 3px solid #D7AD56; padding: 34px 30px">
+        <p class="body" style="font-size: 16px; margin-bottom: 26px">Great experience friendly staff super clean and diverse facility beginner friendly and most of all very fun and friendly. Thanks Austin!...</p>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <div style="width: 44px; height: 44px; border-radius: 60px; overflow: hidden; background: #FFFFFF; flex-shrink: 0"><img src="./avatar.png" alt="Google five star review - brandon arias" style="width: 100%; height: 100%; object-fit: cover; display: block"></div>
+          <span style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px">brandon arias</span>
+        </div>
+      </div>
+      <div style="background: #0F0F10; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); border-top: 3px solid #D7AD56; padding: 34px 30px">
+        <p class="body" style="font-size: 16px; margin-bottom: 26px">By far the best gym in and around Nashville. Whether you're training to be a fighter, get in shape or learn self-defense Nashville MMA is the place to be!...</p>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <div style="width: 44px; height: 44px; border-radius: 60px; overflow: hidden; background: #FFFFFF; flex-shrink: 0"><img src="./avatar.png" alt="Google five star review - patcrumpton" style="width: 100%; height: 100%; object-fit: cover; display: block"></div>
+          <span style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px">patcrumpton</span>
+        </div>
+      </div>
+      <div style="background: #0F0F10; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); border-top: 3px solid #D7AD56; padding: 34px 30px">
+        <p class="body" style="font-size: 16px; margin-bottom: 26px">This place has it all. The rounds at open mat were excellent, very welcoming and friendly environment. If I were a Nashville resident I would be training here permanently....</p>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <div style="width: 44px; height: 44px; border-radius: 60px; overflow: hidden; background: #FFFFFF; flex-shrink: 0"><img src="./avatar.png" alt="Google five star review - Zakkery Root" style="width: 100%; height: 100%; object-fit: cover; display: block"></div>
+          <span style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px">Zakkery Root</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ REQUEST ═══════════════ -->
+  <div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.10) 0%, rgba(0,0,0,0) 42%), #0A0A0A; padding: 90px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
+    <div class="micro" style="margin-bottom: 16px">Get Started</div>
+    <h2 style="font-size: 64px; line-height: 1; margin-bottom: 16px">Request Information Now</h2>
+    <p class="body" style="max-width: 560px; margin: 0 auto 34px auto">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; max-width: 1080px; margin: 0 auto">
+      <input type="text" placeholder="First" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 54px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+      <input type="text" placeholder="Last" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 54px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+      <input type="text" placeholder="Email" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 54px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+      <input type="tel" placeholder="Phone" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 54px; padding: 0 18px; flex-grow: 1; font-family: inherit">
+      <div class="btn" style="white-space: nowrap; padding: 18px 32px">Request Information</div>
+    </div>
+    <p style="font-size: 10px; line-height: 1.5; margin: 16px auto 0 auto; max-width: 900px; color: rgba(255,255,255,0.34)">By submitting your information you consent to receive marketing/promotional sms &amp; email messages from Nashville MMA Training Camp. Reply HELP for more assistance. Reply STOP to opt-out of messaging. Messages &amp; Data rates may apply. Message frequency will vary. You must be 18 years of age or older.</p>
+  </div>
+
+  <!-- ═══════════════ SLOGAN ═══════════════ -->
+  <div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); color: #FFFFFF; padding: 96px 48px; text-align: center">
+    <h2 style="font-size: 84px; line-height: 0.98">We build champions!<br><span style="color: #000000">Training</span> for your goals.<br><span style="color: #000000">community</span> for your success.</h2>
+  </div>
+
+  <!-- ═══════════════ FOOTER — contact left, map right ═══════════════ -->
+  <div style="background: #000000">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; align-items: stretch">
+
+      <div style="padding: 66px 48px 60px 48px">
+        <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 100px; width: auto; margin-bottom: 34px">
+        <div class="micro" style="margin-bottom: 12px">Our Location</div>
+        <h3 style="font-size: 44px; line-height: 1; margin-bottom: 26px">Visit Us Today</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 30px">
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Address</div><div class="body" style="font-size: 14px">1504 Elm Hill Pike<br>Nashville, Tennessee 37210</div></div>
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Phone</div><a href="#" style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; color: #FFFFFF">615-297-4430</a></div>
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Email</div><a href="#" style="font-size: 14px; color: rgba(255,255,255,0.75)">frontdesk@nashvillemma.com</a></div>
+          </div>
+          <div>
+            <div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 10px">Explore</div>
+            <ul style="display: flex; flex-direction: column; gap: 9px">
+              <li><a href="#" class="nav">About</a></li>
+              <li><a href="#" class="nav">Fitness</a></li>
+              <li><a href="#" class="nav">Programs</a></li>
+              <li><a href="#" class="nav">Kids Programs</a></li>
+              <li><a href="#" class="nav">Schedule</a></li>
+              <li><a href="#" class="nav">Recovery</a></li>
+              <li><a href="#" class="nav">Events &amp; Sponsorships</a></li>
+            </ul>
+          </div>
+        </div>
+        <a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>
+      </div>
+
+      <div style="position: relative; min-height: 560px; overflow: hidden; background: #0F0F10; border-left: 1px solid rgba(255,255,255,0.1)">
+        <div style="position: absolute; inset: 0; background:
+          repeating-linear-gradient(0deg,  #1A1A1D 0 1px, transparent 1px 56px),
+          repeating-linear-gradient(90deg, #1A1A1D 0 1px, transparent 1px 56px)"></div>
+        <div style="position: absolute; top: 0; left: 58%; width: 9px; height: 100%; background: #1F1F23; transform: rotate(8deg)"></div>
+        <div style="position: absolute; top: 47%; left: 0; width: 100%; height: 11px; background: #1F1F23"></div>
+        <div style="position: absolute; top: 74%; left: 0; width: 100%; height: 5px; background: #17171A"></div>
+        <div style="position: absolute; top: 47%; left: 62%; transform: translate(-50%,-50%); width: 22px; height: 22px; border-radius: 30px; background: #D7AD56; animation: ping 3.2s ease-out infinite"></div>
+        <div style="position: absolute; top: 47%; left: 62%; transform: translate(-50%,-100%)">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="#D7AD56" stroke="#000000" stroke-width="1.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#000000" stroke="none"/></svg>
+        </div>
+        <div class="micro" style="position: absolute; left: 26px; bottom: 22px; color: rgba(255,255,255,0.4)">1504 Elm Hill Pike &nbsp;·&nbsp; Nashville, TN</div>
+      </div>
+
+    </div>
+
+    <div style="padding: 24px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
+      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 - Martial Arts Websites Developed by 97Display Websites / Privacy Policy</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════ POPUP LEAD FORM ═══════════════ -->
+  <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center">
+      <div onClick="{{ closeForm }}" style="position: absolute; inset: 0; background: rgba(0,0,0,0.82)"></div>
+      <div style="position: relative; width: 620px; background: #0F0F10; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); padding: 44px 44px 38px 44px; animation: rise 260ms ease-out both">
+        <div onClick="{{ closeForm }}" style="position: absolute; top: 16px; right: 18px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.55)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </div>
+        <div class="micro" style="margin-bottom: 14px">Start Training</div>
+        <h3 style="font-size: 46px; line-height: 1; margin-bottom: 8px">Request Information Now</h3>
+        <p class="body" style="font-size: 14px; margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px">
+          <input type="text" placeholder="First" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+          <input type="text" placeholder="Last" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px">
+          <input type="text" placeholder="Email" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+          <input type="tel" placeholder="Phone" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+        </div>
+        <div class="btn" style="display: block; text-align: center; padding: 17px 0">Request Information</div>
+        <p style="font-size: 10px; line-height: 1.5; margin: 16px 0 0 0; color: rgba(255,255,255,0.4)">By submitting your information you consent to receive marketing/promotional sms &amp; email messages from Nashville MMA Training Camp. Reply HELP for more assistance. Reply STOP to opt-out of messaging. Messages &amp; Data rates may apply. Message frequency will vary. You must be 18 years of age or older.</p>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"autoplaySeconds":{"editor":"range","default":6,"min":3,"max":15,"step":1,"unit":"s","section":"Programs"},"$preview":{"width":1440,"height":5200}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { formOpen: false };
+    this._pos = 0; this._target = 0; this._raf = null; this._drag = null; this._sel = -1; this._dragDist = 0;
+  }
+
+  programs() {
+    return [
+      { n: '01', name: 'Jiu-Jitsu',                img: 'prog-jiujitsu.png',         teaser: 'Gi and no-gi, all levels' },
+      { n: '02', name: 'Muay Thai Kickboxing',     img: 'prog-muaythai.jpg',         teaser: 'Strike with every limb' },
+      { n: '03', name: 'Boxing',                   img: 'prog-boxing.jpg',           teaser: 'Footwork, hands, conditioning' },
+      { n: '04', name: 'Mixed Martial Arts',       img: 'prog-mma.jpg',              teaser: 'A well rounded skill set' },
+      { n: '05', name: 'MMA Fight Team',           img: 'prog-fightteam.jpg',        teaser: 'Train to compete' },
+      { n: '06', name: "Women's Classes",          img: 'prog-women.jpg',            teaser: 'Muay Thai and BJJ, women only' },
+      { n: '07', name: 'Wrestling',                img: 'prog-wrestling.png',        teaser: 'Youth and collegiate coaching' },
+      { n: '08', name: 'Self Defense',             img: 'prog-selfdefense.png',      teaser: 'Real-world strategies' },
+      { n: '09', name: 'Personal Training',        img: 'prog-personaltraining.jpg', teaser: '100% customized fitness' },
+      { n: '10', name: 'Sports Performance',       img: 'prog-sportsperf.jpg',       teaser: 'Strength, open gym and turf' },
+      { n: '11', name: 'Kids Martial Arts',        img: 'prog-kidsma.jpg',           teaser: 'BJJ, boxing and wrestling' },
+      { n: '12', name: 'Kids Fitness Classes',     img: 'prog-kidsfitness.jpg',      teaser: 'Motor skills, speed, agility' },
+      { n: '13', name: 'Kids Brazilian Jiu-Jitsu', img: 'prog-kidsbjj.jpg',          teaser: 'Ground-based self-defense' }
+    ];
+  }
+
+  componentDidMount() {
+    var self = this;
+    var frame = document.getElementById('cfFrame');
+    this._cards = frame ? frame.querySelectorAll('[data-cf]') : [];
+    this._title = document.getElementById('cfTitle');
+    this._teaser = document.getElementById('cfTeaser');
+    this._dotBox = document.getElementById('cfDots');
+    this.setSel(0);
+    this.paint();
+
+    // cards and dots are static markup (literal image srcs so the canvas can
+    // embed the photos), so their click handlers attach here instead
+    for (var c = 0; c < this._cards.length; c++) {
+      (function (idx) {
+        self._cards[idx].addEventListener('click', function () {
+          if (self._dragDist > 0.04) { return; }  // a drag is not a click
+          self.goTo(idx);
+        });
+      })(c);
+    }
+    if (this._dotBox) {
+      var dEls = this._dotBox.children;
+      for (var d = 0; d < dEls.length; d++) {
+        (function (idx) {
+          dEls[idx].addEventListener('click', function () { self.goTo(idx); });
+        })(d);
+      }
+    }
+
+    // slow auto-rotate; drags pause it implicitly
+    this.timer = setInterval(function () {
+      if (!self._drag && !self.state.formOpen) { self.nudge(1); }
+    }, (this.props.autoplaySeconds || 6) * 1000);
+
+    // if anything in this environment freezes CSS animations, notice within
+    // two seconds and drive the strip by hand at the same pace instead
+    var track = document.getElementById('mqTrack');
+    if (track) {
+      var t0 = getComputedStyle(track).transform;
+      setTimeout(function () {
+        if (getComputedStyle(track).transform !== t0) { return; }
+        track.style.animation = 'none';
+        var w = track.scrollWidth / 2, x = 0, last = performance.now();
+        var speed = w / 46;
+        var step = function (now) {
+          x += speed * (now - last) / 1000;
+          last = now;
+          if (x >= w) { x -= w; }
+          track.style.transform = 'translateX(' + (-x) + 'px)';
+          requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, 2000);
+    }
+
+    // fade sections in as they scroll into view
+    var els = document.querySelectorAll('.rv');
+    if ('IntersectionObserver' in window && els.length) {
+      for (var i = 0; i < els.length; i++) {
+        els[i].style.opacity = '0';
+        els[i].style.transform = 'translateY(30px)';
+        els[i].style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.style.opacity = '1';
+            en.target.style.transform = 'translateY(0)';
+            io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      for (var j = 0; j < els.length; j++) { io.observe(els[j]); }
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    if (this._raf) { cancelAnimationFrame(this._raf); }
+  }
+
+  indexAt(pos) {
+    var c = this.programs().length;
+    return ((Math.round(pos) % c) + c) % c;
+  }
+
+  // caption and dots are painted straight to the DOM, like the cards,
+  // so sixty updates a second never re-render the page
+  setSel(i) {
+    if (i === this._sel) { return; }
+    this._sel = i;
+    var p = this.programs()[i];
+    if (this._title) { this._title.textContent = p.name; }
+    if (this._teaser) { this._teaser.textContent = p.teaser; }
+    if (this._dotBox) {
+      var ds = this._dotBox.children;
+      for (var k = 0; k < ds.length; k++) {
+        var on = k === i;
+        ds[k].style.background = on ? '#D7AD56' : 'rgba(255,255,255,0.2)';
+        ds[k].style.width = on ? '30px' : '12px';
+      }
+    }
+  }
+
+  paint() {
+    var cards = this._cards;
+    if (!cards || !cards.length) { return; }
+    var W = 320, pitch = W * 1.08, count = cards.length;
+    var rotate = 44, depth = 0.6, falloff = 0.56, fadeK = 0.09;
+    var pos = this._pos;
+    for (var i = 0; i < count; i++) {
+      // fold the distance into the shorter way round the ring
+      var off = i - pos;
+      off = ((off % count) + count) % count;
+      if (off > count / 2) { off -= count; }
+      var d = Math.abs(off);
+      var ramp = Math.pow(d, falloff);
+      var tilt = Math.min(rotate * ramp, 82) * (off < 0 ? -1 : (off > 0 ? 1 : 0));
+      cards[i].style.transform = 'translateX(calc(-50% + ' + (off * pitch) + 'px)) translateZ(' + (-depth * W * ramp) + 'px) rotateY(' + (-tilt) + 'deg)';
+      var edge = Math.min(1, Math.max(0, count / 2 - d));
+      cards[i].style.opacity = String(Math.max(0, 1 - fadeK * d) * edge);
+      cards[i].style.zIndex = String(100 - Math.round(d));
+    }
+  }
+
+  settle(target) {
+    if (this._raf) { cancelAnimationFrame(this._raf); }
+    this._target = target;
+    this.setSel(this.indexAt(target));
+    var self = this;
+    var step = function () {
+      var rem = target - self._pos;
+      if (Math.abs(rem) < 0.0005) { self._pos = target; self.paint(); self._raf = null; return; }
+      self._pos += rem * 0.16;
+      self.paint();
+      self._raf = requestAnimationFrame(step);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+
+  goTo(i) {
+    var c = this.programs().length;
+    this.settle(i + Math.round((this._target - i) / c) * c);
+  }
+
+  nudge(by) { this.settle(Math.round(this._target) + by); }
+
+  cx(e) {
+    if (e.clientX !== undefined) { return e.clientX; }
+    if (e.touches && e.touches[0]) { return e.touches[0].clientX; }
+    return 0;
+  }
+
+  renderVals() {
+    var self = this;
+    return {
+      formOpen: this.state.formOpen,
+      openForm:  function () { self.setState({ formOpen: true }); },
+      closeForm: function () { self.setState({ formOpen: false }); },
+      prev: function () { self.nudge(-1); },
+      next: function () { self.nudge(1); },
+      pDown: function (e) {
+        if (self._raf) { cancelAnimationFrame(self._raf); self._raf = null; }
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+        self._target = self._pos;
+        self._dragDist = 0;
+        self._drag = { x: self.cx(e), pos: self._pos, v: 0, t: performance.now() };
+      },
+      pMove: function (e) {
+        var drag = self._drag;
+        if (!drag) { return; }
+        var pitch = 320 * 1.08;
+        var now = performance.now();
+        var prevPos = self._pos;
+        self._pos = drag.pos - (self.cx(e) - drag.x) / pitch;
+        drag.v = ((self._pos - prevPos) / Math.max(now - drag.t, 1)) * 1000;
+        self._dragDist += Math.abs(self._pos - prevPos);
+        drag.t = now;
+        self.setSel(self.indexAt(self._pos));
+        self.paint();
+      },
+      pUp: function (e) {
+        var drag = self._drag;
+        if (!drag) { return; }
+        self._drag = null;
+        // let a flick carry, but never more than two cards
+        var carried = Math.max(-2, Math.min(2, drag.v * 0.18));
+        self.settle(Math.round(self._pos + carried));
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

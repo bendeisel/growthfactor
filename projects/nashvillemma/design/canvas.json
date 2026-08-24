@@ -1,0 +1,26 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Homepage" },
+    { "id": "page-2", "name": "Reference" },
+    { "id": "page-3", "name": "Explorations" }
+  ],
+  "artboards": [
+    { "file": "Homepage.dc.html", "title": "Homepage — upgraded", "page": "page-1", "x": 0, "y": 0, "w": 1440, "h": 5200 },
+
+    { "file": "Main.dc.html",   "title": "Homepage — as-is",     "page": "page-2", "x": 0,    "y": 0, "w": 1440, "h": 5600 },
+    { "file": "Mobile.dc.html", "title": "As-is — mobile",       "page": "page-2", "x": 1600, "y": 0, "w": 390,  "h": 6400 },
+    { "file": "Brand.dc.html",  "title": "Brand & UI Reference", "page": "page-2", "x": 2160, "y": 0, "w": 1100, "h": 2450 },
+
+    { "file": "HeroMarquee.dc.html",   "title": "C — Marquee (chosen)", "page": "page-3", "x": 0,    "y": 0, "w": 1440, "h": 880 },
+    { "file": "HeroBroadcast.dc.html", "title": "A — Broadcast",        "page": "page-3", "x": 1600, "y": 0, "w": 1440, "h": 880 },
+    { "file": "HeroOverlap.dc.html",   "title": "B — Overlap",          "page": "page-3", "x": 3200, "y": 0, "w": 1440, "h": 880 },
+    { "file": "Upgraded.dc.html",      "title": "Dense (rejected)",     "page": "page-3", "x": 4800, "y": 0, "w": 1440, "h": 7200 }
+  ],
+  "annotations": [
+    { "id": "live-bits", "page": "page-1", "x": 0, "y": -340, "w": 660,
+      "text": "LIVE THINGS TO TRY:\n\n· The Find Your Discipline coverflow — drag it, flick it, click a card or a dot, or use the arrows. It also turns on its own (speed is a tweak chip above the artboard).\n· Hover the gold words in the We'll See You At The Top paragraph — small preview cards pop up, homepage only.\n· Any Request button opens the popup lead form.\n· Sections fade in as you scroll." },
+    { "id": "notes", "page": "page-1", "x": 720, "y": -340, "w": 620,
+      "text": "This artboard is one long page — the homepage top to bottom. Fonts are back to Bebas Neue + Montserrat. Gold class names sit under the headline again (MMA · Jiu Jitsu · Boxing · Muay Thai · Youth Martial Arts). Phone replaces the get-in-touch email in the top bar. Gold gradients tint several section backgrounds. Pictures carry the same 8px corner as the buttons." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}
