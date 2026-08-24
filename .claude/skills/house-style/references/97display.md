@@ -1,4 +1,10 @@
-# 97Display "Ultimate" theme — the archetypes you already own
+# 97Display "Ultimate" theme — reading a legacy site (source platform only)
+
+> **Status: legacy.** Growth Factor no longer builds ON 97Display — new and
+> rebuilt sites ship on our own static stack via `hostinger-delivery.md`.
+> This file remains useful for one thing: understanding what a client's
+> EXISTING 97Display site uses, so the kernel and motif inventory are read
+> correctly before the rebuild.
 
 Many Growth Factor clients sit on 97Display's platform. Its "Ultimate" theme
 ships far more section archetypes than any one site uses, and switching

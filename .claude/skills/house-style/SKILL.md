@@ -119,11 +119,12 @@ defaults for small-business builds (standing client instruction): lead-capture
 forms open as a popup/modal from every request CTA rather than living only
 inline, and interactive showcases should be portable — vanilla JS/CSS that can
 drop into a template platform as a custom block, not framework-bound
-components. If the
-client is on a template platform, check `references/97display.md` first — the
-platform usually ships far more section archetypes than the site is using, and
-switching archetype is free restructuring that stays entirely inside the
-vendor's own vocabulary.
+components. The build
+target is Growth Factor's own static stack deployed to Hostinger — see
+`references/hostinger-delivery.md` for the architecture, form handling, deploy
+paths and the volume economics. Template platforms (97Display etc.) are source
+material a client arrives FROM: `references/97display.md` stays useful for
+reading what such a site currently uses, never as a thing we build on.
 
 **Step 5 — Self-audit.** Before handover, answer these in writing:
 
@@ -166,8 +167,10 @@ defaults instead of the client's identity. Stop and go back to Step 2.
   when there is no CSS to read.
 - `references/axes.md` — the axes kit (structure, scale, density, rhythm) and
   the collision arithmetic behind preferring axes to a theme catalog.
-- `references/97display.md` — the 97Display "Ultimate" theme's section
-  archetypes, and how much unused restructuring is already available.
+- `references/hostinger-delivery.md` — the build target: static stack on
+  Hostinger, form handling, deploy paths, and the volume-pricing economics.
+- `references/97display.md` — LEGACY/source-platform reference: reading the
+  section archetypes of a site a client is migrating away from.
 - `references/worked-example-nashvillemma.md` — one project end to end: kernel,
   motif inventory, and what amplification versus substitution looks like on a
   real bland template.
