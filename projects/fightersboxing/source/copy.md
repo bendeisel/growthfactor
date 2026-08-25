@@ -164,3 +164,8 @@ Pending for schema: opening hours from the client.
 2. Masters boxing removed from the hero list (not an actual class). It
    still appears in the ticker and class cards; kill it there too if Ben
    says so.
+
+## Ben's revisions, round 7 (2026-08-25)
+1. Reviews heading changed from "5 Star Reviews" to "5 Star Gym".
+   Homepage declared done by Ben pending his gradient code, the hero
+   video, card photos, and the Masters call.
