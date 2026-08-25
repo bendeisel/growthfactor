@@ -56,7 +56,7 @@ const reviews = [
     </video>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="wrap hero-inner">
-      <h1 class="reveal">NASHVILLE BOXING AT ITS BEST</h1>
+      <h1 class="reveal"><span class="h1-line">NASHVILLE BOXING</span> <span class="h1-line">AT ITS BEST</span></h1>
       <p class="sub reveal">
         {heroClasses.map((c, i) => (
           <>
@@ -266,26 +266,28 @@ const reviews = [
   .hero-inner { position: relative; max-width: 900px; }
   .hero h1 {
     font-weight: 900;
-    font-size: clamp(40px, 6.6vw, 88px);
+    font-size: min(88px, 7.9vw);
     color: var(--on-dark);
   }
+  .h1-line { display: block; white-space: nowrap; }
   .hero .sub {
-    font-size: clamp(17px, 2vw, 26px);
+    font-size: clamp(9px, 2.7vw, 26px);
     line-height: 1.25;
     font-family: var(--font-display);
     font-weight: 500;
     color: var(--on-dark);
     margin: 24px auto 38px;
     max-width: none;
+    white-space: nowrap;
   }
   .sub-item { text-transform: capitalize; white-space: nowrap; }
   .sub-sep {
     display: inline-block;
-    width: 9px;
-    height: 9px;
+    width: clamp(5px, 1.1vw, 9px);
+    height: clamp(5px, 1.1vw, 9px);
     background: var(--accent);
     transform: rotate(45deg);
-    margin: 0 14px 2px;
+    margin: 0 clamp(5px, 1.4vw, 14px) 2px;
     vertical-align: middle;
   }
   .hero .btn-ring { --ring-gap: var(--ground-band); }
