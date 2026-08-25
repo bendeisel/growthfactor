@@ -20,7 +20,7 @@ const facebookUrl = 'https://www.facebook.com/fightersboxinggym';
     </div>
 
     <nav class="col" aria-label="Footer">
-      <h6>Links</h6>
+      <p class="col-label">Links</p>
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/contact-us/">Contact Us</a></li>
@@ -30,7 +30,7 @@ const facebookUrl = 'https://www.facebook.com/fightersboxinggym';
     </nav>
 
     <div class="col">
-      <h6>Get in touch</h6>
+      <p class="col-label">Get in touch</p>
       <div class="social">
         <a class="soc" href={facebookUrl} rel="noopener" target="_blank">
           <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
@@ -50,7 +50,7 @@ const facebookUrl = 'https://www.facebook.com/fightersboxinggym';
     </div>
 
     <div class="col map-col">
-      <h6>Find us</h6>
+      <p class="col-label">Find us</p>
       <div class="map-frame">
         <iframe
           src={mapsEmbed}
@@ -89,7 +89,7 @@ const facebookUrl = 'https://www.facebook.com/fightersboxinggym';
   }
   .site-footer a { color: var(--on-dark); }
   .site-footer a:hover, .site-footer a:focus-visible { color: var(--accent); }
-  h6 {
+  .col-label {
     font-size: 15px;
     text-transform: uppercase;
     letter-spacing: 1px;

@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 
 // Meta description reuses the hero's own subline; copy is frozen at 99%.
+const pageTitle = 'Fighters Boxing Gym | Nashville’s Boxing at Its Best';
 const description =
-  'Join Nashville’s Best Boxing Gym and Find Something Worth Fighting For.';
+  'Nashville’s best boxing gym. Group classes, youth classes, private sessions, open gym, and sparring. All levels welcome, no experience needed.';
 
 // Class names as Ben supplied them. Masters boxing has no page on the WP
 // build yet; it points at the classes index until one exists. Card photos
@@ -43,7 +44,7 @@ const reviews = [
 ];
 ---
 
-<Base title="Fighters Nashville" description={description}>
+<Base title={pageTitle} description={description}>
   <!-- ============ HERO: reserved for fbg-header.mp4 ============
        Drop the media guy's resized file at public/video/fbg-header.mp4 and
        it plays; until then the dark ground stands in. -->
@@ -53,7 +54,7 @@ const reviews = [
     </video>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="wrap hero-inner">
-      <h1 class="reveal">WHAT ARE YOU FIGHTING FOR?</h1>
+      <h1 class="reveal">NASHVILLE BOXING AT ITS BEST</h1>
       <p class="sub reveal">Join Nashville’s Best Boxing Gym and Find Something Worth Fighting For.</p>
       <span class="btn-ring reveal">
         <button class="btn js-open-lead" type="button">GET STARTED</button>
@@ -138,7 +139,7 @@ const reviews = [
         />
       </figure>
       <div class="split-copy">
-        <h2 class="reveal">NASHVILLE BOXING AT ITS BEST</h2>
+        <h2 class="reveal">WHAT ARE YOU FIGHTING FOR?</h2>
         <div class="reveal">
           <p>Welcome to <b>Fighters Boxing Gym</b>, Nashville’s best boxing facility.</p>
           <p>

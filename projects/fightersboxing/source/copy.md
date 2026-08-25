@@ -134,3 +134,15 @@ Em dashes removed per Ben; replacements shown inline.
    published on fightersnashville.com (no names shown there). Confirm the
    Dustin Austin quote against the Google listing at handover; sources:
    poyst.com/business/fighters-boxing-gym and fightersnashville.com.
+
+## Ben's revisions, round 4 (2026-08-25, SEO pass)
+1. Hero H1 is now "NASHVILLE BOXING AT ITS BEST" (keyworded); section 2's
+   H2 becomes "WHAT ARE YOU FIGHTING FOR?". Both are existing copy strings,
+   swapped per Ben.
+2. Title tag: "Fighters Boxing Gym | Nashville's Boxing at Its Best".
+3. Meta description composed from the client's own phrases (best boxing
+   gym / class list / all levels / no experience needed).
+4. Open Graph + Twitter card tags added, og:image = sparring photo.
+5. Footer/mobile-menu decorative h6 labels became styled paragraphs so the
+   heading outline is clean.
+Pending for schema: opening hours from the client.
