@@ -146,3 +146,12 @@ Em dashes removed per Ben; replacements shown inline.
 5. Footer/mobile-menu decorative h6 labels became styled paragraphs so the
    heading outline is clean.
 Pending for schema: opening hours from the client.
+
+## Ben's revisions, round 5 (2026-08-25)
+1. Hero subheadline is now the four class names (slash-separated) instead
+   of the slogan.
+2. The slogan "Join Nashville's Best Boxing Gym and Find Something Worth
+   Fighting For." moved into Section 1, emphasized above its GET STARTED.
+3. Reviews section: "Google Reviews" eyebrow + "5 Star Reviews" H2, with
+   NMMA-style captions ("five star review - Dustin Austin" and "member
+   testimonial").
