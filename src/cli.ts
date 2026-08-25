@@ -342,10 +342,10 @@ async function cmdFind(args: Args): Promise<void> {
 
 async function cmdDiscover(args: Args): Promise<void> {
   const cfg = findSource(args.positional[0] ?? '');
-  const { connectorFor } = await import('./connectors/registry.ts');
+  const { ensureConnector } = await import('./connectors/registry.ts');
   const { EVENT_FIELD_SPECS, FIELD_SPECS, resolveFieldMap } = await import('./core/fieldmap.ts');
   const http = new HttpClient({ minIntervalMs: Number(cfg.minIntervalMs ?? 250) });
-  const described = await connectorFor(cfg).describe(cfg, http);
+  const described = await (await ensureConnector(cfg)).describe(cfg, http);
 
   console.log(`source:  ${cfg.name} (${cfg.kind})`);
   console.log(`label:   ${described.label}`);
@@ -366,7 +366,14 @@ async function cmdDiscover(args: Args): Promise<void> {
   ));
   if (prop.missingImportant.length) {
     console.log(`\nNOT MAPPED (important): ${prop.missingImportant.join(', ')}`);
-    console.log('Supply these in the source config "defaults" or "fieldMap".');
+    const locality = ['city', 'state', 'zip'].filter((k) => prop.missingImportant.includes(k));
+    if (prop.mapping.addressLine && locality.length) {
+      console.log(
+        `Note: ${locality.join(', ')} will be recovered at ingest when ${prop.mapping.addressLine} `
+        + 'holds a one line address such as "120 Oak Ave, Nashville, TN 37201".',
+      );
+    }
+    console.log('Supply anything still missing in the source config "defaults" or "fieldMap".');
   }
   if (ev.entries.length) {
     console.log('\nevent field mapping:');

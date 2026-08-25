@@ -1,0 +1,99 @@
+{
+  "_comment": [
+    "COURT RECORDS. Read docs/SCRAPING.md before enabling any of these.",
+    "",
+    "Two rules, and they are practical rather than preachy:",
+    "",
+    "1. Prefer an official bulk data request. Tennessee probate clerks will often",
+    "   provide filings on a schedule for a fee or a records request. That is more",
+    "   reliable than scraping, needs no maintenance when the site is redesigned,",
+    "   and removes the terms question entirely. Ask first, scrape second.",
+    "",
+    "2. Never point a scraper at a portal you had to log into or click through an",
+    "   agreement to reach. Public data on an open page is one thing. A subscriber",
+    "   portal is a contract you agreed to, which is a different category of risk.",
+    "   Davidson County's CaseLink is a subscriber service, so it is deliberately",
+    "   NOT configured here.",
+    "",
+    "The browser connector renders JavaScript locally with no scraping subscription.",
+    "It does not defeat CAPTCHAs or bot protection, and it should not be made to.",
+    "If a portal blocks automated access, that is the portal answering the question:",
+    "file the records request instead."
+  ],
+  "sources": [
+    {
+      "name": "probate-davidson",
+      "kind": "browser",
+      "label": "Davidson County probate filings",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_THE_PUBLIC_SEARCH_RESULTS_URL",
+      "waitForSelector": "table",
+      "requireHeaders": ["case"],
+      "maxPages": 3,
+      "minIntervalMs": 2000,
+      "impliesEvents": ["probate"],
+      "defaults": { "county": "Davidson", "state": "TN", "fips": "47037" },
+      "steps": [
+        { "type": "waitForSelector", "selector": "form" },
+        { "type": "type", "selector": "REPLACE_ME_CASE_TYPE_INPUT", "text": "PROBATE" },
+        { "type": "click", "selector": "REPLACE_ME_SEARCH_BUTTON" }
+      ],
+      "notes": [
+        "Davidson probate is handled by the Probate Court Clerk at 1 Public Square.",
+        "The clerk accepts a Probate Records Request Form, which is the better path.",
+        "CaseLink covers Circuit, Probate and General Sessions Civil but it is a",
+        "SUBSCRIBER tool. Do not scrape it. If you subscribe, export from inside it.",
+        "The steps array is a template. Open the public search in a normal browser,",
+        "right click the fields you fill in, copy their selectors, and paste them.",
+        "minIntervalMs is 2000. A court server is not an API."
+      ]
+    },
+    {
+      "name": "probate-williamson",
+      "kind": "browser",
+      "label": "Williamson County probate, Chancery Clerk and Master",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME_WITH_THE_PUBLIC_SEARCH_RESULTS_URL",
+      "waitForSelector": "table",
+      "requireHeaders": ["case"],
+      "minIntervalMs": 2000,
+      "impliesEvents": ["probate"],
+      "defaults": { "county": "Williamson", "state": "TN", "fips": "47187" },
+      "notes": [
+        "In Tennessee probate sits in Chancery Court, so the office you want is the",
+        "Clerk and Master rather than the Circuit Court Clerk. It handles estate",
+        "administration, wills, guardianships and conservatorships.",
+        "The statewide portal at tncourts.gov is worth checking first, since one",
+        "source covering several counties beats one config per county."
+      ]
+    },
+    {
+      "name": "divorce-filings-template",
+      "kind": "browser",
+      "label": "Divorce filings, NOT USABLE YET, see notes",
+      "enabled": false,
+      "costPerRecordCents": 0,
+      "url": "REPLACE_ME",
+      "requireHeaders": ["case"],
+      "minIntervalMs": 2000,
+      "impliesEvents": [],
+      "defaults": { "state": "TN" },
+      "notes": [
+        "HONEST LIMITATION. This will not produce usable leads as the pipeline",
+        "stands, and enabling it would create junk rows.",
+        "A divorce docket publishes party names and a case number. It does not",
+        "publish a property address, because the property is described inside the",
+        "complaint or the final decree rather than in the docket listing.",
+        "Everything in this pipeline joins on address or parcel number. A record",
+        "with only names has nothing to join to, so it lands as an orphan row.",
+        "What is needed is owner name matching: normalize the docket parties and",
+        "look them up against owner_name on the parcel roll. That is a real feature",
+        "and not a large one, it just does not exist yet. Ask for it.",
+        "Also note divorce case contents are frequently sealed even where the docket",
+        "entry is public, and a divorce filing does not by itself mean a sale."
+      ]
+    }
+  ]
+}

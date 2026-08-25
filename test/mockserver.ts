@@ -249,6 +249,69 @@ export async function startMock(opts: MockOptions = {}): Promise<MockHandle> {
       return json({ customFields: [{ id: 'cf_1', name: 'Property Address', fieldKey: 'contact.property_address', dataType: 'TEXT' }] });
     }
 
+    // ---- A JavaScript rendered docket, the shape modern court portals take ----
+    // The results table does not exist in the HTML at all. Plain HTTP sees a shell.
+    if (url.pathname === '/portal') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.end(`<html><head><title>Probate Case Search</title></head><body>
+        <h1>Case Search</h1>
+        <div id="results">Loading results...</div>
+        <script>
+          var CASES = [
+            ['26P1234','SMITH JOHN R','08/01/2026','120 Oak Ave, Nashville, TN 37201','Estate Administration'],
+            ['26P1235','WILLIAMS ROBERT','08/03/2026','216 Oak Ave, Nashville, TN 37201','Estate Administration'],
+            ['26P1236','DAVIS MARY E','08/07/2026','312 Oak Ave, Nashville, TN 37201','Will Probated']
+          ];
+          setTimeout(function () {
+            var rows = CASES.map(function (c) {
+              return '<tr><td>' + c[0] + '</td><td>' + c[1] + '</td><td>' + c[2] +
+                     '</td><td>' + c[3] + '</td><td>' + c[4] + '</td></tr>';
+            }).join('');
+            document.getElementById('results').innerHTML =
+              '<table id="cases"><thead><tr><th>Case Number</th><th>Decedent Name</th>' +
+              '<th>Date Filed</th><th>Property Address</th><th>Case Type</th></tr></thead>' +
+              '<tbody>' + rows + '</tbody></table>';
+          }, 250);
+        </script></body></html>`);
+      return undefined;
+    }
+
+    // ---- A search form, where results only appear after a submit ----
+    if (url.pathname === '/portal-search') {
+      res.writeHead(200, { 'content-type': 'text/html' });
+      res.end(`<html><body>
+        <form id="f" onsubmit="return false">
+          <input id="caseType" value="" />
+          <select id="county"><option value="">Pick</option><option value="DAVIDSON">Davidson</option></select>
+          <button id="go" type="button">Search</button>
+        </form>
+        <div id="out"></div>
+        <script>
+          var PAGE = 1;
+          function render() {
+            var start = (PAGE - 1) * 2;
+            var rows = '';
+            for (var i = start; i < start + 2 && i < 6; i++) {
+              rows += '<tr><td>26P' + (2000 + i) + '</td><td>OWNER ' + i +
+                      '</td><td>08/1' + i + '/2026</td><td>' + (400 + i * 8) +
+                      ' Oak Ave, Nashville, TN 37201</td></tr>';
+            }
+            document.getElementById('out').innerHTML =
+              '<table id="res"><thead><tr><th>Case Number</th><th>Decedent Name</th>' +
+              '<th>Date Filed</th><th>Property Address</th></tr></thead><tbody>' + rows +
+              '</tbody></table>' +
+              (PAGE < 3 ? '<a id="next" href="#" onclick="PAGE++;render();return false">Next</a>' : '');
+          }
+          document.getElementById('go').addEventListener('click', function () {
+            var t = document.getElementById('caseType').value;
+            var c = document.getElementById('county').value;
+            if (t === 'PROBATE' && c === 'DAVIDSON') { PAGE = 1; render(); }
+            else { document.getElementById('out').innerHTML = '<p>No criteria selected.</p>'; }
+          });
+        </script></body></html>`);
+      return undefined;
+    }
+
     // ---- USGS NHD stand in, for waterbody fetching ----
     if (url.pathname === '/nhd/MapServer') {
       return json({

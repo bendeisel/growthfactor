@@ -32,10 +32,20 @@ export function stripTags(html: string): string {
   ).replace(/\s+/g, ' ').trim();
 }
 
-/** Every table on the page, as rows of cell text. */
+/**
+ * Every table on the page, as rows of cell text.
+ *
+ * Script and style blocks are removed first. A JavaScript rendered page often
+ * carries its markup as a string inside a script tag, and matching that would
+ * produce a table of template source instead of data.
+ */
 export function parseHtmlTables(html: string): string[][][] {
+  const cleaned = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ');
   const tables: string[][][] = [];
-  for (const tableMatch of html.matchAll(/<table[^>]*>([\s\S]*?)<\/table>/gi)) {
+  for (const tableMatch of cleaned.matchAll(/<table[^>]*>([\s\S]*?)<\/table>/gi)) {
     const rows: string[][] = [];
     for (const rowMatch of (tableMatch[1] ?? '').matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)) {
       const cells: string[] = [];
@@ -85,4 +95,36 @@ export function tableToObjects(rows: string[][]): Array<Record<string, string>> 
     out.push(o);
   }
   return out;
+}
+
+export interface ExtractOptions extends TableSelect {
+  /** Named in error messages so a misconfigured source is easy to find. */
+  sourceName?: string;
+  origin?: string;
+}
+
+/**
+ * Pull the interesting table out of a page as records, or throw an error that
+ * describes every table it did find. A misconfigured selector should be a copy and
+ * paste to fix, not a guessing game.
+ */
+export function extractTableRows(
+  html: string,
+  opts: ExtractOptions = {},
+): Array<Record<string, string>> {
+  const tables = parseHtmlTables(html);
+  const chosen = selectTable(tables, opts);
+  if (!chosen) {
+    const shapes = tables.map(
+      (t, i) => `[${i}] ${t.length} rows: ${(t[0] ?? []).slice(0, 6).join(' | ')}`,
+    );
+    const where = [opts.sourceName, opts.origin].filter(Boolean).join(' at ');
+    throw new Error(
+      `no matching table${where ? ` for ${where}` : ''}. `
+      + (shapes.length
+        ? `Tables found:\n  ${shapes.join('\n  ')}\nSet tableIndex or requireHeaders.`
+        : 'No tables at all. The page is probably rendered by JavaScript, so try kind "browser".'),
+    );
+  }
+  return tableToObjects(chosen);
 }

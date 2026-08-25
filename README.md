@@ -120,6 +120,26 @@ Corps of Engineers owns a shoreline strip around most of Old Hickory Lake and mu
 of what sells as lakefront there is adjacent to Corps land with dock rights.
 Testing for a boundary touching the water would miss most of the market.
 
+## Scraping government portals
+
+Most public records need no browser: county GIS is a JSON API, so is Socrata, and
+foreclosure notices are an HTML table. Court dockets are the exception, because modern
+portals render results with JavaScript.
+
+For those there is a `browser` connector that drives a locally installed Chromium over
+the DevTools protocol, using the WebSocket built into Node. It fills search forms,
+waits for results, and pages through them. No Playwright, no Apify, no monthly fee, no
+new dependency.
+
+```bash
+npm run gf -- discover probate-davidson
+npm run gf -- pull probate-davidson --limit 20
+```
+
+Whether you also need a scraping platform, why a chat assistant should not be the
+scraper, and why a bulk data request usually beats scraping a court site:
+[docs/SCRAPING.md](docs/SCRAPING.md).
+
 ## Finding data for your county
 
 Every county publishes differently. Rather than hardcoding one county, sources are
@@ -254,7 +274,7 @@ npm install         # only for typechecking, dev only
 npm run check       # typecheck plus tests
 ```
 
-78 tests. The connectors run against a local mock server that replicates the
+85 tests. The connectors run against a local mock server that replicates the
 documented response shapes of ArcGIS, Socrata and the GHL v2 API, covering
 pagination, retry and backoff, cross source address merging, append only event
 history, idempotency across consecutive runs, the approval gate, the geometry behind the
@@ -263,6 +283,7 @@ waterfront filter, and the shipped market definitions themselves.
 ## Docs
 
 - [docs/COSTS.md](docs/COSTS.md) what it costs, and the honest PropStream break even
+- [docs/SCRAPING.md](docs/SCRAPING.md) government portals, whether you need Apify, and court records
 - [docs/MARKETS.md](docs/MARKETS.md) your seven target areas and the waterfront filter
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) every free source, what it gives you, how to find yours
 - [docs/SELLER_FINANCE_PLAYBOOK.md](docs/SELLER_FINANCE_PLAYBOOK.md) how the scoring works and how to work the lists

@@ -118,6 +118,28 @@ table on the page with its headers, so fixing the config is a copy and paste. If
 reports no tables at all, the page is rendered by JavaScript and you need the site's
 own export or a search url instead.
 
+### Headless browser (`kind: "browser"`)
+
+For portals that render results with JavaScript, which is most modern court docket
+searches. Drives a locally installed Chromium over the DevTools protocol. Free, no
+dependency, and it fills forms and pages through results.
+
+```json
+{
+  "name": "probate-davidson",
+  "kind": "browser",
+  "url": "https://example.gov/search",
+  "steps": [{ "type": "click", "selector": "#search" }],
+  "waitForSelector": "#results",
+  "requireHeaders": ["case number"],
+  "minIntervalMs": 2000
+}
+```
+
+See [SCRAPING.md](SCRAPING.md) before pointing it at a court site. Short version:
+ask for bulk data first, never scrape a portal you logged into, and leave the rate
+limit alone.
+
 ### RealEstateAPI (`kind: "reapi"`) PAID, and not recommended
 
 Public pricing starts around 599 dollars a month, which is triple the entire budget.
@@ -170,7 +192,7 @@ If neither finds it, in rough order of yield:
 | `foreclosure`, `auction` | trustee or sheriff sale notices, often a weekly PDF or HTML list | hard deadline, and proof a loan exists to assume |
 | `reo` | HUD ArcGIS layer, lender inventory | already bank owned |
 | `tax_delinquent` | county trustee delinquent roll | often annual, often a CSV |
-| `probate`, `pre_probate` | probate court case search | see below |
+| `probate`, `pre_probate` | probate court case search, usually needs the browser connector | see below |
 | `code_violation` | city code enforcement open data | underrated, and refreshed constantly |
 | `demolition` | condemnation and demolition orders | strong signal, small volume |
 | `vacant` | vacant property registry, utility shutoff lists, code cases | availability varies a lot |

@@ -6,7 +6,7 @@
 // them here. `gf discover` prints the resulting map with a confidence per field
 // so a human can check the guesses before trusting a pull.
 
-import { joinAddress, normApn, normState, normZip, parseDate, parseNum } from './normalize.ts';
+import { joinAddress, normApn, normState, normZip, parseDate, parseNum, splitFullAddress } from './normalize.ts';
 import type { PropertyInput, RawRecord } from './types.ts';
 
 export type FieldType = 'string' | 'number' | 'date';
@@ -301,6 +301,18 @@ export function applyMapping(
       if (composed && /\d/.test(composed)) out.addressLine = composed;
     }
     for (const helper of Object.keys(specs).filter((k) => specs[k]!.helper)) delete out[helper];
+
+    // A single "Property Address" column often carries city, state and zip too.
+    // Recovering them is what lets a court docket row join its parcel.
+    if (typeof out.addressLine === 'string') {
+      const parts = splitFullAddress(out.addressLine);
+      if (parts.street) {
+        out.addressLine = parts.street;
+        if (parts.city && !out.city) out.city = parts.city;
+        if (parts.state && !out.state) out.state = parts.state;
+        if (parts.zip && !out.zip) out.zip = parts.zip;
+      }
+    }
 
     if (out.apn) out.apn = normApn(out.apn as string);
     if (out.state) out.state = normState(out.state as string);

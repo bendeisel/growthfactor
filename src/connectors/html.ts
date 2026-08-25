@@ -5,7 +5,7 @@
 // competed data in a county because pulling it takes effort.
 
 import type { HttpClient } from '../core/http.ts';
-import { parseHtmlTables, selectTable, tableToObjects } from '../core/html.ts';
+import { extractTableRows } from '../core/html.ts';
 import type { RawRecord, SourceConfig } from '../core/types.ts';
 import type { Connector, DescribeResult, PageOptions } from './index.ts';
 import { sampleFields } from './index.ts';
@@ -30,21 +30,12 @@ function urlsFor(cfg: SourceConfig): string[] {
 
 async function rowsFor(cfg: SourceConfig, http: HttpClient, url: string): Promise<RawRecord[]> {
   const html = await http.getText(url);
-  const tables = parseHtmlTables(html);
-  const chosen = selectTable(tables, {
+  return extractTableRows(html, {
     tableIndex: cfg.tableIndex as number | undefined,
     requireHeaders: cfg.requireHeaders as string[] | undefined,
-  });
-  if (!chosen) {
-    const shapes = tables.map((t, i) => `[${i}] ${t.length} rows: ${(t[0] ?? []).slice(0, 6).join(' | ')}`);
-    throw new Error(
-      `source ${cfg.name}: no matching table at ${url}. `
-      + (shapes.length
-        ? `Tables found:\n  ${shapes.join('\n  ')}\nSet tableIndex or requireHeaders.`
-        : 'No tables at all, so this page is probably rendered by JavaScript.'),
-    );
-  }
-  return tableToObjects(chosen) as RawRecord[];
+    sourceName: cfg.name,
+    origin: url,
+  }) as RawRecord[];
 }
 
 export const htmlConnector: Connector = {

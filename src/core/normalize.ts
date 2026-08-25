@@ -65,6 +65,75 @@ export function normAddress(s: string | undefined | null): string | undefined {
   return res || undefined;
 }
 
+export interface FullAddressParts {
+  street?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+}
+
+/**
+ * Split a one line address into parts.
+ *
+ * Court dockets, foreclosure notices and open data feeds publish a single
+ * "Property Address" column holding the whole address, while parcel layers publish
+ * the street on its own with separate city and zip columns. Without splitting the
+ * one line form, a probate record and its parcel produce different dedupe keys and
+ * never join, which is the whole point of collecting both.
+ *
+ * Conservative on purpose: it only claims a split when it can find a state or a zip
+ * at the end, so a plain street address from a parcel layer passes through untouched.
+ */
+export function splitFullAddress(raw: string | undefined | null): FullAddressParts {
+  if (!raw) return {};
+  const v = String(raw).replace(/\s+/g, ' ').trim();
+  if (!v) return {};
+
+  const hasComma = v.includes(',');
+
+  // A trailing zip, with or without a state in front of it.
+  const withState = v.match(/,\s*([A-Za-z]{2})\.?\s*(\d{5})(?:-\d{4})?\s*$/)
+    ?? v.match(/\s([A-Za-z]{2})\.?\s*(\d{5})(?:-\d{4})?\s*$/);
+  // A trailing state with no zip. Requires a comma, because "99 Main Ct" and
+  // "5 Oak Mt" would otherwise read as Connecticut and Montana.
+  const stateOnly = v.match(/,\s*([A-Za-z]{2})\.?\s*$/);
+
+  const tail = withState ?? stateOnly;
+  if (tail) {
+    const state = normState(tail[1]);
+    if (state) {
+      const zip = tail[2];
+      const head = v.slice(0, v.length - tail[0]!.length).trim().replace(/,\s*$/, '');
+      const commaParts = head.split(',').map((p) => p.trim()).filter(Boolean);
+      if (commaParts.length >= 2) {
+        return {
+          street: commaParts.slice(0, -1).join(', '),
+          city: commaParts[commaParts.length - 1],
+          state,
+          zip,
+        };
+      }
+      // Nothing delimits the street from the city, so only the state and zip are
+      // safe to claim. The street field keeps whatever was in front of them.
+      return { street: head || undefined, state, zip };
+    }
+  }
+
+  // No usable state, but a comma delimited city and a trailing zip still help.
+  if (hasComma) {
+    const zipOnly = v.match(/^(.*?),\s*(\d{5})(?:-\d{4})?\s*$/);
+    if (zipOnly && zipOnly[1]!.includes(',')) {
+      const parts = zipOnly[1]!.split(',').map((p) => p.trim()).filter(Boolean);
+      return {
+        street: parts.slice(0, -1).join(', ') || undefined,
+        city: parts[parts.length - 1],
+        zip: zipOnly[2],
+      };
+    }
+  }
+  return {};
+}
+
 export const STATE_FIPS: Record<string, string> = {
   AL: '01', AK: '02', AZ: '04', AR: '05', CA: '06', CO: '08', CT: '09', DE: '10',
   DC: '11', FL: '12', GA: '13', HI: '15', ID: '16', IL: '17', IN: '18', IA: '19',
@@ -72,7 +141,7 @@ export const STATE_FIPS: Record<string, string> = {
   MS: '28', MO: '29', MT: '30', NE: '31', NV: '32', NH: '33', NJ: '34', NM: '35',
   NY: '36', NC: '37', ND: '38', OH: '39', OK: '40', OR: '41', PA: '42', RI: '44',
   SC: '45', SD: '46', TN: '47', TX: '48', UT: '49', VT: '50', VA: '51', WA: '53',
-  WV: '54', WI: '55', WY: '56', PR: '72',
+  WV: '54', WI: '55', WY: '56', PR: '72', VI: '78', GU: '66', AS: '60', MP: '69',
 };
 
 export function normState(s: string | undefined | null): string | undefined {
@@ -94,7 +163,10 @@ export function normState(s: string | undefined | null): string | undefined {
     VIRGINIA: 'VA', WASHINGTON: 'WA', 'WEST VIRGINIA': 'WV', WISCONSIN: 'WI',
     WYOMING: 'WY', 'DISTRICT OF COLUMBIA': 'DC',
   };
-  return byName[v] ?? (v.length === 2 ? v : undefined);
+  const byCode = STATE_FIPS[v] ? v : undefined;
+  // Never pass through an arbitrary two letter token. Street suffixes like ST, CT
+  // and MT would otherwise become states and corrupt both matching and mail.
+  return byName[v] ?? byCode;
 }
 
 export function normZip(s: unknown): string | undefined {

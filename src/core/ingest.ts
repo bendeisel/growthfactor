@@ -6,7 +6,7 @@
 //
 // Skip trace is never called here. Nothing in this file spends money per record.
 
-import { connectorFor, costPerRecordCents } from '../connectors/registry.ts';
+import { costPerRecordCents, ensureConnector } from '../connectors/registry.ts';
 import { EVENT_FIELD_SPECS, FIELD_SPECS, applyMapping, resolveFieldMap, toProperty } from './fieldmap.ts';
 import type { MappingReport } from './fieldmap.ts';
 import { DEFAULT_EQUITY_MODEL, derive, type EquityModelConfig } from './derive.ts';
@@ -68,7 +68,7 @@ export async function runIngest(
   const asOf = opts.asOf ?? new Date().toISOString().slice(0, 10);
   const equityModel = opts.equityModel ?? DEFAULT_EQUITY_MODEL;
   const log = opts.onProgress ?? (() => {});
-  const connector = connectorFor(cfg);
+  const connector = await ensureConnector(cfg);
   const http = new HttpClient({
     minIntervalMs: Number(cfg.minIntervalMs ?? 250),
     retries: Number(cfg.retries ?? 3),
