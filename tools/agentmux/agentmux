@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Thin launcher so `agentmux` works from PATH regardless of where it is symlinked.
+set -euo pipefail
+
+script="${BASH_SOURCE[0]}"
+while [ -L "$script" ]; do
+  dir="$(cd -P "$(dirname "$script")" && pwd)"
+  script="$(readlink "$script")"
+  case "$script" in
+    /*) ;;
+    *) script="$dir/$script" ;;
+  esac
+done
+dir="$(cd -P "$(dirname "$script")" && pwd)"
+
+python="${AGENTMUX_PYTHON:-}"
+if [ -z "$python" ]; then
+  if command -v python3 >/dev/null 2>&1; then
+    python=python3
+  elif command -v python >/dev/null 2>&1; then
+    python=python
+  else
+    echo "agentmux: python3 is required but was not found on PATH" >&2
+    exit 1
+  fi
+fi
+
+exec "$python" "$dir/agentmux.py" "$@"

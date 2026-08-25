@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Claude Code hook entry point. Receives the hook payload as JSON on stdin and
+# the event name as $1. Never fails loudly: a broken notifier must not break
+# the agent it is reporting on.
+set -uo pipefail
+
+script="${BASH_SOURCE[0]}"
+while [ -L "$script" ]; do
+  dir="$(cd -P "$(dirname "$script")" && pwd)"
+  script="$(readlink "$script")"
+  case "$script" in
+    /*) ;;
+    *) script="$dir/$script" ;;
+  esac
+done
+dir="$(cd -P "$(dirname "$script")" && pwd)"
+
+exec "$dir/../agentmux" hook "$@"
