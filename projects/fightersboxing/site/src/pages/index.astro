@@ -16,6 +16,8 @@ const classes = [
   { name: 'Masters boxing', href: '/boxing-classes/' },
 ];
 
+const heroClasses = classes.filter((c) => c.name !== 'Masters boxing');
+
 const tickerRepeats = 3;
 
 // Real reviews only, quoted verbatim. The first is a public Google review;
@@ -55,7 +57,14 @@ const reviews = [
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <h1 class="reveal">NASHVILLE BOXING AT ITS BEST</h1>
-      <p class="sub reveal">{classes.map((c) => c.name).join(' / ')}</p>
+      <p class="sub reveal">
+        {heroClasses.map((c, i) => (
+          <>
+            <span class="sub-item">{c.name}</span>
+            {i < heroClasses.length - 1 && <span class="sub-sep" aria-hidden="true" />}
+          </>
+        ))}
+      </p>
       <span class="btn-ring reveal">
         <button class="btn js-open-lead" type="button">GET STARTED</button>
       </span>
@@ -115,7 +124,7 @@ const reviews = [
               <>
                                 {classes.map((c) => (
                   <>
-                    <span class="ticker-item">{c.name}</span><span class="ticker-sep" aria-hidden="true">/</span>
+                    <span class="ticker-item">{c.name}</span><span class="ticker-sep" aria-hidden="true" />
                   </>
                 ))}
               </>
@@ -267,7 +276,17 @@ const reviews = [
     font-weight: 500;
     color: var(--on-dark);
     margin: 24px auto 38px;
-    max-width: 34ch;
+    max-width: none;
+  }
+  .sub-item { text-transform: capitalize; white-space: nowrap; }
+  .sub-sep {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    transform: rotate(45deg);
+    margin: 0 14px 2px;
+    vertical-align: middle;
   }
   .hero .btn-ring { --ring-gap: var(--ground-band); }
   .hero :global(.btn) { border-color: var(--ground-band); }
@@ -335,11 +354,14 @@ const reviews = [
   }
   .ticker-seg { display: flex; align-items: center; }
   .ticker-sep {
-    font-family: var(--font-action);
-    font-weight: 700;
-    font-size: clamp(18px, 2.2vw, 28px);
-    color: rgba(255, 255, 255, 0.55);
-    padding: 0 0.2em;
+    display: inline-block;
+    width: clamp(8px, 1vw, 12px);
+    height: clamp(8px, 1vw, 12px);
+    background: rgba(255, 255, 255, 0.75);
+    transform: rotate(45deg);
+    margin: 0 0.5em;
+    flex: none;
+    align-self: center;
   }
   .ticker-item {
     font-family: var(--font-display);

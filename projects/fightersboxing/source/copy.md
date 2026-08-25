@@ -155,3 +155,12 @@ Pending for schema: opening hours from the client.
 3. Reviews section: "Google Reviews" eyebrow + "5 Star Reviews" H2, with
    NMMA-style captions ("five star review - Dustin Austin" and "member
    testimonial").
+
+## Ben's revisions, round 6 (2026-08-25)
+1. Hero class list: every word capitalized (CSS capitalize over Ben's
+   strings) and slashes replaced with small red diamond separators (the
+   logo mark's rotated square). Ticker got the same diamond separators in
+   white.
+2. Masters boxing removed from the hero list (not an actual class). It
+   still appears in the ticker and class cards; kill it there too if Ben
+   says so.
