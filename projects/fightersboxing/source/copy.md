@@ -123,3 +123,14 @@ Em dashes removed per Ben; replacements shown inline.
    slideshow. Card photos pending from Ben.
 5. Reviews section added; quotes are visible placeholders until real
    member reviews arrive. No reviews were invented.
+
+## Ben's revisions, round 3 (2026-08-25)
+1. Boxing-ring square decoration dropped everywhere (hero, photo mats,
+   heading marks, class cards, ticker separators). Ticker separator is now
+   a plain slash. Ben will supply gradient-background code next.
+2. Ticker no longer says "Our Classes:"; it is just the four class names.
+3. Reviews are now real and verbatim: one named Google review (Dustin
+   Austin, surfaced via web search) and the two member testimonials
+   published on fightersnashville.com (no names shown there). Confirm the
+   Dustin Austin quote against the Google listing at handover; sources:
+   poyst.com/business/fighters-boxing-gym and fightersnashville.com.

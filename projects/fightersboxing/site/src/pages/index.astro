@@ -17,10 +17,30 @@ const classes = [
 
 const tickerRepeats = 3;
 
-// Placeholder testimonial slots. NEVER invent reviews: these render as
-// clearly-labeled placeholders until Ben supplies real member reviews
-// (e.g. from the Google listing).
-const testimonialSlots = [1, 2, 3];
+// Real reviews only, quoted verbatim. The first is a public Google review;
+// the other two are the member testimonials the gym's own production site
+// (fightersnashville.com) publishes, names not shown there. Swap or add
+// as Ben supplies more from the Google listing.
+const reviews = [
+  {
+    quote:
+      'As a former competitive boxer bringing my 12 year old daughter, this place is amazing for both of our skills and knowledge levels. The coaching staff are highly involved in teaching both of us techniques and also phenomenal motivators to push through their circuit training. If you have aspirations to become the next Olympic Champion or just want to get in shape in a fun and creative way this is the place for you.',
+    name: 'Dustin Austin',
+    source: 'Google review',
+  },
+  {
+    quote:
+      'I believe that anyone showing any past, present or possible inclination towards boxing should give this gym a shot. I spent months inside of this gym and the level of commitment I saw from the boxers was inspiring. Speed, strength, coordination and most importantly dedication is a clear trait that this gym’s members and staff exude during the training.',
+    name: 'Member testimonial',
+    source: 'fightersnashville.com',
+  },
+  {
+    quote:
+      'Being apart of Fighters Nashville, has brought me to terms with who I am... they not only showed me what it means to be a fighter but also what it means to be fighting for something and stand behind it with excellence. I recommend you come and give Fighters Nashville a chance to show you what it means to be a fighter, I guarantee you won’t regret it!!!!',
+    name: 'Member testimonial',
+    source: 'fightersnashville.com',
+  },
+];
 ---
 
 <Base title="Fighters Nashville" description={description}>
@@ -32,15 +52,6 @@ const testimonialSlots = [1, 2, 3];
       <source src="/video/fbg-header.mp4" type="video/mp4" />
     </video>
     <div class="hero-scrim" aria-hidden="true"></div>
-    <svg class="ring-ropes hero-ropes" viewBox="0 0 200 200" aria-hidden="true">
-      <rect x="14" y="14" width="172" height="172" fill="none" stroke="currentColor" stroke-width="2" />
-      <rect x="26" y="26" width="148" height="148" fill="none" stroke="currentColor" stroke-width="1.4" />
-      <rect x="38" y="38" width="124" height="124" fill="none" stroke="currentColor" stroke-width="0.9" />
-      <rect x="8" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-      <rect x="180" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-      <rect x="8" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-      <rect x="180" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-    </svg>
     <div class="wrap hero-inner">
       <h1 class="reveal">WHAT ARE YOU FIGHTING FOR?</h1>
       <p class="sub reveal">Join Nashville’s Best Boxing Gym and Find Something Worth Fighting For.</p>
@@ -55,7 +66,7 @@ const testimonialSlots = [1, 2, 3];
     <div class="glow" aria-hidden="true"></div>
     <div class="wrap split-grid">
       <div class="split-copy">
-        <h2 class="reveal"><span class="mark" aria-hidden="true"></span>WE ARE ALL FIGHTERS: WHAT ARE YOU FIGHTING FOR?</h2>
+        <h2 class="reveal">WE ARE ALL FIGHTERS: WHAT ARE YOU FIGHTING FOR?</h2>
         <div class="reveal">
           <p>Everyone’s fighting for something.</p>
           <p>
@@ -81,13 +92,6 @@ const testimonialSlots = [1, 2, 3];
         </span>
       </div>
       <figure class="split-media mat mat-warm reveal">
-        <svg class="ring-ropes ropes-sm ropes-tr" viewBox="0 0 200 200" aria-hidden="true">
-          <rect x="14" y="14" width="172" height="172" fill="none" stroke="currentColor" stroke-width="2.5" />
-          <rect x="8" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-          <rect x="180" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-          <rect x="8" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-          <rect x="180" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-        </svg>
         <img
           src="/img/training-mitts-800.jpg"
           alt="Coach guarding up while a boxer works the double-end bag at Fighters Boxing Gym"
@@ -107,17 +111,9 @@ const testimonialSlots = [1, 2, 3];
           <span class="ticker-seg" aria-hidden="true">
             {Array.from({ length: tickerRepeats }).map(() => (
               <>
-                <span class="ticker-label">Our Classes:</span>
-                {classes.map((c) => (
+                                {classes.map((c) => (
                   <>
-                    <span class="ticker-item">{c.name}</span>
-                    <svg class="ticker-mark" viewBox="0 0 40 40">
-                      <rect x="8" y="8" width="24" height="24" fill="none" stroke="#FFFFFF" stroke-width="2.6" />
-                      <rect x="5" y="5" width="7" height="7" fill="rgba(255,255,255,0.6)" />
-                      <rect x="28" y="5" width="7" height="7" fill="rgba(255,255,255,0.6)" />
-                      <rect x="5" y="28" width="7" height="7" fill="rgba(255,255,255,0.6)" />
-                      <rect x="28" y="28" width="7" height="7" fill="rgba(255,255,255,0.6)" />
-                    </svg>
+                    <span class="ticker-item">{c.name}</span><span class="ticker-sep" aria-hidden="true">/</span>
                   </>
                 ))}
               </>
@@ -133,13 +129,6 @@ const testimonialSlots = [1, 2, 3];
     <div class="glow" aria-hidden="true"></div>
     <div class="wrap split-grid flip">
       <figure class="split-media mat mat-white reveal">
-        <svg class="ring-ropes ropes-sm ropes-bl" viewBox="0 0 200 200" aria-hidden="true">
-          <rect x="14" y="14" width="172" height="172" fill="none" stroke="currentColor" stroke-width="2.5" />
-          <rect x="8" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-          <rect x="180" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-          <rect x="8" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-          <rect x="180" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-        </svg>
         <img
           src="/img/sparring-1600.webp"
           alt="Two boxers sparring in headgear while a Fighters coach watches from the ropes"
@@ -149,7 +138,7 @@ const testimonialSlots = [1, 2, 3];
         />
       </figure>
       <div class="split-copy">
-        <h2 class="reveal"><span class="mark" aria-hidden="true"></span>NASHVILLE BOXING AT ITS BEST</h2>
+        <h2 class="reveal">NASHVILLE BOXING AT ITS BEST</h2>
         <div class="reveal">
           <p>Welcome to <b>Fighters Boxing Gym</b>, Nashville’s best boxing facility.</p>
           <p>
@@ -186,7 +175,7 @@ const testimonialSlots = [1, 2, 3];
   <!-- ============ CLASSES: self-advancing card stack ============ -->
   <section class="classes grain" id="classes">
     <div class="wrap">
-      <h2 class="classes-title reveal"><span class="mark mark-ondark" aria-hidden="true"></span>Boxing Classes</h2>
+      <h2 class="classes-title reveal">Boxing Classes</h2>
     </div>
     <div class="stack reveal" data-interval="2800">
       <div class="stack-stage">
@@ -195,13 +184,6 @@ const testimonialSlots = [1, 2, 3];
             <a class={`stack-card${i === 0 ? ' is-active' : ''}`} href={c.href} data-i={i} draggable="false">
               <span class="card-media">
                 {/* Placeholder art until Ben's class photos arrive */}
-                <svg class="ring-ropes card-ropes" viewBox="0 0 200 200" aria-hidden="true">
-                  <rect x="14" y="14" width="172" height="172" fill="none" stroke="currentColor" stroke-width="2" />
-                  <rect x="8" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-                  <rect x="180" y="8" width="12" height="12" fill="#CC0000" stroke="none" />
-                  <rect x="8" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-                  <rect x="180" y="180" width="12" height="12" fill="#CC0000" stroke="none" />
-                </svg>
               </span>
               <span class="card-shade" aria-hidden="true"></span>
               <span class="card-title">{c.name}</span>
@@ -221,10 +203,10 @@ const testimonialSlots = [1, 2, 3];
   <section class="testimonials grain glow-host">
     <div class="glow" aria-hidden="true"></div>
     <div class="wrap">
-      <h2 class="reveal"><span class="mark" aria-hidden="true"></span>Reviews</h2>
+      <h2 class="reveal">Reviews</h2>
       <div class="quote-grid">
         {
-          testimonialSlots.map(() => (
+          reviews.map((r) => (
             <figure class="quote-card reveal">
               <span class="stars" aria-hidden="true">
                 {[0, 1, 2, 3, 4].map(() => (
@@ -233,8 +215,8 @@ const testimonialSlots = [1, 2, 3];
                   </svg>
                 ))}
               </span>
-              <blockquote class="quote-placeholder">Member review goes here. Waiting on the real reviews from the Google listing; nothing gets made up.</blockquote>
-              <figcaption class="quote-name">Member name</figcaption>
+              <blockquote>{r.quote}</blockquote>
+              <figcaption class="quote-name">{r.name}</figcaption>
             </figure>
           ))
         }
@@ -287,43 +269,6 @@ const testimonialSlots = [1, 2, 3];
   .hero .btn-ring { --ring-gap: var(--ground-band); }
   .hero :global(.btn) { border-color: var(--ground-band); }
 
-  /* ---------- boxing-ring square outline (the deco Ben asked for) ---------- */
-  .ring-ropes { color: rgba(255, 255, 255, 0.3); }
-  .hero-ropes {
-    position: absolute;
-    width: clamp(160px, 18vw, 280px);
-    right: max(-40px, -3vw);
-    top: -36px;
-  }
-  .ropes-sm {
-    position: absolute;
-    width: clamp(80px, 9vw, 130px);
-    color: var(--border);
-    z-index: 2;
-  }
-  .ropes-tr { right: -5%; top: -8%; }
-  .ropes-bl { left: -5%; bottom: -8%; }
-
-  /* ---------- heading mark: small ring-ropes square ---------- */
-  .mark {
-    display: block;
-    width: 30px;
-    height: 30px;
-    margin-bottom: 18px;
-    border: 2.5px solid var(--accent);
-    position: relative;
-  }
-  .mark::before, .mark::after {
-    content: '';
-    position: absolute;
-    background: var(--text-dark);
-    width: 8px;
-    height: 8px;
-  }
-  .mark::before { top: -5px; left: -5px; box-shadow: 33px 0 var(--text-dark); }
-  .mark::after { bottom: -5px; left: -5px; box-shadow: 33px 0 var(--text-dark); }
-  .mark-ondark::before, .mark-ondark::after { background: var(--on-dark); box-shadow: 33px 0 var(--on-dark); }
-  .mark-ondark::before { box-shadow: 33px 0 var(--on-dark); }
 
   /* ---------- split sections ---------- */
   .split { padding: var(--section-pad) 0; background: var(--ground); }
@@ -378,15 +323,12 @@ const testimonialSlots = [1, 2, 3];
     animation: ticker-scroll 30s linear infinite;
   }
   .ticker-seg { display: flex; align-items: center; }
-  .ticker-label {
+  .ticker-sep {
     font-family: var(--font-action);
     font-weight: 700;
-    font-size: clamp(15px, 1.6vw, 20px);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.85);
-    padding: 0 1.1em 0 2em;
-    white-space: nowrap;
+    font-size: clamp(18px, 2.2vw, 28px);
+    color: rgba(255, 255, 255, 0.55);
+    padding: 0 0.2em;
   }
   .ticker-item {
     font-family: var(--font-display);
@@ -399,7 +341,6 @@ const testimonialSlots = [1, 2, 3];
     white-space: nowrap;
     padding: 0 0.55em;
   }
-  .ticker-mark { width: clamp(18px, 2vw, 26px); height: clamp(18px, 2vw, 26px); flex: none; }
   @keyframes ticker-scroll {
     to { transform: translateX(-50%); }
   }
@@ -448,10 +389,6 @@ const testimonialSlots = [1, 2, 3];
     background:
       radial-gradient(120% 90% at 30% 10%, rgba(204, 0, 0, 0.22), transparent 55%),
       #181817;
-  }
-  .card-ropes {
-    width: 42%;
-    color: rgba(255, 255, 255, 0.22);
   }
   .card-shade {
     position: absolute;
@@ -511,7 +448,6 @@ const testimonialSlots = [1, 2, 3];
     font-size: 16px;
     line-height: 1.7;
   }
-  .quote-placeholder { color: var(--text-light); font-style: italic; }
   .quote-name {
     font-family: var(--font-display);
     font-weight: 700;
@@ -557,7 +493,6 @@ const testimonialSlots = [1, 2, 3];
     .split-grid.flip .split-media { order: 2; }
     .split-media { max-width: 560px; margin-inline: auto; }
     .quote-grid { grid-template-columns: 1fr; }
-    .hero-ropes { top: -20px; }
   }
 </style>
 
