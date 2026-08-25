@@ -49,8 +49,9 @@ Scope-gated — a narrow PIT yields a smaller tool list than this. Tools are nam
 | Opportunities | search, get, pipelines | update |
 | Calendars | list, events, appointment notes | edit calendars, edit events |
 | Locations | location, custom fields | — |
+| Funnel redirects | list | create, update, delete |
 | Payments | orders, transactions | — |
-| Forms | list | — |
+| Forms | list, submissions | upload files only |
 | Social | posts, connected accounts | create/edit posts |
 | Email templates | list | create, update, delete |
 | Blogs | authors, categories | create post, update post, slug check |
@@ -59,23 +60,60 @@ The honest read: this is an **operations** surface. Segment and enrich contacts,
 work conversations, move opportunities through pipelines, manage calendars,
 author blog and email content. That is genuinely most of the day-to-day.
 
-## The ceiling — no workflows, no funnels
+## The ceiling — no workflows, no funnels, no prospecting
 
-**You cannot build automations or funnels through this.** Not a scope problem,
-not an MCP gap — HighLevel's v2 platform API has no write endpoints for
-workflows, funnel page content, or forms. The funnels API exposes two calls,
-list funnels and list pages. The builders are UI-only surfaces, and exposing
-them is still an open request on HighLevel's own ideas portal.
+**You cannot build automations, funnels, forms, or prospecting reports through
+this.** Not a scope problem and not an MCP gap — HighLevel's v2 platform API has
+no write endpoints for them, and MCP can only expose what the API has.
 
-So Claude can tell you what automations exist and enrol a contact into a
-workflow you built by hand, but it cannot author the workflow, edit a step,
-change a funnel page, or create a form. Plan client work accordingly: the
-automation architecture is built in the UI by a human, and Claude operates it.
+Verified against HighLevel's published OpenAPI specs
+([gohighlevel/api-v2-docs](https://github.com/gohighlevel/api-v2-docs)), not
+secondhand write-ups:
 
-Third-party GHL MCP servers advertising workflow and funnel tools — one claims
-520+ tools — wrap the same public API. Where they claim writes the API does not
-have, they are either driving the UI unofficially or overstating. We use the
-official endpoint.
+| Surface | Every documented endpoint |
+|---|---|
+| Workflows | `GET /workflows/` — that is the entire spec |
+| Funnels | `GET /funnels/funnel/list`, `GET /funnels/page`, `GET /funnels/page/count` |
+| Funnel redirects | full CRUD — POST / PATCH / DELETE / list |
+| Forms | `GET /forms/`, `GET /forms/submissions`, `POST /forms/upload-custom-files` |
+| Prospecting | none — no spec exists |
+
+So Claude can list what automations and funnels exist, but cannot author a
+workflow, edit a step, change funnel page content, or build a form. The
+automation architecture is built in the UI by a human; Claude operates it.
+Funnel redirects are the one genuine write here and are handy for campaign URL
+management.
+
+### Triggering a workflow — the useful exception
+
+There is no endpoint to invoke a workflow, but contacts can be enrolled in one:
+
+```
+POST   /contacts/{contactId}/workflow/{workflowId}
+DELETE /contacts/{contactId}/workflow/{workflowId}
+POST   /contacts/{contactId}/campaigns/{campaignId}
+DELETE /contacts/{contactId}/campaigns/{campaignId}
+```
+
+Enrolling a contact starts that workflow for that contact, which covers most of
+what "trigger a workflow" usually means in practice. Build the automation by
+hand, then drive enrollment programmatically.
+
+### Prospecting is UI-only
+
+The Prospecting Tool and its audit reports have no API. The scopes exist —
+`prospecting.readonly`, `prospecting.write`, `prospecting/auditReport.write`,
+`prospecting/reports.readonly` — but they appear only in the user-permission
+enumeration in `users.json`, and no endpoint in any spec references them. They
+control what a staff user can open in the UI, not API access. Generating audit
+reports for outbound stays a manual job in GHL.
+
+### On third-party servers
+
+Third-party GHL MCP servers advertising workflow, funnel, and prospecting tools
+— one claims 520+ tools — wrap the same public API documented above. Where they
+claim writes the API does not have, they are either driving the UI unofficially
+or overstating. We use the official endpoint.
 
 ## Why not Ask AI
 
@@ -110,3 +148,12 @@ it accordingly:
   `.mcp.json`, never in this repo, a project folder, or a commit.
 - Revoke in Settings → Private Integrations when a client engagement ends. The
   token outlives the project otherwise.
+
+## Provenance
+
+The endpoint tables in "The ceiling" are read directly from HighLevel's
+published OpenAPI specs (`gohighlevel/api-v2-docs`) and are exact. The MCP tool
+table in "What we get" is compiled from HighLevel's MCP documentation, which is
+unreachable from some of our sandboxed environments — treat tool-name specifics
+as indicative and confirm against the live tool list your client reports after
+connecting.
