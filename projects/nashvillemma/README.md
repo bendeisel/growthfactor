@@ -5,6 +5,9 @@
 - `design/` — the canvas working files. Any Claude session can re-seed the canvas
   from these (or `--extract` fresh copies from the artifact URL if someone has
   edited it in the GUI since).
+- `assets/gymhero.mp4` — the client's hero video, full quality (1920x1080, 12.4s,
+  7.5MB). This is the file the production build uses. The design artboards carry
+  smaller embedded copies (960/640px, VP9+H.264) purely for the mockup.
 - Status: homepage design in review with leadership. Remaining pages pending the
   approved sitemap. Build target: static site on Hostinger per
   `.claude/skills/house-style/references/hostinger-delivery.md`.
