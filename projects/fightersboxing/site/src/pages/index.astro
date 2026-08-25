@@ -254,11 +254,16 @@ const reviews = [
     height: 100%;
     object-fit: cover;
   }
-  /* the WP build's measured 0.7 dark overlay, kept so the white copy always reads */
+  /* lightened from the WP build's 0.7 per Ben; a touch more weight is
+     kept behind the centered copy so the white type still reads */
   .hero-scrim {
     position: absolute;
     inset: 0;
-    background: rgba(9, 9, 9, 0.7);
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      rgba(9, 9, 9, 0.5),
+      rgba(9, 9, 9, 0.32)
+    );
   }
   .hero-inner { position: relative; max-width: 900px; }
   .hero h1 {
