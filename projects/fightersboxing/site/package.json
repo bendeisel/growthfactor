@@ -13,6 +13,7 @@
     "@fontsource/didact-gothic": "^5.2.5",
     "@fontsource/josefin-sans": "^5.2.5",
     "@fontsource/jost": "^5.2.5",
-    "astro": "^5.13.2"
+    "astro": "^5.13.2",
+    "three": "^0.185.1"
   }
 }

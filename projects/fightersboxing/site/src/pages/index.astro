@@ -72,8 +72,7 @@ const reviews = [
   </section>
 
   <!-- ============ SECTION 1 ============ -->
-  <section class="split grain glow-host">
-    <div class="glow" aria-hidden="true"></div>
+  <section class="split grain fluid-host">
     <div class="wrap split-grid">
       <div class="split-copy">
         <h2 class="reveal">WE ARE ALL FIGHTERS: WHAT ARE YOU FIGHTING FOR?</h2>
@@ -136,8 +135,7 @@ const reviews = [
   </a>
 
   <!-- ============ SECTION 2 (mirrored, warm ground) ============ -->
-  <section class="split grain alt glow-host">
-    <div class="glow" aria-hidden="true"></div>
+  <section class="split grain alt fluid-host">
     <div class="wrap split-grid flip">
       <figure class="split-media mat mat-white reveal">
         <img
@@ -211,8 +209,7 @@ const reviews = [
   </section>
 
   <!-- ============ TESTIMONIALS (placeholders, real reviews pending) ============ -->
-  <section class="testimonials grain glow-host">
-    <div class="glow" aria-hidden="true"></div>
+  <section class="testimonials grain fluid-host">
     <div class="wrap">
       <p class="reviews-eyebrow reveal">Google Reviews</p>
       <h2 class="reveal">5 Star Gym</h2>
@@ -501,31 +498,8 @@ const reviews = [
     color: var(--text-light);
   }
 
-  /* ---------- ambient red glow (not the hero) ---------- */
-  .glow-host { position: relative; overflow: clip; }
-  .glow {
-    position: absolute;
-    width: 640px;
-    height: 640px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(204, 0, 0, 0.4), transparent 65%);
-    opacity: 0.16;
-    filter: blur(40px);
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    transform: translate(-30%, -30%);
-    animation: glow-orbit 26s ease-in-out infinite;
-  }
-  @keyframes glow-orbit {
-    0% { top: -10%; left: -8%; }
-    25% { top: -14%; left: 70%; }
-    50% { top: 60%; left: 84%; }
-    75% { top: 66%; left: -4%; }
-    100% { top: -10%; left: -8%; }
-  }
+  .fluid-host { position: relative; overflow: clip; }
   @media (prefers-reduced-motion: reduce) {
-    .glow { animation: none; }
     .ticker-track { animation: none; }
     .stack-card { transition: none; }
   }
@@ -638,27 +612,17 @@ const reviews = [
     startAuto();
   }
 
-  // Ambient glow: drifts on its own, leans toward the pointer.
-  const hosts = document.querySelectorAll('.glow-host');
-  const reducedGlow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reducedGlow) {
-    hosts.forEach((host) => {
-      const glow = host.querySelector('.glow');
-      if (!glow) return;
-      let raf = 0;
-      host.addEventListener('pointermove', (e) => {
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-          raf = 0;
-          const r = host.getBoundingClientRect();
-          const dx = (e.clientX - r.left) / r.width - 0.5;
-          const dy = (e.clientY - r.top) / r.height - 0.5;
-          glow.style.transform = `translate(calc(-30% + ${dx * 120}px), calc(-30% + ${dy * 120}px))`;
-        });
-      });
-      host.addEventListener('pointerleave', () => {
-        glow.style.transform = 'translate(-30%, -30%)';
-      });
-    });
+</script>
+
+<script>
+  // Ambient fluid gradient (Ben's pick), ported vanilla in scripts/fluid-bg.js.
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => mountFluidBg(host));
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
   }
 </script>

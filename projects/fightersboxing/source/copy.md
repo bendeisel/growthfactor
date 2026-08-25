@@ -169,3 +169,13 @@ Pending for schema: opening hours from the client.
 1. Reviews heading changed from "5 Star Reviews" to "5 Star Gym".
    Homepage declared done by Ben pending his gradient code, the hero
    video, card photos, and the Masters call.
+
+## Ben's revisions, round 8 (2026-08-25)
+1. CSS glow replaced with the fluid gradient Ben supplied (PixelLiquidBg,
+   React/Next original), ported to vanilla JS + three at
+   site/src/scripts/fluid-bg.js, mounted on the three light sections.
+   Tuning per Ben: white ground, faded bright red palette instead of pink
+   (#FFE3DE to #E03A2E), auto drift 0.22 (was 0.45), intensity 1.2 (was
+   2.4), grain 0.02 (was 0.085), canvas at 50% opacity, loads after idle,
+   pauses off-screen, skipped for reduced-motion users. Ben is unsure he
+   will keep it; easy to remove (one script + .fluid-host class).
