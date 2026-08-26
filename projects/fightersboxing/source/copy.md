@@ -179,3 +179,13 @@ Pending for schema: opening hours from the client.
    2.4), grain 0.02 (was 0.085), canvas at 50% opacity, loads after idle,
    pauses off-screen, skipped for reduced-motion users. Ben is unsure he
    will keep it; easy to remove (one script + .fluid-host class).
+
+## Ben's revisions, round 9 (2026-08-25)
+1. Real class-card photos added to the Boxing Classes card stack (were
+   dark placeholders). Ben-supplied, matched by content to their class:
+   - masters-boxing.jpg: two older sparring partners, wall mural in back
+   - boxing-basics.jpg: camo-shirt mitt work in front of the wall mural
+   - competition-team.jpg: fight-night ring with corner crew watching
+   - youth-boxing.jpg: kid on the branded heavy bag
+   Cropped to the card's 520:320 ratio, saved at 1040x640 JPG (~80-110KB
+   each) in site/public/img/classes/.
