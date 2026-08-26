@@ -1,20 +1,171 @@
 {
   "pages": [
-    { "id": "page-1", "name": "Inner pages" }
+    {
+      "id": "page-1",
+      "name": "Schedule"
+    },
+    {
+      "id": "page-2",
+      "name": "Programs"
+    }
   ],
   "artboards": [
-    { "file": "Schedule.dc.html", "title": "Schedule — real timetable", "page": "page-1", "x": 0, "y": 0, "w": 1440, "h": 2680 },
-    { "file": "ProgramDetail.dc.html", "title": "Program detail — Brazilian Jiu Jitsu", "page": "page-1", "x": 1600, "y": 0, "w": 1440, "h": 4620 }
+    {
+      "file": "Schedule.dc.html",
+      "title": "Schedule \u2014 all 86 classes",
+      "page": "page-1",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 2682
+    },
+    {
+      "file": "ProgramDetail.dc.html",
+      "title": "Brazilian Jiu Jitsu",
+      "page": "page-2",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 4627
+    },
+    {
+      "file": "Program-boxing.dc.html",
+      "title": "Boxing Classes In Nashville",
+      "page": "page-2",
+      "x": 1600,
+      "y": 0,
+      "w": 1440,
+      "h": 4145
+    },
+    {
+      "file": "Program-muay-thai.dc.html",
+      "title": "Muay Thai Classes in Nashville",
+      "page": "page-2",
+      "x": 3200,
+      "y": 0,
+      "w": 1440,
+      "h": 4911
+    },
+    {
+      "file": "Program-mixed-martial-arts.dc.html",
+      "title": "Mixed Martial Arts In Nashville",
+      "page": "page-2",
+      "x": 4800,
+      "y": 0,
+      "w": 1440,
+      "h": 4298
+    },
+    {
+      "file": "Program-wrestling.dc.html",
+      "title": "Wrestling in Nashville",
+      "page": "page-2",
+      "x": 6400,
+      "y": 0,
+      "w": 1440,
+      "h": 4283
+    },
+    {
+      "file": "Program-self-defense.dc.html",
+      "title": "Self-Defense Classes & Seminars In Nashville",
+      "page": "page-2",
+      "x": 0,
+      "y": 5121,
+      "w": 1440,
+      "h": 5849
+    },
+    {
+      "file": "Program-sports-performance.dc.html",
+      "title": "Sports Performance Classes In Nashville",
+      "page": "page-2",
+      "x": 1600,
+      "y": 5121,
+      "w": 1440,
+      "h": 4490
+    },
+    {
+      "file": "Program-fitness-classes.dc.html",
+      "title": "Exercise Classes and Open Gym in Nashville",
+      "page": "page-2",
+      "x": 3200,
+      "y": 5121,
+      "w": 1440,
+      "h": 5017
+    },
+    {
+      "file": "Program-womens-classes.dc.html",
+      "title": "Women\u2019s Muay Thai & Brazilian Jiu-Jitsu Classes in Nashv",
+      "page": "page-2",
+      "x": 4800,
+      "y": 5121,
+      "w": 1440,
+      "h": 3952
+    },
+    {
+      "file": "Program-mma-fight-team.dc.html",
+      "title": "MMA Fight Team In Nashville",
+      "page": "page-2",
+      "x": 6400,
+      "y": 5121,
+      "w": 1440,
+      "h": 4176
+    },
+    {
+      "file": "Program-personal-training.dc.html",
+      "title": "Personal Training in Nashville",
+      "page": "page-2",
+      "x": 0,
+      "y": 11180,
+      "w": 1440,
+      "h": 3654
+    },
+    {
+      "file": "Program-kids-martial-arts.dc.html",
+      "title": "Kids Martial Arts in Nashville",
+      "page": "page-2",
+      "x": 1600,
+      "y": 11180,
+      "w": 1440,
+      "h": 3694
+    },
+    {
+      "file": "Program-kids-brazilian-jiu-jitsu.dc.html",
+      "title": "Kids BJJ Classes In Nashville",
+      "page": "page-2",
+      "x": 3200,
+      "y": 11180,
+      "w": 1440,
+      "h": 4033
+    },
+    {
+      "file": "Program-kids-fitness.dc.html",
+      "title": "Kids Fitness Classes in Nashville",
+      "page": "page-2",
+      "x": 4800,
+      "y": 11180,
+      "w": 1440,
+      "h": 4070
+    }
   ],
   "annotations": [
     {
-      "id": "src-note",
+      "id": "prog-note",
+      "page": "page-2",
+      "x": 0,
+      "y": -420,
+      "w": 900,
+      "text": "ALL 13 PROGRAM PAGES \u2014 every word is the client's own, taken verbatim from their live site. Nothing was rewritten.\n\nEach page's class times are generated from data/classes.json by program tag, not typed in. Change a boxing class once and it moves on the boxing page AND the master schedule. Adult pages exclude kids classes; the kids pages carry their own.\n\nPersonal Training shows no schedule on purpose \u2014 it is by appointment. Kids Martial Arts is the umbrella page, so it lists every kids class.\n\nStill coming: coaches, FAQ, then Events (GoHighLevel embed) and Sponsors as two separate pages."
+    },
+    {
+      "id": "sched-note",
       "page": "page-1",
       "x": 0,
-      "y": -360,
+      "y": -300,
       "w": 680,
-      "text": "INNER-PAGE TEMPLATES — separate from the homepage canvas so version history stays clean.\n\nAll words are verbatim from the live site (full-site harvest). The schedule grid holds all 86 real classes with times aligned across the week — the filter chips work, click them. The Jiu-Jitsu page carries the full live-page copy, the real BJJ class times per day, and Head Coach Bryan Tidwell's real photo and bio.\n\nPreserved as-is per the copy lock (flagging, not fixing): Friday 11:30 AM class ends \"12:30 AM\" on the live site, and the site mixes \"Gi / No-Gi / No Gi\" spellings. Say the word and we'll list every one for the client.\n\nThe Program Detail layout is the stamp for all 13 program pages. Still to design: coaches index, FAQ, about, contact, reviews — all content is already harvested."
+      "text": "MASTER SCHEDULE \u2014 all 86 classes, times aligned across the week. The filter chips work: Adults (69), Kids (12), Fitness (5).\n\nThis grid and every program page's times come from one file. Editing a class in one place moves it everywhere."
     }
   ],
-  "launch": { "view": "canvas", "page": "page-1" }
+  "launch": {
+    "view": "canvas",
+    "page": "page-2"
+  }
 }

@@ -1,0 +1,100 @@
+{
+  "note": "One entry per program page. schedule_tag/schedule_audience select class times from classes.json; nothing about a class is written here.",
+  "programs": [
+    {
+      "slug": "boxing",
+      "content": "classes-boxing",
+      "hero": "Boxing-Page-1-263313.png",
+      "body": "Boxing-Header-Page-2-263314.png",
+      "schedule_tag": "boxing"
+    },
+    {
+      "slug": "muay-thai",
+      "content": "classes-muay-thai",
+      "hero": "Muay-Thai-Page-1-263309.png",
+      "body": "Muay-Thai-Page-2-263310.png",
+      "schedule_tag": "muay-thai"
+    },
+    {
+      "slug": "mixed-martial-arts",
+      "content": "classes-mixed-martial-arts",
+      "hero": "MMA-Classes-Cover-Page-1-263319.png",
+      "body": "MMA-Classes-Header-Page-2-263320.png",
+      "schedule_tag": "mixed-martial-arts"
+    },
+    {
+      "slug": "wrestling",
+      "content": "classes-wrestling",
+      "hero": "Wrestling-Header-Page-1-263328.png",
+      "body": "Wrestling-Cover-and-Page-2-263329.png",
+      "schedule_tag": "wrestling"
+    },
+    {
+      "slug": "self-defense",
+      "content": "classes-self-defense-classes-and-seminars",
+      "hero": "selfdefensemainpng-264047.png",
+      "body": "8943-selfdefense-261427.jpg",
+      "schedule_tag": "self-defense"
+    },
+    {
+      "slug": "sports-performance",
+      "content": "classes-weightlifting-classes",
+      "hero": "Iron-Pile-Cover-Page-1-263304.JPG",
+      "body": "Iron-Pile-Header-Page-2-263305.png",
+      "schedule_tag": "sports-performance"
+    },
+    {
+      "slug": "fitness-classes",
+      "content": "classes-fitness-classes",
+      "hero": "fitnessweightsmainpng-264039.png",
+      "body": "13sep-19-fitness-280893.jpg",
+      "schedule_tag": "sports-performance"
+    },
+    {
+      "slug": "womens-classes",
+      "content": "classes-womens-classes",
+      "hero": "womenbjj-297296.jpg",
+      "body": "womenmt-297295.jpg",
+      "schedule_tag": "womens-classes"
+    },
+    {
+      "slug": "mma-fight-team",
+      "content": "classes-mixed-martial-arts-competition-team",
+      "hero": "MMA-Fight-Team-Page-1-263321.png",
+      "body": "MMA-Fight-Team-Page-2-263322.jpg",
+      "schedule_tag": "sparring"
+    },
+    {
+      "slug": "personal-training",
+      "content": "classes-personal-training",
+      "hero": "PT-Page-1-263302.png",
+      "body": "PT-Page-2-263303.png",
+      "schedule_tag": null,
+      "schedule": false
+    },
+    {
+      "slug": "kids-martial-arts",
+      "content": "classes-kids-martial-arts",
+      "hero": "kids-273867.jpeg",
+      "body": "Kids-BJJ-Page-2-263339.png",
+      "schedule_tag": null,
+      "schedule_audience": "kids"
+    },
+    {
+      "slug": "kids-brazilian-jiu-jitsu",
+      "content": "classes-kids-brazilian-jiu-jitsu",
+      "hero": "Kids-BJJ-Cover-Page-1-263338.jpg",
+      "body": "kidsbjjmainpng-264041.png",
+      "schedule_tag": "jiu-jitsu",
+      "schedule_audience": "kids"
+    },
+    {
+      "slug": "kids-fitness",
+      "content": "classes-kids-fitness-classes",
+      "hero": "142024-07-07-Kids-fitness-279081.jpg",
+      "body": "222024-07-07-Kids-fitness-279082.jpg",
+      "schedule_tag": "kids-fitness-classes",
+      "schedule_audience": "kids"
+    }
+  ]
+}

@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+  <style>
+    body { margin: 0; background: #000000; color: #FFFFFF;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+           font-size: 16px; line-height: 1.7; }
+    h1,h2,h3,h4 { margin: 0; font-weight: 400;
+           font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    p  { margin: 0 0 18px 0; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    a  { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #FFFFFF; }
+    .body { color: rgba(255,255,255,0.66); }
+    .micro { font-size: 10px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: 0.24em; color: #D7AD56; }
+    .btn { background: #D7AD56; color: #0A0A0A; border-radius: 8px; display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 16px 36px; text-transform: uppercase;
+           letter-spacing: 0.12em; cursor: pointer; }
+    .btn:hover { background: #FFFFFF; }
+    .btn-line { background: transparent; color: #FFFFFF; border-radius: 8px;
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 16px 30px; text-transform: uppercase;
+           letter-spacing: 0.12em; cursor: pointer; }
+    .btn-line:hover { box-shadow: inset 0 0 0 1px #D7AD56; color: #D7AD56; }
+    .nav { color: rgba(255,255,255,0.78); font-size: 12.8px; text-transform: uppercase;
+           letter-spacing: 0.05em; }
+    .nav:hover { color: #D7AD56; }
+    .tick { font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 38px;
+            color: #0A0A0A; letter-spacing: 0.03em; white-space: nowrap; }
+    .ctl { width: 46px; height: 46px; border-radius: 8px; background: rgba(255,255,255,0.06);
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); display: flex; align-items: center;
+           justify-content: center; cursor: pointer; color: #FFFFFF; }
+    .ctl:hover { background: #D7AD56; color: #0A0A0A; box-shadow: inset 0 0 0 1px #D7AD56; }
+    /* hover link-preview: gold word, small popup card above it */
+    .lp { color: #D7AD56; font-weight: 700; position: relative; cursor: pointer;
+          border-bottom: 1px dotted rgba(215,173,86,0.55); white-space: nowrap; }
+    .lp-card { position: absolute; bottom: calc(100% + 12px); left: 50%;
+          transform: translate(-50%, 10px) scale(0.9); opacity: 0; pointer-events: none;
+          transition: opacity 0.22s ease, transform 0.22s ease; width: 232px;
+          background: #0F0F10; box-shadow: 0 20px 50px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.16);
+          padding: 6px; z-index: 30; display: block; }
+    .lp:hover .lp-card { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    .lp-card img { display: block; width: 220px; height: 130px; object-fit: cover; border-radius: 6px; }
+    .lp-lab { display: block; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.18em; color: #D7AD56; padding: 8px 4px 4px 4px;
+          white-space: normal; }
+    @keyframes roll  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
+    @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
+    @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</helmet>
+
+<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">
+
+<!-- header -->
+    <div style="position: relative; z-index: 6; background: #000000; border-bottom: 1px solid rgba(255,255,255,0.1)">
+      <div style="display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 9px 48px; border-bottom: 1px solid rgba(255,255,255,0.1)">
+        <div class="micro" style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="1.8" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>1504 Elm Hill Pike, Nashville, Tennessee 37210</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 18px">
+          <a href="#" style="display: flex; align-items: center; gap: 7px; color: #FFFFFF; font-size: 13px; font-weight: 800; letter-spacing: 0.06em">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D7AD56" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2.1z"/></svg>
+            <span>615-297-4430</span>
+          </a>
+          <div style="display: flex; align-items: center; gap: 11px">
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 11v3h4.4c-.6 2-2.4 3.4-4.4 3.4A5.4 5.4 0 1 1 15.6 8l2.2-2.2A8.5 8.5 0 1 0 20.5 12v-1z"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a>
+            <a href="#" style="color: rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8A26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15.2V8.8l5.2 3.2z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 14px 48px">
+        <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 108px; width: auto">
+        <div style="display: flex; align-items: center; gap: 20px">
+          <a href="#" class="nav">About</a>
+          <a href="#" class="nav">Fitness</a>
+          <a href="#" class="nav">Programs</a>
+          <a href="#" class="nav">Kids Programs</a>
+          <a href="#" class="nav">Schedule</a>
+          <a href="#" class="nav">Recovery</a>
+          <a href="#" class="nav">Events &amp; Sponsorships</a>
+          <div class="btn" style="padding: 12px 22px; font-size: 12px" onClick="{{ openForm }}">Request Info</div>
+        </div>
+      </div>
+    </div>
+
+
+
+  
+
+<div style="position: relative; height: 440px; overflow: hidden; isolation: isolate">
+  <img src="prog-kids-fitness-hero.jpg" alt="Kids Fitness Classes in Nashville" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1">
+  <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.9) 100%); z-index: 2"></div>
+  <div style="position: absolute; left: 48px; bottom: 44px; z-index: 3; max-width: 1100px">
+    <div class="micro" style="margin-bottom: 14px">Programs</div>
+    <h1 style="font-size: 84px; line-height: 0.92">Kids Fitness Classes in Nashville</h1>
+    <div style="width: 110px; height: 4px; background: #D7AD56; margin-top: 20px"></div>
+  </div>
+</div>
+<div class="rv" style="background: radial-gradient(1000px 500px at 88% -10%, rgba(215,173,86,0.14), transparent 60%), #0A0A0A; padding: 74px 48px">
+  <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 52px; align-items: start">
+    <div>
+      <h2 style="font-size: 40px; line-height: 1.04; margin-bottom: 24px">Join Our Kids Fitness Classes: Building Stronger, Healthier Kids!</h2>
+      <p class="body" style="font-size: 16px">Are you looking for a fun and engaging way to get your child active? Our Kids Fitness Classes at Nashville MMA Training Camp in Nashville are the perfect place for them to learn, grow, and thrive!</p>
+      <p class="body" style="font-size: 16px">Get more information now!</p>
+      <div style="display: flex; gap: 14px; margin-top: 28px">
+        <div class="btn" onClick="{{ openForm }}">Request more information</div>
+        <a href="#" class="btn-line">Schedule</a>
+      </div>
+    </div>
+    <div style="position: relative; min-height: 380px; overflow: hidden; border-radius: 8px">
+      <img src="prog-kids-fitness-body.jpg" alt="Kids Fitness Classes in Nashville" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+    </div>
+  </div>
+</div>
+<div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.12) 0%, rgba(0,0,0,0) 45%), #000000; padding: 70px 48px">
+  <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">Why Choose Our Kids Fitness Classes?</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1180px">
+    <div><p class="body" style="font-size: 15px">Our classes are designed to help children develop essential motor skills, improve their coordination, and build a solid foundation for lifelong fitness. While we incorporate some basic striking techniques to keep things exciting, the primary focus is on functional fitness—ensuring your child gains strength, agility, and confidence in a safe and supportive environment.</p></div>
+    <div><p class="body" style="font-size: 15px">What Your Child Will Learn</p></div>
+  </div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px">
+    <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 24px 26px"><h3 style="font-size: 28px; margin-bottom: 8px; color: #D7AD56">Basic Movements</h3><p class="body" style="font-size: 14px; margin: 0">Our experienced instructors guide children through fundamental exercises like squats, lunges, and push-ups, helping them master proper form and technique.</p></div>
+    <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 24px 26px"><h3 style="font-size: 28px; margin-bottom: 8px; color: #D7AD56">Motor Skills Development</h3><p class="body" style="font-size: 14px; margin: 0">We emphasize activities that enhance balance, coordination, and fine motor skills, which are crucial for your child’s overall physical development.</p></div>
+    <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 24px 26px"><h3 style="font-size: 28px; margin-bottom: 8px; color: #D7AD56">Speed and Agility</h3><p class="body" style="font-size: 14px; margin: 0">Fun drills and games are incorporated to improve your child’s reaction time, speed, and agility—skills that benefit them in everyday life and any sport they choose.</p></div>
+    <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 24px 26px"><h3 style="font-size: 28px; margin-bottom: 8px; color: #D7AD56">Gym Etiquette and Workout Basics</h3><p class="body" style="font-size: 14px; margin: 0">From learning how to use gym equipment safely to understanding the importance of warm-ups and cool-downs, your child will become familiar with the basics of working out in a gym environment.</p></div>
+  </div>
+</div>
+<div class="rv" style="background: #0A0A0A; padding: 70px 48px">
+  <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">Enroll Your Kid in Nashville Today!</h2>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1180px">
+    <div><p class="body" style="font-size: 15px">Our Kids Fitness Classes aren’t just about exercise—they’re about creating a positive and enjoyable experience where kids can make new friends, build self-esteem, and develop a love for fitness that will last a lifetime.</p><p class="body" style="font-size: 15px">Don’t wait—spots are limited! Sign up today and watch your child grow stronger, healthier, and more confident!</p></div>
+    <div><p class="body" style="font-size: 15px">Get more information now!</p></div>
+  </div>
+</div>
+<div class="rv" style="background: #000000; padding: 70px 48px">
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px">
+    <h2 style="font-size: 54px; line-height: 1">Schedule</h2>
+    <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px">View Full Schedule</a>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
+  <!-- GENERATED:cards -->
+      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Monday</div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Kids Fitness (ages 9-14)</span></div></div>
+      </div>
+      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Tuesday</div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Kids Fitness (ages 9-14)</span></div></div>
+      </div>
+      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Wednesday</div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Kids Fitness (ages 9-14)</span></div></div>
+      </div>
+      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Thursday</div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Kids Fitness (ages 9-14)</span></div></div>
+      </div>
+      <div style="background: linear-gradient(135deg, rgba(215,173,86,0.2), rgba(215,173,86,0.06)), #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 12px">
+        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 30px; line-height: 1">90+ Classes Per Week</div>
+        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>
+      </div>
+  <!-- /GENERATED:cards -->
+  </div>
+</div>
+<div class="rv" style="background: #0A0A0A; padding: 56px 48px">
+  <div class="micro" style="margin-bottom: 16px">Areas We Serve</div>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px">
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Nashville</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Antioch</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Hermitage</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Goodlettesville</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Bellevue</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Green Hills</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Brentwood</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Franklin</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Smyrna</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Belle Meade</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Berry Hill</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">East Nashville</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">North Nashville</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Madison</span>
+    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Old Hickory</span>
+  </div>
+</div>
+<div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); padding: 66px 48px; text-align: center">
+  <h2 style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 10px">Request Information Now</h2>
+  <p style="color: rgba(255,255,255,0.92); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>
+  <div onClick="{{ openForm }}" style="display: inline-block; background: #0A0A0A; color: #FFFFFF; border-radius: 8px; font-size: 13px; font-weight: 800; padding: 17px 42px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer">Request Information</div>
+</div>
+
+<!-- ═══════════════ FOOTER — contact left, map right ═══════════════ -->
+  <div style="background: #000000">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; align-items: stretch">
+
+      <div style="padding: 66px 48px 60px 48px">
+        <img src="./logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 100px; width: auto; margin-bottom: 34px">
+        <div class="micro" style="margin-bottom: 12px">Our Location</div>
+        <h3 style="font-size: 44px; line-height: 1; margin-bottom: 26px">Visit Us Today</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 30px">
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Address</div><div class="body" style="font-size: 14px">1504 Elm Hill Pike<br>Nashville, Tennessee 37210</div></div>
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Phone</div><a href="#" style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; color: #FFFFFF">615-297-4430</a></div>
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Email</div><a href="#" style="font-size: 14px; color: rgba(255,255,255,0.75)">frontdesk@nashvillemma.com</a></div>
+          </div>
+          <div>
+            <div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 10px">Explore</div>
+            <ul style="display: flex; flex-direction: column; gap: 9px">
+              <li><a href="#" class="nav">About</a></li>
+              <li><a href="#" class="nav">Fitness</a></li>
+              <li><a href="#" class="nav">Programs</a></li>
+              <li><a href="#" class="nav">Kids Programs</a></li>
+              <li><a href="#" class="nav">Schedule</a></li>
+              <li><a href="#" class="nav">Recovery</a></li>
+              <li><a href="#" class="nav">Events &amp; Sponsorships</a></li>
+            </ul>
+          </div>
+        </div>
+        <a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>
+      </div>
+
+      <div style="position: relative; min-height: 560px; overflow: hidden; background: #0F0F10; border-left: 1px solid rgba(255,255,255,0.1)">
+        <div style="position: absolute; inset: 0; background:
+          repeating-linear-gradient(0deg,  #1A1A1D 0 1px, transparent 1px 56px),
+          repeating-linear-gradient(90deg, #1A1A1D 0 1px, transparent 1px 56px)"></div>
+        <div style="position: absolute; top: 0; left: 58%; width: 9px; height: 100%; background: #1F1F23; transform: rotate(8deg)"></div>
+        <div style="position: absolute; top: 47%; left: 0; width: 100%; height: 11px; background: #1F1F23"></div>
+        <div style="position: absolute; top: 74%; left: 0; width: 100%; height: 5px; background: #17171A"></div>
+        <div style="position: absolute; top: 47%; left: 62%; transform: translate(-50%,-50%); width: 22px; height: 22px; border-radius: 30px; background: #D7AD56; animation: ping 3.2s ease-out infinite"></div>
+        <div style="position: absolute; top: 47%; left: 62%; transform: translate(-50%,-100%)">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="#D7AD56" stroke="#000000" stroke-width="1.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#000000" stroke="none"/></svg>
+        </div>
+        <div class="micro" style="position: absolute; left: 26px; bottom: 22px; color: rgba(255,255,255,0.4)">1504 Elm Hill Pike &nbsp;·&nbsp; Nashville, TN</div>
+      </div>
+
+    </div>
+
+    <div style="padding: 24px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
+      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 - Martial Arts Websites Developed by 97Display Websites / Privacy Policy</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════ POPUP LEAD FORM ═══════════════ -->
+  <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center">
+      <div onClick="{{ closeForm }}" style="position: absolute; inset: 0; background: rgba(0,0,0,0.82)"></div>
+      <div style="position: relative; width: 620px; background: #0F0F10; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); padding: 44px 44px 38px 44px; animation: rise 260ms ease-out both">
+        <div onClick="{{ closeForm }}" style="position: absolute; top: 16px; right: 18px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.55)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </div>
+        <div class="micro" style="margin-bottom: 14px">Start Training</div>
+        <h3 style="font-size: 46px; line-height: 1; margin-bottom: 8px">Request Information Now</h3>
+        <p class="body" style="font-size: 14px; margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px">
+          <input type="text" placeholder="First" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+          <input type="text" placeholder="Last" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px">
+          <input type="text" placeholder="Email" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+          <input type="tel" placeholder="Phone" style="background: #000000; color: #FFFFFF; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16); border: none; border-radius: 8px; font-size: 15px; height: 52px; padding: 0 16px; font-family: inherit; width: 100%; box-sizing: border-box">
+        </div>
+        <div class="btn" style="display: block; text-align: center; padding: 17px 0">Request Information</div>
+        <p style="font-size: 10px; line-height: 1.5; margin: 16px 0 0 0; color: rgba(255,255,255,0.4)">By submitting your information you consent to receive marketing/promotional sms &amp; email messages from Nashville MMA Training Camp. Reply HELP for more assistance. Reply STOP to opt-out of messaging. Messages &amp; Data rates may apply. Message frequency will vary. You must be 18 years of age or older.</p>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1440,"height":4720}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { formOpen: false };
+  }
+  componentDidMount() {
+    var els = document.querySelectorAll('.rv');
+    if ('IntersectionObserver' in window && els.length) {
+      for (var i = 0; i < els.length; i++) {
+        els[i].style.opacity = '0';
+        els[i].style.transform = 'translateY(26px)';
+        els[i].style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.style.opacity = '1';
+            en.target.style.transform = 'translateY(0)';
+            io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      for (var j = 0; j < els.length; j++) { io.observe(els[j]); }
+    }
+  }
+  renderVals() {
+    var self = this;
+    return {
+      formOpen: this.state.formOpen,
+      openForm:  function () { self.setState({ formOpen: true }); },
+      closeForm: function () { self.setState({ formOpen: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

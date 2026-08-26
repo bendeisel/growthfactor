@@ -50,8 +50,10 @@ def grid_rows(classes):
     return "\n".join(rows)
 
 # ── per-program day cards ──────────────────────────────────────────────────
-def program_cards(slug):
-    picked = [c for c in CLASSES if slug in c["programs"]]
+def program_cards(slug, audience=None):
+    """Adult program pages exclude kids classes; kids pages get their own page."""
+    picked = [c for c in CLASSES if slug in c["programs"]
+              and (c["audience"] == audience if audience else c["audience"] != "kids")]
     by = defaultdict(list)
     for c in picked:
         by[c["day"]].append(c)

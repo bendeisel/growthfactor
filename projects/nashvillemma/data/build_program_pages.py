@@ -1,0 +1,266 @@
+# -*- coding: utf-8 -*-
+"""Generate a design artboard for every program page.
+
+Reads the client's own harvested page copy (content/*.md), lays it into the
+approved program-detail design, and pulls class times from classes.json by
+program tag. Copy is placed verbatim — nothing is rewritten, shortened or
+retitled. Chrome (header/footer/popup/styles) is lifted from the approved
+ProgramDetail artboard so every page stays identical to the signed-off one.
+
+  python3 build_program_pages.py
+"""
+import json, os, re, html, shutil, subprocess
+
+HERE     = os.path.dirname(os.path.abspath(__file__))
+PROJ     = os.path.dirname(HERE)
+CONTENT  = os.path.join(PROJ, "content")
+IMAGES   = os.path.join(PROJ, "source", "images")
+PAGES    = os.path.join(PROJ, "design-pages")
+IMGOUT   = os.path.join(PAGES, "img")
+
+GOLD, CARD, BEBAS = "#D7AD56", "#1E1E29", "'Bebas Neue','Oswald','Arial Narrow',sans-serif"
+DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+
+CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))["classes"]
+PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8"))["programs"]
+
+def esc(s): return html.escape(s, quote=False)
+
+# ── chrome lifted from the approved artboard ───────────────────────────────
+TPL = open(os.path.join(PAGES, "ProgramDetail.dc.html"), encoding="utf-8").read()
+def slice_between(a, b):
+    i = TPL.index(a); j = TPL.index(b, i)
+    return TPL[i:j]
+HELMET = slice_between("<helmet>", "</helmet>") + "</helmet>"
+HEADER = slice_between("<!-- header -->", "<!-- ═══ PAGE HERO")
+FOOTER = slice_between("<!-- ═══════════════ FOOTER", "</x-dc>").replace("</div>\n</x-dc>", "</div>")
+SCRIPT = TPL[TPL.index("<script data-dc-script"):]
+
+# ── markdown -> blocks ─────────────────────────────────────────────────────
+SKIP_HEADING = re.compile(r"request (more )?information|areas we serve", re.I)
+NOISE_LINE   = re.compile(r"^\[Button:|^REQUEST MORE INFORMATION|^Just fill out|^Contact us today|^Text Us Here", re.I)
+
+def parse(md):
+    md = re.sub(r"^---.*?---\s*", "", md, flags=re.S)          # drop front matter
+    blocks, skip_next_heading = [], False
+    for raw in md.split("\n"):
+        line = raw.rstrip()
+        if not line.strip():
+            continue
+        m = re.match(r"^(#{1,4})\s+(.*)$", line)
+        if m:
+            lvl, txt = len(m.group(1)), m.group(2).strip()
+            if skip_next_heading:                              # review author name
+                skip_next_heading = False; continue
+            if SKIP_HEADING.search(txt):
+                blocks.append(("areas", txt) if re.search(r"areas we serve", txt, re.I) else ("skip", txt))
+                continue
+            blocks.append(("h%d" % lvl, txt)); continue
+        im = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", line)
+        if im:
+            if "testimonials-google" in im.group(2):
+                skip_next_heading = True                       # its caption follows
+            continue                                           # images come from the manifest
+        if line.startswith("- "):
+            blocks.append(("li", line[2:].strip())); continue
+        if NOISE_LINE.search(line.strip()):
+            continue
+        blocks.append(("p", line.strip()))
+    return blocks
+
+# ── schedule cards from classes.json ───────────────────────────────────────
+def schedule_cards(tag, audience, enabled=True):
+    if not enabled or (tag is None and audience is None):
+        return None, 0
+    picked = [c for c in CLASSES
+              if (tag is None or tag in c["programs"])
+              and (audience is None or c["audience"] == audience)
+              and (audience is not None or c["audience"] != "kids")]
+    if not picked:
+        return None, 0
+    by = {}
+    for c in picked:
+        by.setdefault(c["day"], []).append(c)
+    out = []
+    for d in DAYS:
+        if d not in by: continue
+        lines = "".join(
+            '<div style="display: flex; gap: 8px; align-items: baseline">'
+            '<span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">%s</span>'
+            '<span class="body" style="font-size: 12.5px; line-height: 1.4">%s</span></div>'
+            % (c["start"], esc(c["name"])) for c in sorted(by[d], key=lambda x: x["sort"]))
+        out.append('      <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px">\n'
+                   '        <div style="font-family: %s; font-size: 24px; margin-bottom: 10px">%s</div>\n'
+                   '        <div style="display: flex; flex-direction: column; gap: 8px">%s</div>\n      </div>'
+                   % (CARD, GOLD, BEBAS, d, lines))
+    out.append('      <div style="background: linear-gradient(135deg, rgba(215,173,86,0.2), rgba(215,173,86,0.06)), %s; '
+               'border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px; display: flex; flex-direction: column; '
+               'justify-content: center; align-items: flex-start; gap: 12px">\n'
+               '        <div style="font-family: %s; font-size: 30px; line-height: 1">90+ Classes Per Week</div>\n'
+               '        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>\n'
+               '      </div>' % (CARD, GOLD, BEBAS))
+    return "\n".join(out), len(picked)
+
+# ── render one page ────────────────────────────────────────────────────────
+def render(p):
+    blocks = parse(open(os.path.join(CONTENT, p["content"] + ".md"), encoding="utf-8").read())
+    title = next(t for k, t in blocks if k == "h1")
+    idx   = [i for i, (k, _) in enumerate(blocks) if k == "h1"][0]
+    rest  = blocks[idx + 1:]
+
+    # intro = first h2 and the paragraphs under it
+    intro_head, intro_paras, i = "", [], 0
+    while i < len(rest):
+        k, t = rest[i]
+        if k == "h2":
+            intro_head = t; i += 1
+            while i < len(rest) and rest[i][0] == "p":
+                intro_paras.append(rest[i][1]); i += 1
+            break
+        i += 1
+    body, areas = rest[i:], []
+
+    sections, cur = [], None
+    for k, t in body:
+        if k == "areas":
+            cur = "AREAS"; continue
+        if cur == "AREAS":
+            if k == "li": areas.append(t); continue
+            if k in ("h2","h3","h4"): cur = None
+        if k == "skip":  continue
+        if k in ("h2", "h3", "h4"):
+            cur = {"head": t, "paras": [], "items": []}; sections.append(cur); continue
+        if cur and isinstance(cur, dict):
+            (cur["paras"] if k == "p" else cur["items"]).append(t)
+
+    hero_img = "prog-%s-hero.jpg" % p["slug"]
+    body_img = "prog-%s-body.jpg" % p["slug"]
+
+    out = []
+    out.append('<div style="position: relative; height: 440px; overflow: hidden; isolation: isolate">')
+    out.append('  <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; z-index: 1">' % (hero_img, esc(title)))
+    out.append('  <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.9) 100%); z-index: 2"></div>')
+    out.append('  <div style="position: absolute; left: 48px; bottom: 44px; z-index: 3; max-width: 1100px">')
+    out.append('    <div class="micro" style="margin-bottom: 14px">Programs</div>')
+    size = 84 if len(title) < 34 else 64
+    out.append('    <h1 style="font-size: %dpx; line-height: 0.92">%s</h1>' % (size, esc(title)))
+    out.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 20px"></div>' % GOLD)
+    out.append('  </div>\n</div>')
+
+    # intro
+    out.append('<div class="rv" style="background: radial-gradient(1000px 500px at 88% -10%, rgba(215,173,86,0.14), transparent 60%), #0A0A0A; padding: 74px 48px">')
+    out.append('  <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 52px; align-items: start">')
+    out.append('    <div>')
+    if intro_head:
+        out.append('      <h2 style="font-size: %dpx; line-height: 1.04; margin-bottom: 24px">%s</h2>' % (50 if len(intro_head) < 60 else 40, esc(intro_head)))
+    for para in intro_paras:
+        out.append('      <p class="body" style="font-size: 16px">%s</p>' % esc(para))
+    out.append('      <div style="display: flex; gap: 14px; margin-top: 28px">')
+    out.append('        <div class="btn" onClick="{{ openForm }}">Request more information</div>')
+    out.append('        <a href="#" class="btn-line">Schedule</a>')
+    out.append('      </div>\n    </div>')
+    out.append('    <div style="position: relative; min-height: 380px; overflow: hidden; border-radius: 8px">')
+    out.append('      <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover">' % (body_img, esc(title)))
+    out.append('    </div>\n  </div>\n</div>')
+
+    # body sections
+    for n, s in enumerate(sections):
+        if not s["paras"] and not s["items"]: continue
+        bg = ('linear-gradient(180deg, rgba(215,173,86,0.12) 0%, rgba(0,0,0,0) 45%), #000000'
+              if n % 2 == 0 else '#0A0A0A')
+        out.append('<div class="rv" style="background: %s; padding: 70px 48px">' % bg)
+        out.append('  <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">%s</h2>' % esc(s["head"]))
+        if s["paras"]:
+            cols = "1fr 1fr" if len(s["paras"]) > 1 else "1fr"
+            out.append('  <div style="display: grid; grid-template-columns: %s; gap: 40px; max-width: 1180px">' % cols)
+            half = (len(s["paras"]) + 1) // 2
+            groups = [s["paras"][:half], s["paras"][half:]] if len(s["paras"]) > 1 else [s["paras"]]
+            for g in groups:
+                if not g: continue
+                out.append('    <div>' + "".join('<p class="body" style="font-size: 15px">%s</p>' % esc(x) for x in g) + '</div>')
+            out.append('  </div>')
+        if s["items"]:
+            out.append('  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px">')
+            for it in s["items"]:
+                m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
+                if m:
+                    out.append('    <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 24px 26px">'
+                               '<h3 style="font-size: 28px; margin-bottom: 8px; color: %s">%s</h3>'
+                               '<p class="body" style="font-size: 14px; margin: 0">%s</p></div>'
+                               % (CARD, GOLD, GOLD, esc(m.group(1).strip()), esc(m.group(2).strip())))
+                else:
+                    out.append('    <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 24px 26px">'
+                               '<p class="body" style="font-size: 14px; margin: 0">%s</p></div>' % (CARD, GOLD, esc(it)))
+            out.append('  </div>')
+        out.append('</div>')
+
+    # schedule
+    cards, n_cls = schedule_cards(p.get("schedule_tag"), p.get("schedule_audience"),
+                                  p.get("schedule", True))
+    if cards:
+        out.append('<div class="rv" style="background: #000000; padding: 70px 48px">')
+        out.append('  <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px">')
+        out.append('    <h2 style="font-size: 54px; line-height: 1">Schedule</h2>')
+        out.append('    <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px">View Full Schedule</a>')
+        out.append('  </div>')
+        out.append('  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">')
+        out.append('  <!-- GENERATED:cards -->')
+        out.append(cards)
+        out.append('  <!-- /GENERATED:cards -->')
+        out.append('  </div>\n</div>')
+
+    # areas we serve
+    if areas:
+        out.append('<div class="rv" style="background: #0A0A0A; padding: 56px 48px">')
+        out.append('  <div class="micro" style="margin-bottom: 16px">Areas We Serve</div>')
+        out.append('  <div style="display: flex; flex-wrap: wrap; gap: 10px">')
+        for a in areas:
+            out.append('    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); '
+                       'border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">%s</span>' % esc(a))
+        out.append('  </div>\n</div>')
+
+    # cta
+    out.append('<div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); padding: 66px 48px; text-align: center">')
+    out.append('  <h2 style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 10px">Request Information Now</h2>')
+    out.append('  <p style="color: rgba(255,255,255,0.92); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>')
+    out.append('  <div onClick="{{ openForm }}" style="display: inline-block; background: #0A0A0A; color: #FFFFFF; border-radius: 8px; font-size: 13px; '
+               'font-weight: 800; padding: 17px 42px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer">Request Information</div>')
+    out.append('</div>')
+
+    return title, "\n".join(out), n_cls
+
+# ── image prep ─────────────────────────────────────────────────────────────
+def find_image(name):
+    direct = os.path.join(IMAGES, name)
+    if os.path.exists(direct): return direct
+    for f in os.listdir(IMAGES):
+        if f.endswith(name): return os.path.join(IMAGES, f)
+    return None
+
+def prep(src, dst, width):
+    import imageio_ffmpeg
+    ff = imageio_ffmpeg.get_ffmpeg_exe()
+    subprocess.run([ff, "-y", "-i", src, "-vf", "scale=%d:-2" % width, "-q:v", "5", dst],
+                   check=True, capture_output=True)
+
+os.makedirs(IMGOUT, exist_ok=True)
+made = []
+for p in PROGRAMS:
+    for kind, width in (("hero", 1200), ("body", 760)):
+        src = find_image(p[kind])
+        if not src:
+            print("  MISSING image for %s/%s: %s" % (p["slug"], kind, p[kind])); continue
+        prep(src, os.path.join(IMGOUT, "prog-%s-%s.jpg" % (p["slug"], kind)), width)
+
+    title, body_html, n_cls = render(p)
+    page = ('<!doctype html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <script src="./support.js"></script>\n</head>\n<body>\n'
+            '<x-dc>\n' + HELMET + '\n\n<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">\n\n'
+            + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</div>\n</x-dc>\n" + SCRIPT)
+    name = "Program-%s.dc.html" % p["slug"]
+    open(os.path.join(PAGES, name), "w", encoding="utf-8").write(page)
+    made.append((name, title, n_cls))
+    print("%-42s %-52s %2d classes" % (name, title[:50], n_cls))
+
+json.dump([{"file": f, "title": t} for f, t, _ in made],
+          open(os.path.join(HERE, "generated-pages.json"), "w", encoding="utf-8"), indent=2)
+print("\n%d program pages generated" % len(made))
