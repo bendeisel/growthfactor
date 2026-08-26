@@ -11,10 +11,6 @@
     {
       "id": "page-3",
       "name": "Explorations"
-    },
-    {
-      "id": "page-4",
-      "name": "Page templates"
     }
   ],
   "artboards": [
@@ -98,24 +94,6 @@
       "y": 0,
       "w": 1440,
       "h": 7200
-    },
-    {
-      "file": "Schedule.dc.html",
-      "title": "Template \u2014 Schedule",
-      "page": "page-4",
-      "x": 0,
-      "y": 0,
-      "w": 1440,
-      "h": 2350
-    },
-    {
-      "file": "ProgramDetail.dc.html",
-      "title": "Template \u2014 Program detail",
-      "page": "page-4",
-      "x": 1600,
-      "y": 0,
-      "w": 1440,
-      "h": 3450
     }
   ],
   "annotations": [
@@ -134,18 +112,10 @@
       "y": -340,
       "w": 620,
       "text": "This artboard is one long page \u2014 the homepage top to bottom. Fonts are back to Bebas Neue + Montserrat. Gold class names sit under the headline again (MMA \u00b7 Jiu Jitsu \u00b7 Boxing \u00b7 Muay Thai \u00b7 Youth Martial Arts). Phone replaces the get-in-touch email in the top bar. Gold gradients tint several section backgrounds. Pictures carry the same 8px corner as the buttons."
-    },
-    {
-      "id": "templates-note",
-      "page": "page-4",
-      "x": 0,
-      "y": -300,
-      "w": 660,
-      "text": "PAGE TEMPLATES \u2014 pages get stamped from these, so ~30 URLs need only a handful of designs. The Program Detail template alone covers all 13 program pages.\n\nGold italic text is placeholder content that arrives with the full-site download. Renaming or moving pages in the sitemap changes nothing here \u2014 only nav labels and URLs at build time.\n\nStill to design once content lands: coaches, about/generic, reviews, contact."
     }
   ],
   "launch": {
     "view": "canvas",
-    "page": "page-4"
+    "page": "page-1"
   }
 }

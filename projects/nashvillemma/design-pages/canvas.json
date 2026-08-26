@@ -1,0 +1,20 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Inner pages" }
+  ],
+  "artboards": [
+    { "file": "Schedule.dc.html", "title": "Schedule — real timetable", "page": "page-1", "x": 0, "y": 0, "w": 1440, "h": 2680 },
+    { "file": "ProgramDetail.dc.html", "title": "Program detail — Brazilian Jiu Jitsu", "page": "page-1", "x": 1600, "y": 0, "w": 1440, "h": 4620 }
+  ],
+  "annotations": [
+    {
+      "id": "src-note",
+      "page": "page-1",
+      "x": 0,
+      "y": -360,
+      "w": 680,
+      "text": "INNER-PAGE TEMPLATES — separate from the homepage canvas so version history stays clean.\n\nAll words are verbatim from the live site (full-site harvest). The schedule grid holds all 86 real classes with times aligned across the week — the filter chips work, click them. The Jiu-Jitsu page carries the full live-page copy, the real BJJ class times per day, and Head Coach Bryan Tidwell's real photo and bio.\n\nPreserved as-is per the copy lock (flagging, not fixing): Friday 11:30 AM class ends \"12:30 AM\" on the live site, and the site mixes \"Gi / No-Gi / No Gi\" spellings. Say the word and we'll list every one for the client.\n\nThe Program Detail layout is the stamp for all 13 program pages. Still to design: coaches index, FAQ, about, contact, reviews — all content is already harvested."
+    }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}
