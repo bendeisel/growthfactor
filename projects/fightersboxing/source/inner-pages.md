@@ -50,10 +50,14 @@ pattern. Not yet built; when we get to it, ship the top real content,
 drop the bottom.
 
 ## Not ready: needs real content from Ben, nothing to build yet
-- **FAQs** — real-looking questions ("How do I apply for a membership?",
-  "Are there training classes for kids?", "What equipment do I need for
-  boxing?") but every answer is Lorem Ipsum. Cannot build this page until
-  real answers exist; not writing them ourselves per the copy lock.
+- **FAQs** — the dev-site export has real-looking questions ("How do I
+  apply for a membership?", "Are there training classes for kids?", "What
+  equipment do I need for boxing?") but every answer is Lorem Ipsum.
+  Ben says his staff wrote the real FAQs on the production site,
+  fightersnashville.com/faqs/. That domain is ALSO blocked by this
+  session's egress proxy, and the page is not indexed in search, so the
+  real answers still have to come from Ben: either a WordPress export from
+  the production site (same Tools > Export flow) or pasted text.
 
 ## Mechanical fixes applied (per the standing em-dash rule + broken links)
 - Beginners: "You'll master the essentials — stance, footwork, defense,
@@ -85,18 +89,41 @@ competition-team.jpg) as their hero images, which is a clean fit since
 Ben asked for exactly this: one page-specific photo per class page,
 video reserved for the homepage only.
 
-## Template pattern (shipped on Beginners Boxing Class, page 1 of 3)
-- Same Header/Footer/LeadPopup as the homepage
-- Hero: photo band (not video), lightened radial scrim, page H1, one
-  GET STARTED button
-- Body: the page's real copy in a single column (headline + 2 subheads),
-  ambient fluid gradient background, second GET STARTED button at the end
+## Template pattern (rev 2, per Ben 2026-08-26)
+First pass used a photo header band on each page, mirroring the old WP
+site. Ben rejected it: the band read badly (especially on mobile, where it
+filled the screen and pushed the H1 out of view) and the padding was off.
+Revised pattern, now `src/layouts/ClassPage.astro`:
+- **No header band.** The H1 is the first thing on the page, under a small
+  red "Boxing Classes" eyebrow (reuses the existing nav string, no new
+  copy), so the page name is the first thing read.
+- **Alternating splits.** Each copy block with a photo renders as a split
+  section, photo beside the text, sides alternating down the page, in the
+  same tinted mat frames as the homepage (warm mat on white ground, then
+  white mat with shadow on warm ground).
+- **Centered closer.** A copy block with no photo renders centered and
+  carries the GET STARTED button, ending the page.
+- **Ambient red fluid gradient** on every section, same tuning as the
+  homepage.
 - Cross-page ticker at the bottom: all four class names, current page
-  shown dimmed/underlined instead of linked, the other three link to
-  their own pages (not homepage anchors) for real internal linking
-- New shared files: `src/data/classes.js` (single source for the class
-  list, used by the homepage and every class page) and
-  `src/components/ClassTicker.astro` (the reusable ticker)
+  dimmed and underlined instead of linked, the other three link to their
+  own pages (not homepage anchors) for real internal linking.
+- Padding: page head and first split are deliberately tightened so the H1
+  and the first heading read as one unit; sections after that use the
+  standard homepage section rhythm.
+
+Pages are now data-only. A class page supplies a title, description, H1,
+and a list of `{ heading, body, readMore?, image? }` sections; the layout
+does the rest, so Youth and Competition stamp out in minutes.
+
+New shared files:
+- `src/layouts/ClassPage.astro` (the template)
+- `src/data/classes.js` (single source for the class list, used by the
+  homepage and every class page)
+- `src/components/ClassTicker.astro` (the reusable ticker)
+- the split-section and mat-frame CSS moved out of the homepage into
+  `src/styles/global.css` so the homepage and inner pages share one
+  definition and cannot drift apart
 
 Next: Youth Boxing Class and Competition Team Training, same pattern,
 their own real copy, awaiting Ben's sign-off on this first one.
