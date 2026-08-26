@@ -1,20 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+import { classes } from '../data/classes.js';
 
 // Meta description reuses the hero's own subline; copy is frozen at 99%.
 const pageTitle = 'Fighters Boxing Gym | Nashville’s Boxing at Its Best';
 const description =
   'Nashville’s best boxing gym. Group classes, youth classes, private sessions, open gym, and sparring. All levels welcome, no experience needed.';
-
-// Class names as Ben supplied them. Masters boxing has no page on the WP
-// build yet; it points at the classes index until one exists. Card photos
-// are placeholders until Ben sends the real set.
-const classes = [
-  { name: 'Boxing basics', href: '/beginners-boxing-class/', image: '/img/classes/boxing-basics.jpg' },
-  { name: 'Competition Team', href: '/competition-team-training/', image: '/img/classes/competition-team.jpg' },
-  { name: 'Youth boxing', href: '/youth-boxing-class/', image: '/img/classes/youth-boxing.jpg' },
-  { name: 'Masters boxing', href: '/boxing-classes/', image: '/img/classes/masters-boxing.jpg' },
-];
 
 const heroClasses = classes.filter((c) => c.name !== 'Masters boxing');
 
