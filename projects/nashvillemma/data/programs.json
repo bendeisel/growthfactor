@@ -6,35 +6,40 @@
       "content": "classes-boxing",
       "hero": "Boxing-Page-1-263313.png",
       "body": "Boxing-Header-Page-2-263314.png",
-      "schedule_tag": "boxing"
+      "schedule_tag": "boxing",
+      "hero_style": "inset"
     },
     {
       "slug": "muay-thai",
       "content": "classes-muay-thai",
       "hero": "Muay-Thai-Page-1-263309.png",
       "body": "Muay-Thai-Page-2-263310.png",
-      "schedule_tag": "muay-thai"
+      "schedule_tag": "muay-thai",
+      "hero_style": "inset"
     },
     {
       "slug": "mixed-martial-arts",
       "content": "classes-mixed-martial-arts",
       "hero": "MMA-Classes-Cover-Page-1-263319.png",
       "body": "MMA-Classes-Header-Page-2-263320.png",
-      "schedule_tag": "mixed-martial-arts"
+      "schedule_tag": "mixed-martial-arts",
+      "hero_style": "inset"
     },
     {
       "slug": "wrestling",
       "content": "classes-wrestling",
       "hero": "Wrestling-Header-Page-1-263328.png",
       "body": "Wrestling-Cover-and-Page-2-263329.png",
-      "schedule_tag": "wrestling"
+      "schedule_tag": "wrestling",
+      "hero_style": "inset"
     },
     {
       "slug": "self-defense",
       "content": "classes-self-defense-classes-and-seminars",
       "hero": "selfdefensemainpng-264047.png",
       "body": "8943-selfdefense-261427.jpg",
-      "schedule_tag": "self-defense"
+      "schedule_tag": "self-defense",
+      "hero_style": "inset"
     },
     {
       "slug": "sports-performance",
@@ -45,7 +50,8 @@
       "coach": {
         "name": "Tim Sumich",
         "role": "Head Coach — Sports Performance"
-      }
+      },
+      "hero_style": "inset"
     },
     {
       "slug": "open-gym",
@@ -61,14 +67,16 @@
       "content": "classes-womens-classes",
       "hero": "womenbjj-297296.jpg",
       "body": "womenmt-297295.jpg",
-      "schedule_tag": "womens-classes"
+      "schedule_tag": "womens-classes",
+      "hero_style": "inset"
     },
     {
       "slug": "mma-fight-team",
       "content": "classes-mixed-martial-arts-competition-team",
       "hero": "MMA-Fight-Team-Page-1-263321.png",
       "body": "MMA-Fight-Team-Page-2-263322.jpg",
-      "schedule_tag": "sparring"
+      "schedule_tag": "sparring",
+      "hero_style": "inset"
     },
     {
       "slug": "personal-training",
@@ -76,7 +84,8 @@
       "hero": "PT-Page-1-263302.png",
       "body": "PT-Page-2-263303.png",
       "schedule_tag": null,
-      "schedule": false
+      "schedule": false,
+      "hero_style": "inset"
     },
     {
       "slug": "kids-martial-arts",
@@ -84,7 +93,8 @@
       "hero": "kids-273867.jpeg",
       "body": "192024-07-07-Kids-fitness-279078.jpg",
       "schedule_tag": null,
-      "schedule_audience": "kids"
+      "schedule_audience": "kids",
+      "hero_style": "inset"
     },
     {
       "slug": "kids-brazilian-jiu-jitsu",
@@ -92,7 +102,8 @@
       "hero": "Kids-BJJ-Cover-Page-1-263338.jpg",
       "body": "Kids-BJJ-Page-2-263339.png",
       "schedule_tag": "jiu-jitsu",
-      "schedule_audience": "kids"
+      "schedule_audience": "kids",
+      "hero_style": "inset"
     },
     {
       "slug": "kids-fitness",
@@ -100,7 +111,8 @@
       "hero": "142024-07-07-Kids-fitness-279081.jpg",
       "body": "222024-07-07-Kids-fitness-279082.jpg",
       "schedule_tag": "kids-fitness-classes",
-      "schedule_audience": "kids"
+      "schedule_audience": "kids",
+      "hero_style": "inset"
     }
   ]
 }

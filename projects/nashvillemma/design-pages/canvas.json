@@ -35,7 +35,7 @@
       "x": 1600,
       "y": 0,
       "w": 1440,
-      "h": 4490
+      "h": 4588
     },
     {
       "file": "Program-muay-thai.dc.html",
@@ -44,7 +44,7 @@
       "x": 3200,
       "y": 0,
       "w": 1440,
-      "h": 5541
+      "h": 5639
     },
     {
       "file": "Program-mixed-martial-arts.dc.html",
@@ -53,7 +53,7 @@
       "x": 4800,
       "y": 0,
       "w": 1440,
-      "h": 4758
+      "h": 4856
     },
     {
       "file": "Program-wrestling.dc.html",
@@ -62,32 +62,32 @@
       "x": 6400,
       "y": 0,
       "w": 1440,
-      "h": 4814
+      "h": 4912
     },
     {
       "file": "Program-self-defense.dc.html",
       "title": "Self-Defense Classes & Seminars In Nashville",
       "page": "page-2",
       "x": 0,
-      "y": 5771,
+      "y": 5869,
       "w": 1440,
-      "h": 6627
+      "h": 6725
     },
     {
       "file": "Program-sports-performance.dc.html",
       "title": "Sports Performance Classes In Nashville",
       "page": "page-2",
       "x": 1600,
-      "y": 5771,
+      "y": 5869,
       "w": 1440,
-      "h": 5353
+      "h": 5451
     },
     {
       "file": "Program-open-gym.dc.html",
       "title": "Open Gym in Nashville",
       "page": "page-2",
       "x": 3200,
-      "y": 5771,
+      "y": 5869,
       "w": 1440,
       "h": 3868
     },
@@ -96,54 +96,54 @@
       "title": "Women\u2019s Muay Thai & Brazilian Jiu-Jitsu Classes in Nashv",
       "page": "page-2",
       "x": 4800,
-      "y": 5771,
+      "y": 5869,
       "w": 1440,
-      "h": 4398
+      "h": 4496
     },
     {
       "file": "Program-mma-fight-team.dc.html",
       "title": "MMA Fight Team In Nashville",
       "page": "page-2",
       "x": 6400,
-      "y": 5771,
+      "y": 5869,
       "w": 1440,
-      "h": 4727
+      "h": 4825
     },
     {
       "file": "Program-personal-training.dc.html",
       "title": "Personal Training in Nashville",
       "page": "page-2",
       "x": 0,
-      "y": 12628,
+      "y": 12824,
       "w": 1440,
-      "h": 4090
+      "h": 4188
     },
     {
       "file": "Program-kids-martial-arts.dc.html",
       "title": "Kids Martial Arts in Nashville",
       "page": "page-2",
       "x": 1600,
-      "y": 12628,
+      "y": 12824,
       "w": 1440,
-      "h": 3851
+      "h": 3949
     },
     {
       "file": "Program-kids-brazilian-jiu-jitsu.dc.html",
       "title": "Kids BJJ Classes In Nashville",
       "page": "page-2",
       "x": 3200,
-      "y": 12628,
+      "y": 12824,
       "w": 1440,
-      "h": 4437
+      "h": 4535
     },
     {
       "file": "Program-kids-fitness.dc.html",
       "title": "Kids Fitness Classes in Nashville",
       "page": "page-2",
       "x": 4800,
-      "y": 12628,
+      "y": 12824,
       "w": 1440,
-      "h": 4370
+      "h": 4468
     }
   ],
   "annotations": [
