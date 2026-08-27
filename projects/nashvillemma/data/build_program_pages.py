@@ -22,8 +22,8 @@ GOLD, CARD, BEBAS = "#D7AD56", "#1E1E29", "'Bebas Neue','Oswald','Arial Narrow',
 
 # "Desert Horizon" gradient (21st.dev recipe) remapped onto the NMMA gold kernel.
 # cqmin -> px on purpose: container-type:size collapses a content-height band.
-SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-ax="300" data-ay="78" data-per="19" '
-                 'style="position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; filter: blur(1.5px); '
+SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-ax="135" data-ay="40" data-per="19" '
+                 'style="position: absolute; top: -18%; bottom: -18%; left: -13%; width: 126%; filter: blur(1.5px); '
                  'background-color: #8A6224; background-image: '
                  'radial-gradient(150% 46.8% at 42.7% 6%, rgba(243,225,178,0.92) 0%, rgba(243,225,178,0) 51%), '
                  'radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), '
@@ -35,6 +35,25 @@ CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))
 PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8"))["programs"]
 
 def esc(s): return html.escape(s, quote=False)
+
+
+BTN_LINE = re.compile(r'(<a\b[^>]*class="btn-line"[^>]*>)(.*?)(</a>)', re.S)
+
+def spark_buttons(html_str):
+    """Travelling gold spark on the outlined buttons."""
+    def rep(m):
+        open_tag, inner, close = m.group(1), m.group(2), m.group(3)
+        if "spark-ring" in inner:
+            return m.group(0)
+        if 'style="' in open_tag:
+            open_tag = open_tag.replace('style="', 'style="position: relative; overflow: hidden; isolation: isolate; ', 1)
+        else:
+            open_tag = open_tag.replace('class="btn-line"',
+                'class="btn-line" style="position: relative; overflow: hidden; isolation: isolate"', 1)
+        return (open_tag + '<span aria-hidden="true" class="spark-ring"></span>'
+                + '<span aria-hidden="true" class="spark-fill"></span>'
+                + '<span style="position: relative; z-index: 2">' + inner + '</span>' + close)
+    return BTN_LINE.sub(rep, html_str)
 
 NBSP_NAME = "Nashville MMA Training Camp"
 
@@ -219,9 +238,10 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
         if gold:
             out.append('<div class="rv" style="position: relative; overflow: hidden; background: #000000">')
             out.append('  <div aria-hidden="true" class="dg" data-ax="%d" data-ay="%d" data-per="%d" data-ph="%.2f" '
-                       'style="position: absolute; top: -34%%; bottom: -34%%; left: -26%%; width: 152%%; background-image: '
-                       'radial-gradient(940px 460px at 50%% 18%%, rgba(215,173,86,0.22), transparent 64%%)"></div>'
-                       % (300 + (n % 3) * 40, 100 + (n % 3) * 22, 18 + (n % 4) * 3, n * 1.3))
+                       'style="position: absolute; top: -20%%; bottom: -20%%; left: -15%%; width: 130%%; background-image: '
+                       'radial-gradient(1240px 580px at 50%% 4%%, rgba(215,173,86,0.21) 0%%, '
+                       'rgba(215,173,86,0.11) 34%%, transparent 70%%)"></div>'
+                       % (150 + (n % 3) * 18, 52 + (n % 3) * 8, 18 + (n % 4) * 3, n * 1.3))
             out.append('  <div style="position: relative; z-index: 2; padding: 70px 48px">')
         else:
             out.append('<div class="rv" style="background: #0A0A0A; padding: 70px 48px">')
@@ -334,7 +354,7 @@ for p in PROGRAMS:
         prep(src, os.path.join(IMGOUT, "prog-%s-%s.jpg" % (p["slug"], kind)), width)
 
     title, body_html, n_cls = render(p)
-    body_html = no_break_name(body_html)
+    body_html = spark_buttons(no_break_name(body_html))
     page = ('<!doctype html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <script src="./support.js"></script>\n</head>\n<body>\n'
             '<x-dc>\n' + HELMET + '\n\n<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">\n\n'
             + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</div>\n</x-dc>\n" + SCRIPT)

@@ -53,6 +53,19 @@
           text-transform: uppercase; letter-spacing: 0.18em; color: #D7AD56; padding: 8px 4px 4px 4px;
           white-space: normal; }
     .ph { color: #C59543; font-style: italic; }
+    .shim { color: #D7AD56;
+           background-image: linear-gradient(100deg, #D7AD56 0%, #D7AD56 36%, #F7E3B4 46%,
+                             #FFF8E4 50%, #F7E3B4 54%, #D7AD56 64%, #D7AD56 100%);
+           background-size: 280% 100%; background-repeat: no-repeat;
+           -webkit-background-clip: text; background-clip: text;
+           -webkit-text-fill-color: transparent; }
+    .spark-ring { position: absolute; top: 50%; left: 50%; width: 560px; height: 560px;
+           margin: -280px 0 0 -280px; z-index: 0; will-change: transform;
+           background: conic-gradient(from 0deg,
+             rgba(215,173,86,0) 0deg, rgba(215,173,86,0) 328deg,
+             rgba(215,173,86,0.72) 338deg, #FFF6DE 350deg,
+             rgba(215,173,86,0.72) 359deg, rgba(215,173,86,0) 360deg); }
+    .spark-fill { position: absolute; inset: 2px; border-radius: 7px; background: #0B0B0C; z-index: 1; }
     @keyframes roll  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
     @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
@@ -228,6 +241,24 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+    var shim = document.querySelectorAll('.shim');
+    var ring = document.querySelectorAll('.spark-ring');
+    if ((shim.length || ring.length) && typeof requestAnimationFrame === 'function') {
+      var s0 = null;
+      var sparkle = function (now) {
+        if (s0 === null) { s0 = now; }
+        var t = (now - s0) / 1000;
+        for (var i = 0; i < shim.length; i++) {
+          var pos = 50 + 46 * Math.sin(2 * Math.PI * (t / 4.6) + i * 0.55);
+          shim[i].style.backgroundPosition = pos.toFixed(1) + '% 0';
+        }
+        for (var j = 0; j < ring.length; j++) {
+          ring[j].style.transform = 'rotate(' + ((t * 62 + j * 47) % 360).toFixed(1) + 'deg)';
+        }
+        requestAnimationFrame(sparkle);
+      };
+      requestAnimationFrame(sparkle);
+    }
     var dg = document.querySelectorAll('.dg');
     if (dg.length && typeof requestAnimationFrame === 'function') {
       for (var d = 0; d < dg.length; d++) { dg[d].style.willChange = 'transform'; }
