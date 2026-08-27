@@ -19,6 +19,16 @@ PAGES    = os.path.join(PROJ, "design-pages")
 IMGOUT   = os.path.join(PAGES, "img")
 
 GOLD, CARD, BEBAS = "#D7AD56", "#1E1E29", "'Bebas Neue','Oswald','Arial Narrow',sans-serif"
+
+# "Desert Horizon" gradient (21st.dev recipe) remapped onto the NMMA gold kernel.
+# cqmin -> px on purpose: container-type:size collapses a content-height band.
+SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-amp="30" data-per="44" '
+                 'style="position: absolute; top: -3px; bottom: -3px; left: -6%; width: 112%; filter: blur(1.5px); '
+                 'background-color: #8A6224; background-image: '
+                 'radial-gradient(150% 46.8% at 42.7% 6%, rgba(243,225,178,0.92) 0%, rgba(243,225,178,0) 51%), '
+                 'radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), '
+                 'radial-gradient(150% 46.8% at 51.03% 67%, rgba(197,149,67,0.92) 0%, rgba(197,149,67,0) 51%), '
+                 'radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>')
 DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
 CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))["classes"]
@@ -166,9 +176,16 @@ def render(p):
     # body sections
     for n, s in enumerate(sections):
         if not s["paras"] and not s["items"]: continue
-        bg = ('linear-gradient(180deg, rgba(215,173,86,0.12) 0%, rgba(0,0,0,0) 45%), #000000'
-              if n % 2 == 0 else '#0A0A0A')
-        out.append('<div class="rv" style="background: %s; padding: 70px 48px">' % bg)
+        gold = (n % 2 == 0)
+        if gold:
+            out.append('<div class="rv" style="position: relative; overflow: hidden; background: #000000">')
+            out.append('  <div aria-hidden="true" class="dg" data-amp="%d" data-per="%d" data-ph="%.2f" '
+                       'style="position: absolute; top: 0; bottom: 0; left: -12%%; width: 124%%; background-image: '
+                       'radial-gradient(920px 440px at 50%% -14%%, rgba(215,173,86,0.20), transparent 62%%)"></div>'
+                       % (34 + (n % 3) * 8, 36 + (n % 4) * 7, n * 1.3))
+            out.append('  <div style="position: relative; z-index: 2; padding: 70px 48px">')
+        else:
+            out.append('<div class="rv" style="background: #0A0A0A; padding: 70px 48px">')
         out.append('  <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">%s</h2>' % esc(s["head"]))
         if s["paras"]:
             cols = "1fr 1fr" if len(s["paras"]) > 1 else "1fr"
@@ -235,11 +252,14 @@ def render(p):
         out.append('    </div>\n  </div>\n</div>')
 
     # cta
-    out.append('<div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); padding: 66px 48px; text-align: center">')
-    out.append('  <h2 style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 10px">Request Information Now</h2>')
-    out.append('  <p style="color: rgba(255,255,255,0.92); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>')
+    out.append('<div class="rv" style="position: relative; overflow: hidden; background: #8A6224">')
+    out.append('  ' + SAND_GRADIENT)
+    out.append('  <div style="position: relative; z-index: 2; padding: 66px 48px; text-align: center">')
+    out.append('  <h2 style="font-size: 60px; line-height: 1; color: #131313; margin-bottom: 10px">Request Information Now</h2>')
+    out.append('  <p style="color: rgba(19,19,19,0.82); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>')
     out.append('  <div onClick="{{ openForm }}" style="display: inline-block; background: #0A0A0A; color: #FFFFFF; border-radius: 8px; font-size: 13px; '
                'font-weight: 800; padding: 17px 42px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer">Request Information</div>')
+    out.append('  </div>')
     out.append('</div>')
 
     return title, "\n".join(out), n_cls

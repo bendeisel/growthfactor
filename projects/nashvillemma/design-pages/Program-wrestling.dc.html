@@ -125,7 +125,9 @@
     </div>
   </div>
 </div>
-<div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.12) 0%, rgba(0,0,0,0) 45%), #000000; padding: 70px 48px">
+<div class="rv" style="position: relative; overflow: hidden; background: #000000">
+  <div aria-hidden="true" class="dg" data-amp="34" data-per="36" data-ph="0.00" style="position: absolute; top: 0; bottom: 0; left: -12%; width: 124%; background-image: radial-gradient(920px 440px at 50% -14%, rgba(215,173,86,0.20), transparent 62%)"></div>
+  <div style="position: relative; z-index: 2; padding: 70px 48px">
   <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">We're Bringing Quality Wrestling Coaching To Nashville</h2>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1180px">
     <div><p class="body" style="font-size: 15px">Our adult wrestling program at Nashville MMA Training Camp provides a supportive and encouraging environment for participants of all skill levels. Students will learn fundamental wrestling skills such as takedowns, throws, escapes, reversals, and pins.</p><p class="body" style="font-size: 15px">Students will also have the opportunity to simulate real wrestling scenarios and engage in sparring sessions with partners to practice and develop their wrestling technique and strategy. With former Division 1 and Division 2 wrestlers helping to teach our adult and youth wrestling programs, this is definitely the top spot in Nashville to advance your skills.</p></div>
@@ -144,7 +146,9 @@
     <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 24px 26px"><p class="body" style="font-size: 14px; margin: 0">Wrestling match tactics, positioning, setups, and counters</p></div>
   </div>
 </div>
-<div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.12) 0%, rgba(0,0,0,0) 45%), #000000; padding: 70px 48px">
+<div class="rv" style="position: relative; overflow: hidden; background: #000000">
+  <div aria-hidden="true" class="dg" data-amp="50" data-per="50" data-ph="2.60" style="position: absolute; top: 0; bottom: 0; left: -12%; width: 124%; background-image: radial-gradient(920px 440px at 50% -14%, rgba(215,173,86,0.20), transparent 62%)"></div>
+  <div style="position: relative; z-index: 2; padding: 70px 48px">
   <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">Try Out Nashville’s Ultimate Wrestling Program Now!</h2>
   <div style="display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 1180px">
     <div><p class="body" style="font-size: 15px">The adult wrestling program at Nashville MMA Training Camp is a supportive and encouraging environment for participants of all skill levels. With multiple collegiate wrestlers helping to teach our adult and youth wrestling programs, this is definitely your top spot in Nashville to advance your wrestling skills.</p></div>
@@ -200,10 +204,13 @@
     <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">Old Hickory</span>
   </div>
 </div>
-<div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); padding: 66px 48px; text-align: center">
-  <h2 style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 10px">Request Information Now</h2>
-  <p style="color: rgba(255,255,255,0.92); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>
+<div class="rv" style="position: relative; overflow: hidden; background: #8A6224">
+  <div aria-hidden="true" class="dg" data-amp="30" data-per="44" style="position: absolute; top: -3px; bottom: -3px; left: -6%; width: 112%; filter: blur(1.5px); background-color: #8A6224; background-image: radial-gradient(150% 46.8% at 42.7% 6%, rgba(243,225,178,0.92) 0%, rgba(243,225,178,0) 51%), radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), radial-gradient(150% 46.8% at 51.03% 67%, rgba(197,149,67,0.92) 0%, rgba(197,149,67,0) 51%), radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>
+  <div style="position: relative; z-index: 2; padding: 66px 48px; text-align: center">
+  <h2 style="font-size: 60px; line-height: 1; color: #131313; margin-bottom: 10px">Request Information Now</h2>
+  <p style="color: rgba(19,19,19,0.82); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>
   <div onClick="{{ openForm }}" style="display: inline-block; background: #0A0A0A; color: #FFFFFF; border-radius: 8px; font-size: 13px; font-weight: 800; padding: 17px 42px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer">Request Information</div>
+  </div>
 </div>
 
 <!-- ═══════════════ FOOTER — contact left, map right ═══════════════ -->
@@ -293,6 +300,25 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+    var dg = document.querySelectorAll('.dg');
+    if (dg.length && typeof requestAnimationFrame === 'function') {
+      for (var d = 0; d < dg.length; d++) { dg[d].style.willChange = 'transform'; }
+      var t0 = null;
+      var drift = function (now) {
+        if (t0 === null) { t0 = now; }
+        var t = (now - t0) / 1000;
+        for (var i = 0; i < dg.length; i++) {
+          var el = dg[i];
+          var amp = parseFloat(el.getAttribute('data-amp') || '38');
+          var per = parseFloat(el.getAttribute('data-per') || '38');
+          var ph = parseFloat(el.getAttribute('data-ph') || '0');
+          var x = amp * Math.sin(2 * Math.PI * (t / per) + ph);
+          el.style.transform = 'translate3d(' + x.toFixed(2) + 'px, 0, 0)';
+        }
+        requestAnimationFrame(drift);
+      };
+      requestAnimationFrame(drift);
+    }
     var els = document.querySelectorAll('.rv');
     if ('IntersectionObserver' in window && els.length) {
       for (var i = 0; i < els.length; i++) {

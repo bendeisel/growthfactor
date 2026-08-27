@@ -228,6 +228,25 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+    var dg = document.querySelectorAll('.dg');
+    if (dg.length && typeof requestAnimationFrame === 'function') {
+      for (var d = 0; d < dg.length; d++) { dg[d].style.willChange = 'transform'; }
+      var t0 = null;
+      var drift = function (now) {
+        if (t0 === null) { t0 = now; }
+        var t = (now - t0) / 1000;
+        for (var i = 0; i < dg.length; i++) {
+          var el = dg[i];
+          var amp = parseFloat(el.getAttribute('data-amp') || '38');
+          var per = parseFloat(el.getAttribute('data-per') || '38');
+          var ph = parseFloat(el.getAttribute('data-ph') || '0');
+          var x = amp * Math.sin(2 * Math.PI * (t / per) + ph);
+          el.style.transform = 'translate3d(' + x.toFixed(2) + 'px, 0, 0)';
+        }
+        requestAnimationFrame(drift);
+      };
+      requestAnimationFrame(drift);
+    }
     var chips = document.querySelectorAll('.fchip');
     var cls = document.querySelectorAll('.cls');
     function setFilter(f) {

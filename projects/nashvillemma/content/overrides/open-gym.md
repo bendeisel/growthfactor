@@ -8,7 +8,6 @@ Welcome to the epicenter of elite martial arts and fitness training in Nashville
 
 Step inside, and you're greeted by expansive training spaces that seamlessly blend an array of fitness equipment with versatile training grounds. With a combination of weight rooms and large turf areas, our fitness spaces are tailored for muscle building, designed for strength and conditioning exercises, and built for athletes and enthusiasts alike. We've ensured every tool you need is at your fingertips. This seamless integration guarantees that whether you're aiming to enhance your endurance, agility, or strength, our facility caters to your every need.
 
-Moving further in, our pride is the sprawling 13,000 sqft of premium-quality mats, an arena where martial arts practitioners can hone their craft. Adjacent to this, our professional-grade cage and ring stand as a testament to our dedication to providing an authentic combat experience. Here, both budding fighters and seasoned pros can spar, practice techniques, or prepare for an upcoming fight in an environment that mirrors the real-world stage.
 
 #### Recover Like a Pro
 

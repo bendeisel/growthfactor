@@ -314,9 +314,12 @@
   </div>
 
   <!-- SLOGAN -->
-  <div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); color: #FFFFFF; padding: 54px 20px; text-align: center">
+  <div class="rv" style="position: relative; overflow: hidden; background: #8A6224">
+  <div aria-hidden="true" class="dg" data-amp="30" data-per="44" data-ph="11.20" style="position: absolute; top: -3px; bottom: -3px; left: -6%; width: 112%; filter: blur(1.5px); background-color: #8A6224; background-image: radial-gradient(150% 46.8% at 42.7% 6%, rgba(243,225,178,0.92) 0%, rgba(243,225,178,0) 51%), radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), radial-gradient(150% 46.8% at 51.03% 67%, rgba(197,149,67,0.92) 0%, rgba(197,149,67,0) 51%), radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>
+  <div style="position: relative; z-index: 2; padding: 54px 20px; text-align: center">
     <h2 style="font-size: 40px; line-height: 1">We build champions!<br><span style="color: #000000">Training</span> for your goals.<br><span style="color: #000000">community</span> for your success.</h2>
   </div>
+</div>
 
   <!-- FOOTER -->
   <div style="background: #000000">
@@ -408,10 +411,31 @@ class Component extends DCLogic {
   }
 
   componentDidMount() {
+    var dg = document.querySelectorAll('.dg');
+    if (dg.length && typeof requestAnimationFrame === 'function') {
+      for (var d = 0; d < dg.length; d++) { dg[d].style.willChange = 'transform'; }
+      var t0 = null;
+      var drift = function (now) {
+        if (t0 === null) { t0 = now; }
+        var t = (now - t0) / 1000;
+        for (var i = 0; i < dg.length; i++) {
+          var el = dg[i];
+          var amp = parseFloat(el.getAttribute('data-amp') || '38');
+          var per = parseFloat(el.getAttribute('data-per') || '38');
+          var ph = parseFloat(el.getAttribute('data-ph') || '0');
+          var x = amp * Math.sin(2 * Math.PI * (t / per) + ph);
+          el.style.transform = 'translate3d(' + x.toFixed(2) + 'px, 0, 0)';
+        }
+        requestAnimationFrame(drift);
+      };
+      requestAnimationFrame(drift);
+    }
     var self = this;
     var vid = document.getElementById('heroVid');
     if (vid) {
       vid.muted = true;
+      vid.loop = true;   // the bare loop attribute does not survive the renderer
+      vid.addEventListener('ended', function () { vid.currentTime = 0; vid.play(); });
       var vp = vid.play();
       if (vp && vp.catch) { vp.catch(function () {}); }
     }
