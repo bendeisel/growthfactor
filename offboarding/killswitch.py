@@ -56,7 +56,8 @@ PHASES = {
 }
 
 REQUIRED_SYSTEM_FIELDS = ("id", "name", "phase", "blast_radius", "revocation",
-                          "tiers", "owner", "steps", "verify")
+                          "tiers", "owner", "steps", "verify", "share_policy")
+SHARE_POLICIES = ("never_share", "named_user", "autofill_only", "not_applicable")
 REQUIRED_PERSON_FIELDS = ("id", "name", "email", "tiers")
 
 # Pattern hits are errors: this repo holds pointers to credentials, never
@@ -190,6 +191,16 @@ def cmd_check(args: argparse.Namespace) -> int:
             if not isinstance(entry.get("blast_radius"), int) or \
                     not 1 <= entry.get("blast_radius", 0) <= 5:
                 errors.append(f"system '{sid}': blast_radius must be an int 1-5")
+            sp = entry.get("share_policy")
+            if sp is not None and sp not in SHARE_POLICIES:
+                errors.append(f"system '{sid}': share_policy '{sp}' is not one of "
+                              f"{list(SHARE_POLICIES)}")
+            if sp == "never_share" and entry.get("tiers") and \
+                    set(entry["tiers"]) - {"admin"}:
+                warnings.append(
+                    f"system '{sid}': share_policy is never_share but it applies to "
+                    f"tiers {entry['tiers']} — if only Ben holds it, this should "
+                    f"normally be tiers = [\"admin\"]")
             if not entry.get("verified", False):
                 warnings.append(f"system '{sid}': verified = false — nobody has "
                                 f"confirmed this matches your real stack")
@@ -246,7 +257,37 @@ def cmd_check(args: argparse.Namespace) -> int:
 # plan
 # --------------------------------------------------------------------------- #
 
-def build_plan(inv: dict, person: dict, reason: str | None) -> str:
+def rotation_call(entry: dict, for_cause: bool) -> tuple[str, str]:
+    """What this system's policy means for THIS departure. (label, explanation)"""
+    policy = entry.get("share_policy", "not_applicable")
+    br = entry.get("blast_radius", 5)
+    if policy == "never_share":
+        return ("ROTATE — unconditional",
+                "Only Ben should ever have held this. If it was shared, treat this "
+                "exit as an incident: rotate now and find out how it got shared.")
+    if policy == "named_user":
+        return ("REMOVE USER — no rotation needed",
+                "Named-user access revokes cleanly for one person, which is why this "
+                "is the preferred model. Rotation is only needed if you find they "
+                "were using a shared login instead.")
+    if policy == "autofill_only":
+        if for_cause:
+            return ("ROTATE — for-cause departure",
+                    "Autofill-only is not a boundary against someone motivated to "
+                    "keep the password. A for-cause exit rotates it regardless.")
+        if br <= 3:
+            return ("Rotation OPTIONAL — record your decision",
+                    "Shared autofill-only and blast radius is 3 or below, so the "
+                    "password was never viewable and this is the payoff of the "
+                    "policy. Write down that you chose not to rotate, and why.")
+        return ("ROTATE — blast radius too high to skip",
+                f"Autofill-only, but blast radius {br}/5. Above 3 it rotates on "
+                "every exit regardless of permission level.")
+    return ("", "")
+
+
+def build_plan(inv: dict, person: dict, reason: str | None,
+               for_cause: bool = False) -> str:
     out: list[str] = []
     w = out.append
     pid = person["id"]
@@ -258,6 +299,8 @@ def build_plan(inv: dict, person: dict, reason: str | None) -> str:
     w(f"- **Role:** {person.get('role', 'unrecorded')}")
     w(f"- **Tiers:** {', '.join(ptiers) or 'NONE — this runbook will be empty'}")
     w(f"- **Generated:** {today()}")
+    w(f"- **Departure type:** {'FOR CAUSE' if for_cause else 'amicable'}"
+      f"{'  ← everything shared rotates, no exceptions' if for_cause else ''}")
     if reason:
         w(f"- **Reason:** {reason}")
     w("")
@@ -284,6 +327,23 @@ def build_plan(inv: dict, person: dict, reason: str | None) -> str:
           "Phase 0 2FA sweep and confirm. An empty list here is only trustworthy if "
           "somebody checked.")
     w("")
+
+    # Never-share audit — the policy check that catches drift.
+    # Deliberately NOT tier-filtered: these are admin-only by policy, so they
+    # would never appear in a contractor's plan. Listing them anyway is how you
+    # catch the case where policy drifted and one got shared after all.
+    never = [x for x in inv.get("system", [])
+             if x.get("share_policy") == "never_share"]
+    if never:
+        w("## Never-share audit")
+        w("")
+        w("House policy is that only Ben ever holds these. Confirm, for each, that "
+          "this person never had it. A yes is not a routine rotation — it means the "
+          "policy drifted, and the drift is more important than this one exit.")
+        w("")
+        for entry in never:
+            w(f"- [ ] **{entry['name']}** — confirmed never shared with them")
+        w("")
 
     # Rotation scope.
     w("## Rotation scope")
@@ -355,6 +415,10 @@ def build_plan(inv: dict, person: dict, reason: str | None) -> str:
             if meta:
                 w("*" + "  ·  ".join(meta) + "*")
                 w("")
+            call, why_call = rotation_call(entry, for_cause)
+            if call:
+                w(f"**Policy — {entry.get('share_policy')}: {call}.** {why_call}")
+                w("")
             if entry.get("why"):
                 w("> " + entry["why"].strip().replace("\n", "\n> "))
                 w("")
@@ -384,7 +448,7 @@ def build_plan(inv: dict, person: dict, reason: str | None) -> str:
 def cmd_plan(args: argparse.Namespace) -> int:
     inv, people = load(INVENTORY), load(PEOPLE)
     person = find_person(people, args.person)
-    print(build_plan(inv, person, args.reason))
+    print(build_plan(inv, person, args.reason, args.for_cause))
     return 0
 
 
@@ -392,12 +456,13 @@ def cmd_start(args: argparse.Namespace) -> int:
     inv, people = load(INVENTORY), load(PEOPLE)
     person = find_person(people, args.person)
     RUNS.mkdir(exist_ok=True)
-    dest = RUNS / f"{today()}-{person['id']}.md"
+    suffix = "-for-cause" if args.for_cause else ""
+    dest = RUNS / f"{today()}-{person['id']}{suffix}.md"
     if dest.exists() and not args.force:
         fail(f"{dest.relative_to(HERE.parent)} already exists — work that run, or "
              f"pass --force to regenerate it (regenerating loses ticked boxes)")
     who = operator(args.operator)
-    body = build_plan(inv, person, args.reason)
+    body = build_plan(inv, person, args.reason, args.for_cause)
     body = body.replace("# Offboarding runbook",
                         f"<!-- run opened {now()} by {who} -->\n# Offboarding runbook", 1)
     dest.write_text(body, encoding="utf-8")
@@ -524,12 +589,18 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("plan", help="print a runbook without opening a run")
     s.add_argument("person")
     s.add_argument("--reason", help="why they are leaving, for the record")
+    s.add_argument("--for-cause", action="store_true",
+                   help="departure was not amicable: every shared credential "
+                        "rotates, autofill-only included")
     s.set_defaults(func=cmd_plan)
 
     s = sub.add_parser("start", help="open a tracked run in runs/")
     s.add_argument("person")
     s.add_argument("--reason", help="why they are leaving, for the record")
     s.add_argument("--operator", help="who is running this (default: git user.email)")
+    s.add_argument("--for-cause", action="store_true",
+                   help="departure was not amicable: every shared credential "
+                        "rotates, autofill-only included")
     s.add_argument("--force", action="store_true",
                    help="overwrite an existing run file for today (loses ticks)")
     s.set_defaults(func=cmd_start)

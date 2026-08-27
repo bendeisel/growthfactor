@@ -17,6 +17,35 @@ vault = "shared password manager — set to your actual vault name"
 # the system's `tiers`.
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 
+# House credential policy, enforced by `share_policy` on each system below.
+#
+#   never_share    — Ben holds it, nobody else, ever. Registrar, hosting root,
+#                    finance, API keys, SSH/deploy keys, 2FA seeds, recovery
+#                    codes. These cannot be shared "use but don't view" because
+#                    they are copy-paste secrets with no autofill mode. If one
+#                    of these WAS shared, that is an incident, not a routine
+#                    exit — it rotates immediately and unconditionally.
+#   named_user     — the service supports adding the person as their own user.
+#                    Always prefer this: offboarding becomes a user removal with
+#                    ZERO rotation. Strictly better than autofill-only sharing.
+#   autofill_only  — shared through Dashlane with "Can autofill" so they can use
+#                    it but not view, copy, edit or reshare it. The fallback for
+#                    services with no multi-user support. Earns the right to skip
+#                    rotation on an amicable exit — NOT on a for-cause one, and
+#                    never for high blast radius.
+#   not_applicable — not a credential (a device, a data transfer, a process).
+#
+# Rotation on exit is decided by policy + departure type, not by whether the
+# person "used" the credential:
+#
+#   departure   never_share   named_user   autofill_only
+#   amicable    rotate        remove user  skip if blast_radius <= 3
+#   for-cause   rotate        remove user  ROTATE, all of it
+#
+# Autofill delivers the password into the browser to fill the field, so a
+# motivated person can read it out. "Can autofill" removes accidental retention
+# and bulk export. It is not a boundary against someone who wants to keep it.
+
 # ---------------------------------------------------------------------------
 # PHASE 0 — prechecks. Non-destructive, done at notice, BEFORE anything is cut
 # off. Every item here exists because doing it after a later phase is either
@@ -86,6 +115,7 @@ kind = "endpoint"
 phase = 1
 blast_radius = 4
 revocation = "per_person"
+share_policy = "not_applicable"
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "physical + device management, if any"
@@ -104,6 +134,7 @@ kind = "infra"
 phase = 1
 blast_radius = 5
 revocation = "per_person"
+share_policy = "not_applicable"
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "vault admin console"
@@ -122,6 +153,7 @@ kind = "infra"
 phase = 1
 blast_radius = 3
 revocation = "per_person"
+share_policy = "named_user"
 tiers = ["internal", "automation", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "github.com/orgs/<org>/people"
@@ -141,6 +173,7 @@ kind = "infra"
 phase = 1
 blast_radius = 5
 revocation = "per_person"
+share_policy = "named_user"
 tiers = ["internal", "client-access", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "hPanel > Files > FTP accounts / SSH access"
@@ -159,6 +192,7 @@ kind = "saas"
 phase = 1
 blast_radius = 2
 revocation = "per_person"
+share_policy = "named_user"
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "each tool's admin page"
@@ -178,6 +212,7 @@ kind = "automation"
 phase = 1
 blast_radius = 4
 revocation = "per_person"
+share_policy = "named_user"
 tiers = ["automation", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "each platform's team settings"
@@ -201,7 +236,8 @@ kind = "infra"
 phase = 2
 blast_radius = 5
 revocation = "rotate"
-tiers = ["internal", "client-access", "admin"]
+share_policy = "never_share"
+tiers = ["admin"]
 owner = "ben@growth-factor.ai"
 admin = "registrar account"
 verified = false
@@ -221,7 +257,8 @@ kind = "infra"
 phase = 2
 blast_radius = 5
 revocation = "rotate"
-tiers = ["internal", "client-access", "admin"]
+share_policy = "never_share"
+tiers = ["admin"]
 owner = "ben@growth-factor.ai"
 admin = "hpanel.hostinger.com"
 verified = false
@@ -242,7 +279,8 @@ kind = "infra"
 phase = 2
 blast_radius = 4
 revocation = "rotate"
-tiers = ["internal", "automation", "admin"]
+share_policy = "never_share"
+tiers = ["admin"]
 owner = "ben@growth-factor.ai"
 admin = "repo settings > Deploy keys / Secrets"
 verified = false
@@ -261,6 +299,7 @@ kind = "client"
 phase = 2
 blast_radius = 4
 revocation = "both"
+share_policy = "named_user"
 tiers = ["client-access"]
 owner = "ben@growth-factor.ai"
 admin = "per-client Google properties"
@@ -275,13 +314,36 @@ steps = [
 verify = "Per client: their name appears in no user list, primary ownership sits with the client, and no unrecognised manager or pending transfer exists."
 
 [[system]]
+id = "client-shared-logins"
+name = "Client logins with no multi-user support — shared autofill-only"
+kind = "client"
+phase = 2
+blast_radius = 3
+revocation = "rotate"
+share_policy = "autofill_only"
+tiers = ["client-access"]
+owner = "ben@growth-factor.ai"
+admin = "per-client, per-service"
+verified = false
+steps = [
+  "Revoke the Dashlane collection share (removing them from the group should already have done this — confirm it did).",
+  "Gym/booking software (Glofox and similar), legacy CMS logins kept from a migration, review platforms, directory listings: these usually have one login and no user management, which is why they are shared autofill-only rather than as named users.",
+  "AMICABLE exit: rotation optional at blast radius 3 or below, because the password was never viewable. Record the decision either way.",
+  "FOR-CAUSE exit: rotate every one of these, no exceptions. Autofill-only is not a boundary against someone motivated to keep the password.",
+  "Either way, check each service for a second account, an added user, or an API token they created inside it — that access survives any rotation you do here.",
+  "Where a service has quietly added multi-user support since you set it up, switch to named users now. That removes this whole entry from future runbooks.",
+]
+verify = "Share revoked; for a for-cause exit, every login rotated and confirmed working; no unrecognised second account or token in any of these services."
+
+[[system]]
 id = "lead-path"
 name = "Lead capture path and client-facing mailboxes"
 kind = "client"
 phase = 2
 blast_radius = 4
 revocation = "rotate"
-tiers = ["client-access", "automation", "admin"]
+share_policy = "never_share"
+tiers = ["admin"]
 owner = "ben@growth-factor.ai"
 admin = "lead endpoint + per-domain mail"
 verified = false
@@ -300,7 +362,8 @@ kind = "finance"
 phase = 2
 blast_radius = 5
 revocation = "both"
-tiers = ["finance", "admin"]
+share_policy = "never_share"
+tiers = ["admin"]
 owner = "ben@growth-factor.ai"
 admin = "payment processor, bank, accounting software"
 verified = false
@@ -325,6 +388,7 @@ kind = "identity"
 phase = 3
 blast_radius = 3
 revocation = "per_person"
+share_policy = "not_applicable"
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "admin.google.com > Users > Transfer data / Drive"
@@ -343,6 +407,7 @@ kind = "identity"
 phase = 3
 blast_radius = 3
 revocation = "per_person"
+share_policy = "not_applicable"
 tiers = ["internal", "client-access", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "admin.google.com + their mailbox settings"
@@ -362,6 +427,7 @@ kind = "process"
 phase = 3
 blast_radius = 2
 revocation = "per_person"
+share_policy = "not_applicable"
 tiers = ["internal", "client-access", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "ClickUp + client comms"
@@ -386,6 +452,7 @@ kind = "identity"
 phase = 4
 blast_radius = 5
 revocation = "per_person"
+share_policy = "named_user"
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "admin.google.com > Users"
@@ -414,6 +481,7 @@ kind = "process"
 phase = 5
 blast_radius = 5
 revocation = "per_person"
+share_policy = "not_applicable"
 tiers = ["internal", "client-access", "automation", "finance", "admin"]
 owner = "ben@growth-factor.ai"
 admin = "n/a"

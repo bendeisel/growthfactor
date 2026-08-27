@@ -29,6 +29,49 @@ Three files of data and one script that turns them into an ordered checklist:
 phase and blast radius, and emits markdown with a checkbox per step. `start`
 writes that to `runs/` so it can be worked and committed as a record.
 
+## House credential policy
+
+The policy: **Ben holds the credentials. Nobody else, ever.** Other people get
+*use* without *sight* — shared through Dashlane with "Can autofill" so they can
+log in but never view, copy, edit or reshare the password.
+
+Each system carries a `share_policy`, and the generated runbook tells you what
+that means for the departure in front of you:
+
+| `share_policy` | What it means | On exit |
+|---|---|---|
+| `never_share` | Ben only. Registrar, hosting root, finance, deploy keys, API keys, SSH keys, 2FA seeds — copy-paste secrets with no autofill mode. | Rotate unconditionally. If it *was* shared, that's an incident. |
+| `named_user` | The service supports the person as their own user. **Always prefer this.** | Remove the user. **Zero rotation.** |
+| `autofill_only` | Shared "Can autofill" — the fallback for services with no user management (booking software, legacy CMSes). | Amicable + blast radius ≤3: optional. For-cause: rotate all of it. |
+| `not_applicable` | Not a credential — a device, a data transfer, a process. | — |
+
+Run `plan` with `--for-cause` for a departure that wasn't amicable, and every
+shared credential rotates regardless of permission level.
+
+**Why autofill-only isn't a boundary:** the password is delivered to the browser
+to fill the field, so someone motivated can read it out. "Can autofill" removes
+*accidental* retention and blocks bulk export. That's worth a lot — it's what
+earns the right to skip rotation on an ordinary exit — but it is not protection
+against a person who wants to keep the password. Hence the for-cause branch.
+
+**Named user beats autofill-only** wherever it's available. A shared login, even
+autofill-only, still eventually rotates. A named user is removed and nothing
+rotates at all. Every service you move to named users deletes an entry from
+every future runbook.
+
+**The never-share audit runs regardless of tier.** Never-share systems are
+scoped `tiers = ["admin"]`, so they never appear in a contractor's plan — but the
+audit lists them anyway and asks you to confirm each was never shared. A "yes"
+there matters more than the exit you're working: it means the policy drifted.
+
+### What the policy is worth, measured
+
+The example contractor's runbook before never-share items were scoped to admin
+only: **95 items.** After: **77.** The 18 that disappeared were the highest
+blast-radius rotations on the list — registrar, hosting, deploy keys, finance,
+the lead path. That's the policy paying for itself, and the same number will
+keep falling as services move to named users.
+
 ## The two classes of access, which is the whole point
 
 **Class 1 — per-person accounts you can revoke.** Workspace, GitHub org,
