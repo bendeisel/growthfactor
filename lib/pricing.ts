@@ -8,10 +8,12 @@ import { getModel } from "@/lib/models";
  * 2026-08-31, which makes real spend *lower* than what we log — the safe
  * direction for a budget cap, so we deliberately don't model it.
  *
- * Rates for the other providers are not hard-coded: whoever sets the API key
- * sets the rate, via env, from that provider's current pricing page. A model
- * with no rate still logs tokens; its spend is reported as unpriced rather than
- * guessed, because a made-up rate in a budget guardrail is worse than a gap.
+ * ANTHROPIC_INPUT_CENTS_PER_MTOK / ANTHROPIC_OUTPUT_CENTS_PER_MTOK override
+ * both, so a published price change needs an env edit rather than a deploy.
+ *
+ * A model with no rate still logs tokens; its spend is reported as unpriced
+ * rather than guessed, because a made-up rate in a budget guardrail is worse
+ * than a visible gap.
  */
 
 export interface Rate {

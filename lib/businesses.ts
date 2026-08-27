@@ -16,6 +16,17 @@ export interface Business {
   accountRef?: string;
   /** Membership businesses show active-member / past-due counts. */
   membership: boolean;
+  /**
+   * Ben owns it — it belongs in "My Businesses".
+   * Ownership and clienthood are separate flags rather than separate lists,
+   * because two of these are both: he owns the gyms *and* the agency serves
+   * them. Two lists would mean maintaining the same gym twice.
+   */
+  owned?: boolean;
+  /** The agency does done-for-you work for it — it belongs in "Client OS". */
+  client?: boolean;
+  /** No longer active. Kept so stored history still resolves to a name. */
+  archived?: boolean;
 }
 
 export const BUSINESSES: Business[] = [
@@ -25,6 +36,8 @@ export const BUSINESSES: Business[] = [
     kind: "MMA gym — memberships",
     source: "glowfox",
     membership: true,
+    owned: true,
+    client: true,
   },
   {
     id: "fighters-boxing",
@@ -32,6 +45,8 @@ export const BUSINESSES: Business[] = [
     kind: "Boxing gym — memberships",
     source: "glowfox",
     membership: true,
+    owned: true,
+    client: true,
   },
   {
     id: "growth-factor-ai",
@@ -39,6 +54,7 @@ export const BUSINESSES: Business[] = [
     kind: "Agency — retainers",
     source: "ghl",
     membership: false,
+    owned: true,
   },
   {
     id: "fuel-fortress",
@@ -46,6 +62,7 @@ export const BUSINESSES: Business[] = [
     kind: "Nutrition / supplements",
     source: "ghl",
     membership: false,
+    client: true,
   },
   {
     id: "aeterna-club",
@@ -53,6 +70,7 @@ export const BUSINESSES: Business[] = [
     kind: "Membership club",
     source: "ghl",
     membership: true,
+    archived: true,
   },
   {
     id: "furst-place-mma",
@@ -60,6 +78,7 @@ export const BUSINESSES: Business[] = [
     kind: "MMA gym — memberships",
     source: "glowfox",
     membership: true,
+    client: true,
   },
   {
     id: "drhoward-compass",
@@ -67,9 +86,16 @@ export const BUSINESSES: Business[] = [
     kind: "Coaching program",
     source: "ghl",
     membership: false,
+    archived: true,
   },
 ];
 
 export function getBusiness(id: string): Business | undefined {
   return BUSINESSES.find((b) => b.id === id);
 }
+
+/** The three Ben owns — the top of the rail. */
+export const OWNED = BUSINESSES.filter((b) => b.owned && !b.archived);
+
+/** The four the agency does done-for-you work for. */
+export const CLIENTS = BUSINESSES.filter((b) => b.client && !b.archived);

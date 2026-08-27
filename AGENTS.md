@@ -15,20 +15,19 @@ Single-tab operations dashboard for Growth Factor AI. Spec and phase plan:
 
 ## Layout of the code
 
-Three columns, one screen: businesses, Command Center, apps.
+A rail of sections on the left, one section filling the rest.
 
 - `app/page.tsx` — the whole product. No routes to add.
 - `middleware.ts` — the single auth gate for every request.
-- `components/metrics/business-panel.tsx` — left column: selector, four KPI
-  tiles, one chart, attention feed.
-- `components/command-center-panel.tsx` — middle: Jarvis core, model selector,
-  the one chat thread. `lib/models.ts` decides which models exist; only ones this
-  deployment can actually call are offered.
-- `components/jarvis/jarvis-core.tsx` — the centrepiece (three.js), which is also
-  the agent's status light.
-- `components/workspace/` — right column. `apps-panel.tsx` is the toggle,
-  `tool-window.tsx` renders a tool result, `workspace-context.tsx` is the wire
-  between the chat and the window.
+- `components/command-center.tsx` — the shell: section state, theme toggle, the
+  desktop rail and the phone tab bar.
+- `components/ui/sidebar.tsx` — the collapsible rail.
+- `components/sections/` — one file per section (businesses, clients, bridge,
+  inbox, clickup). `parts.tsx` holds the shared page furniture.
+- `components/charts/plot.tsx` — every chart. Area, bars, pace bars, rank grid,
+  meters.
+- `lib/reports.ts` — sample Client OS data, badged as sample until an adapter
+  replaces it.
 - `lib/tools/` — what the agent can do. One file per source.
 - `lib/chat/` — providers and the Anthropic tool loop.
 - `lib/metrics/` — data layer. `registry.ts` decides stored-vs-pull;
@@ -64,9 +63,15 @@ Three columns, one screen: businesses, Command Center, apps.
   edge with `lib/metrics/format.ts`. Don't use `Intl` compact notation — Node
   and Chrome disagree on trailing zeros, which breaks hydration.
 - **Budget checks happen before the provider call**, never after.
-- Dark theme only. Colours come from the `@theme` block in `app/globals.css` —
-  use the token names (`text-ink-muted`, `bg-panel`), not raw hex. Status
-  colours are reserved for status; don't use them as series colours.
+- **Two themes, one set of token names.** Every colour is a runtime variable in
+  `app/globals.css`; `.dark` on `<html>` flips the whole app. Use the token names
+  (`text-ink-muted`, `bg-surface`), never raw hex, and never define a colour only
+  inside one scheme. A tile is never pure white and never pure black.
+- **Text on a status colour uses `text-on-tone`,** not `text-white`. The status
+  colours are dark in light mode and bright in dark mode, so a fixed foreground
+  fails one of them. Status colours are reserved for status — never a series colour.
+- **Claude only.** One provider means one tool shape, one price table, one
+  failure mode in the budget guard. Don't add a second provider "switched off".
 - Server components fetch; client components poll. Keep secrets in route
   handlers and `lib/` — never in a `"use client"` file.
 

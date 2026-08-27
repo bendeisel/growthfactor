@@ -24,16 +24,22 @@ locally it runs open and shows an `unprotected` badge in the header.
 ## The idea
 
 ```
-┌── My businesses ────┐ ┌── Command Center ───────┐ ┌── Apps ─────────────┐
-│ selector            │ │      ( Jarvis core )    │ │ Email ClickUp …     │
-│ Revenue  Members    │ │  status: working ●      │ │                     │
-│ New      Lost       │ │                         │ │  the window the     │
-│ ────────────────    │ │  you: open ClickUp      │ │  agent just opened  │
-│ chart               │ │  ⚒ clickup_tasks        │ │                     │
-│ ────────────────    │ │  Opus 5: four open …    │ │  [Approve] [Decline]│
-│ needs attention     │ │  ▸ model selector       │ │                     │
-└─────────────────────┘ └─────────────────────────┘ └─────────────────────┘
+┌──────────────┬────────────────────────────────────────────┐
+│ My Businesses│  One section, full width                   │
+│ Client OS    │                                            │
+│ Bridge       │  Businesses → four numbers + pace          │
+│ Superhuman   │  Client OS  → Ads / SEO / Website          │
+│ ClickUp      │  Bridge     → four Claude Code sessions    │
+│ ── Watch ─── │  Superhuman → inbox                        │
+│ Needs attn ⑥ │  ClickUp    → the board                    │
+│ Dark mode    │  Needs attn → worst first                  │
+└──────────────┴────────────────────────────────────────────┘
 ```
+
+On a phone the rail becomes a bottom tab bar and the theme toggle floats top
+right. Both themes are designed, not inverted: light is a blue-grey page with
+tinted cards, dark is deep navy with cards lifted off it. Nothing is pure white
+or pure black.
 
 **The left column is the wall.** The four numbers Ben asked for — revenue, new
 members, lost members, total members — month-to-date with last month beside
@@ -42,16 +48,14 @@ month, because half a month of revenue judged against a whole one always looks
 like a collapse. Total members is a stock, so it compares to where last month
 closed.
 
-**The middle column is the only terminal.** One thread, run by Claude — Opus 5
-by default (best at driving the tools) or Sonnet 5 when a question is routine and
-you'd rather spend less. Codex and Gemini are optional second opinions that appear
-in the selector only once you set both their API key and their model id; they
-answer but can't drive the tools yet. The Jarvis core is also the status light:
-idle drifts, thinking speeds up and shifts violet, working runs hot.
+**Bridge is the terminal.** Claude Code only — Opus 5 by default (best at
+driving the tools) or Sonnet 5 when a question is routine. Codex, Gemini and the
+OpenAI-compatible path are gone rather than switched off: a provider you keep
+"just in case" still costs a second tool shape, a second price table and a
+second failure mode in the budget guard.
 
-**The right column is whatever you summoned.** Nothing is a hand-built app
-screen. Ask for something, the agent calls a tool, and the tool call *is* the
-window — it opens on the matching tab so you can watch the work.
+**Nothing is a hand-built app screen.** Ask for something, the agent calls a
+tool, and the tool call *is* the window.
 
 ## Tools
 
@@ -75,8 +79,8 @@ Two rules hold for all of them:
 - **A tool that can't run says which credential is missing.** It never returns
   plausible-looking placeholder data.
 
-Tools run on Claude. If you add Codex or Gemini later they'll answer but not act,
-and the panel says `chat only` rather than letting you find out by asking.
+Tools run on Claude, which is the only provider — so there is no "answers but
+can't act" tier to explain.
 
 ## Metrics: pushed, stored, then read
 
@@ -132,6 +136,8 @@ than guessing a number into a guardrail.
 Opus 5 is the default because it's the best tool-driver, not the cheapest: at
 list rates a heavy tool-using turn is cents, but a day of them adds up against a
 $5 cap. Switch to Sonnet 5 for routine questions if the meter gets tight.
+`ANTHROPIC_INPUT_CENTS_PER_MTOK` / `_OUTPUT_CENTS_PER_MTOK` override the built-in
+rates, so a published price change needs an env edit rather than a deploy.
 
 ## Layout
 

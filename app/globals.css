@@ -2,86 +2,160 @@
 
 /*
   Command Center design tokens.
-  Deep navy rather than near-black, hero numbers, and status colours that read
-  at a glance from across the room — this is a screen that stays open all day.
-  Dark-only by design, so we commit to one look instead of styling both schemes.
+
+  Two moods, one set of names. Every colour is a runtime variable so the whole
+  app flips by toggling `.dark` on <html> — no duplicated class lists, and no
+  colour whose only definition lives inside one scheme.
+
+  Two rules the palette exists to satisfy:
+  - A tile is never white. Pure white on a light ground glares, and pure black
+    reads as a terminal. Both schemes put cards on a *tinted* surface a step
+    away from the page behind them.
+  - Status colours are reserved for status. Series colours never borrow them,
+    so red always means "this is a problem" and never "this is series three".
 */
-@theme {
-  --color-bg: #071021;
-  --color-bg-elevated: #0d1c33;
-  --color-panel: #102039;
-  --color-panel-hover: #16294a;
-  --color-line: #1e3557;
-  --color-line-bright: #2b4570;
 
-  --color-ink: #eef4ff;
-  --color-ink-muted: #9db0cf;
-  --color-ink-dim: #6b83a8;
+@theme inline {
+  --color-bg: var(--cc-bg);
+  --color-surface: var(--cc-surface);
+  --color-surface-2: var(--cc-surface-2);
+  --color-surface-hover: var(--cc-surface-hover);
+  --color-line: var(--cc-line);
+  --color-line-strong: var(--cc-line-strong);
 
-  /* Series colours: identity only. */
-  --color-accent: #22d3ee;
-  --color-accent-deep: #0e7490;
-  --color-blue: #3b82f6;
-  --color-violet: #8b5cf6;
+  --color-ink: var(--cc-ink);
+  --color-ink-muted: var(--cc-ink-muted);
+  --color-ink-dim: var(--cc-ink-dim);
 
-  /* Status colours: reserved for status, never used as a series colour. */
-  --color-up: #22c55e;
-  --color-down: #ef4444;
-  --color-warn: #f59e0b;
+  /* Identity. */
+  --color-brand: var(--cc-brand);
+  --color-brand-soft: var(--cc-brand-soft);
+  --color-violet: var(--cc-violet);
+  --color-violet-soft: var(--cc-violet-soft);
+  --color-teal: var(--cc-teal);
+  --color-teal-soft: var(--cc-teal-soft);
+
+  /* Status — reserved. */
+  --color-up: var(--cc-up);
+  --color-up-soft: var(--cc-up-soft);
+  --color-warn: var(--cc-warn);
+  --color-warn-soft: var(--cc-warn-soft);
+  --color-down: var(--cc-down);
+  --color-down-soft: var(--cc-down-soft);
+  /* Readable ink for text sitting ON a status colour. */
+  --color-on-tone: var(--cc-on-tone);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-html {
+/*
+  Light: a blue-grey page with cards a shade lighter — tinted, not white.
+*/
+:root {
+  color-scheme: light;
+
+  --cc-bg: #e9eef5;
+  --cc-surface: #f7f9fc;
+  --cc-surface-2: #eef2f8;
+  --cc-surface-hover: #e4ebf4;
+  --cc-line: #d5dee9;
+  --cc-line-strong: #bcc9d9;
+
+  --cc-ink: #0f1c2e;
+  --cc-ink-muted: #4a5c75;
+  --cc-ink-dim: #7688a1;
+
+  --cc-brand: #2563eb;
+  --cc-brand-soft: #dbe6fb;
+  --cc-violet: #7c3aed;
+  --cc-violet-soft: #e8ddfd;
+  --cc-teal: #0891a8;
+  --cc-teal-soft: #d6eef3;
+
+  --cc-up: #078055;
+  --cc-up-soft: #d6f0e6;
+  --cc-warn: #8f5e08;
+  --cc-warn-soft: #fbeccd;
+  --cc-down: #dc2743;
+  --cc-down-soft: #fbdde2;
+  --cc-on-tone: #ffffff;
+}
+
+/*
+  Dark: deep navy rather than black, cards lifted off it in blue-slate.
+  Nothing here is #000 — that's the look Ben called Tron.
+*/
+.dark {
   color-scheme: dark;
+
+  --cc-bg: #0a1120;
+  --cc-surface: #141f36;
+  --cc-surface-2: #1b2942;
+  --cc-surface-hover: #223151;
+  --cc-line: #24344f;
+  --cc-line-strong: #35496b;
+
+  --cc-ink: #e8eefb;
+  --cc-ink-muted: #9aabc6;
+  --cc-ink-dim: #6c7f9d;
+
+  --cc-brand: #5b9bf8;
+  --cc-brand-soft: #16294a;
+  --cc-violet: #a78bfa;
+  --cc-violet-soft: #2a2148;
+  --cc-teal: #2dd4bf;
+  --cc-teal-soft: #103b3d;
+
+  --cc-up: #34d399;
+  --cc-up-soft: #0f3529;
+  --cc-warn: #fbbf24;
+  --cc-warn-soft: #3a2c0c;
+  --cc-down: #fb7185;
+  --cc-down-soft: #3d1522;
+  --cc-on-tone: #0a1120;
 }
 
 body {
-  background:
-    radial-gradient(
-      1100px 520px at 15% -8%,
-      color-mix(in oklab, var(--color-blue) 16%, transparent),
-      transparent 62%
-    ),
-    radial-gradient(
-      900px 480px at 88% -4%,
-      color-mix(in oklab, var(--color-accent) 12%, transparent),
-      transparent 58%
-    ),
-    var(--color-bg);
-  color: var(--color-ink);
+  background: var(--cc-bg);
+  color: var(--cc-ink);
   font-family: var(--font-sans);
+  /* Stop iOS from re-sizing type when the phone rotates in bed. */
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Thin, dark scrollbars so panels don't get chunky OS chrome. */
+/* Thin scrollbars so panels don't get chunky OS chrome. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-line-bright) transparent;
+  scrollbar-color: var(--cc-line-strong) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: var(--color-line-bright);
+  background: var(--cc-line-strong);
   border-radius: 999px;
 }
 *::-webkit-scrollbar-track {
   background: transparent;
 }
 
-@utility panel {
-  background: color-mix(in oklab, var(--color-panel) 92%, transparent);
-  border: 1px solid var(--color-line);
-  backdrop-filter: blur(8px);
+/* A card: tinted surface, hairline, soft lift. Never white, never black. */
+@utility card-surface {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
+  border-radius: 0.875rem;
+  box-shadow:
+    0 1px 2px color-mix(in oklab, var(--cc-ink) 5%, transparent),
+    0 10px 24px -16px color-mix(in oklab, var(--cc-ink) 22%, transparent);
 }
 
-/* Inner tile: sits on a panel and holds one number. */
+/* Inner tile: sits on a card and holds one number. */
 @utility tile {
-  background: color-mix(in oklab, var(--color-bg-elevated) 88%, transparent);
-  border: 1px solid var(--color-line);
-  border-radius: 0.75rem;
+  background: var(--cc-surface-2);
+  border: 1px solid var(--cc-line);
+  border-radius: 0.625rem;
 }
 
 @utility tabular {
@@ -91,12 +165,11 @@ body {
 /* Hero figure: the number you read from across the room. */
 @utility hero-number {
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  font-weight: 700;
 }
 
-/* Slow pulse for "live" indicators — calmer than Tailwind's animate-pulse. */
 @keyframes cc-breathe {
   0%,
   100% {
@@ -111,20 +184,14 @@ body {
   animation: cc-breathe 2.4s ease-in-out infinite;
 }
 
-/* Sweep used by the Jarvis core's status ring while the agent works. */
-@keyframes cc-sweep {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@utility sweep {
-  animation: cc-sweep 3.2s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .breathe,
-  .sweep {
+  .breathe {
     animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }

@@ -1,17 +1,14 @@
 /**
  * The models the Command Center can talk to.
  *
- * Claude is the brain. This is Anthropic-only by default, with Codex (OpenAI)
- * and Gemini as slots that appear in the selector *only* once their key and
- * model id are configured — an option that can't work has no business being in
- * the list.
- *
- * Their model ids come from env rather than being hard-coded: whoever holds the
- * key knows which model that key is entitled to, and guessing a model id is the
- * same class of mistake as guessing a price.
+ * Claude only, and specifically Claude Code — Ben's decision. Codex, Gemini and
+ * the OpenAI-compatible path they shared are gone rather than left switched
+ * off, because a provider you keep "just in case" still has to be kept working:
+ * a second tool shape, a second price table, a second failure mode in the
+ * budget guard. One provider means one tool loop and one set of permissions.
  */
 
-export type ProviderId = "anthropic" | "openai" | "gemini";
+export type ProviderId = "anthropic";
 
 /** What a model is reached for. */
 export type Tier = "fast" | "heavy";
@@ -38,11 +35,8 @@ export interface Provider {
 
 export const PROVIDERS: Record<ProviderId, Provider> = {
   anthropic: { id: "anthropic", label: "Anthropic", short: "Claude" },
-  openai: { id: "openai", label: "OpenAI", short: "Codex" },
-  gemini: { id: "gemini", label: "Google", short: "Gemini" },
 };
 
-/** Always offered: these are the brains this thing is built around. */
 const ANTHROPIC_MODELS: ModelOption[] = [
   {
     id: "claude-opus-5",
@@ -64,49 +58,9 @@ const ANTHROPIC_MODELS: ModelOption[] = [
   },
 ];
 
-/**
- * Optional providers. Both halves have to be set — the key to call it, and the
- * model id to name. Tools stay off: the loop is written against Anthropic's
- * tool_use shape, so these answer but don't act (yet).
- */
-function optionalModels(): ModelOption[] {
-  const optional: ModelOption[] = [];
-
-  const openaiModel = process.env.OPENAI_MODEL;
-  if (openaiModel && process.env.OPENAI_API_KEY) {
-    optional.push({
-      id: openaiModel,
-      label: `Codex (${openaiModel})`,
-      provider: "openai",
-      tier: "heavy",
-      blurb: "Second opinion. Can't drive the tools yet.",
-      envVar: "OPENAI_API_KEY",
-      tools: false,
-    });
-  }
-
-  const geminiModel = process.env.GEMINI_MODEL;
-  if (geminiModel && process.env.GEMINI_API_KEY) {
-    optional.push({
-      id: geminiModel,
-      label: `Gemini (${geminiModel})`,
-      provider: "gemini",
-      tier: "heavy",
-      blurb: "Second opinion. Can't drive the tools yet.",
-      envVar: "GEMINI_API_KEY",
-      tools: false,
-    });
-  }
-
-  return optional;
-}
-
-/**
- * Every model available on this deployment. Server-side — the page reads it and
- * hands the list to the selector, since env isn't visible in the browser.
- */
+/** Every model available on this deployment. */
 export function listModels(): ModelOption[] {
-  return [...ANTHROPIC_MODELS, ...optionalModels()];
+  return [...ANTHROPIC_MODELS];
 }
 
 /** The model a request gets when it doesn't name one. */

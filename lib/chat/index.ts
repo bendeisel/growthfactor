@@ -1,5 +1,4 @@
 import { anthropicProvider } from "@/lib/chat/anthropic";
-import { geminiProvider, openAIProvider } from "@/lib/chat/openai-compatible";
 import { buildSystemPrompt } from "@/lib/chat/system";
 import {
   MissingCredentialError,
@@ -14,8 +13,6 @@ import { TOOLS, runTool } from "@/lib/tools";
 
 const PROVIDERS: Record<ProviderId, Provider> = {
   anthropic: anthropicProvider,
-  openai: openAIProvider,
-  gemini: geminiProvider,
 };
 
 export interface ChatRunOptions {
