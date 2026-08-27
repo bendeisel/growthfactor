@@ -1,29 +1,36 @@
 ---
 // CLASS PAGE TEMPLATE
 //
-// Header (rev 3, per Ben 2026-08-26): no photo, but not plain either. The
-// page name is set as a two-line poster lockup: the first line in near
-// black on the light ground, the second knocked out white on a red slab
-// that bleeds the full width of the screen. The ambient red fluid runs
-// behind it at higher intensity than the body sections, so the header
-// moves without needing a picture. The structure repeats on every page
-// (that consistency is the point) while the words inside it change, so
-// the pages read as one system instead of one page copied.
+// Shape follows the client's own content, which is identical on all three
+// class pages: a lead pitch (headline + paragraph + Read More), then two
+// sub-blocks that sat side by side in the original WordPress build.
 //
-// Body: photos sit beside the copy in the homepage's mat frames, sides
-// alternating; the photo-less block becomes the centered closer.
+//   1. poster header  page name in two lines, the second knocked out white
+//                     on a full-bleed red slab, ambient red fluid behind it
+//                     at higher intensity so it moves without a photo
+//   2. lead split     the page's photo beside the lead pitch
+//   3. pair           the two sub-blocks side by side on the warm ground
+//   4. close          centered call to action
+//   5. ticker         cross-nav to the other classes
 //
-// Pages supply data only: title, description, the two H1 lines, and the
-// section list.
+// Pages supply data only. One photo per page is deliberate: there are six
+// photos total and three class pages, so each page opens with its own
+// class-card photo (the card previews the page) and nothing repeats. Send
+// more photography and the pair section can take a second split.
 import Base from './Base.astro';
 import ClassTicker from '../components/ClassTicker.astro';
 
-export interface ClassSection {
+export interface LeadBlock {
   heading: string;
   /** paragraph HTML; <b> emphasis preserved from the client's copy */
   body: string;
   readMore?: { href: string; label: string };
-  image?: { src: string; alt: string; width: number; height: number };
+  image: { src: string; alt: string; width: number; height: number };
+}
+
+export interface PairBlock {
+  heading: string;
+  body: string;
 }
 
 interface Props {
@@ -31,14 +38,12 @@ interface Props {
   description: string;
   /** the page name split for the poster lockup: [black line, red slab line] */
   h1Lines: [string, string];
-  sections: ClassSection[];
+  lead: LeadBlock;
+  pair: PairBlock[];
   currentHref: string;
 }
 
-const { pageTitle, description, h1Lines, sections, currentHref } = Astro.props as Props;
-
-const withPhoto = sections.filter((s) => s.image);
-const closers = sections.filter((s) => !s.image);
+const { pageTitle, description, h1Lines, lead, pair, currentHref } = Astro.props as Props;
 ---
 
 <Base title={pageTitle} description={description}>
@@ -52,64 +57,54 @@ const closers = sections.filter((s) => !s.image);
     </div>
   </section>
 
-  <!-- ============ SPLITS: photo beside copy, alternating ============ -->
-  {
-    withPhoto.map((s, i) => {
-      const flip = i % 2 === 1;
-      return (
-        <section class={`split grain first-split${flip ? ' alt' : ''}${i > 0 ? ' subsequent' : ''} fluid-host`}>
-          <div class={`wrap split-grid${flip ? ' flip' : ''}`}>
-            {flip && (
-              <figure class="split-media mat mat-white reveal">
-                <img
-                  src={s.image!.src}
-                  alt={s.image!.alt}
-                  loading="lazy"
-                  width={s.image!.width}
-                  height={s.image!.height}
-                />
-              </figure>
-            )}
-            <div class="split-copy">
-              <h2 class="reveal">{s.heading}</h2>
-              <div class="reveal" set:html={s.body} />
-              {s.readMore && (
-                <p class="read-more reveal">
-                  <a href={s.readMore.href}>{s.readMore.label}</a>
-                </p>
-              )}
-            </div>
-            {!flip && (
-              <figure class="split-media mat mat-warm reveal">
-                <img
-                  src={s.image!.src}
-                  alt={s.image!.alt}
-                  loading="lazy"
-                  width={s.image!.width}
-                  height={s.image!.height}
-                />
-              </figure>
-            )}
-          </div>
-        </section>
-      );
-    })
-  }
+  <!-- ============ LEAD: photo beside the pitch ============ -->
+  <section class="split grain lead-split fluid-host">
+    <div class="wrap split-grid">
+      <div class="split-copy">
+        <h2 class="reveal">{lead.heading}</h2>
+        <div class="reveal" set:html={lead.body} />
+        {
+          lead.readMore && (
+            <p class="read-more reveal">
+              <a href={lead.readMore.href}>{lead.readMore.label}</a>
+            </p>
+          )
+        }
+      </div>
+      <figure class="split-media mat mat-warm reveal">
+        <img
+          src={lead.image.src}
+          alt={lead.image.alt}
+          loading="lazy"
+          width={lead.image.width}
+          height={lead.image.height}
+        />
+      </figure>
+    </div>
+  </section>
 
-  <!-- ============ CLOSER: centered, carries the CTA ============ -->
-  {
-    closers.map((s) => (
-      <section class="closer grain fluid-host">
-        <div class="wrap closer-inner">
-          <h2 class="reveal">{s.heading}</h2>
-          <div class="reveal" set:html={s.body} />
-          <span class="btn-ring reveal">
-            <button class="btn js-open-lead" type="button">GET STARTED</button>
-          </span>
-        </div>
-      </section>
-    ))
-  }
+  <!-- ============ PAIR: the two sub-blocks, side by side ============ -->
+  <section class="pair grain alt fluid-host">
+    <div class="wrap pair-grid">
+      {
+        pair.map((p) => (
+          <div class="pair-item reveal">
+            <h3>{p.heading}</h3>
+            <div set:html={p.body} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ============ CLOSE: the call to action ============ -->
+  <section class="close grain fluid-host">
+    <div class="wrap close-inner">
+      <span class="btn-ring reveal">
+        <button class="btn js-open-lead" type="button">GET STARTED</button>
+      </span>
+    </div>
+  </section>
 
   <!-- ============ cross-nav to the other classes ============ -->
   <div class="ticker">
@@ -148,38 +143,49 @@ const closers = sections.filter((s) => !s.image);
     padding-inline: clamp(20px, 4vw, 40px);
   }
 
-  /* ---------- splits ---------- */
-  /* the first split follows the header, so it gets less top padding than a
-     standalone section would */
-  .first-split { padding-top: clamp(38px, 4.4vw, 58px); }
-  .split.subsequent { padding-top: var(--section-pad); }
+  /* ---------- lead ---------- */
+  /* follows the header, so less top padding than a standalone section */
+  .lead-split { padding-top: clamp(38px, 4.4vw, 58px); }
   .read-more { margin-top: clamp(14px, 2vw, 22px); }
   .read-more a {
     font-family: var(--font-display);
     font-weight: 700;
   }
 
-  /* ---------- closer ---------- */
-  .closer {
+  /* ---------- pair ---------- */
+  .pair {
+    background: var(--ground-alt);
+    padding: var(--section-pad) 0;
+  }
+  .pair-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  .pair-item h3 {
+    font-size: clamp(20px, 2.3vw, 27px);
+    margin-bottom: clamp(12px, 1.6vw, 18px);
+  }
+  .pair-item :global(p) { max-width: 46ch; }
+
+  /* ---------- close ---------- */
+  .close {
     background: var(--ground);
-    padding: clamp(20px, 3vw, 40px) 0 var(--section-pad);
+    padding: clamp(40px, 5.5vw, 76px) 0;
   }
-  .closer-inner {
-    max-width: 720px;
-    text-align: center;
-  }
-  .closer h2 {
-    font-size: clamp(26px, 3.2vw, 40px);
-    margin-bottom: clamp(16px, 2.2vw, 24px);
-  }
-  .closer p { margin-inline: auto; }
-  .closer .btn-ring { margin-top: clamp(26px, 3.4vw, 40px); }
+  .close-inner { text-align: center; }
 
   /* ---------- cross-nav ticker ---------- */
   .ticker {
     overflow: hidden;
     background: var(--accent);
     padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+
+  @media (max-width: 800px) {
+    .pair-grid { grid-template-columns: 1fr; gap: clamp(28px, 6vw, 40px); }
+    .pair-item :global(p) { max-width: none; }
   }
 </style>
 

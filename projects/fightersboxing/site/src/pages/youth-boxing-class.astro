@@ -1,0 +1,52 @@
+---
+// Copy verbatim from the client's WordPress export (Tools > Export,
+// 2026-08-26). Two mechanical fixes, both logged in source/inner-pages.md:
+// the em dash after "workout" became a period (Ben's standing rule), and
+// the Read More link pointed at /about-us/, which is not a real page on
+// this site (About Us is a nav dropdown), so it now points at
+// /what-to-expect/ as the Beginners page's Read More already does.
+import ClassPage from '../layouts/ClassPage.astro';
+
+const lead = {
+  heading: 'Building Confidence, Character, and Skill',
+  body: `<p>Our <b>Youth Boxing Program</b> is more than just a workout. It’s a foundation for
+    life. Designed for ages 8 and up, this <b>non-contact class</b> introduces kids to proper
+    stance, movement, defense, and striking fundamentals. Led by <b>USA Certified coaches</b>,
+    our program builds coordination, focus, and discipline in a structured, high-energy
+    environment that kids actually enjoy.</p>`,
+  readMore: { href: '/what-to-expect/', label: 'Read More' },
+  image: {
+    src: '/img/classes/youth-boxing.jpg',
+    alt: 'Young boxer working the heavy bag at Fighters Boxing Gym',
+    width: 1040,
+    height: 640,
+  },
+};
+
+const pair = [
+  {
+    heading: 'Real Coaching, Real Mentorship',
+    body: `<p>Our coaching staff brings top-tier boxing knowledge and years of experience training
+      athletes at every level. We focus on technique and development, but also on the values that
+      make great boxers respect, patience, perseverance, and confidence. Every class balances fun
+      learning, ensuring your child stays motivated, and growing stronger kids both mentally and
+      physically.</p>`,
+  },
+  {
+    heading: 'A Safe and Supportive Community',
+    body: `<p>At Fighters Boxing Gym, every young athlete is part of the team. There’s no pressure
+      to compete just a supportive environment where kids can build skills, stay active, and find
+      pride in their progress. Whether they’re training for fun, fitness, or a future in the
+      sport, we’ll help them grow into their best selves one round at a time.</p>`,
+  },
+];
+---
+
+<ClassPage
+  pageTitle="Youth Boxing Class | Fighters Boxing Gym"
+  description="Our Youth Boxing Program is more than just a workout. Designed for ages 8 and up, this non-contact class builds coordination, focus, and discipline under USA Certified coaches."
+  h1Lines={['YOUTH', 'BOXING CLASS']}
+  lead={lead}
+  pair={pair}
+  currentHref="/youth-boxing-class/"
+/>

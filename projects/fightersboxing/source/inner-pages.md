@@ -174,3 +174,60 @@ without a photo. Type is much bigger: clamp(40px, 8.4vw, 104px), Archivo
 ['BEGINNERS', 'BOXING CLASS'], so each page controls its own break.
 The fluid host now reads `data-fluid-opacity` / `data-fluid-pixel` so any
 section can tune the gradient.
+
+## Rev 4 (2026-08-26): all three class pages built
+
+Restructured the template to match the shape the client actually used on
+all three class pages: a lead pitch (headline + paragraph + Read More),
+then two sub-blocks that were side-by-side `<h4>` items in the original.
+So the template is now: poster header, lead split with one photo, the two
+sub-blocks side by side on the warm ground, a centered CTA, the ticker.
+
+This also resolves the photo shortage. One photo per page means each class
+page opens with its own class-card photo (card previews page, page opens
+with it larger) and nothing repeats anywhere:
+- homepage: `ring-facing-off.jpg`, `sparring-1600.webp`
+- Beginners: `classes/boxing-basics.jpg`
+- Youth: `classes/youth-boxing.jpg`
+- Competition: `classes/competition-team.jpg`
+- spare, unused: `training-mitts-800.jpg`
+If more photography arrives, the pair section can become a second split on
+every page at once.
+
+Pages live:
+- `/beginners-boxing-class/`
+- `/youth-boxing-class/`
+- `/competition-team-training/`
+
+One link added (a link, not copy): Competition's entry requirements say
+"we recommend taking a Boxing Basics Class first", so those words now link
+to `/beginners-boxing-class/`.
+
+Read More targets still point at pages that do not exist yet
+(`/what-to-expect/` on Beginners and Youth, `/our-gyms/` on Competition).
+Those are the client's own link targets and both pages are planned, so
+they are left as-is and will resolve as the build continues.
+
+## Reviews: what can and cannot be sourced (2026-08-26)
+Ben asked for real names on the review cards. Current state: one named
+Google review (Dustin Austin) plus two testimonials the client's own
+production site publishes without names.
+
+Searching cannot get more reliably. Public search surfaces Yelp snippets
+(e.g. "Jesse M.", "Daniel S.") but only as truncated fragments, and Yelp
+initials are not Google names. Publishing a partial fragment under a
+partial name would be inventing attribution, so it is not being done.
+To get real named Google reviews the options are:
+1. Ben pastes 3 to 5 reviews (name + full text) from the Google Business
+   Profile dashboard. Fastest, zero setup.
+2. Google Places API with a key, which returns author names and text
+   programmatically. Worth doing anyway if the maintenance agent is going
+   to refresh reviews on a schedule.
+3. Unblock the egress proxy for the Google Business Profile URL.
+
+SEO note for the record: on-page reviews mainly help conversion and give
+AI crawlers named, specific evidence to quote. They do NOT feed Google's
+star ratings, and self-serving `Review`/`AggregateRating` schema on a
+business's own site is against Google's structured-data guidelines, so
+that markup stays off. The reviews that move local ranking are the ones on
+the Google Business Profile itself.
