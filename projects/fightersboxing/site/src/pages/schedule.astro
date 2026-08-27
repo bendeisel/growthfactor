@@ -6,13 +6,14 @@
 // dash in "a true boxing gym-designed for those serious about the sport"
 // became a comma, per Ben's standing rule.
 //
-// Every time on this page comes from src/data/schedule.js, the same file the
-// class pages and /schedule.ics read, so the three can never disagree.
+// Every time on this page comes from the schedule in Sanity, the same place
+// the class pages read, so the gym changes a class time once and every page
+// follows. See projects/fightersboxing/CMS.md.
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ClassCalendar from '../components/ClassCalendar.astro';
 import SessionCards from '../components/SessionCards.astro';
-import { feeds, programForHref } from '../data/schedule.js';
+import { programForHref } from '../data/schedule.js';
 import ClassTicker from '../components/ClassTicker.astro';
 
 const youth = programForHref('/youth-boxing-class/');
@@ -40,7 +41,6 @@ const youth = programForHref('/youth-boxing-class/');
           <h2>Youth boxing</h2>
           <p class="kids-links">
             <a href={youth.href}>See the youth boxing class</a>
-            <a href={feeds.youth.href}>Sync the kids schedule</a>
           </p>
         </div>
         <div class="kids-cards">

@@ -337,3 +337,45 @@ What syncs where, all from `site/src/data/schedule.js`:
 The day cards are one component (`components/SessionCards.astro`), so a
 class's times look identical on the schedule page, its class page and any
 page built later.
+
+## The schedule moves into Sanity (2026-08-27, Ben round 3)
+Ben: "I don't want to sync to calendar button. I want it to automatically
+sync back to the main calendar. That way we can create, on the backend in
+Sanity, the customer can just change the schedule and it changes on all the
+pages not just one."
+
+So the .ics subscribe feeds and both sync buttons are gone, and the schedule
+now lives in a CMS the gym edits. Full map in CMS.md, setup steps in
+cms/README.md. In short:
+
+- one document per class in Sanity, edited by the gym, Publish and done
+- the build reads Sanity and writes the times into the HTML, so the pages
+  stay static files, crawlable, and correct with JavaScript off
+- on page load the page re-checks Sanity through its CDN and re-renders in
+  place only if something changed, so a Publish reaches the live site
+  without waiting for a deploy
+- with no Sanity project configured the build logs one line and uses the
+  committed copy of the week, so anyone can clone the repo and build
+
+The plumbing:
+- `site/src/lib/schedule-source.js` the query, plus validation that drops
+  any half-broken document rather than letting it take a page down
+- `site/src/lib/render-schedule.js` one renderer used at build time and in
+  the browser, so a live update produces exactly the built markup
+- `site/src/scripts/schedule-live.js` the on-load re-check, wired in
+  Base.astro and a no-op on pages with no schedule
+- `cms/schemaTypes/classSession.ts` the Studio schema, in plain language:
+  class name, day, start, optional end, adults or kids, and which pages it
+  appears on
+- `cms/seed.ndjson` today's 22 classes, so the client's schedule lands in
+  Sanity with one import command instead of 22 hand entries
+
+The eighth cell of the board was the subscribe panel; it is now a call to
+action ("New here?") that opens the lead form. That short paragraph is the
+one piece of copy on these pages I wrote rather than the client.
+
+Verified with the live path faked in Playwright: an edited schedule
+re-renders the board, the kids block and each class page from the one
+change; an invalid document is dropped; the filter chips still work after a
+re-render; a program with no classes left hides its block instead of showing
+an empty heading; and with the request blocked, the built-in times stand.

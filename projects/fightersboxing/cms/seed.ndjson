@@ -1,0 +1,22 @@
+{"_id":"session-mon-0700-open-gym-0","_type":"classSession","name":"Open Gym","day":"mon","start":"07:00","audience":"adult","programs":["open-gym"],"end":"10:00"}
+{"_id":"session-mon-0700-boxing-basics-1","_type":"classSession","name":"Boxing Basics","day":"mon","start":"07:00","audience":"adult","programs":["boxing-basics"]}
+{"_id":"session-mon-1630-open-gym-2","_type":"classSession","name":"Open Gym","day":"mon","start":"16:30","audience":"adult","programs":["open-gym"],"end":"19:30"}
+{"_id":"session-mon-1745-competition-team-training-3","_type":"classSession","name":"Competition Team Training","day":"mon","start":"17:45","audience":"adult","programs":["competition"]}
+{"_id":"session-mon-1800-boxing-basics-4","_type":"classSession","name":"Boxing Basics","day":"mon","start":"18:00","audience":"adult","programs":["boxing-basics"]}
+{"_id":"session-tue-0700-open-gym-5","_type":"classSession","name":"Open Gym","day":"tue","start":"07:00","audience":"adult","programs":["open-gym"],"end":"10:00"}
+{"_id":"session-tue-1630-open-gym-6","_type":"classSession","name":"Open Gym","day":"tue","start":"16:30","audience":"adult","programs":["open-gym"],"end":"19:30"}
+{"_id":"session-tue-1800-boxing-basics-7","_type":"classSession","name":"Boxing Basics","day":"tue","start":"18:00","audience":"adult","programs":["boxing-basics"]}
+{"_id":"session-wed-0700-open-gym-8","_type":"classSession","name":"Open Gym","day":"wed","start":"07:00","audience":"adult","programs":["open-gym"],"end":"10:00"}
+{"_id":"session-wed-1630-open-gym-9","_type":"classSession","name":"Open Gym","day":"wed","start":"16:30","audience":"adult","programs":["open-gym"],"end":"19:30"}
+{"_id":"session-wed-1745-competition-team-training-10","_type":"classSession","name":"Competition Team Training","day":"wed","start":"17:45","audience":"adult","programs":["competition"]}
+{"_id":"session-wed-1800-boxing-basics-11","_type":"classSession","name":"Boxing Basics","day":"wed","start":"18:00","audience":"adult","programs":["boxing-basics"]}
+{"_id":"session-thu-0700-open-gym-12","_type":"classSession","name":"Open Gym","day":"thu","start":"07:00","audience":"adult","programs":["open-gym"],"end":"10:00"}
+{"_id":"session-thu-1630-open-gym-13","_type":"classSession","name":"Open Gym","day":"thu","start":"16:30","audience":"adult","programs":["open-gym"],"end":"19:30"}
+{"_id":"session-thu-1745-competition-sparring-14","_type":"classSession","name":"Competition Sparring","day":"thu","start":"17:45","audience":"adult","programs":["competition"]}
+{"_id":"session-thu-1800-foundational-sparring-15","_type":"classSession","name":"Foundational Sparring","day":"thu","start":"18:00","audience":"adult","programs":["competition"]}
+{"_id":"session-fri-0700-open-gym-16","_type":"classSession","name":"Open Gym","day":"fri","start":"07:00","audience":"adult","programs":["open-gym"],"end":"10:00"}
+{"_id":"session-fri-1630-open-gym-17","_type":"classSession","name":"Open Gym","day":"fri","start":"16:30","audience":"adult","programs":["open-gym"],"end":"19:30"}
+{"_id":"session-fri-1800-boxing-basics-18","_type":"classSession","name":"Boxing Basics","day":"fri","start":"18:00","audience":"adult","programs":["boxing-basics"]}
+{"_id":"session-sat-0200-open-gym-19","_type":"classSession","name":"Open Gym","day":"sat","start":"02:00","audience":"adult","programs":["open-gym"],"end":"12:00"}
+{"_id":"session-sat-0900-boxing-basics-20","_type":"classSession","name":"Boxing Basics","day":"sat","start":"09:00","audience":"adult","programs":["boxing-basics"]}
+{"_id":"session-sat-1200-iban-youth-21","_type":"classSession","name":"IBAN Youth","day":"sat","start":"12:00","audience":"youth","programs":["youth"]}

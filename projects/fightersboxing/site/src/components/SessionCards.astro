@@ -3,37 +3,38 @@
 //
 // One card per day that has a session, for a given program or audience.
 // Shared by the class-page strips and the kids block on /schedule/, so a
-// class's times look identical wherever they appear and come from the same
-// place: src/data/schedule.js.
-import { activeDays, timeLabel } from '../data/schedule.js';
+// class's times look identical wherever they appear and come from one
+// place: the schedule in Sanity, with the committed copy as the fallback.
+//
+// Rendered through the shared renderer, so the browser can re-render the
+// same markup after checking Sanity for a change.
+import { activeDays } from '../data/schedule.js';
+import { getSessions } from '../lib/schedule-source.js';
+import { renderCards } from '../lib/render-schedule.js';
 
 interface Props {
   program?: string;
   audience?: string;
 }
 const { program, audience } = Astro.props as Props;
-const board = activeDays({ program, audience });
+
+const sessions = await getSessions();
+const board = activeDays(sessions, { program, audience });
+const cardsHtml = renderCards(board);
 ---
 
-<ul class="cards">
-  {
-    board.map((day) => (
-      <li class="card">
-        <p class="card-day">{day.name}</p>
-        <ul class="card-slots">
-          {day.sessions.map((s) => (
-            <li>
-              <span class="card-time">{timeLabel(s)}</span>
-              <span class="card-name">{s.name}</span>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ))
-  }
-</ul>
+<ul
+  class="cards"
+  data-live="cards"
+  data-program={program}
+  data-audience={audience}
+  set:html={cardsHtml}
+/>
 
-<style>
+<style is:global>
+  /* Global rather than scoped because the cards are injected as HTML by the
+     shared renderer, at build time and again after a live update, so they
+     carry no scope hash. Every selector is nested under .cards. */
   .cards {
     list-style: none;
     margin: 0;
@@ -44,12 +45,12 @@ const board = activeDays({ program, audience });
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: clamp(12px, 1.4vw, 20px);
   }
-  .card {
+  .cards .card {
     background: var(--ground-alt);
     border-radius: calc(var(--radius-panel) + 6px);
     padding: clamp(16px, 1.8vw, 24px);
   }
-  .card-day {
+  .cards .card-day {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 15px;
@@ -59,9 +60,9 @@ const board = activeDays({ program, audience });
     padding-bottom: 10px;
     border-bottom: 2px solid var(--accent);
   }
-  .card-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .card-slots li { display: grid; gap: 2px; }
-  .card-time {
+  .cards .card-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .cards .card-slots li { display: grid; gap: 2px; }
+  .cards .slot-time {
     font-family: var(--font-action);
     font-size: 12px;
     font-weight: 700;
@@ -69,7 +70,7 @@ const board = activeDays({ program, audience });
     text-transform: uppercase;
     color: var(--accent);
   }
-  .card-name {
+  .cards .slot-name {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 15px;

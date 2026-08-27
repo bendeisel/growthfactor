@@ -209,3 +209,11 @@ Pending for schema: opening hours from the client.
    carries a "Youth boxing" panel; the kids cards also sit on the youth
    page. Two subscribe feeds, adult and kids.
 3. Foundational Sparring assigned to the competition page only.
+
+## Ben's revisions, round 12 (2026-08-27)
+1. Calendar subscribe feeds and both "sync to your calendar" buttons
+   removed. The schedule is now edited by the gym in Sanity and every page
+   reads from it (CMS.md).
+2. New copy, mine not the client's: the board's eighth cell reads "New
+   here? Stop in for a tour, meet the coaches, and we will point you at the
+   class that fits where you are now." with a GET MORE INFO button.

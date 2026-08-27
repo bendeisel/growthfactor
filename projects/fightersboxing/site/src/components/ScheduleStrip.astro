@@ -1,12 +1,14 @@
 ---
 // CLASS TIMES, SYNCED
 //
-// The same dataset as /schedule/, filtered to the one class this page is
+// The same schedule as /schedule/, filtered to the one class this page is
 // about. Nothing here is typed per page: give the strip the page's own href
-// and it finds the program, so a schedule edit updates all three class
-// pages at once. A page whose class has no sessions renders nothing.
+// and it finds the program, so one edit in Sanity updates the schedule page
+// and all three class pages together. A page whose class has no sessions
+// renders nothing.
 import SessionCards from './SessionCards.astro';
-import { activeDays, programForHref, feeds } from '../data/schedule.js';
+import { activeDays, programForHref } from '../data/schedule.js';
+import { getSessions } from '../lib/schedule-source.js';
 
 interface Props {
   currentHref: string;
@@ -14,8 +16,8 @@ interface Props {
 const { currentHref } = Astro.props as Props;
 
 const program = programForHref(currentHref);
-const hasSessions = program ? activeDays({ program: program.slug }).length > 0 : false;
-const feed = program ? feeds[program.audience] : null;
+const sessions = await getSessions();
+const hasSessions = program ? activeDays(sessions, { program: program.slug }).length > 0 : false;
 ---
 
 {
@@ -26,7 +28,6 @@ const feed = program ? feeds[program.audience] : null;
           <h2>Class times</h2>
           <p class="times-links">
             <a href="/schedule/">See the full week</a>
-            <a href={feed.href}>Sync to your calendar</a>
           </p>
         </div>
 

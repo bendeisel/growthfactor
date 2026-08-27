@@ -71,6 +71,14 @@ const schema = {
     <LeadPopup />
 
     <script>
+      // The schedule pages carry their times in the HTML already; this
+      // re-checks Sanity on load so a class-time edit reaches the live site
+      // without a rebuild. No-ops on pages with no schedule on them.
+      import { syncSchedule } from '../scripts/schedule-live.js';
+      syncSchedule();
+    </script>
+
+    <script>
       // Reveal on scroll: the entrance move measured on the WP build
       // (opacity 0->1, y 20px->0). Vanilla so it can drop into any platform.
       const io = new IntersectionObserver(

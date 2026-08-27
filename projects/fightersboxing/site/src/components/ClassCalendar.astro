@@ -1,8 +1,10 @@
 ---
 // THE ADULT WEEK BOARD
 //
-// Every adult session in src/data/schedule.js, laid out as one card per day
-// with a filter row above it. Kids classes are not on this board: they get
+// Every adult session in the schedule, laid out as one card per day with a
+// filter row above it. The sessions come from Sanity at build time and get
+// re-checked in the browser, so the gym changes a class time once and this
+// board follows. Kids classes are not on this board: they get
 // their own block further down /schedule/ and their own page, per Ben.
 //
 // Deliberately not Nashville MMA's time-rail matrix: Fighters runs two to
@@ -10,13 +12,18 @@
 // empty. Day cards read at a glance, stack cleanly on a phone, and the
 // light ground plus deep rounding keeps the two gyms apart.
 //
-// The eighth cell is the subscribe panel, so the grid closes at 4x2 and the
-// calendar feed sits where people are already reading times.
-import { week, programs, timeLabel, feeds } from '../data/schedule.js';
+// The eighth cell is a call to action, so the grid closes at 4x2 and the ask
+// sits where someone has just finished reading the times.
+import { week, programs } from '../data/schedule.js';
+import { getSessions } from '../lib/schedule-source.js';
+import { renderBoard } from '../lib/render-schedule.js';
 
-const board = week({ audience: 'adult' });
+const sessions = await getSessions();
+const board = week(sessions, { audience: 'adult' });
 const chips = programs.filter((p) => p.audience === 'adult');
-const feed = feeds.adult;
+// Rendered through the shared renderer so the browser can re-render the
+// same markup after checking Sanity for a change.
+const boardHtml = renderBoard(board);
 ---
 
 <div class="cal">
@@ -31,47 +38,35 @@ const feed = feeds.adult;
     }
   </div>
 
-  <div class="board">
-    {
-      board.map((day) => (
-        <div class="day" data-day={day.key}>
-          <p class="day-name">{day.name}</p>
-          <ul class="slots">
-            {day.sessions.map((s) => (
-              <li class="slot" data-tags={s.tags.join(' ')}>
-                <span class="slot-time">{timeLabel(s)}</span>
-                <span class="slot-name">{s.name}</span>
-              </li>
-            ))}
-          </ul>
-          <p class="day-empty" hidden={day.sessions.length > 0}>No sessions</p>
-        </div>
-      ))
-    }
+  <div class="board" data-live="board" data-audience="adult">
+    <Fragment set:html={boardHtml} />
 
-    <div class="day sync">
-      <p class="day-name">Take it with you</p>
-      <p class="sync-copy">
-        Subscribe once and every class time lands in your phone calendar. When the gym
-        moves a session, your calendar moves with it.
+    <div class="day ask">
+      <p class="day-name">New here?</p>
+      <p class="ask-copy">
+        Stop in for a tour, meet the coaches, and we will point you at the class that
+        fits where you are now.
       </p>
-      <a class="sync-btn" href={feed.href}>Sync to your calendar</a>
-      <p class="sync-note">Works with Google Calendar, Apple Calendar and Outlook.</p>
+      <button class="ask-btn js-open-lead" type="button">Get more info</button>
     </div>
   </div>
 </div>
 
-<style>
+<style is:global>
+  /* Global rather than scoped because the day cells are injected as HTML by
+     the shared renderer, at build time and again after a live update, so
+     they carry no scope hash. Every selector is nested under .cal to keep
+     that out of the rest of the site. */
   .cal { position: relative; z-index: 1; }
 
   /* ---------- filter chips ---------- */
-  .filters {
+  .cal .filters {
     display: flex;
     flex-wrap: wrap;
     gap: clamp(8px, 1vw, 12px);
     margin-bottom: clamp(24px, 3.4vw, 40px);
   }
-  .chip {
+  .cal .chip {
     font-family: var(--font-action);
     font-size: 13px;
     font-weight: 700;
@@ -85,20 +80,20 @@ const feed = feeds.adult;
     cursor: pointer;
     transition: background 0.25s, color 0.25s, border-color 0.25s;
   }
-  .chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--accent); }
-  .chip.is-on {
+  .cal .chip:hover, .cal .chip:focus-visible { border-color: var(--accent); color: var(--accent); }
+  .cal .chip.is-on {
     background: var(--accent);
     border-color: var(--accent);
     color: var(--on-dark);
   }
 
   /* ---------- the board ---------- */
-  .board {
+  .cal .board {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(12px, 1.4vw, 20px);
   }
-  .day {
+  .cal .day {
     background: var(--ground);
     border: 1px solid var(--border);
     border-radius: calc(var(--radius-panel) + 6px);
@@ -106,7 +101,7 @@ const feed = feeds.adult;
     display: flex;
     flex-direction: column;
   }
-  .day-name {
+  .cal .day-name {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(17px, 1.5vw, 21px);
@@ -117,15 +112,15 @@ const feed = feeds.adult;
     padding-bottom: 12px;
     border-bottom: 2px solid var(--accent);
   }
-  .slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .slot {
+  .cal .slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .cal .slot {
     display: grid;
     gap: 2px;
     padding-left: 12px;
     border-left: 3px solid var(--accent);
     border-radius: 0 8px 8px 0;
   }
-  .slot-time {
+  .cal .slot-time {
     font-family: var(--font-action);
     font-size: 12px;
     font-weight: 700;
@@ -133,27 +128,27 @@ const feed = feeds.adult;
     text-transform: uppercase;
     color: var(--accent);
   }
-  .slot-name {
+  .cal .slot-name {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 15px;
     line-height: 1.25;
   }
-  .day-empty {
+  .cal .day-empty {
     font-size: 14px;
     color: var(--text-light);
     margin: 0;
   }
 
-  /* ---------- the subscribe cell ---------- */
-  .sync {
+  /* ---------- the call to action cell ---------- */
+  .cal .ask {
     background: var(--ground-band);
     border-color: var(--ground-band);
     color: var(--on-dark);
   }
-  .sync .day-name { color: var(--on-dark); }
-  .sync-copy { font-size: 14px; line-height: 1.6; margin: 0 0 auto; }
-  .sync-btn {
+  .cal .ask .day-name { color: var(--on-dark); }
+  .cal .ask-copy { font-size: 14px; line-height: 1.6; margin: 0 0 auto; }
+  .cal .ask-btn {
     font-family: var(--font-action);
     font-size: 13px;
     font-weight: 700;
@@ -161,23 +156,20 @@ const feed = feeds.adult;
     text-transform: uppercase;
     color: var(--on-dark);
     background: var(--accent);
+    border: 0;
     border-radius: var(--radius-pill);
-    padding: 14px 24px;
-    text-align: center;
+    padding: 15px 24px;
     margin-top: 18px;
+    cursor: pointer;
+    transition: background 0.3s;
   }
-  .sync-btn:hover, .sync-btn:focus-visible { background: var(--accent-hover); color: var(--on-dark); }
-  .sync-note {
-    font-size: 12px;
-    color: var(--text-light);
-    margin: 12px 0 0;
-  }
+  .cal .ask-btn:hover, .cal .ask-btn:focus-visible { background: var(--accent-hover); }
 
   @media (max-width: 1080px) {
-    .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cal .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 560px) {
-    .board { grid-template-columns: 1fr; }
+    .cal .board { grid-template-columns: 1fr; }
   }
 </style>
 
@@ -187,7 +179,6 @@ const feed = feeds.adult;
   const cal = document.querySelector('.cal');
   if (cal) {
     const chips = cal.querySelectorAll('.chip');
-    const days = cal.querySelectorAll('.day[data-day]');
 
     const apply = (filter) => {
       chips.forEach((c) => {
@@ -195,10 +186,13 @@ const feed = feeds.adult;
         c.classList.toggle('is-on', on);
         c.setAttribute('aria-pressed', String(on));
       });
-      days.forEach((day) => {
+      // Queried at apply time, not cached: the browser may have re-rendered
+      // these cells from Sanity since the page loaded.
+      cal.querySelectorAll('.day[data-day]').forEach((day) => {
         let shown = 0;
         day.querySelectorAll('.slot').forEach((slot) => {
-          const match = filter === 'all' || (slot.dataset.tags || '').split(' ').includes(filter);
+          const match =
+            filter === 'all' || (slot.dataset.programs || '').split(' ').includes(filter);
           slot.hidden = !match;
           if (match) shown += 1;
         });
@@ -208,5 +202,11 @@ const feed = feeds.adult;
     };
 
     chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter)));
+
+    // A live update wipes the hidden flags, so re-apply the active filter.
+    document.addEventListener('schedule:updated', () => {
+      const active = cal.querySelector('.chip.is-on');
+      apply(active ? active.dataset.filter : 'all');
+    });
   }
 </script>
