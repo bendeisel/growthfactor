@@ -379,3 +379,68 @@ re-renders the board, the kids block and each class page from the one
 change; an invalid document is dropped; the filter chips still work after a
 re-render; a program with no classes left hides its block instead of showing
 an empty heading; and with the request blocked, the built-in times stand.
+
+## Grid layout, Saturday basics fix, and the FAQ page (2026-08-27, Ben round 4)
+Ben: "For the schedules, just like Nashville MMA, I want the 6 p.m. to be
+beside the 6 p.m. I would rather it not be blocky and take a whole page
+either. It should be one piece. Do we not have a boxing basics on Saturday
+morning? I think you had it called Boxing and KO, but it's just Boxing
+Basics now. Also, instead of building a blog page, let's build a dynamic
+FAQ that actually answers all the questions from Reddit and stuff that are
+around Nashville so that we can rank higher in AI and SEO in general for
+the whole city."
+
+**Schedule became a true aligned grid.** The day-card board (Ben round 2)
+put every class in its own box; Ben wanted what Nashville MMA does, a
+single grid where the same hour lines up across every day. Rebuilt as
+`matrix()` in schedule.js: one row per start time that actually has a
+class (not one row per hour of the day, so the grid stays compact instead
+of mostly empty), seven day columns, time rail down the left. 6 PM Monday
+now sits directly across from 6 PM Wednesday and Friday. Renders through
+`renderMatrix()` in the shared renderer, same as before: one markup path
+for the build and for a live Sanity re-check. Filtering now hides whole
+time rows when nothing in them matches the chip.
+
+Saturday: already fixed to Boxing Basics on 2026-08-27 (Ben round 2). Ben
+asked again in this message, so it is confirmed twice over. It reads
+Boxing Basics, 9 AM, in schedule.js and on the built grid.
+
+Class-page and kids blocks became a compact list (`renderList()` /
+`SessionList.astro`, renamed from the old day-card `SessionCards`): day
+name, then its times inline. No card grid taking up a page height for one
+or two classes.
+
+**FAQ page**, `/faqs/`, replaces the planned Boxing Blog (already absent
+from nav; nothing to remove). 22 questions across five sections (starting
+from zero, the classes, kids and teens, competing, visiting the gym),
+built from real search demand around Nashville boxing (cost, first class,
+gear, sparring, kids' age, USA Boxing registration) plus what the client's
+own copy already answers on the class pages. FAQPage JSON-LD generated
+from the same list shown on the page, so structured data can never claim a
+question the page does not display. Client-side search filters by
+question and answer text; a hit auto-opens. Same Sanity-or-fallback
+pattern as the schedule: `cms/schemaTypes/faqItem.ts`,
+`cms/faq-seed.ndjson` with all 22 seeded, `site/src/lib/faq-source.js`.
+One difference from the schedule: no live browser re-check, since FAQ
+answers change far less often than class times and a page whose whole job
+is being read and quoted does not need to ship its content twice (once in
+HTML, once in a JS bundle).
+
+**Three answers need Ben's own numbers before they are fully trustworthy**,
+flagged with `needsGymInput` in faqs.js and left as honest "call us" rather
+than invented figures:
+1. Cost. I gave the market range from public sources instead of the gym's
+   real rates. Send current pricing and trial terms.
+2. Whether the youth schedule is really just Saturday noon.
+3. Whether private / personal training sessions are offered at all.
+
+Also folded the schedule's URL-building into `site/src/lib/sanity.js`, one
+place both the schedule and the FAQs use, rather than writing the same
+apicdn URL logic twice.
+
+Local grounding for the FAQ (not the client's copy, my own research,
+verified real): 405 42nd Ave N sits in the Charlotte Avenue corridor
+between Sylvan Park and The Nations, near the I-40 exit at 46th Ave, with
+a WeGo stop at 42nd Ave. USA Boxing membership requires a yearly sports
+physical and an athlete passbook; registration opens at age 8, which is
+also this gym's youth boxing minimum.

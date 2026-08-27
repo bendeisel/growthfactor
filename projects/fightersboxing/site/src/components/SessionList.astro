@@ -1,0 +1,93 @@
+---
+// ONE CLASS ACROSS THE WEEK
+//
+// A compact run of rows, day then times, for a given program or audience.
+// Shared by the class-page block and the kids block on /schedule/, so a
+// class's times look identical wherever they appear and come from one
+// place: the schedule in Sanity, with the committed copy as the fallback.
+//
+// Rendered through the shared renderer, so the browser can re-render the
+// same markup after checking Sanity for a change.
+import { activeDays } from '../data/schedule.js';
+import { getSessions } from '../lib/schedule-source.js';
+import { renderList } from '../lib/render-schedule.js';
+
+interface Props {
+  program?: string;
+  audience?: string;
+}
+const { program, audience } = Astro.props as Props;
+
+const sessions = await getSessions();
+const board = activeDays(sessions, { program, audience });
+const listHtml = renderList(board);
+---
+
+<ul
+  class="time-list"
+  data-live="list"
+  data-program={program}
+  data-audience={audience}
+  set:html={listHtml}
+/>
+
+<style is:global>
+  /* Global rather than scoped because the rows are injected as HTML by the
+     shared renderer, at build time and again after a live update, so they
+     carry no scope hash. Every selector is nested under .time-list. */
+  .time-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius-panel) + 6px);
+    overflow: hidden;
+  }
+  .time-list .tl-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: clamp(12px, 2vw, 24px);
+    align-items: baseline;
+    padding: clamp(12px, 1.5vw, 17px) clamp(16px, 2.2vw, 24px);
+    border-top: 1px solid var(--border);
+  }
+  .time-list .tl-row:first-child { border-top: 0; }
+  .time-list .tl-day {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .time-list .tl-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px clamp(18px, 2.4vw, 30px);
+  }
+  .time-list .tl-time {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 9px;
+    font-size: 14px;
+    color: var(--text-dark);
+  }
+  .time-list .tl-time b {
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .time-list .tl-time em {
+    font-style: normal;
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  @media (max-width: 620px) {
+    .time-list .tl-row { grid-template-columns: 1fr; gap: 7px; }
+  }
+</style>

@@ -6,7 +6,7 @@
 // and it finds the program, so one edit in Sanity updates the schedule page
 // and all three class pages together. A page whose class has no sessions
 // renders nothing.
-import SessionCards from './SessionCards.astro';
+import SessionList from './SessionList.astro';
 import { activeDays, programForHref } from '../data/schedule.js';
 import { getSessions } from '../lib/schedule-source.js';
 
@@ -32,7 +32,7 @@ const hasSessions = program ? activeDays(sessions, { program: program.slug }).le
         </div>
 
         <div class="reveal">
-          <SessionCards program={program.slug} />
+          <SessionList program={program.slug} />
         </div>
       </div>
     </section>

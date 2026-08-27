@@ -12,7 +12,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ClassCalendar from '../components/ClassCalendar.astro';
-import SessionCards from '../components/SessionCards.astro';
+import SessionList from '../components/SessionList.astro';
 import { programForHref } from '../data/schedule.js';
 import ClassTicker from '../components/ClassTicker.astro';
 
@@ -44,7 +44,7 @@ const youth = programForHref('/youth-boxing-class/');
           </p>
         </div>
         <div class="kids-cards">
-          <SessionCards audience="youth" />
+          <SessionList audience="youth" />
         </div>
       </div>
     </div>
@@ -122,7 +122,6 @@ const youth = programForHref('/youth-boxing-class/');
     gap: clamp(24px, 4vw, 56px);
     align-items: center;
   }
-  .kids-panel :global(.card) { background: var(--ground); }
   .kids-head h2 { font-size: clamp(28px, 3.6vw, 46px); }
   .kids-links {
     display: flex;

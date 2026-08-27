@@ -22,8 +22,7 @@
 // dataset holds a class schedule and is read through Sanity's public CDN,
 // which is read-only. No token is involved, so nothing here can write.
 import { fallbackSessions, dayKeys, audiences, programSlugs } from '../data/schedule.js';
-
-const API_VERSION = 'v2024-01-01';
+import { queryUrl, fetchOrFallback } from './sanity.js';
 
 /** One document per session. Drafts are excluded, so nothing half-typed shows. */
 export const SESSION_QUERY = `*[_type == "classSession" && !(_id in path("drafts.**"))]{
@@ -35,13 +34,7 @@ export const SESSION_QUERY = `*[_type == "classSession" && !(_id in path("drafts
  * has no Sanity project configured yet.
  */
 export function sessionQueryUrl(env) {
-  const projectId = env.PUBLIC_SANITY_PROJECT_ID;
-  const dataset = env.PUBLIC_SANITY_DATASET || 'production';
-  if (!projectId) return null;
-  const query = encodeURIComponent(SESSION_QUERY.replace(/\s+/g, ' ').trim());
-  // apicdn, not api: the CDN is cached, cheap and plenty fresh for a
-  // weekly class schedule.
-  return `https://${projectId}.apicdn.sanity.io/${API_VERSION}/data/query/${dataset}?query=${query}`;
+  return queryUrl(env, SESSION_QUERY);
 }
 
 /**
@@ -80,30 +73,13 @@ let pending = null;
  * committed copy on any failure, and says which source it used.
  */
 export function getSessions(env = import.meta.env) {
-  if (pending) return pending;
-
-  const url = sessionQueryUrl(env);
-  if (!url) {
-    console.log('[schedule] no PUBLIC_SANITY_PROJECT_ID, using the committed copy of the week');
-    pending = Promise.resolve(fallbackSessions);
-    return pending;
-  }
-
-  pending = fetch(url)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Sanity responded ${res.status}`);
-      return res.json();
-    })
-    .then((body) => {
-      const sessions = normalizeSessions(body.result);
-      if (sessions.length === 0) throw new Error('Sanity returned no usable sessions');
-      console.log(`[schedule] ${sessions.length} sessions from Sanity`);
-      return sessions;
-    })
-    .catch((err) => {
-      console.warn(`[schedule] ${err.message}; using the committed copy of the week`);
-      return fallbackSessions;
+  pending =
+    pending ||
+    fetchOrFallback({
+      url: sessionQueryUrl(env),
+      label: 'schedule',
+      parse: normalizeSessions,
+      fallback: fallbackSessions,
     });
-
   return pending;
 }

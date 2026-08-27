@@ -217,3 +217,13 @@ Pending for schema: opening hours from the client.
 2. New copy, mine not the client's: the board's eighth cell reads "New
    here? Stop in for a tour, meet the coaches, and we will point you at the
    class that fits where you are now." with a GET MORE INFO button.
+
+## Ben's revisions, round 13 (2026-08-27)
+1. Schedule rebuilt as one aligned grid (Nashville MMA style): a time row
+   per class time, seven days across, so the same hour lines up week to
+   week. Filtering hides empty rows.
+2. Confirmed again: Saturday 9 AM is Boxing Basics.
+3. New page /faqs/ replaces the planned blog: 22 questions built from real
+   Nashville boxing search demand, FAQPage schema, client-side search.
+   Three answers (pricing, youth schedule frequency, private training)
+   flagged for Ben's real numbers rather than guessed at.

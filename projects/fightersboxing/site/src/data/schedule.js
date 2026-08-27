@@ -127,7 +127,27 @@ export function week(sessions, filter = {}) {
   return days.map((d) => ({ ...d, sessions: matching.filter((s) => s.day === d.key) }));
 }
 
-/** Only the days that actually have a session: the day-card strips. */
+/**
+ * The week as one aligned grid: a row per start time that actually has a
+ * class, and seven cells across. Rows exist only for times in use, so the
+ * grid stays compact and 6 PM on Monday sits beside 6 PM on Tuesday.
+ */
+export function matrix(sessions, filter = {}) {
+  const matching = pick(sessions, filter);
+  const times = [...new Set(matching.map((s) => s.start))].sort(
+    (a, b) => minutes(a) - minutes(b)
+  );
+  return times.map((start) => ({
+    start,
+    label: clock(start),
+    cells: days.map((d) => ({
+      ...d,
+      sessions: matching.filter((s) => s.day === d.key && s.start === start),
+    })),
+  }));
+}
+
+/** Only the days that actually have a session: the class-page lists. */
 export function activeDays(sessions, filter = {}) {
   return week(sessions, filter).filter((d) => d.sessions.length > 0);
 }

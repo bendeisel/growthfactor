@@ -61,6 +61,8 @@ const schema = {
     <link rel="apple-touch-icon" href="/favicon-180.png" />
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <!-- pages add page-specific structured data here -->
+    <slot name="head" />
   </head>
   <body>
     <Header />

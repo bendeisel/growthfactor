@@ -9,8 +9,8 @@
 // request, a stripped-down browser, JavaScript off, and the page simply
 // keeps the times it was built with.
 import { sessionQueryUrl, normalizeSessions } from '../lib/schedule-source.js';
-import { week, activeDays } from '../data/schedule.js';
-import { renderBoard, renderCards } from '../lib/render-schedule.js';
+import { matrix, activeDays } from '../data/schedule.js';
+import { renderMatrix, renderList } from '../lib/render-schedule.js';
 
 /** Read a filter off the container: absent attribute means no filter. */
 function filterFor(el) {
@@ -20,15 +20,11 @@ function filterFor(el) {
   return filter;
 }
 
-function updateBoard(el, sessions) {
-  const html = renderBoard(week(sessions, filterFor(el)));
-  // The day cells come first and the call to action closes the grid, so
-  // replace the cells and leave everything else where it is.
-  el.querySelectorAll('.day[data-day]').forEach((cell) => cell.remove());
-  el.insertAdjacentHTML('afterbegin', html);
+function updateMatrix(el, sessions) {
+  el.innerHTML = renderMatrix(matrix(sessions, filterFor(el)));
 }
 
-function updateCards(el, sessions) {
+function updateList(el, sessions) {
   const board = activeDays(sessions, filterFor(el));
   const section = el.closest('section');
   if (board.length === 0) {
@@ -38,11 +34,11 @@ function updateCards(el, sessions) {
     return;
   }
   if (section) section.hidden = false;
-  el.innerHTML = renderCards(board);
+  el.innerHTML = renderList(board);
 }
 
 export function syncSchedule() {
-  const targets = document.querySelectorAll('[data-live="board"], [data-live="cards"]');
+  const targets = document.querySelectorAll('[data-live="matrix"], [data-live="list"]');
   if (targets.length === 0) return;
 
   const url = sessionQueryUrl(import.meta.env);
@@ -54,8 +50,8 @@ export function syncSchedule() {
       const sessions = normalizeSessions(body.result);
       if (sessions.length === 0) return;
       targets.forEach((el) => {
-        if (el.dataset.live === 'board') updateBoard(el, sessions);
-        else updateCards(el, sessions);
+        if (el.dataset.live === 'matrix') updateMatrix(el, sessions);
+        else updateList(el, sessions);
       });
       document.dispatchEvent(new CustomEvent('schedule:updated'));
     })
