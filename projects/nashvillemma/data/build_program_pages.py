@@ -219,6 +219,21 @@ def render(p):
                        'border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">%s</span>' % esc(a))
         out.append('  </div>\n</div>')
 
+    # coach
+    c = p.get("coach")
+    if c:
+        out.append('<div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.1) 0%, rgba(0,0,0,0) 40%), #0A0A0A; padding: 70px 48px">')
+        out.append('  <div style="display: grid; grid-template-columns: 320px 1fr; gap: 44px; align-items: center">')
+        out.append('    <div style="position: relative; height: 340px; overflow: hidden; border-radius: 8px; background: %s; display: flex; align-items: center; justify-content: center">' % CARD)
+        out.append('      <span class="ph" style="font-size: 13px">[Coach photo]</span>')
+        out.append('    </div>')
+        out.append('    <div>')
+        out.append('      <div class="micro" style="margin-bottom: 12px">%s</div>' % esc(c["role"]))
+        out.append('      <h2 style="font-size: 48px; line-height: 1; margin-bottom: 16px">%s</h2>' % esc(c["name"]))
+        out.append('      <p class="ph" style="font-size: 15px">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
+        out.append('      <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px; display: inline-block; margin-top: 10px">Coaches &amp; Trainers</a>')
+        out.append('    </div>\n  </div>\n</div>')
+
     # cta
     out.append('<div class="rv" style="background: linear-gradient(135deg, #D7AD56 0%, #C59543 55%, #C0883A 100%); padding: 66px 48px; text-align: center">')
     out.append('  <h2 style="font-size: 60px; line-height: 1; color: #FFFFFF; margin-bottom: 10px">Request Information Now</h2>')
@@ -237,11 +252,18 @@ def find_image(name):
         if f.endswith(name): return os.path.join(IMAGES, f)
     return None
 
+LIMIT = 52 * 1024   # base64 inflates ~1.34x, so this lands under the ~70 KB canvas guidance
+
 def prep(src, dst, width):
+    """Encode down until the file fits the canvas per-entry budget."""
     import imageio_ffmpeg
     ff = imageio_ffmpeg.get_ffmpeg_exe()
-    subprocess.run([ff, "-y", "-i", src, "-vf", "scale=%d:-2" % width, "-q:v", "5", dst],
-                   check=True, capture_output=True)
+    for w, q in ((width, 5), (width, 7), (int(width * 0.85), 8), (int(width * 0.72), 9), (int(width * 0.6), 11)):
+        subprocess.run([ff, "-y", "-i", src, "-vf", "scale=%d:-2" % w, "-q:v", str(q), dst],
+                       check=True, capture_output=True)
+        if os.path.getsize(dst) <= LIMIT:
+            return
+    print("  NOTE: %s still %d KB after max compression" % (os.path.basename(dst), os.path.getsize(dst) // 1024))
 
 os.makedirs(IMGOUT, exist_ok=True)
 made = []

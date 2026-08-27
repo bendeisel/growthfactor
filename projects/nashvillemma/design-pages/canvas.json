@@ -80,16 +80,16 @@
       "x": 1600,
       "y": 5121,
       "w": 1440,
-      "h": 4490
+      "h": 4957
     },
     {
-      "file": "Program-fitness-classes.dc.html",
-      "title": "Exercise Classes and Open Gym in Nashville",
+      "file": "Program-open-gym.dc.html",
+      "title": "Open Gym in Nashville",
       "page": "page-2",
       "x": 3200,
       "y": 5121,
       "w": 1440,
-      "h": 5017
+      "h": 3642
     },
     {
       "file": "Program-womens-classes.dc.html",
@@ -151,9 +151,9 @@
       "id": "prog-note",
       "page": "page-2",
       "x": 0,
-      "y": -420,
-      "w": 900,
-      "text": "ALL 13 PROGRAM PAGES \u2014 every word is the client's own, taken verbatim from their live site. Nothing was rewritten.\n\nEach page's class times are generated from data/classes.json by program tag, not typed in. Change a boxing class once and it moves on the boxing page AND the master schedule. Adult pages exclude kids classes; the kids pages carry their own.\n\nPersonal Training shows no schedule on purpose \u2014 it is by appointment. Kids Martial Arts is the umbrella page, so it lists every kids class.\n\nStill coming: coaches, FAQ, then Events (GoHighLevel embed) and Sponsors as two separate pages."
+      "y": -470,
+      "w": 980,
+      "text": "13 PROGRAM PAGES \u2014 every word is the client's own, verbatim from their live site.\n\nCLASS TIMES ARE SHARED. No page has a schedule typed into it; all of them read data/classes.json. Verified by renaming a class in that file and watching it change on both the boxing page and the master schedule. Adult pages exclude kids classes; kids pages carry their own.\n\nTHIS ROUND:\n\u00b7 Sports Performance rebuilt as the athlete page \u2014 leads with Train Like An Athlete, then the client's own 'Train Just Like The PROS' block. Coach block added for Tim Sumich; his background is a GOLD PLACEHOLDER because he is not on the current site, so there is nothing on file to quote. Note their live copy credits Co-Owner UFC Lightweight Contender Michael Chandler as the program's inspiration.\n\u00b7 Exercise Classes & Open Gym became OPEN GYM \u2014 the old page sold a variety of fitness classes that no longer exists. Rebuilt from the client's own Facilities copy: 40,000 sqft, 13,000 sqft of mats, cage and ring, Recovery Room. No class times, by design.\n\u00b7 Kids BJJ body photo swapped \u2014 it was a near-duplicate of its hero.\n\nStill coming: coaches, FAQ, then Events (GoHighLevel embed) and Sponsors as two pages."
     },
     {
       "id": "sched-note",
@@ -161,7 +161,7 @@
       "x": 0,
       "y": -300,
       "w": 680,
-      "text": "MASTER SCHEDULE \u2014 all 86 classes, times aligned across the week. The filter chips work: Adults (69), Kids (12), Fitness (5).\n\nThis grid and every program page's times come from one file. Editing a class in one place moves it everywhere."
+      "text": "MASTER SCHEDULE \u2014 all 86 classes, times aligned across the week. Filter chips work: Adults (69), Kids (12), Fitness (5).\n\nThis grid and every program page read the same file, so a class edited once moves everywhere."
     }
   ],
   "launch": {

@@ -38,17 +38,22 @@
     },
     {
       "slug": "sports-performance",
-      "content": "classes-weightlifting-classes",
+      "content": "overrides/sports-performance",
       "hero": "Iron-Pile-Cover-Page-1-263304.JPG",
       "body": "Iron-Pile-Header-Page-2-263305.png",
-      "schedule_tag": "sports-performance"
+      "schedule_tag": "sports-performance",
+      "coach": {
+        "name": "Tim Sumich",
+        "role": "Head Coach — Sports Performance"
+      }
     },
     {
-      "slug": "fitness-classes",
-      "content": "classes-fitness-classes",
-      "hero": "fitnessweightsmainpng-264039.png",
-      "body": "13sep-19-fitness-280893.jpg",
-      "schedule_tag": "sports-performance"
+      "slug": "open-gym",
+      "content": "overrides/open-gym",
+      "hero": "Iron-Pile-Header-Page-2-263305.png",
+      "body": "DSC09141-292252.jpg",
+      "schedule_tag": null,
+      "schedule": false
     },
     {
       "slug": "womens-classes",
@@ -76,7 +81,7 @@
       "slug": "kids-martial-arts",
       "content": "classes-kids-martial-arts",
       "hero": "kids-273867.jpeg",
-      "body": "Kids-BJJ-Page-2-263339.png",
+      "body": "192024-07-07-Kids-fitness-279078.jpg",
       "schedule_tag": null,
       "schedule_audience": "kids"
     },
@@ -84,7 +89,7 @@
       "slug": "kids-brazilian-jiu-jitsu",
       "content": "classes-kids-brazilian-jiu-jitsu",
       "hero": "Kids-BJJ-Cover-Page-1-263338.jpg",
-      "body": "kidsbjjmainpng-264041.png",
+      "body": "Kids-BJJ-Page-2-263339.png",
       "schedule_tag": "jiu-jitsu",
       "schedule_audience": "kids"
     },
