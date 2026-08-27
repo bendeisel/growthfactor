@@ -20,3 +20,5 @@
 {"_id":"session-sat-0200-open-gym-19","_type":"classSession","name":"Open Gym","day":"sat","start":"02:00","audience":"adult","programs":["open-gym"],"end":"12:00"}
 {"_id":"session-sat-0900-boxing-basics-20","_type":"classSession","name":"Boxing Basics","day":"sat","start":"09:00","audience":"adult","programs":["boxing-basics"]}
 {"_id":"session-sat-1200-iban-youth-21","_type":"classSession","name":"IBAN Youth","day":"sat","start":"12:00","audience":"youth","programs":["youth"]}
+{"_id":"session-mon-1630-youth-boxing-22","_type":"classSession","name":"Youth Boxing","day":"mon","start":"16:30","audience":"youth","programs":["youth"]}
+{"_id":"session-wed-1630-youth-boxing-23","_type":"classSession","name":"Youth Boxing","day":"wed","start":"16:30","audience":"youth","programs":["youth"]}

@@ -90,6 +90,13 @@ export const fallbackSessions = [
   { day: 'sat', name: 'Open Gym', start: '02:00', end: '12:00', audience: 'adult', programs: ['open-gym'] },
   { day: 'sat', name: 'Boxing Basics', start: '09:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'sat', name: 'IBAN Youth', start: '12:00', audience: 'youth', programs: ['youth'] },
+
+  // Monday and Wednesday evening youth classes, per Ben (2026-08-27): the
+  // client's WordPress export only carried Saturday's IBAN Youth session,
+  // missing these two. No end time was given, so these follow the same
+  // "start time only" pattern as most other sessions on this page.
+  { day: 'mon', name: 'Youth Boxing', start: '16:30', audience: 'youth', programs: ['youth'] },
+  { day: 'wed', name: 'Youth Boxing', start: '16:30', audience: 'youth', programs: ['youth'] },
 ];
 
 /** "07:00" -> 420, for sorting. */

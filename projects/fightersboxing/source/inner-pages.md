@@ -444,3 +444,14 @@ between Sylvan Park and The Nations, near the I-40 exit at 46th Ave, with
 a WeGo stop at 42nd Ave. USA Boxing membership requires a yearly sports
 physical and an athlete passbook; registration opens at age 8, which is
 also this gym's youth boxing minimum.
+
+## Two missing youth sessions added (2026-08-27, Ben round 5)
+Ben: "You only have the Saturday kids class or youth class listed. There
+are Monday and Wednesday evenings on our schedule on our website. 4:30."
+
+The client's WordPress export only carried one youth session (Saturday
+IBAN Youth, noon), so that was all that made it into schedule.js. Ben
+confirmed two more directly: Youth Boxing, Monday and Wednesday, 4:30 PM.
+Added with no end time, matching how most other sessions on this page are
+recorded (start only). `cms/seed.ndjson` regenerated to match (24
+documents now, was 22).
