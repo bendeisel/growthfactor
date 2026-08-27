@@ -35,7 +35,7 @@
       "x": 1600,
       "y": 0,
       "w": 1440,
-      "h": 4145
+      "h": 4490
     },
     {
       "file": "Program-muay-thai.dc.html",
@@ -44,7 +44,7 @@
       "x": 3200,
       "y": 0,
       "w": 1440,
-      "h": 4911
+      "h": 5541
     },
     {
       "file": "Program-mixed-martial-arts.dc.html",
@@ -53,7 +53,7 @@
       "x": 4800,
       "y": 0,
       "w": 1440,
-      "h": 4298
+      "h": 4758
     },
     {
       "file": "Program-wrestling.dc.html",
@@ -62,88 +62,88 @@
       "x": 6400,
       "y": 0,
       "w": 1440,
-      "h": 4283
+      "h": 4814
     },
     {
       "file": "Program-self-defense.dc.html",
       "title": "Self-Defense Classes & Seminars In Nashville",
       "page": "page-2",
       "x": 0,
-      "y": 5121,
+      "y": 5771,
       "w": 1440,
-      "h": 5849
+      "h": 6627
     },
     {
       "file": "Program-sports-performance.dc.html",
       "title": "Sports Performance Classes In Nashville",
       "page": "page-2",
       "x": 1600,
-      "y": 5121,
+      "y": 5771,
       "w": 1440,
-      "h": 4957
+      "h": 5353
     },
     {
       "file": "Program-open-gym.dc.html",
       "title": "Open Gym in Nashville",
       "page": "page-2",
       "x": 3200,
-      "y": 5121,
+      "y": 5771,
       "w": 1440,
-      "h": 3642
+      "h": 3868
     },
     {
       "file": "Program-womens-classes.dc.html",
       "title": "Women\u2019s Muay Thai & Brazilian Jiu-Jitsu Classes in Nashv",
       "page": "page-2",
       "x": 4800,
-      "y": 5121,
+      "y": 5771,
       "w": 1440,
-      "h": 3952
+      "h": 4398
     },
     {
       "file": "Program-mma-fight-team.dc.html",
       "title": "MMA Fight Team In Nashville",
       "page": "page-2",
       "x": 6400,
-      "y": 5121,
+      "y": 5771,
       "w": 1440,
-      "h": 4176
+      "h": 4727
     },
     {
       "file": "Program-personal-training.dc.html",
       "title": "Personal Training in Nashville",
       "page": "page-2",
       "x": 0,
-      "y": 11180,
+      "y": 12628,
       "w": 1440,
-      "h": 3654
+      "h": 4090
     },
     {
       "file": "Program-kids-martial-arts.dc.html",
       "title": "Kids Martial Arts in Nashville",
       "page": "page-2",
       "x": 1600,
-      "y": 11180,
+      "y": 12628,
       "w": 1440,
-      "h": 3694
+      "h": 3851
     },
     {
       "file": "Program-kids-brazilian-jiu-jitsu.dc.html",
       "title": "Kids BJJ Classes In Nashville",
       "page": "page-2",
       "x": 3200,
-      "y": 11180,
+      "y": 12628,
       "w": 1440,
-      "h": 4033
+      "h": 4437
     },
     {
       "file": "Program-kids-fitness.dc.html",
       "title": "Kids Fitness Classes in Nashville",
       "page": "page-2",
       "x": 4800,
-      "y": 11180,
+      "y": 12628,
       "w": 1440,
-      "h": 4070
+      "h": 4370
     }
   ],
   "annotations": [
@@ -153,7 +153,7 @@
       "x": 0,
       "y": -470,
       "w": 980,
-      "text": "13 PROGRAM PAGES \u2014 every word is the client's own, verbatim from their live site.\n\nCLASS TIMES ARE SHARED. No page has a schedule typed into it; all of them read data/classes.json. Verified by renaming a class in that file and watching it change on both the boxing page and the master schedule. Adult pages exclude kids classes; kids pages carry their own.\n\nTHIS ROUND:\n\u00b7 Sports Performance rebuilt as the athlete page \u2014 leads with Train Like An Athlete, then the client's own 'Train Just Like The PROS' block. Coach block added for Tim Sumich; his background is a GOLD PLACEHOLDER because he is not on the current site, so there is nothing on file to quote. Note their live copy credits Co-Owner UFC Lightweight Contender Michael Chandler as the program's inspiration.\n\u00b7 Exercise Classes & Open Gym became OPEN GYM \u2014 the old page sold a variety of fitness classes that no longer exists. Rebuilt from the client's own Facilities copy: 40,000 sqft, 13,000 sqft of mats, cage and ring, Recovery Room. No class times, by design.\n\u00b7 Kids BJJ body photo swapped \u2014 it was a near-duplicate of its hero.\n\nStill coming: coaches, FAQ, then Events (GoHighLevel embed) and Sponsors as two pages."
+      "text": "13 PROGRAM PAGES \u2014 every word is the client's own, verbatim from their live site.\n\nTHIS ROUND:\n\u00b7 Type scale raised throughout \u2014 headings and body copy were too small to read at 100%.\n\u00b7 The gold washes and the Request Information band now BOUNCE, sweeping corner to corner on a rAF loop (never a CSS animation, which your browser pauses).\n\u00b7 Request Information band is the sand gradient, mapped onto your golds.\n\u00b7 OPEN GYM is the framed-hero test: photo inset in a rounded panel with black around it, title centred. Approve and it rolls to the other 12.\n\u00b7 Open Gym also drops the cage/mats copy and moves to fitness-floor and turf photos.\n\nCLASS TIMES ARE SHARED \u2014 no page has a schedule typed into it; all read data/classes.json. Adult pages exclude kids classes; kids pages carry their own.\n\nStill coming: header dropdown, mobile artboards, then coaches, FAQ, Events and Sponsors."
     },
     {
       "id": "sched-note",

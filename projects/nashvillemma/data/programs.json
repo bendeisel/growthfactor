@@ -53,7 +53,8 @@
       "hero": "fitnessweightsmainpng-264039.png",
       "body": "13sep-19-fitness-280893.jpg",
       "schedule_tag": null,
-      "schedule": false
+      "schedule": false,
+      "hero_style": "inset"
     },
     {
       "slug": "womens-classes",

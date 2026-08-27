@@ -22,8 +22,8 @@ GOLD, CARD, BEBAS = "#D7AD56", "#1E1E29", "'Bebas Neue','Oswald','Arial Narrow',
 
 # "Desert Horizon" gradient (21st.dev recipe) remapped onto the NMMA gold kernel.
 # cqmin -> px on purpose: container-type:size collapses a content-height band.
-SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-amp="30" data-per="44" '
-                 'style="position: absolute; top: -3px; bottom: -3px; left: -6%; width: 112%; filter: blur(1.5px); '
+SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-ax="300" data-ay="78" data-per="19" '
+                 'style="position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; filter: blur(1.5px); '
                  'background-color: #8A6224; background-image: '
                  'radial-gradient(150% 46.8% at 42.7% 6%, rgba(243,225,178,0.92) 0%, rgba(243,225,178,0) 51%), '
                  'radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), '
@@ -35,6 +35,18 @@ CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))
 PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8"))["programs"]
 
 def esc(s): return html.escape(s, quote=False)
+
+NBSP_NAME = "Nashville MMA Training Camp"
+
+def no_break_name(html_str):
+    """Keep the gym's name on one line without touching attribute values."""
+    parts = re.split(r"(<[^>]*>)", html_str)
+    for i in range(0, len(parts), 2):          # even indices are text, odd are tags
+        if NBSP_NAME in parts[i]:
+            parts[i] = parts[i].replace(
+                NBSP_NAME, '<span style="white-space: nowrap">%s</span>' % NBSP_NAME)
+    return "".join(parts)
+
 
 # ── chrome lifted from the approved artboard ───────────────────────────────
 TPL = open(os.path.join(PAGES, "ProgramDetail.dc.html"), encoding="utf-8").read()
@@ -96,17 +108,17 @@ def schedule_cards(tag, audience, enabled=True):
         if d not in by: continue
         lines = "".join(
             '<div style="display: flex; gap: 8px; align-items: baseline">'
-            '<span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">%s</span>'
-            '<span class="body" style="font-size: 12.5px; line-height: 1.4">%s</span></div>'
+            '<span class="micro" style="font-size: 11px; flex: 0 0 62px; letter-spacing: 0.08em">%s</span>'
+            '<span class="body" style="font-size: 15px; line-height: 1.45">%s</span></div>'
             % (c["start"], esc(c["name"])) for c in sorted(by[d], key=lambda x: x["sort"]))
         out.append('      <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px">\n'
-                   '        <div style="font-family: %s; font-size: 24px; margin-bottom: 10px">%s</div>\n'
+                   '        <div style="font-family: %s; font-size: 29px; margin-bottom: 12px">%s</div>\n'
                    '        <div style="display: flex; flex-direction: column; gap: 8px">%s</div>\n      </div>'
                    % (CARD, GOLD, BEBAS, d, lines))
     out.append('      <div style="background: linear-gradient(135deg, rgba(215,173,86,0.2), rgba(215,173,86,0.06)), %s; '
                'border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px; display: flex; flex-direction: column; '
                'justify-content: center; align-items: flex-start; gap: 12px">\n'
-               '        <div style="font-family: %s; font-size: 30px; line-height: 1">90+ Classes Per Week</div>\n'
+               '        <div style="font-family: %s; font-size: 35px; line-height: 1">90+ Classes Per Week</div>\n'
                '        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>\n'
                '      </div>' % (CARD, GOLD, BEBAS))
     return "\n".join(out), len(picked)
@@ -147,24 +159,51 @@ def render(p):
     body_img = "prog-%s-body.jpg" % p["slug"]
 
     out = []
+    if p.get("hero_style") == "inset":
+        # framed hero: the photo sits in a rounded panel with black around it,
+        # title centred inside. 8px radius per the standing picture-corner rule.
+        out.append('<div style="background: #000000; padding: 40px 48px 8px 48px">')
+        out.append('  <div style="background: #141416; border-radius: 14px; padding: 10px; '
+                   'box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07)">')
+        out.append('  <div style="position: relative; height: 470px; overflow: hidden; border-radius: 8px; isolation: isolate">')
+        out.append('    <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; z-index: 1">' % (hero_img, esc(title)))
+        out.append('    <div style="position: absolute; inset: 0; z-index: 2; background: '
+                   'radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.78) 100%)"></div>')
+        out.append('    <div style="position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; '
+                   'align-items: center; justify-content: center; text-align: center; padding: 0 60px">')
+        out.append('      <div class="micro" style="margin-bottom: 16px">Programs</div>')
+        import re as _re
+        m = _re.match(r"^(.*?)\s+in\s+(.*)$", title, _re.I)
+        h1 = ('%s<br>In %s' % (esc(m.group(1)), esc(m.group(2)))) if m else esc(title)
+        lead = m.group(1) if m else title
+        out.append('      <h1 style="font-size: %dpx; line-height: 0.95; max-width: 1050px">%s</h1>'
+                   % (104 if len(lead) < 30 else 80, h1))
+        out.append('      <div style="width: 110px; height: 4px; background: %s; margin-top: 24px"></div>' % GOLD)
+        out.append('    </div>\n  </div>\n  </div>\n</div>')
+        return _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img)
+
     out.append('<div style="position: relative; height: 440px; overflow: hidden; isolation: isolate">')
     out.append('  <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; z-index: 1">' % (hero_img, esc(title)))
     out.append('  <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.9) 100%); z-index: 2"></div>')
     out.append('  <div style="position: absolute; left: 48px; bottom: 44px; z-index: 3; max-width: 1100px">')
     out.append('    <div class="micro" style="margin-bottom: 14px">Programs</div>')
-    size = 84 if len(title) < 34 else 64
+    size = 104 if len(title) < 34 else 80
     out.append('    <h1 style="font-size: %dpx; line-height: 0.92">%s</h1>' % (size, esc(title)))
     out.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 20px"></div>' % GOLD)
     out.append('  </div>\n</div>')
 
+    return _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img)
+
+
+def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
     # intro
     out.append('<div class="rv" style="background: radial-gradient(1000px 500px at 88% -10%, rgba(215,173,86,0.14), transparent 60%), #0A0A0A; padding: 74px 48px">')
     out.append('  <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 52px; align-items: start">')
     out.append('    <div>')
     if intro_head:
-        out.append('      <h2 style="font-size: %dpx; line-height: 1.04; margin-bottom: 24px">%s</h2>' % (50 if len(intro_head) < 60 else 40, esc(intro_head)))
+        out.append('      <h2 style="font-size: %dpx; line-height: 1.04; margin-bottom: 24px">%s</h2>' % (64 if len(intro_head) < 60 else 50, esc(intro_head)))
     for para in intro_paras:
-        out.append('      <p class="body" style="font-size: 16px">%s</p>' % esc(para))
+        out.append('      <p class="body" style="font-size: 19px; line-height: 1.72">%s</p>' % esc(para))
     out.append('      <div style="display: flex; gap: 14px; margin-top: 28px">')
     out.append('        <div class="btn" onClick="{{ openForm }}">Request more information</div>')
     out.append('        <a href="#" class="btn-line">Schedule</a>')
@@ -179,14 +218,14 @@ def render(p):
         gold = (n % 2 == 0)
         if gold:
             out.append('<div class="rv" style="position: relative; overflow: hidden; background: #000000">')
-            out.append('  <div aria-hidden="true" class="dg" data-amp="%d" data-per="%d" data-ph="%.2f" '
-                       'style="position: absolute; top: 0; bottom: 0; left: -12%%; width: 124%%; background-image: '
-                       'radial-gradient(920px 440px at 50%% -14%%, rgba(215,173,86,0.20), transparent 62%%)"></div>'
-                       % (34 + (n % 3) * 8, 36 + (n % 4) * 7, n * 1.3))
+            out.append('  <div aria-hidden="true" class="dg" data-ax="%d" data-ay="%d" data-per="%d" data-ph="%.2f" '
+                       'style="position: absolute; top: -34%%; bottom: -34%%; left: -26%%; width: 152%%; background-image: '
+                       'radial-gradient(940px 460px at 50%% 18%%, rgba(215,173,86,0.22), transparent 64%%)"></div>'
+                       % (300 + (n % 3) * 40, 100 + (n % 3) * 22, 18 + (n % 4) * 3, n * 1.3))
             out.append('  <div style="position: relative; z-index: 2; padding: 70px 48px">')
         else:
             out.append('<div class="rv" style="background: #0A0A0A; padding: 70px 48px">')
-        out.append('  <h2 style="font-size: 40px; line-height: 1.06; margin-bottom: 24px; max-width: 980px">%s</h2>' % esc(s["head"]))
+        out.append('  <h2 style="font-size: 54px; line-height: 1.04; margin-bottom: 26px; max-width: 1060px">%s</h2>' % esc(s["head"]))
         if s["paras"]:
             cols = "1fr 1fr" if len(s["paras"]) > 1 else "1fr"
             out.append('  <div style="display: grid; grid-template-columns: %s; gap: 40px; max-width: 1180px">' % cols)
@@ -194,7 +233,7 @@ def render(p):
             groups = [s["paras"][:half], s["paras"][half:]] if len(s["paras"]) > 1 else [s["paras"]]
             for g in groups:
                 if not g: continue
-                out.append('    <div>' + "".join('<p class="body" style="font-size: 15px">%s</p>' % esc(x) for x in g) + '</div>')
+                out.append('    <div>' + "".join('<p class="body" style="font-size: 18px; line-height: 1.72">%s</p>' % esc(x) for x in g) + '</div>')
             out.append('  </div>')
         if s["items"]:
             out.append('  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px">')
@@ -202,12 +241,12 @@ def render(p):
                 m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
                 if m:
                     out.append('    <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 24px 26px">'
-                               '<h3 style="font-size: 28px; margin-bottom: 8px; color: %s">%s</h3>'
-                               '<p class="body" style="font-size: 14px; margin: 0">%s</p></div>'
+                               '<h3 style="font-size: 34px; margin-bottom: 10px; color: %s">%s</h3>'
+                               '<p class="body" style="font-size: 17px; line-height: 1.7; margin: 0">%s</p></div>'
                                % (CARD, GOLD, GOLD, esc(m.group(1).strip()), esc(m.group(2).strip())))
                 else:
                     out.append('    <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 24px 26px">'
-                               '<p class="body" style="font-size: 14px; margin: 0">%s</p></div>' % (CARD, GOLD, esc(it)))
+                               '<p class="body" style="font-size: 17px; line-height: 1.7; margin: 0">%s</p></div>' % (CARD, GOLD, esc(it)))
             out.append('  </div>')
         out.append('</div>')
 
@@ -217,7 +256,7 @@ def render(p):
     if cards:
         out.append('<div class="rv" style="background: #000000; padding: 70px 48px">')
         out.append('  <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px">')
-        out.append('    <h2 style="font-size: 54px; line-height: 1">Schedule</h2>')
+        out.append('    <h2 style="font-size: 64px; line-height: 1">Schedule</h2>')
         out.append('    <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px">View Full Schedule</a>')
         out.append('  </div>')
         out.append('  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">')
@@ -233,7 +272,7 @@ def render(p):
         out.append('  <div style="display: flex; flex-wrap: wrap; gap: 10px">')
         for a in areas:
             out.append('    <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); '
-                       'border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 9px 16px">%s</span>' % esc(a))
+                       'border-radius: 8px; font-size: 14px; font-weight: 700; letter-spacing: 0.05em; padding: 11px 18px">%s</span>' % esc(a))
         out.append('  </div>\n</div>')
 
     # coach
@@ -246,8 +285,8 @@ def render(p):
         out.append('    </div>')
         out.append('    <div>')
         out.append('      <div class="micro" style="margin-bottom: 12px">%s</div>' % esc(c["role"]))
-        out.append('      <h2 style="font-size: 48px; line-height: 1; margin-bottom: 16px">%s</h2>' % esc(c["name"]))
-        out.append('      <p class="ph" style="font-size: 15px">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
+        out.append('      <h2 style="font-size: 58px; line-height: 1; margin-bottom: 18px">%s</h2>' % esc(c["name"]))
+        out.append('      <p class="ph" style="font-size: 18px; line-height: 1.7">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
         out.append('      <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px; display: inline-block; margin-top: 10px">Coaches &amp; Trainers</a>')
         out.append('    </div>\n  </div>\n</div>')
 
@@ -255,8 +294,8 @@ def render(p):
     out.append('<div class="rv" style="position: relative; overflow: hidden; background: #8A6224">')
     out.append('  ' + SAND_GRADIENT)
     out.append('  <div style="position: relative; z-index: 2; padding: 66px 48px; text-align: center">')
-    out.append('  <h2 style="font-size: 60px; line-height: 1; color: #131313; margin-bottom: 10px">Request Information Now</h2>')
-    out.append('  <p style="color: rgba(19,19,19,0.82); margin-bottom: 26px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>')
+    out.append('  <h2 style="font-size: 74px; line-height: 1; color: #131313; margin-bottom: 12px">Request Information Now</h2>')
+    out.append('  <p style="color: rgba(19,19,19,0.82); font-size: 18px; margin-bottom: 28px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</p>')
     out.append('  <div onClick="{{ openForm }}" style="display: inline-block; background: #0A0A0A; color: #FFFFFF; border-radius: 8px; font-size: 13px; '
                'font-weight: 800; padding: 17px 42px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer">Request Information</div>')
     out.append('  </div>')
@@ -295,6 +334,7 @@ for p in PROGRAMS:
         prep(src, os.path.join(IMGOUT, "prog-%s-%s.jpg" % (p["slug"], kind)), width)
 
     title, body_html, n_cls = render(p)
+    body_html = no_break_name(body_html)
     page = ('<!doctype html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <script src="./support.js"></script>\n</head>\n<body>\n'
             '<x-dc>\n' + HELMET + '\n\n<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">\n\n'
             + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</div>\n</x-dc>\n" + SCRIPT)
