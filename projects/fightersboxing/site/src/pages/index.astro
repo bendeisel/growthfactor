@@ -7,8 +7,6 @@ const pageTitle = 'Fighters Boxing Gym | Nashville’s Boxing at Its Best';
 const description =
   'Nashville’s best boxing gym. Group classes, youth classes, private sessions, open gym, and sparring. All levels welcome, no experience needed.';
 
-const heroClasses = classes.filter((c) => c.name !== 'Masters boxing');
-
 const tickerRepeats = 3;
 
 // Real reviews only, quoted verbatim. The first is a public Google review;
@@ -49,10 +47,10 @@ const reviews = [
     <div class="wrap hero-inner">
       <h1 class="reveal"><span class="h1-line">NASHVILLE BOXING</span> <span class="h1-line">AT ITS BEST</span></h1>
       <p class="sub reveal">
-        {heroClasses.map((c, i) => (
+        {classes.map((c, i) => (
           <>
             <span class="sub-item">{c.name}</span>
-            {i < heroClasses.length - 1 && <span class="sub-sep" aria-hidden="true" />}
+            {i < classes.length - 1 && <span class="sub-sep" aria-hidden="true" />}
           </>
         ))}
       </p>
@@ -94,11 +92,11 @@ const reviews = [
       </div>
       <figure class="split-media mat mat-warm reveal">
         <img
-          src="/img/training-mitts-800.jpg"
-          alt="Coach guarding up while a boxer works the double-end bag at Fighters Boxing Gym"
+          src="/img/ring-facing-off.jpg"
+          alt="Two Fighters members squared up and ready to work in the ring"
           loading="lazy"
-          width="800"
-          height="534"
+          width="1040"
+          height="640"
         />
       </figure>
     </div>

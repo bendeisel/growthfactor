@@ -1,14 +1,20 @@
 ---
 // CLASS PAGE TEMPLATE
-// Per Ben (2026-08-26): no photo header band on inner pages. The H1 is the
-// first thing on the page, then photos sit side by side with the text as
-// you scroll, in the same mat frames as the homepage, over the ambient red
-// fluid gradient.
 //
-// Each class page supplies only data: an H1, a meta description, and a list
-// of sections. A section with an `image` renders as a split (photo beside
-// copy, alternating sides down the page); a section without one renders as
-// a centered closer carrying the final call to action.
+// Header (rev 3, per Ben 2026-08-26): no photo, but not plain either. The
+// page name is set as a two-line poster lockup: the first line in near
+// black on the light ground, the second knocked out white on a red slab
+// that bleeds the full width of the screen. The ambient red fluid runs
+// behind it at higher intensity than the body sections, so the header
+// moves without needing a picture. The structure repeats on every page
+// (that consistency is the point) while the words inside it change, so
+// the pages read as one system instead of one page copied.
+//
+// Body: photos sit beside the copy in the homepage's mat frames, sides
+// alternating; the photo-less block becomes the centered closer.
+//
+// Pages supply data only: title, description, the two H1 lines, and the
+// section list.
 import Base from './Base.astro';
 import ClassTicker from '../components/ClassTicker.astro';
 
@@ -23,23 +29,26 @@ export interface ClassSection {
 interface Props {
   pageTitle: string;
   description: string;
-  h1: string;
+  /** the page name split for the poster lockup: [black line, red slab line] */
+  h1Lines: [string, string];
   sections: ClassSection[];
   currentHref: string;
 }
 
-const { pageTitle, description, h1, sections, currentHref } = Astro.props as Props;
+const { pageTitle, description, h1Lines, sections, currentHref } = Astro.props as Props;
 
 const withPhoto = sections.filter((s) => s.image);
 const closers = sections.filter((s) => !s.image);
 ---
 
 <Base title={pageTitle} description={description}>
-  <!-- ============ PAGE HEAD: H1 first, no photo band ============ -->
-  <section class="page-head grain fluid-host">
-    <div class="wrap">
-      <p class="eyebrow reveal">Boxing Classes</p>
-      <h1 class="reveal">{h1}</h1>
+  <!-- ============ HEADER: two-line poster lockup, red slab ============ -->
+  <section class="page-head grain fluid-host" data-fluid-opacity="0.7" data-fluid-pixel="12">
+    <div class="wrap head-inner">
+      <h1 class="page-title reveal">
+        <span class="t-line">{h1Lines[0]}</span>
+        <span class="t-line t-slab"><span class="t-slab-inner">{h1Lines[1]}</span></span>
+      </h1>
     </div>
   </section>
 
@@ -109,34 +118,42 @@ const closers = sections.filter((s) => !s.image);
 </Base>
 
 <style>
-  /* ---------- page head ---------- */
+  /* ---------- header ---------- */
   .page-head {
     background: var(--ground);
-    padding: clamp(44px, 6vw, 78px) 0 clamp(8px, 1.5vw, 18px);
+    padding: clamp(34px, 5vw, 68px) 0 clamp(30px, 4vw, 54px);
   }
-  .eyebrow {
-    font-family: var(--font-action);
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 14px;
-  }
-  .page-head h1 {
+  .head-inner { position: relative; z-index: 1; }
+  .page-title {
     font-weight: 900;
-    font-size: clamp(34px, 5.6vw, 68px);
-    max-width: 22ch;
+    font-size: clamp(40px, 8.4vw, 104px);
+    line-height: 0.94;
+    letter-spacing: -0.02em;
+  }
+  .t-line { display: block; }
+  /* the red slab bleeds the full width of the screen; the section clips it */
+  .t-slab {
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: clamp(6px, 0.8vw, 12px);
+    padding-block: clamp(6px, 0.8vw, 14px);
+    background: var(--accent);
+    color: var(--on-dark);
+  }
+  .t-slab-inner {
+    display: block;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: clamp(20px, 4vw, 40px);
   }
 
   /* ---------- splits ---------- */
-  /* the first split sits right under the page head, so it gets less top
-     padding than a standalone section would */
+  /* the first split follows the header, so it gets less top padding than a
+     standalone section would */
   .first-split { padding-top: clamp(38px, 4.4vw, 58px); }
   .split.subsequent { padding-top: var(--section-pad); }
-  .read-more {
-    margin-top: clamp(14px, 2vw, 22px);
-  }
+  .read-more { margin-top: clamp(14px, 2vw, 22px); }
   .read-more a {
     font-family: var(--font-display);
     font-weight: 700;
@@ -171,7 +188,14 @@ const closers = sections.filter((s) => !s.image);
   const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reducedFluid) {
     const start = () => {
-      document.querySelectorAll('.fluid-host').forEach((host) => mountFluidBg(host));
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
     };
     if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
     else setTimeout(start, 800);

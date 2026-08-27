@@ -127,3 +127,50 @@ New shared files:
 
 Next: Youth Boxing Class and Competition Team Training, same pattern,
 their own real copy, awaiting Ben's sign-off on this first one.
+
+## Rev 3 (2026-08-26, Ben's feedback on the first template)
+
+**Broken ticker in the artifact preview (fixed).** The class page's ticker
+rendered as jumbled unstyled text in the published artifact while the real
+built page was fine. Cause: `astro.config.mjs` sets
+`inlineStylesheets: 'auto'`, so Astro inlines small component-scoped
+stylesheets into a `<style>` block in the page `<head>` instead of the
+external `_astro/*.css` file. The artifact packagers only read the
+external CSS, silently dropping every scoped rule (the whole ticker).
+Both packagers now also collect the inline `<style>` blocks. Worth
+remembering for any future page: a component whose styles are small
+enough to inline will lose them in the artifact unless the packager
+collects them.
+
+**Masters Boxing removed everywhere** (class discontinued). Gone from
+`src/data/classes.js`, which removes it from the homepage hero list, the
+homepage ticker, the homepage card stack (now 3 cards), and every class
+page's cross-nav ticker. The dead `heroClasses` filter in index.astro is
+gone too. Its photo was NOT deleted: it is a good generic ring shot, so it
+moved to `public/img/ring-facing-off.jpg` and is now the homepage's
+section 1 photo.
+
+**Photo repetition fixed.** `training-mitts-800.jpg` was on the homepage
+body AND the Beginners page body. Now:
+- homepage section 1: `ring-facing-off.jpg` (the freed Masters photo)
+- homepage section 2: `sparring-1600.webp`
+- Beginners section 1: `training-mitts-800.jpg`
+- Beginners section 2: `classes/boxing-basics.jpg`
+No body photo repeats across pages. The class-card thumbnails on the
+homepage still preview their own class page, which is intentional
+continuity rather than repetition.
+NOTE ON SCARCITY: there are only 6 photos total and 3 class pages needing
+2 each. Youth and Competition can each get one unique photo, but a second
+one per page will repeat something unless Ben sends more.
+
+**Header redesigned (rev 3).** The small red "Boxing Classes" eyebrow is
+gone (Ben: it should not just randomly say that at the top). The page name
+is now a two-line poster lockup: line one in near-black on the light
+ground, line two knocked out white on a red slab that bleeds the full
+width of the screen, with the ambient red fluid running behind it at
+higher intensity (0.7 opacity vs 0.5 in the body) so the header moves
+without a photo. Type is much bigger: clamp(40px, 8.4vw, 104px), Archivo
+900. Pages now pass `h1Lines` as a two-item array, e.g.
+['BEGINNERS', 'BOXING CLASS'], so each page controls its own break.
+The fluid host now reads `data-fluid-opacity` / `data-fluid-pixel` so any
+section can tune the gradient.
