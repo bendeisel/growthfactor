@@ -1,0 +1,9 @@
+Tracked runs land here: one markdown checklist per departure, plus audit.log.
+
+Commit them. They are the record of what was revoked and rotated, and when —
+the thing you show a client who asks whether their credentials were handled
+when a person left, and the thing that tells you next time which steps got
+skipped and why.
+
+Never paste a credential into a run file. `killswitch.py check` and
+`killswitch.py complete` both refuse if one appears.

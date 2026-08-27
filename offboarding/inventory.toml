@@ -1,0 +1,428 @@
+# Access inventory — the data the kill switch runs on.
+#
+# RULE, no exceptions: this file contains POINTERS, never secrets. Names of
+# systems, admin URLs, vault item groups, who owns what. No passwords, keys,
+# tokens, recovery codes, or 2FA seeds. `killswitch.py check` enforces this.
+#
+# STATUS: seeded from what this repo implies about the stack (Google Workspace,
+# GitHub, Hostinger, a registrar, a shared vault, client-owned marketing
+# accounts). Every entry is marked `verified = false` until a human confirms it
+# matches reality. An unverified inventory is the failure mode this whole system
+# exists to prevent, so `check` will keep reminding you.
+
+[meta]
+org = "Growth Factor"
+vault = "shared password manager — set to your actual vault name"
+# Tiers a person can hold. A system applies to a person if their tiers overlap
+# the system's `tiers`.
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+
+# ---------------------------------------------------------------------------
+# PHASE 0 — prechecks. Non-destructive, done at notice, BEFORE anything is cut
+# off. Every item here exists because doing it after a later phase is either
+# impossible or destroys access you need.
+# ---------------------------------------------------------------------------
+
+[[precheck]]
+id = "twofa-dependency-sweep"
+name = "Find every account where THEIR phone is the second factor"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+why = """
+The trap that turns a routine exit into a lockout. If a departing person's
+phone or authenticator is the 2FA device on a client's Google Ads account, a
+registrar login, or the Hostinger account, suspending them first leaves you
+permanently locked out of an asset you are contractually responsible for.
+Recovering it means proving ownership to a support desk, for every account,
+while the client waits."""
+steps = [
+  "List every account where their number/authenticator/email is a recovery or 2FA factor. Check the vault entries in their groups for '2FA: <their phone>' style notes.",
+  "For each one: add a company-controlled factor (shared authenticator seed in the vault, or a company phone) and confirm you can log in with it in a private window.",
+  "Only then remove their factor. Removing before confirming the replacement works is how you lose the account.",
+  "Record any account you could NOT re-factor — that one becomes a support-desk recovery ticket, and it blocks Phase 4 for that account.",
+]
+
+[[precheck]]
+id = "snapshot-audit-logs"
+name = "Snapshot audit logs and current access before touching anything"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+why = """
+Logs age out (Workspace login audit is limited, most SaaS keep 30-90 days) and
+revoking access can also revoke your ability to see what that access did. If a
+question comes up in three months — did they export the client list, did they
+pull the vault — the snapshot you took today is the only answer you will have."""
+steps = [
+  "Export Workspace login + admin audit for that user (admin.google.com > Reporting > Audit).",
+  "Export the shared vault's access report for their account: which items they viewed, and when.",
+  "Screenshot / export their org membership lists (GitHub, Slack, ClickUp) so 'what did they have' is answerable later.",
+  "Note anything anomalous in the last 30 days (bulk exports, new API tokens, forwarding rules they added, unfamiliar OAuth grants) and handle it as an incident, not a routine exit.",
+]
+
+[[precheck]]
+id = "scope-the-rotation"
+name = "Compute the rotation scope: everything they could SEE, not everything assigned to them"
+tiers = ["client-access", "automation", "finance", "admin"]
+why = """
+The single most common offboarding mistake. A shared credential is compromised
+the moment someone with access walks out the door, whether or not they were
+'using' it and whether or not they were assigned that client. Read access to a
+vault group means every item in that group needs rotating. Scope by visibility,
+never by assignment."""
+steps = [
+  "For each vault group they belonged to, list every item in it. That full list is the rotation scope.",
+  "Add any credential shared outside the vault — pasted in Slack DMs, sent by email, in a shared doc, written in a project README. Search Slack and mail for the client names they worked on.",
+  "Sort the scope by blast radius: registrar and hosting first, client marketing accounts next, everything else after.",
+  "Anything you decide NOT to rotate, write down why. That note is the thing you will be judged on later.",
+]
+
+# ---------------------------------------------------------------------------
+# PHASE 1 — per-person cutoff. Accounts that can be revoked cleanly for one
+# human. Identity provider deliberately NOT here — it is Phase 4.
+# ---------------------------------------------------------------------------
+
+[[system]]
+id = "endpoint"
+name = "Company device / laptop"
+kind = "endpoint"
+phase = 1
+blast_radius = 4
+revocation = "per_person"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "physical + device management, if any"
+verified = false
+steps = [
+  "Recover the device before the final conversation ends, or agree a courier slot in writing on the spot.",
+  "Assume anything that was on it has been copied. The device coming back is not a reason to skip rotation.",
+  "If it does not come back same-day, treat every credential that was ever on it as compromised and escalate the rotation scope accordingly.",
+]
+verify = "Device in hand, or a written, dated return commitment on file."
+
+[[system]]
+id = "vault-membership"
+name = "Shared password manager — remove the account"
+kind = "infra"
+phase = 1
+blast_radius = 5
+revocation = "per_person"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "vault admin console"
+verified = false
+steps = [
+  "Deactivate (do not delete — deleting can destroy the access history you snapshotted for) their vault account.",
+  "Terminate all their vault sessions and revoke any device/API keys the vault issued them.",
+  "Confirm the Phase 0 rotation scope was captured first. Once the account is gone, reconstructing what they could see gets much harder.",
+]
+verify = "Their vault login fails and shows no active sessions."
+
+[[system]]
+id = "github-membership"
+name = "GitHub org membership"
+kind = "infra"
+phase = 1
+blast_radius = 3
+revocation = "per_person"
+tiers = ["internal", "automation", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "github.com/orgs/<org>/people"
+verified = false
+steps = [
+  "Remove from the org (this kills their repo access and any PAT they hold, since org-scoped tokens die with membership).",
+  "Check for forks of private repos under their personal account — removal does not delete forks they already made.",
+  "Remove them from any repo they were added to directly, outside the org teams.",
+  "Check they are not the sole owner of a webhook, GitHub App install, or Action secret. Reassign if so.",
+]
+verify = "They no longer appear in the org member list, and private repos 404 for them."
+
+[[system]]
+id = "hostinger-sftp-ssh"
+name = "Hostinger SFTP / SSH access"
+kind = "infra"
+phase = 1
+blast_radius = 5
+revocation = "per_person"
+tiers = ["internal", "client-access", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "hPanel > Files > FTP accounts / SSH access"
+verified = false
+steps = [
+  "Delete their per-person SFTP account, if they had one.",
+  "Remove their public key from SSH access. Enumerate the authorized keys and remove anything you cannot positively attribute — an unattributed key is a live one.",
+  "If everyone shared one SFTP login rather than having their own, that is not a Phase 1 removal — it is a Phase 2 rotation (see `hostinger-hpanel`), and it is worth fixing the shared-login pattern while you are in there.",
+]
+verify = "SFTP with their credentials/key is refused, and the remaining key list is fully attributed."
+
+[[system]]
+id = "saas-per-person"
+name = "Slack / ClickUp / Canva and other seat-based tools"
+kind = "saas"
+phase = 1
+blast_radius = 2
+revocation = "per_person"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "each tool's admin page"
+verified = false
+steps = [
+  "Deactivate the account in each tool (deactivate, not delete — you want their message and task history to survive).",
+  "Export anything only they hold: Slack DMs with clients, Canva designs owned by their personal seat, ClickUp docs under their account.",
+  "In Canva specifically, reassign brand-kit and template ownership before deactivating, or client brand assets can become unreachable.",
+  "Revoke tool-issued API tokens, not just the login.",
+]
+verify = "Their login fails in each tool, and no client-owned asset is stranded on their seat."
+
+[[system]]
+id = "automation-membership"
+name = "Automation and data platforms — membership"
+kind = "automation"
+phase = 1
+blast_radius = 4
+revocation = "per_person"
+tiers = ["automation", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "each platform's team settings"
+verified = false
+steps = [
+  "Remove their user from the automation/data platforms in use (workflow runners, backend/database, headless CMS, whatever applies).",
+  "Find workflows, cron jobs, and scheduled tasks that RUN AS them or authenticate with their personal OAuth connection — those break silently when the account dies. Re-point each one at a service account before Phase 4.",
+  "A lead-capture or notification workflow that dies quietly is the worst outcome in this business, so check the lead path explicitly.",
+]
+verify = "No workflow or scheduled job authenticates as them; the lead path was tested end-to-end after the change."
+
+# ---------------------------------------------------------------------------
+# PHASE 2 — rotation. Shared secrets. These cannot be "revoked per person";
+# the only real control is changing them. Ordered by blast radius.
+# ---------------------------------------------------------------------------
+
+[[system]]
+id = "registrar-dns"
+name = "Domain registrar and DNS"
+kind = "infra"
+phase = 2
+blast_radius = 5
+revocation = "rotate"
+tiers = ["internal", "client-access", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "registrar account"
+verified = false
+steps = [
+  "Rotate the registrar password and re-key 2FA to a company-controlled factor.",
+  "Rotate any registrar API key, and check for API keys you did not create.",
+  "Verify the registrant email and the recovery email are company-controlled addresses, not theirs.",
+  "Confirm registrar lock / transfer lock is ON for every domain.",
+  "Review the DNS records and nameservers for changes in the last 60 days. A quiet MX or TXT change is how mail gets intercepted, and it is invisible from the front end of the site.",
+]
+verify = "Login works with the new credential and company 2FA; transfer lock on; DNS and MX match what you expect for every domain."
+
+[[system]]
+id = "hostinger-hpanel"
+name = "Hostinger hPanel account"
+kind = "infra"
+phase = 2
+blast_radius = 5
+revocation = "rotate"
+tiers = ["internal", "client-access", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "hpanel.hostinger.com"
+verified = false
+steps = [
+  "Rotate the hPanel password and re-key 2FA to a company factor.",
+  "Rotate database passwords and any per-site DB user they could see.",
+  "Rotate remaining shared SFTP credentials.",
+  "Rotate the Git deployment credential / deploy token hPanel uses to pull, and re-run a deploy to prove the new one works.",
+  "Check the mail accounts on each domain for forwarding rules or aliases added in the last 60 days.",
+  "Check cron jobs for anything you did not add.",
+]
+verify = "New credential logs in; a test deploy succeeds; no unexpected forwarders, aliases, or cron entries."
+
+[[system]]
+id = "github-deploy-credentials"
+name = "GitHub deploy keys, Action secrets, tokens"
+kind = "infra"
+phase = 2
+blast_radius = 4
+revocation = "rotate"
+tiers = ["internal", "automation", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "repo settings > Deploy keys / Secrets"
+verified = false
+steps = [
+  "Rotate deploy keys on every repo they had access to. Removing their membership does not invalidate a deploy key they copied.",
+  "Rotate Action secrets and any repo/org-level tokens visible to them (hosting credentials, SFTP passwords, API keys).",
+  "Rotate webhook signing secrets.",
+  "Push a no-op commit to confirm CI and deployment still work with the new secrets.",
+]
+verify = "CI green and a deploy completes after rotation; the old deploy key is gone from the repo."
+
+[[system]]
+id = "client-google-assets"
+name = "Client-owned Google assets — GBP, Ads, Analytics, Search Console"
+kind = "client"
+phase = 2
+blast_radius = 4
+revocation = "both"
+tiers = ["client-access"]
+owner = "ben@growth-factor.ai"
+admin = "per-client Google properties"
+verified = false
+steps = [
+  "For each client they touched: remove their user from Google Business Profile, Ads, Analytics, Tag Manager, and Search Console.",
+  "Where access was via a shared client login rather than a named user, rotate that password — and take the opportunity to move the client to named-user access, which is the thing that makes the next exit cheap.",
+  "Check GBP for a pending ownership transfer or an added manager you do not recognise. A hijacked GBP is the most damaging and least visible thing on this list for a local-business client.",
+  "Confirm the client, not Growth Factor and not an individual, is the primary owner of their own GBP and Ads accounts.",
+  "Rotate anything they held for the client outside Google: legacy CMS logins from a migration (97Display, Wix, Squarespace), review-platform logins, booking software.",
+]
+verify = "Per client: their name appears in no user list, primary ownership sits with the client, and no unrecognised manager or pending transfer exists."
+
+[[system]]
+id = "lead-path"
+name = "Lead capture path and client-facing mailboxes"
+kind = "client"
+phase = 2
+blast_radius = 4
+revocation = "rotate"
+tiers = ["client-access", "automation", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "lead endpoint + per-domain mail"
+verified = false
+steps = [
+  "Rotate credentials on the central lead endpoint and its notification integrations.",
+  "Check every leads@ / info@ mailbox they had access to for forwarding rules, filters, and auto-forward settings added while they were here.",
+  "Confirm lead notifications still reach the client after the rotation — submit a real test form on at least one site per hosting plan.",
+  "Leads are the product the client pays for. A silent break here is worse than the breach you are protecting against, so this verification is not optional.",
+]
+verify = "Test submission on a live site arrives at the client's inbox, and no unexpected forwarders remain."
+
+[[system]]
+id = "finance"
+name = "Payments, banking, accounting"
+kind = "finance"
+phase = 2
+blast_radius = 5
+revocation = "both"
+tiers = ["finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "payment processor, bank, accounting software"
+verified = false
+steps = [
+  "Remove their user from the payment processor, bank, and accounting software.",
+  "Rotate API keys on the payment processor and check for keys you did not create.",
+  "Remove them as an authorised contact with the bank — a user removal in the app is not the same as removal from the account itself, and the phone channel is the one that gets abused.",
+  "Cancel their company cards; check for subscriptions billed to them personally that clients depend on.",
+  "Check payout and bank-detail change history for the last 90 days.",
+]
+verify = "No access in any finance system; payout details unchanged and confirmed; card cancelled."
+
+# ---------------------------------------------------------------------------
+# PHASE 3 — continuity. Move the work and the knowledge before the account
+# dies. Everything here needs their account still alive.
+# ---------------------------------------------------------------------------
+
+[[system]]
+id = "drive-transfer"
+name = "Drive ownership transfer"
+kind = "identity"
+phase = 3
+blast_radius = 3
+revocation = "per_person"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "admin.google.com > Users > Transfer data / Drive"
+verified = false
+steps = [
+  "Run the admin Drive transfer to a named owner. Do this while the account is active — after suspension the tooling gets narrower and after deletion the files go with it.",
+  "Transfer does not catch files in shared drives owned elsewhere, or files they shared from a personal account. Spot-check the client folders they worked on.",
+  "Check for client deliverables sitting only in their My Drive.",
+]
+verify = "Transfer report shows completion; the client folders they worked on open under the new owner."
+
+[[system]]
+id = "mail-continuity"
+name = "Mail continuity — delegation, forwarding, auto-reply"
+kind = "identity"
+phase = 3
+blast_radius = 3
+revocation = "per_person"
+tiers = ["internal", "client-access", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "admin.google.com + their mailbox settings"
+verified = false
+steps = [
+  "Delegate their mailbox to whoever picks up the thread, or set forwarding to a monitored address.",
+  "Set an auto-reply naming the new point of contact. Clients emailing a dead address and hearing nothing is a churn event, not an IT detail.",
+  "Remove them from group aliases and shared inboxes, but keep the alias itself receiving.",
+  "Do NOT delete the mailbox. Keep it for the retention period you have decided on (90 days is a common floor) — you will need it.",
+]
+verify = "Mail to their address is received by a monitored inbox and returns the auto-reply."
+
+[[system]]
+id = "work-handover"
+name = "Work and client relationship handover"
+kind = "process"
+phase = 3
+blast_radius = 2
+revocation = "per_person"
+tiers = ["internal", "client-access", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "ClickUp + client comms"
+verified = false
+steps = [
+  "Reassign their open tasks and in-flight builds to a named person, not to a queue.",
+  "For each client they were the face of: send the introduction to the new contact yourself, before the client notices the change.",
+  "Capture undocumented context — half-finished kernels, client preferences, why a decision was made — in the project folder while you can still ask.",
+  "Check the shipped-log and project kernels for entries only they understood.",
+]
+verify = "No open task or active build is assigned to them; every affected client has been introduced to their new contact."
+
+# ---------------------------------------------------------------------------
+# PHASE 4 — identity termination. LAST, on purpose. Phases 0-3 need this
+# account alive.
+# ---------------------------------------------------------------------------
+
+[[system]]
+id = "google-workspace"
+name = "Google Workspace account (identity provider)"
+kind = "identity"
+phase = 4
+blast_radius = 5
+revocation = "per_person"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "admin.google.com > Users"
+verified = false
+steps = [
+  "Confirm Phase 0 re-factoring and Phase 3 transfers are complete. This step is the point of no easy return.",
+  "Reset the password to something only you hold.",
+  "Sign out all sessions — a live session survives a password change until you explicitly terminate it, which is the gap people forget.",
+  "Revoke all third-party OAuth grants and connected apps. This is what kills 'Sign in with Google' access to every SaaS you did not think to check, and it is the highest-value single action in this whole runbook.",
+  "Revoke app passwords, and any API/service-account key issued under their identity.",
+  "Remove recovery phone and recovery email.",
+  "Remove them from all groups; strip any admin role.",
+  "SUSPEND the account. Do not delete it — deletion destroys mail, Drive remnants, and audit trail you may need. Diarise the deletion decision for the end of your retention period.",
+]
+verify = "Account shows suspended; connected-apps list is empty; no active sessions; recovery contacts are company-controlled."
+
+# ---------------------------------------------------------------------------
+# PHASE 5 — verify and record. The phase that decides whether any of the above
+# actually worked.
+# ---------------------------------------------------------------------------
+
+[[system]]
+id = "verification-sweep"
+name = "Independent verification sweep"
+kind = "process"
+phase = 5
+blast_radius = 5
+revocation = "per_person"
+tiers = ["internal", "client-access", "automation", "finance", "admin"]
+owner = "ben@growth-factor.ai"
+admin = "n/a"
+verified = false
+steps = [
+  "Walk the `verify` line of every system in this run and actually test it. A ticked box is a claim; a failed login attempt is evidence.",
+  "Test the lead path on at least one live site per hosting plan. Rotation breaks form handlers more often than anything else here.",
+  "Run a deploy to prove the pipeline still works with rotated credentials.",
+  "Re-check the audit logs a week later for login attempts using the revoked identity. Attempts after departure change the conversation from offboarding to incident.",
+  "Close the run in the audit log with `killswitch.py complete`.",
+]
+verify = "Every system's verify line has been executed, not assumed."

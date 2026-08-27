@@ -1,0 +1,52 @@
+# People and the access tiers they hold.
+#
+# Same rule as inventory.toml: pointers only, never secrets. `killswitch.py
+# check` enforces it.
+#
+# Keep this current while people are HERE. The entire value of this system is
+# that on the day someone quits you already know what they can see — a tier
+# list reconstructed during an exit is a guess, and guesses are what leave a
+# live registrar credential in a former contractor's password manager.
+#
+# Tiers (defined in inventory.toml [meta].tiers):
+#   internal      — Workspace, repos, project management. Baseline for everyone.
+#   client-access — holds credentials for client-owned accounts. The expensive tier:
+#                   drives the whole Phase 2 rotation burden.
+#   automation    — workflow runners, database/CMS backends, API keys.
+#   finance       — payment processor, bank, accounting.
+#   admin         — can administer the above, including this repo.
+#
+# Fields:
+#   id            — short slug, used as `killswitch.py plan <id>`
+#   name, email   — who they are
+#   role          — free text
+#   tiers         — which tiers they hold (drives which systems appear in the plan)
+#   vault_groups  — vault groups they can READ. Rotation scope is computed from
+#                   this, because visibility is what compromises a shared secret,
+#                   not assignment.
+#   clients       — client projects they touched; expands the Phase 2 client work
+#   twofa_holder_for — accounts where THEIR device is a second factor. Anything
+#                   listed here becomes a Phase 0 blocker, because suspending
+#                   them first locks you out permanently.
+#   shared_logins — shared (non-named-user) logins they used. Each one is a
+#                   mandatory rotation and a standing reminder to move that
+#                   system to named users.
+
+[[person]]
+id = "example-contractor"
+name = "EXAMPLE — delete this entry and add your real people"
+email = "someone@growth-factor.ai"
+role = "Contract designer/builder"
+tiers = ["internal", "client-access"]
+vault_groups = ["clients-all", "infrastructure"]
+clients = ["nashvillemma"]
+twofa_holder_for = []
+shared_logins = ["hostinger-hpanel"]
+notes = """
+This entry exists so `plan` and `check` have something to run against. It is
+deliberately worst-case for a small agency: a contractor with read access to
+the whole client vault group and a shared hosting login. Note what that costs —
+run `killswitch.py plan example-contractor` and count the rotation steps. That
+count is the argument for named-user access and per-client vault groups, and
+it drops sharply the moment you split them up.
+"""
