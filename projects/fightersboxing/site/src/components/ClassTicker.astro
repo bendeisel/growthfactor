@@ -18,14 +18,14 @@ const tickerRepeats = 3;
       <span class="ticker-seg" aria-hidden="true">
         {Array.from({ length: tickerRepeats }).map(() => (
           <>
-            {classes.map((c, i) => (
+            {classes.map((c) => (
               <>
                 {c.href === currentHref ? (
                   <span class="ticker-item is-current">{c.name}</span>
                 ) : (
                   <a class="ticker-item" href={c.href}>{c.name}</a>
                 )}
-                {i < classes.length - 1 && <span class="ticker-sep" aria-hidden="true" />}
+                <span class="ticker-sep" aria-hidden="true" />
               </>
             ))}
           </>

@@ -1,0 +1,111 @@
+---
+// SCHEDULE
+//
+// Copy verbatim from the client's WordPress export (Tools > Export,
+// 2026-08-26). One mechanical fix, logged in source/inner-pages.md: the em
+// dash in "a true boxing gym-designed for those serious about the sport"
+// became a comma, per Ben's standing rule.
+//
+// Every time on this page comes from src/data/schedule.js, the same file the
+// class pages and /schedule.ics read, so the three can never disagree.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassCalendar from '../components/ClassCalendar.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+---
+
+<Base
+  title="Boxing Schedule | Fighters Boxing Gym"
+  description="The full week at Fighters Boxing Gym in Nashville: boxing basics, competition team training, youth boxing and open gym. Subscribe once and every class time lands in your calendar."
+>
+  <PageHeader lines={['BOXING', 'SCHEDULE']} sub="at Fighters Boxing Nashville" />
+
+  <!-- ============ THE WEEK ============ -->
+  <section class="cal-section grain fluid-host">
+    <div class="wrap">
+      <ClassCalendar />
+    </div>
+  </section>
+
+  <!-- ============ OPEN GYM: the client's own pitch ============ -->
+  <section class="split grain fluid-host">
+    <div class="wrap split-grid flip">
+      <figure class="split-media mat mat-warm reveal">
+        <img
+          src="/img/training-mitts-800.jpg"
+          alt="Coach holding mitts for a boxer during open gym at Fighters Boxing Gym"
+          loading="lazy"
+          width="800"
+          height="534"
+        />
+      </figure>
+      <div class="split-copy">
+        <p class="kicker reveal">Train Like a Pro</p>
+        <h2 class="reveal">The Benefits of Open Gym at Nashville&rsquo;s Best Boxing Gym</h2>
+        <div class="reveal">
+          <p>
+            At <b>Fighters Boxing Gym</b> in Nashville, our <b>open gym</b> access gives you the
+            freedom to train like a pro at your own pace. Whether you&rsquo;re working on your
+            footwork, perfecting your punches, or building endurance, our gym offers the equipment
+            and space you need to sharpen your skills. It&rsquo;s a true boxing gym, designed for
+            those serious about the sport.
+          </p>
+          <p>
+            Unlike typical fitness boxing gyms, our open gym is about real training. You&rsquo;ll be
+            able to push yourself, focus on technique, and elevate your game without distractions.
+            Whether you&rsquo;re preparing for a fight or just aiming to improve, the open gym at
+            Fighters Boxing Gym is where real progress happens.
+          </p>
+        </div>
+        <span class="btn-ring reveal">
+          <button class="btn js-open-lead" type="button">GET MORE INFORMATION</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ cross-nav to the classes ============ -->
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .cal-section {
+    background: var(--ground-alt);
+    padding: clamp(38px, 5vw, 68px) 0 var(--section-pad);
+  }
+  .kicker {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: clamp(10px, 1.2vw, 16px);
+  }
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

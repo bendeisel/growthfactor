@@ -231,3 +231,75 @@ star ratings, and self-serving `Review`/`AggregateRating` schema on a
 business's own site is against Google's structured-data guidelines, so
 that markup stays off. The reviews that move local ranking are the ones on
 the Google Business Profile itself.
+
+## Schedule page and the synced calendar (2026-08-27)
+Ben: "I want to add the synced calendar just like you have on Nashville MMA
+Training Camp."
+
+How Nashville MMA does it (read out of the NMMA Page Templates canvas):
+one schedule dataset feeds two surfaces. The Schedule page renders the
+whole week, and every program page renders the same data filtered to that
+program, marked in the canvas as GENERATED:grid and GENERATED:cards. The
+sync is that nothing is typed twice.
+
+Fighters now works the same way, from `site/src/data/schedule.js`:
+- `/schedule/` the full week board, with filter chips per program
+- class pages a "Class times" strip filtered to that page's own class
+- `/schedule.ics` a subscribe feed, one weekly repeating event per session
+
+So a schedule change is one edit in one file. The board, all three class
+pages and every member's subscribed phone calendar move together.
+
+Deliberately NOT Nashville MMA's layout. NMMA uses a shared time rail with
+seven day columns because it runs 90+ classes a week. Fighters runs two to
+five sessions a day, so that matrix would be mostly empty white space.
+Fighters gets a day-card board instead: seven cards, red rule under each
+day name, sessions as time + name on a red tick, deep rounding, light
+ground. The eighth cell of the 4x2 grid is the subscribe panel, on the
+dark ground, so the grid closes and the feed sits where people are already
+reading times.
+
+The .ics is the part that earns the word synced. Subscribe once in Google
+Calendar, Apple Calendar or Outlook and the gym's week is in your phone;
+REFRESH-INTERVAL is 12 hours, so a redeploy reaches subscribers the same
+day. Times carry a spelled-out America/Chicago VTIMEZONE, so daylight
+saving is correct without the reader's calendar guessing.
+
+Source of the times: the client's own Schedule page in the WordPress
+export. Transcribed as published, with these notes.
+
+TWO THINGS FOR BEN TO CONFIRM (both flagged in schedule.js):
+1. Saturday open gym reads "2AM-12PM" on the client's page. Almost
+   certainly a typo, since weekday mornings are 7AM-10AM. Kept verbatim
+   rather than guessed at. Fix the one line and every surface follows.
+2. Sessions the client published with a start time only (Boxing Basics,
+   Competition Team Training, both sparring classes, Kardio KO, IBAN
+   Youth) get a 60 minute default length in the .ics only. Real lengths
+   welcome.
+Two more worth a look:
+3. Youth boxing has exactly one session in the client's grid, "IBAN Youth"
+   Saturday 12PM, so the youth page's Class times strip shows one card.
+   If youth trains more often than that, the client's grid is missing it.
+4. "Foundational Sparring" (Thursday 6PM) is tagged to both Boxing basics
+   and Competition team, because the name reads foundational but the slot
+   sits in the competition block. Confirm which page owns it.
+
+Mechanical fixes, logged: "Bsics & Kardio KO" spelled correctly; the em
+dash in "a true boxing gym-designed for those serious about the sport"
+became a comma (Ben's standing rule). The client's grid has no Sunday row,
+so Sunday renders "No sessions".
+
+Copy on the page is the client's: "Boxing Schedule / at Fighters Boxing
+Nashville", then "Train Like a Pro" and "The Benefits of Open Gym at
+Nashville's Best Boxing Gym" with both paragraphs verbatim. The page takes
+the last unused photo, `training-mitts-800.jpg`, so nothing repeats
+site-wide.
+
+Two refactors that came with it:
+- the poster header moved out of ClassPage into
+  `components/PageHeader.astro`, so the schedule page and every future
+  page share one header instead of copies drifting apart. It takes an
+  optional sub-line, which is how "at Fighters Boxing Nashville" sits
+  under the slab.
+- the class ticker now prints a diamond after every item, not between
+  them, so the seam where the loop repeats no longer shows a gap.

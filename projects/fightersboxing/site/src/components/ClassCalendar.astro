@@ -1,0 +1,207 @@
+---
+// THE WEEK BOARD
+//
+// Every session in src/data/schedule.js, laid out as one card per day with
+// a filter row above it. Deliberately not Nashville MMA's time-rail matrix:
+// Fighters runs two to five sessions a day, so a shared 7-column time grid
+// would be mostly empty. Day cards read at a glance, stack cleanly on a
+// phone, and the light ground plus deep rounding keeps the two gyms apart.
+//
+// The eighth cell is the subscribe panel, so the grid closes at 4x2 and the
+// calendar feed sits where people are already reading times.
+import { week, programs, timeLabel } from '../data/schedule.js';
+
+const board = week();
+---
+
+<div class="cal">
+  <div class="filters" role="group" aria-label="Filter the schedule by class">
+    <button class="chip is-on" type="button" data-filter="all" aria-pressed="true">All classes</button>
+    {
+      programs.map((p) => (
+        <button class="chip" type="button" data-filter={p.slug} aria-pressed="false">
+          {p.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="board">
+    {
+      board.map((day) => (
+        <div class="day" data-day={day.key}>
+          <p class="day-name">{day.name}</p>
+          <ul class="slots">
+            {day.sessions.map((s) => (
+              <li class="slot" data-tags={s.tags.join(' ')}>
+                <span class="slot-time">{timeLabel(s)}</span>
+                <span class="slot-name">{s.name}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="day-empty" hidden={day.sessions.length > 0}>No sessions</p>
+        </div>
+      ))
+    }
+
+    <div class="day sync">
+      <p class="day-name">Take it with you</p>
+      <p class="sync-copy">
+        Subscribe once and every class time lands in your phone calendar. When the gym
+        moves a session, your calendar moves with it.
+      </p>
+      <a class="sync-btn" href="/schedule.ics">Sync to your calendar</a>
+      <p class="sync-note">Works with Google Calendar, Apple Calendar and Outlook.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cal { position: relative; z-index: 1; }
+
+  /* ---------- filter chips ---------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, 1vw, 12px);
+    margin-bottom: clamp(24px, 3.4vw, 40px);
+  }
+  .chip {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--accent); }
+  .chip.is-on {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-dark);
+  }
+
+  /* ---------- the board ---------- */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+  }
+  .day {
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius-panel) + 6px);
+    padding: clamp(18px, 1.9vw, 26px);
+    display: flex;
+    flex-direction: column;
+  }
+  .day-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .slot {
+    display: grid;
+    gap: 2px;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  .slot-time {
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .slot-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.25;
+  }
+  .day-empty {
+    font-size: 14px;
+    color: var(--text-light);
+    margin: 0;
+  }
+
+  /* ---------- the subscribe cell ---------- */
+  .sync {
+    background: var(--ground-band);
+    border-color: var(--ground-band);
+    color: var(--on-dark);
+  }
+  .sync .day-name { color: var(--on-dark); }
+  .sync-copy { font-size: 14px; line-height: 1.6; margin: 0 0 auto; }
+  .sync-btn {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    background: var(--accent);
+    border-radius: var(--radius-pill);
+    padding: 14px 24px;
+    text-align: center;
+    margin-top: 18px;
+  }
+  .sync-btn:hover, .sync-btn:focus-visible { background: var(--accent-hover); color: var(--on-dark); }
+  .sync-note {
+    font-size: 12px;
+    color: var(--text-light);
+    margin: 12px 0 0;
+  }
+
+  @media (max-width: 1080px) {
+    .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .board { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  // Filtering is progressive: without JavaScript every session is already
+  // on the page and the chips simply do nothing.
+  const cal = document.querySelector('.cal');
+  if (cal) {
+    const chips = cal.querySelectorAll('.chip');
+    const days = cal.querySelectorAll('.day[data-day]');
+
+    const apply = (filter) => {
+      chips.forEach((c) => {
+        const on = c.dataset.filter === filter;
+        c.classList.toggle('is-on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+      days.forEach((day) => {
+        let shown = 0;
+        day.querySelectorAll('.slot').forEach((slot) => {
+          const match = filter === 'all' || (slot.dataset.tags || '').split(' ').includes(filter);
+          slot.hidden = !match;
+          if (match) shown += 1;
+        });
+        const empty = day.querySelector('.day-empty');
+        if (empty) empty.hidden = shown > 0;
+      });
+    };
+
+    chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter)));
+  }
+</script>

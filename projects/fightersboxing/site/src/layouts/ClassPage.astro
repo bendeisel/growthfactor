@@ -10,14 +10,18 @@
 //                     at higher intensity so it moves without a photo
 //   2. lead split     the page's photo beside the lead pitch
 //   3. pair           the two sub-blocks side by side on the warm ground
-//   4. close          centered call to action
-//   5. ticker         cross-nav to the other classes
+//   4. class times    this class's sessions, read from src/data/schedule.js
+//                     so the page can never disagree with /schedule/
+//   5. close          centered call to action
+//   6. ticker         cross-nav to the other classes
 //
 // Pages supply data only. One photo per page is deliberate: there are six
 // photos total and three class pages, so each page opens with its own
 // class-card photo (the card previews the page) and nothing repeats. Send
 // more photography and the pair section can take a second split.
 import Base from './Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ScheduleStrip from '../components/ScheduleStrip.astro';
 import ClassTicker from '../components/ClassTicker.astro';
 
 export interface LeadBlock {
@@ -48,14 +52,7 @@ const { pageTitle, description, h1Lines, lead, pair, currentHref } = Astro.props
 
 <Base title={pageTitle} description={description}>
   <!-- ============ HEADER: two-line poster lockup, red slab ============ -->
-  <section class="page-head grain fluid-host" data-fluid-opacity="0.7" data-fluid-pixel="12">
-    <div class="wrap head-inner">
-      <h1 class="page-title reveal">
-        <span class="t-line">{h1Lines[0]}</span>
-        <span class="t-line t-slab"><span class="t-slab-inner">{h1Lines[1]}</span></span>
-      </h1>
-    </div>
-  </section>
+  <PageHeader lines={h1Lines} />
 
   <!-- ============ LEAD: photo beside the pitch ============ -->
   <section class="split grain lead-split fluid-host">
@@ -97,6 +94,9 @@ const { pageTitle, description, h1Lines, lead, pair, currentHref } = Astro.props
     </div>
   </section>
 
+  <!-- ====== CLASS TIMES: read straight from the shared schedule ====== -->
+  <ScheduleStrip currentHref={currentHref} />
+
   <!-- ============ CLOSE: the call to action ============ -->
   <section class="close grain fluid-host">
     <div class="wrap close-inner">
@@ -113,36 +113,6 @@ const { pageTitle, description, h1Lines, lead, pair, currentHref } = Astro.props
 </Base>
 
 <style>
-  /* ---------- header ---------- */
-  .page-head {
-    background: var(--ground);
-    padding: clamp(34px, 5vw, 68px) 0 clamp(30px, 4vw, 54px);
-  }
-  .head-inner { position: relative; z-index: 1; }
-  .page-title {
-    font-weight: 900;
-    font-size: clamp(40px, 8.4vw, 104px);
-    line-height: 0.94;
-    letter-spacing: -0.02em;
-  }
-  .t-line { display: block; }
-  /* the red slab bleeds the full width of the screen; the section clips it */
-  .t-slab {
-    width: 100vw;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    margin-top: clamp(6px, 0.8vw, 12px);
-    padding-block: clamp(6px, 0.8vw, 14px);
-    background: var(--accent);
-    color: var(--on-dark);
-  }
-  .t-slab-inner {
-    display: block;
-    max-width: var(--content-max);
-    margin-inline: auto;
-    padding-inline: clamp(20px, 4vw, 40px);
-  }
-
   /* ---------- lead ---------- */
   /* follows the header, so less top padding than a standalone section */
   .lead-split { padding-top: clamp(38px, 4.4vw, 58px); }

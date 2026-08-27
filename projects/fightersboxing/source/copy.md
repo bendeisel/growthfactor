@@ -189,3 +189,15 @@ Pending for schema: opening hours from the client.
    - youth-boxing.jpg: kid on the branded heavy bag
    Cropped to the card's 520:320 ratio, saved at 1040x640 JPG (~80-110KB
    each) in site/public/img/classes/.
+
+## Ben's revisions, round 10 (2026-08-27)
+1. Synced calendar added, matching how Nashville MMA Training Camp does it
+   (one dataset, many surfaces). New page `/schedule/` carries the client's
+   real weekly schedule from the WordPress export; each class page carries
+   the same data filtered to its own class; `/schedule.ics` publishes it as
+   a subscribe feed. All of it reads from site/src/data/schedule.js.
+   Copy on the schedule page is the client's own, with one em dash turned
+   into a comma and "Bsics" spelled correctly. Open items for Ben are
+   logged in inner-pages.md: the Saturday "2AM-12PM" open gym, class
+   lengths for the .ics, the single youth session, and which page owns
+   Foundational Sparring.
