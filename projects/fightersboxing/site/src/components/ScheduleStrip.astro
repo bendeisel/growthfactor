@@ -5,7 +5,8 @@
 // about. Nothing here is typed per page: give the strip the page's own href
 // and it finds the program, so a schedule edit updates all three class
 // pages at once. A page whose class has no sessions renders nothing.
-import { week, programForHref, timeLabel } from '../data/schedule.js';
+import SessionCards from './SessionCards.astro';
+import { activeDays, programForHref, feeds } from '../data/schedule.js';
 
 interface Props {
   currentHref: string;
@@ -13,33 +14,25 @@ interface Props {
 const { currentHref } = Astro.props as Props;
 
 const program = programForHref(currentHref);
-const board = program ? week(program.slug).filter((d) => d.sessions.length > 0) : [];
+const hasSessions = program ? activeDays({ program: program.slug }).length > 0 : false;
+const feed = program ? feeds[program.audience] : null;
 ---
 
 {
-  board.length > 0 && (
+  hasSessions && program && (
     <section class="times grain fluid-host">
       <div class="wrap">
         <div class="times-head reveal">
           <h2>Class times</h2>
-          <a class="times-link" href="/schedule/">See the full week</a>
+          <p class="times-links">
+            <a href="/schedule/">See the full week</a>
+            <a href={feed.href}>Sync to your calendar</a>
+          </p>
         </div>
 
-        <ul class="times-grid reveal">
-          {board.map((day) => (
-            <li class="times-day">
-              <p class="times-dayname">{day.name}</p>
-              <ul class="times-slots">
-                {day.sessions.map((s) => (
-                  <li>
-                    <span class="times-time">{timeLabel(s)}</span>
-                    <span class="times-name">{s.name}</span>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+        <div class="reveal">
+          <SessionCards program={program.slug} />
+        </div>
       </div>
     </section>
   )
@@ -59,51 +52,15 @@ const board = program ? week(program.slug).filter((d) => d.sessions.length > 0) 
     margin-bottom: clamp(24px, 3.2vw, 38px);
   }
   .times-head h2 { font-size: clamp(28px, 3.6vw, 46px); }
-  .times-link {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 15px;
-  }
-
-  .times-grid {
-    list-style: none;
+  .times-links {
+    display: flex;
+    gap: clamp(16px, 2vw, 28px);
+    flex-wrap: wrap;
     margin: 0;
-    padding: 0;
-    display: grid;
-    /* auto-fill, not auto-fit: a class with one session gets one column's
-       width instead of stretching across the page */
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: clamp(12px, 1.4vw, 20px);
   }
-  .times-day {
-    background: var(--ground-alt);
-    border-radius: calc(var(--radius-panel) + 6px);
-    padding: clamp(16px, 1.8vw, 24px);
-  }
-  .times-dayname {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    margin: 0 0 12px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--accent);
-  }
-  .times-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .times-slots li { display: grid; gap: 2px; }
-  .times-time {
-    font-family: var(--font-action);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .times-name {
+  .times-links a {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 15px;
-    line-height: 1.25;
   }
 </style>

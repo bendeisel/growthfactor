@@ -303,3 +303,37 @@ Two refactors that came with it:
   under the slab.
 - the class ticker now prints a diamond after every item, not between
   them, so the seam where the loop repeats no longer shows a gap.
+
+## Adults and kids split apart (2026-08-27, Ben round 2)
+Ben: "Saturday class should just be boxing basics. I do want the kids'
+schedule just on the kids' page. Maybe we have an adult schedule page and
+then just the kids' class page on the schedule page and also on the kids'
+page itself. Make them auto-sync."
+
+Three changes, all in the one dataset:
+1. Saturday 9AM is now **Boxing Basics**. The client's page called it
+   "Bsics & Kardio KO"; per Ben it is just boxing basics.
+2. Sessions carry an `audience`, adult or youth. The week board on
+   /schedule/ is the adult week only. The kids classes get their own block
+   below it, in a panel, with links to the youth page and to their own
+   feed. The same cards render on the youth page itself.
+3. Two feeds instead of one: `/schedule.ics` for the adult classes,
+   `/youth-schedule.ics` for the kids. An adult subscribing does not get
+   kids classes in their phone, and a parent gets only the kids block.
+   Both are built by `site/src/lib/ics.js` from the same dataset.
+
+Also, Foundational Sparring (Thursday 6PM) now belongs to the competition
+page only, not both. It sits in the client's competition block next to
+Competition Sparring. One word from Ben moves it to basics.
+
+What syncs where, all from `site/src/data/schedule.js`:
+- /schedule/ adult board, filter chips for boxing basics, competition
+  team and open gym, plus the kids panel
+- /beginners-boxing-class/ boxing basics only, 5 days
+- /competition-team-training/ competition classes only, 3 days
+- /youth-boxing-class/ kids only, and the same cards as the kids panel
+- /schedule.ics and /youth-schedule.ics the two subscribe feeds
+
+The day cards are one component (`components/SessionCards.astro`), so a
+class's times look identical on the schedule page, its class page and any
+page built later.

@@ -11,7 +11,11 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ClassCalendar from '../components/ClassCalendar.astro';
+import SessionCards from '../components/SessionCards.astro';
+import { feeds, programForHref } from '../data/schedule.js';
 import ClassTicker from '../components/ClassTicker.astro';
+
+const youth = programForHref('/youth-boxing-class/');
 ---
 
 <Base
@@ -20,15 +24,34 @@ import ClassTicker from '../components/ClassTicker.astro';
 >
   <PageHeader lines={['BOXING', 'SCHEDULE']} sub="at Fighters Boxing Nashville" />
 
-  <!-- ============ THE WEEK ============ -->
+  <!-- ============ THE ADULT WEEK ============ -->
   <section class="cal-section grain fluid-host">
     <div class="wrap">
       <ClassCalendar />
     </div>
   </section>
 
+  <!-- ====== KIDS: their own block, same dataset as the youth page ====== -->
+  <section class="kids grain fluid-host">
+    <div class="wrap">
+      <div class="kids-panel reveal">
+        <div class="kids-head">
+          <p class="kicker">For the kids</p>
+          <h2>Youth boxing</h2>
+          <p class="kids-links">
+            <a href={youth.href}>See the youth boxing class</a>
+            <a href={feeds.youth.href}>Sync the kids schedule</a>
+          </p>
+        </div>
+        <div class="kids-cards">
+          <SessionCards audience="youth" />
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ OPEN GYM: the client's own pitch ============ -->
-  <section class="split grain fluid-host">
+  <section class="split alt grain fluid-host">
     <div class="wrap split-grid flip">
       <figure class="split-media mat mat-warm reveal">
         <img
@@ -84,6 +107,38 @@ import ClassTicker from '../components/ClassTicker.astro';
     color: var(--accent);
     margin-bottom: clamp(10px, 1.2vw, 16px);
   }
+  .kids {
+    background: var(--ground);
+    padding: var(--section-pad) 0;
+  }
+  /* the kids classes sit in their own panel, so one session reads as a
+     deliberate block rather than a card adrift in white space */
+  .kids-panel {
+    background: var(--ground-alt);
+    border-radius: calc(var(--radius-panel) + 14px);
+    padding: clamp(24px, 3.2vw, 48px);
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+  }
+  .kids-panel :global(.card) { background: var(--ground); }
+  .kids-head h2 { font-size: clamp(28px, 3.6vw, 46px); }
+  .kids-links {
+    display: flex;
+    gap: clamp(16px, 2vw, 28px);
+    flex-wrap: wrap;
+    margin: clamp(14px, 1.8vw, 20px) 0 0;
+  }
+  .kids-links a {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  @media (max-width: 900px) {
+    .kids-panel { grid-template-columns: 1fr; }
+  }
+
   .ticker {
     overflow: hidden;
     background: var(--accent);

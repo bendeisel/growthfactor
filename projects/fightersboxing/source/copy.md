@@ -201,3 +201,11 @@ Pending for schema: opening hours from the client.
    logged in inner-pages.md: the Saturday "2AM-12PM" open gym, class
    lengths for the .ics, the single youth session, and which page owns
    Foundational Sparring.
+
+## Ben's revisions, round 11 (2026-08-27)
+1. Saturday 9AM class renamed to "Boxing Basics" (the client's page read
+   "Bsics & Kardio KO").
+2. Adults and kids separated: /schedule/ leads with the adult week and
+   carries a "Youth boxing" panel; the kids cards also sit on the youth
+   page. Two subscribe feeds, adult and kids.
+3. Foundational Sparring assigned to the competition page only.

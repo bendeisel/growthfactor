@@ -1,0 +1,78 @@
+---
+// DAY CARDS
+//
+// One card per day that has a session, for a given program or audience.
+// Shared by the class-page strips and the kids block on /schedule/, so a
+// class's times look identical wherever they appear and come from the same
+// place: src/data/schedule.js.
+import { activeDays, timeLabel } from '../data/schedule.js';
+
+interface Props {
+  program?: string;
+  audience?: string;
+}
+const { program, audience } = Astro.props as Props;
+const board = activeDays({ program, audience });
+---
+
+<ul class="cards">
+  {
+    board.map((day) => (
+      <li class="card">
+        <p class="card-day">{day.name}</p>
+        <ul class="card-slots">
+          {day.sessions.map((s) => (
+            <li>
+              <span class="card-time">{timeLabel(s)}</span>
+              <span class="card-name">{s.name}</span>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    /* auto-fill, not auto-fit: a class with one session gets one column's
+       width instead of stretching across the page */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+  }
+  .card {
+    background: var(--ground-alt);
+    border-radius: calc(var(--radius-panel) + 6px);
+    padding: clamp(16px, 1.8vw, 24px);
+  }
+  .card-day {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin: 0 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .card-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .card-slots li { display: grid; gap: 2px; }
+  .card-time {
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .card-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.25;
+  }
+</style>
