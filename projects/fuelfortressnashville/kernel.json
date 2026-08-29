@@ -1,0 +1,70 @@
+{
+  "client": "Fuel Fortress Nashville",
+  "source": "WordPress/Elementor DB dump u213629895_YBpXO.fuelfortressnashvillecom.20260829182046.sql.gz",
+  "extraction_method": "Mechanical frequency count of hex literals and font_family declarations across 2,099 _elementor_data / _elementor_page_settings rows.",
+  "site": {
+    "domain": "fuelfortressnashville.com",
+    "address": "412 Davidson St, Nashville, TN 37213",
+    "phone": "(615) 562-3966",
+    "email_interim": "fuelfortress615@gmail.com",
+    "email_note": "Client is issuing a branded address; swap when supplied.",
+    "platform_from": "WordPress 6.x + Elementor Pro 3.35.1, hello-elementor theme, Hostinger"
+  },
+  "typefaces": {
+    "display": "Bebas Neue",
+    "body": "DM Sans",
+    "excluded": ["Roboto", "Roboto Slab"],
+    "excluded_reason": "Elementor kit defaults, not author-selected; zero use in page data."
+  },
+  "tokens": {
+    "--ground": "#090909",
+    "--ground-raise": "#111111",
+    "--ground-edge": "#1A1A1A",
+    "--light": "#F5F5F5",
+    "--white": "#FFFFFF",
+    "--text-dim": "#666666",
+    "--text-mid": "#888888",
+    "--text-soft": "#C8C8C8",
+    "--text-quiet": "#B8B8B8",
+    "--rule": "#3A3A3A",
+    "--rule-light": "#D4D4D4",
+    "--rule-lighter": "#E0E0E0",
+    "--grey-6e": "#6E6E6E"
+  },
+  "token_colors_ranked": [
+    "#FFFFFF", "#666666", "#F5F5F5", "#090909", "#888888",
+    "#C8C8C8", "#1A1A1A", "#111111", "#D4D4D4", "#6E6E6E",
+    "#B8B8B8", "#E0E0E0", "#3A3A3A"
+  ],
+  "excluded_colors": {
+    "#54595F": "Elementor default system 'Secondary' — never applied.",
+    "#7A7A7A": "Elementor default system 'Text' — never applied.",
+    "#6EC1E4": "Elementor default system 'Primary' — never applied."
+  },
+  "accent": null,
+  "accent_note": "The kernel has NO chromatic accent. The palette is pure achromatic: near-black ground, off-white band, a grey ramp. This is the single most distinctive thing about the identity and is treated as load-bearing, not as an omission to be filled.",
+  "motifs_inventoried": [
+    "Scrolling ticker band: Bebas caps, 0.78rem, 0.3em tracking, #090909 on #F5F5F5, middot separators. Used once.",
+    "Zero-padded numerals 01-04 indexing list items. Used once.",
+    "Tiny wide-tracked uppercase eyebrow above every section heading: 10px, 0.3em tracking, #3A3A3A. Used consistently.",
+    "Grayscale-to-color image hover: brightness(.85) grayscale(.2) -> brightness(1) grayscale(0), 0.6s cubic-bezier(.25,.46,.45,.94).",
+    "Mosaic gallery where items 1 and 6 span double width.",
+    "Hard 0px corners on all containers; 999px pills reserved for pagination dots only.",
+    "Middot separator in kickers: 'Strength & Power', 'Recovery / Wellness', '1-on-1 / Strength'.",
+    "Alternating full-bleed grounds: #090909 against #F5F5F5."
+  ],
+  "axes_shipped": {
+    "structure": "F dense mosaic",
+    "type_stance": "4 condensed caps dominant",
+    "density": "dense",
+    "rhythm": "interlocked",
+    "color_stance": "alternating high contrast"
+  },
+  "divergence_check": {
+    "neighbour": "Nashville MMA Training Camp (martial arts gym, Nashville TN, same city)",
+    "neighbour_axes": "E editorial rail / 1 extreme contrast / duotone gold #D7AD56 / dense / punctuated",
+    "differs_on": ["structure", "type_stance", "color_stance", "rhythm"],
+    "shared_display_face": "Bebas Neue is shared with the neighbour and CANNOT be changed — it is Fuel Fortress's own face, frozen by lock 2. Divergence is therefore carried entirely by the other axes, which differ on four of five.",
+    "body_face_differs": "DM Sans vs Montserrat"
+  }
+}

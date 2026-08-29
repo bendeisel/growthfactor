@@ -1,0 +1,115 @@
+# Fuel Fortress Nashville
+
+- **Homepage preview (artifact):** https://claude.ai/code/artifact/3d3013c1-ef40-43f2-969b-2bf50799ea05
+- `kernel.json` — the locked brand kernel, extracted mechanically from the client's
+  WordPress/Elementor database dump (not read off a screenshot).
+- `site/` — the build, on Growth Factor's static Hostinger stack per
+  `.claude/skills/house-style/references/hostinger-delivery.md`.
+- Status: **homepage only.** Content rewritten with the client in this session to
+  remove claims that were not true of the Nashville location.
+
+## Source
+
+`u213629895_YBpXO.fuelfortressnashvillecom.20260829182046.sql.gz` — WordPress 6.x,
+Elementor Pro 3.35.1, hello-elementor theme, on Hostinger. 7 published pages,
+203 media attachments, 1,189 Elementor payloads. Parsed offline; the live site and
+Instagram are both unreachable from the build environment (see Assets below).
+
+## What changed in the copy, and why
+
+Copy is normally frozen at 99%. It was **deliberately unfrozen for this project** —
+the client commissioned a content change because the live site made claims that are
+false for the Nashville location. Every change below traces to an explicit client
+instruction in the session, not to editorial preference.
+
+**Removed as untrue**
+- "Customized programming included with every membership" (personal training) — PT
+  is a paid add-on, never included. This was the single most important fix.
+- "Custom Plans Included — Every membership includes nutrition and programming."
+- "Private Saunas · Hot-stone saunas in both men's and women's locker rooms" — there
+  is one sauna, it is not hot-stone and not private.
+- "Combat Sports Training Area · Dedicated space for Kickboxing and combat
+  conditioning classes" — client's read is that this was copied off the original
+  Fuel Fortress site by the previous developer.
+- The "Programs & Services / Nashville Training Programs for Every Goal" section —
+  there are no programs. Replaced by **The Gym**, describing what is in the building.
+- 47 combat-sport template icons (gloves, pads, referee, gum shield, shin pads) that
+  shipped with the source template and describe a martial arts gym, not this one.
+
+**Deduplicated** — the source homepage carried three near-identical copies of the
+Problem block, the Difference block and the Why block, plus two of the services
+block. Kept one of each, using the client's latest variant where they differed.
+
+**Repositioned** — equipment is now the lead section rather than a bullet in a
+feature grid, per "we have the best equipment in Nashville, highest grade equipment."
+
+**Added** — an **Add-Ons** section (client's structure) holding personal training and
+ready-made meals, both stated plainly as costing extra. Kickboxing sits there too as
+a free recreational extra run by Taryn, with its own page to follow.
+
+**Kept verbatim** — the ticker slogans, the four Problem items, pricing and discount
+terms, "Train hard. Recover strong. Perform better.", the areas-served list, and all
+Google review text.
+
+## SEO
+
+Client's priority terms: *weightlifting Nashville*, *weightlifting*, *East Nashville*
+(the gym sits between downtown and East Nashville and draws commuters), and *sauna*
+(currently ranking ~30th). Title, meta description, H1 eyebrow, the sauna section and
+the location section are all built around these. `ExerciseGym` structured data
+carries the real NAP, areas served, and the genuine 5.0/8 Google rating.
+
+## Assets — outstanding
+
+The build environment cannot reach `fuelfortressnashville.com` or Instagram (both
+blocked by the network egress proxy), so **no image or video files could be
+downloaded**. Every photo and video position is a marked slot naming the file that
+belongs there; dropping real files into `site/img/` and `site/video/` and swapping
+the commented-in `<img>` / `<video>` tag completes it.
+
+Needed from the client:
+1. The hero background video (source: `0308-2.mp4`), resized for web —
+   1920×1080 max, H.264, target under ~6 MB, muted, plus a poster frame.
+2. The 10 gallery photos (`dji_mimo_20260309_*`, the March 9 2026 shoot).
+3. A photo of the actual sauna.
+4. Instagram photos, if they want any beyond the above.
+
+**Provenance warning:** the homepage's own photography is clean — every image on it
+comes from the single 2026-03-09 shoot, which post-dates the Nashville opening. But
+the **About** and **Contact** pages pull `dji_mimo_20241121_*` and
+`dji_mimo_20250912_*`, both of which pre-date Nashville opening and are almost
+certainly other Fuel Fortress locations. Those must not be carried over.
+
+## Open questions for the client
+
+1. **24/7 access wording** — the source site says both "digital keytag via the free
+   Fuel Fortress Members App" and "every member gets fob access from day one." Which
+   is it? Currently written neutrally as "members get their own access from day one."
+2. **Square footage and year established** — the source has animated counters that
+   read `0K+ ft` and `Est. 0`, i.e. the real numbers were never entered. Left out
+   rather than invented; the proof strip uses three verifiable facts instead.
+3. **Staffed hours** — footer says "open 24/7 to members, staffed hours vary." Real
+   staffed hours would be better.
+4. **Branded email** — using `fuelfortress615@gmail.com` as instructed until the
+   branded address exists. One constant in `lead.php`, one line in the footer.
+
+## Step 5 self-audit (house-style)
+
+- **Did any word change?** Yes, extensively — but only under explicit client
+  instruction, itemised above. Nothing was reworded for taste.
+- **Is every hex and face in the kernel?** Yes. 13 hexes, all from the frequency
+  count in `kernel.json`; Bebas Neue and DM Sans only. No color was introduced.
+- **Which existing motif is each decision from?** Eyebrow-with-rule → the site's
+  10px/0.3em eyebrow, used on every section already. Numbered index → the `01–04`
+  Problem list. Alternating black/off-white bands → the existing `#090909`/`#F5F5F5`
+  section grounds. Grayscale-to-color hover → the existing gallery hover filter.
+  Mosaic with double-width 1st and 6th → the existing gallery flex rule. Hard 0px
+  corners with pills reserved for dots → the existing radius pairing. Ticker → kept
+  outright. Middot kickers → the existing "Recovery · Wellness" separators.
+- **Which two axes differ from same-vertical neighbours?** Four of five differ from
+  Nashville MMA Training Camp: structure (F dense mosaic vs E editorial rail), type
+  stance (4 condensed caps vs 1 extreme contrast), color stance (alternating high
+  contrast, no accent, vs duotone gold), rhythm (interlocked vs punctuated). Bebas
+  Neue is shared and cannot change — it is Fuel Fortress's own face.
+- **Would this be mistaken for the last three sites shipped?** No. The absence of any
+  accent color is the distinguishing feature and is the client's own palette.
