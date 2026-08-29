@@ -83,10 +83,53 @@ p{margin:0 0 1em}
   color:var(--text-soft);padding:6px 0;border-bottom:1px solid transparent;transition:.25s;
 }
 .nav a:hover{color:var(--white);border-bottom-color:var(--white)}
-.hdr-tel{font-size:11px;letter-spacing:.14em;color:var(--text-soft);white-space:nowrap}
-.hdr-tel:hover{color:var(--white)}
 .navtoggle{display:none;background:none;border:1px solid var(--rule);color:var(--white);
   padding:9px 13px;font:500 10px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+
+
+/* ---------- trail grid ----------
+   Fixed full-page lattice that lights under the cursor and drifts on its own
+   when the pointer goes idle. Screen blend so it reads on every band tone. */
+.trail{position:fixed;inset:0;z-index:5;display:grid;gap:0;padding:0;
+  pointer-events:none;mix-blend-mode:screen;contain:strict}
+.trail-cell{background:transparent;border-radius:4px;
+  transition:background .38s ease,border-radius .2s ease}
+.trail-cell.on{background:var(--ground-edge)}
+@media (prefers-reduced-motion:reduce){.trail{display:none}}
+
+/* ---------- page hero (inner pages) ---------- */
+.phero{position:relative;min-height:clamp(380px,58vh,620px);display:flex;align-items:flex-end;overflow:hidden}
+.phero-media{position:absolute;inset:0;z-index:0}
+.phero-media img{width:100%;height:100%;object-fit:cover}
+.phero-media .slot-ph{border:0}
+.phero-scrim{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(9,9,9,.78) 0%,rgba(9,9,9,.48) 38%,rgba(9,9,9,.86) 80%,var(--ground) 100%)}
+.phero-inner{position:relative;z-index:2;width:100%;max-width:var(--max);margin:0 auto;
+  padding:calc(var(--band-y) * .55) var(--gut) clamp(38px,5vw,64px)}
+.phero .d1{font-size:clamp(44px,7.5vw,112px);max-width:15ch}
+.phero .lede{margin-top:20px}
+
+/* ---------- FAQ ---------- */
+.faq{margin-top:clamp(34px,4vw,54px);border-top:1px solid var(--rule)}
+.faq-item{border-bottom:1px solid var(--rule)}
+.faq-item summary{
+  list-style:none;cursor:pointer;padding:clamp(18px,2.2vw,26px) 44px clamp(18px,2.2vw,26px) 0;
+  position:relative;font-family:var(--display);font-size:clamp(17px,1.7vw,24px);
+  letter-spacing:.05em;text-transform:uppercase;color:var(--text-soft);transition:color .25s}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:hover{color:var(--white)}
+.faq-item[open] summary{color:var(--white)}
+.faq-item summary::after{content:"";position:absolute;right:8px;top:50%;width:13px;height:1px;
+  background:currentColor;transform:translateY(-50%)}
+.faq-item summary::before{content:"";position:absolute;right:14px;top:50%;width:1px;height:13px;
+  background:currentColor;transform:translateY(-50%);transition:opacity .25s,transform .25s}
+.faq-item[open] summary::before{opacity:0;transform:translateY(-50%) rotate(90deg)}
+.faq-a{padding:0 0 clamp(20px,2.4vw,28px) 0;max-width:74ch}
+.faq-a p{margin:0;font-size:14.5px;line-height:1.75;color:var(--text-dim)}
+
+/* ---------- header call button + current page ---------- */
+.btn-call{padding:11px 20px;font-size:10px;white-space:nowrap;flex:none}
+.nav a.is-here{color:var(--white);border-bottom-color:var(--rule)}
 
 /* ---------- buttons ---------- */
 .btn{
@@ -405,7 +448,6 @@ p{margin:0 0 1em}
   .nav.is-open{display:flex}
   .nav a{padding:14px 0;border-bottom:1px solid var(--ground-edge)}
   .navtoggle{display:block;margin-left:auto}
-  .hdr-tel{display:none}
   .split{grid-template-columns:1fr}
   .plans{grid-template-columns:1fr}
   .mosaic .slot,.mosaic .slot:nth-child(1),.mosaic .slot:nth-child(6){flex:1 1 calc(50% - 6px);height:220px}

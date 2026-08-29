@@ -5,8 +5,12 @@
   WordPress/Elementor database dump (not read off a screenshot).
 - `site/`, the build, on Growth Factor's static Hostinger stack per
   `.claude/skills/house-style/references/hostinger-delivery.md`.
-- Status: **homepage only.** Content rewritten with the client in this session to
+- Status: **six pages built.** `index`, `equipment`, `gym`, `addons`, `membership`,
+  `kickboxing`. Every page carries its own FAQ. Content rewritten with the client to
   remove claims that were not true of the Nashville location.
+- `site/build.py` assembles the pages from one shared layout and emits plain static
+  HTML plus `sitemap.xml`. Run `python3 build.py` after editing content. It also
+  emits the single-file review preview when `PREVIEW_OUT` is set.
 
 ## Source
 
@@ -58,6 +62,19 @@ Client's priority terms: *weightlifting Nashville*, *weightlifting*, *East Nashv
 (currently ranking ~30th). Title, meta description, H1 eyebrow, the sauna section and
 the location section are all built around these. `ExerciseGym` structured data
 carries the real NAP, areas served, and the genuine 5.0/8 Google rating.
+
+## Why the media is missing
+
+A WordPress `.sql` export contains the **database only**. Media files live on disk
+under `wp-content/uploads/` and are never included in a SQL dump, which is why the
+dump gives filenames, alt text and dimensions but no images. To get them the client
+needs a **files** backup rather than a database one: Hostinger File Manager,
+compress `wp-content/uploads/2026/03/`, and send the zip. The same applies to the
+hero video.
+
+Fetching them directly is also impossible from this environment: both
+`fuelfortressnashville.com` and Instagram are blocked by the network egress proxy,
+retested with the client's explicit permission.
 
 ## Assets, outstanding
 

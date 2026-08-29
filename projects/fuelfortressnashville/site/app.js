@@ -16,6 +16,101 @@
     });
   }
 
+
+  /* --- trail grid: follows the pointer, drifts on its own when idle --- */
+  var trail = document.getElementById('trail');
+  if (trail && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var CELL = 40, HOLD = 380, IDLE_AFTER = 1500, DRIFT_MS = 120;
+    var cells = [], cols = 0, rows = 0, last = -1;
+    var timers = new Map();
+    var idleTimer = null, driftTimer = null, driftAt = -1;
+
+    var radius = function (i) {
+      var c = cells[i];
+      if (!c) return;
+      var r = Math.floor(i / cols), col = i % cols;
+      var on = function (j, ok) { return ok && cells[j] && cells[j].classList.contains('on'); };
+      var t = on(i - cols, r > 0), b = on(i + cols, r < rows - 1);
+      var l = on(i - 1, col > 0), rt = on(i + 1, col < cols - 1);
+      c.style.borderRadius = (t || l ? '0' : '4px') + ' ' + (t || rt ? '0' : '4px') + ' ' +
+                             (b || rt ? '0' : '4px') + ' ' + (b || l ? '0' : '4px');
+    };
+    var refresh = function (i) {
+      radius(i);
+      if (i % cols > 0) radius(i - 1);
+      if (i % cols < cols - 1) radius(i + 1);
+      radius(i - cols); radius(i + cols);
+    };
+    var light = function (i) {
+      var c = cells[i];
+      if (!c) return;
+      c.classList.add('on');
+      refresh(i);
+      if (timers.has(i)) clearTimeout(timers.get(i));
+      timers.set(i, setTimeout(function () {
+        if (cells[i]) { cells[i].classList.remove('on'); refresh(i); }
+        timers.delete(i);
+      }, HOLD));
+    };
+
+    var build = function () {
+      cols = Math.ceil(document.documentElement.clientWidth / CELL);
+      rows = Math.ceil(document.documentElement.clientHeight / CELL);
+      trail.style.gridTemplateColumns = 'repeat(' + cols + ', ' + CELL + 'px)';
+      trail.style.gridTemplateRows = 'repeat(' + rows + ', ' + CELL + 'px)';
+      timers.forEach(clearTimeout); timers.clear();
+      trail.textContent = '';
+      cells = [];
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < cols * rows; i++) {
+        var d = document.createElement('div');
+        d.className = 'trail-cell';
+        frag.appendChild(d);
+        cells.push(d);
+      }
+      trail.appendChild(frag);
+      last = -1;
+      driftAt = Math.floor(cols * rows / 2);
+    };
+
+    var drift = function () {
+      var r = Math.floor(driftAt / cols), c = driftAt % cols;
+      var step = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,-1],[1,-1],[-1,1]][Math.floor(Math.random()*8)];
+      r = Math.min(rows - 1, Math.max(0, r + step[0]));
+      c = Math.min(cols - 1, Math.max(0, c + step[1]));
+      driftAt = r * cols + c;
+      light(driftAt);
+    };
+    var startDrift = function () { if (!driftTimer) driftTimer = setInterval(drift, DRIFT_MS); };
+    var stopDrift = function () { if (driftTimer) { clearInterval(driftTimer); driftTimer = null; } };
+    var resetIdle = function () {
+      stopDrift();
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(startDrift, IDLE_AFTER);
+    };
+
+    document.addEventListener('mousemove', function (e) {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      var col = Math.floor(e.clientX / CELL), row = Math.floor(e.clientY / CELL);
+      if (col < 0 || col >= cols || row < 0 || row >= rows) return;
+      var i = row * cols + col;
+      resetIdle();
+      if (i === last) return;
+      last = i;
+      driftAt = i;
+      light(i);
+    }, { passive: true });
+
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { build(); resetIdle(); }, 180);
+    }, { passive: true });
+
+    build();
+    idleTimer = setTimeout(startDrift, IDLE_AFTER);
+  }
+
   /* --- sticky header --- */
   var hdr = document.getElementById('hdr');
   if (hdr) {
@@ -50,7 +145,8 @@
     tour:    ['Book a Gym Tour', 'Come walk the floor. Leave your details and we’ll set up a time.'],
     daypass: ['Day Pass', '$25 for the day. Leave your details and we’ll have you set up when you arrive.'],
     annual:  ['Annual Membership', '$84.99/mo, billed annually. Our lowest rate at all four locations.'],
-    monthly: ['Month to Month', '$104.99/mo, cancel anytime. Full access, no penalties.']
+    monthly: ['Month to Month', '$104.99/mo, cancel anytime. Full access, no penalties.'],
+    pt:      ['Personal Training', 'Priced separately from membership. Leave your details and a coach will call you back.']
   };
 
   function openModal(kind) {
@@ -106,146 +202,155 @@
     if (lb && lb.classList.contains('is-open')) { lb.classList.remove('is-open'); document.body.style.overflow = ''; }
   });
 
-  /* --- reveal on scroll --- */
-  var revealables = document.querySelectorAll('.rv');
-  if (!('IntersectionObserver' in window)) {
-    Array.prototype.forEach.call(revealables, function (el) { el.classList.add('is-in'); });
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-in');
-        io.unobserve(entry.target);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
-    Array.prototype.forEach.call(revealables, function (el) { io.observe(el); });
-  }
 
-
+  /* --- page-scoped components. Re-runnable, so a router can call it again. --- */
+  function initPage() {
   /* --- equipment showcase: tablist, arrow-key navigable --- */
-  var eqTabs = Array.prototype.slice.call(document.querySelectorAll('.eq-item'));
-  var eqPanels = Array.prototype.slice.call(document.querySelectorAll('.eq-panel'));
-  if (eqTabs.length && eqTabs.length === eqPanels.length) {
-    var selectEq = function (i, focus) {
-      eqTabs.forEach(function (tab, n) {
-        var on = n === i;
-        tab.classList.toggle('is-active', on);
-        tab.setAttribute('aria-selected', on ? 'true' : 'false');
-        tab.tabIndex = on ? 0 : -1;
+    var eqTabs = Array.prototype.slice.call(document.querySelectorAll('.eq-item'));
+    var eqPanels = Array.prototype.slice.call(document.querySelectorAll('.eq-panel'));
+    if (eqTabs.length && eqTabs.length === eqPanels.length) {
+      var selectEq = function (i, focus) {
+        eqTabs.forEach(function (tab, n) {
+          var on = n === i;
+          tab.classList.toggle('is-active', on);
+          tab.setAttribute('aria-selected', on ? 'true' : 'false');
+          tab.tabIndex = on ? 0 : -1;
+        });
+        eqPanels.forEach(function (panel, n) {
+          var on = n === i;
+          panel.classList.toggle('is-active', on);
+          panel.hidden = !on;
+        });
+        if (focus) eqTabs[i].focus();
+      };
+
+      eqTabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () { selectEq(i, false); });
+        // pointer-over switches too, but never steals focus from a keyboard user
+        tab.addEventListener('mouseenter', function () { selectEq(i, false); });
+        tab.addEventListener('keydown', function (e) {
+          var delta = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+          if (delta) {
+            e.preventDefault();
+            selectEq((i + delta + eqTabs.length) % eqTabs.length, true);
+          } else if (e.key === 'Home') {
+            e.preventDefault(); selectEq(0, true);
+          } else if (e.key === 'End') {
+            e.preventDefault(); selectEq(eqTabs.length - 1, true);
+          }
+        });
       });
-      eqPanels.forEach(function (panel, n) {
-        var on = n === i;
-        panel.classList.toggle('is-active', on);
-        panel.hidden = !on;
-      });
-      if (focus) eqTabs[i].focus();
-    };
-
-    eqTabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { selectEq(i, false); });
-      // pointer-over switches too, but never steals focus from a keyboard user
-      tab.addEventListener('mouseenter', function () { selectEq(i, false); });
-      tab.addEventListener('keydown', function (e) {
-        var delta = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
-        if (delta) {
-          e.preventDefault();
-          selectEq((i + delta + eqTabs.length) % eqTabs.length, true);
-        } else if (e.key === 'Home') {
-          e.preventDefault(); selectEq(0, true);
-        } else if (e.key === 'End') {
-          e.preventDefault(); selectEq(eqTabs.length - 1, true);
-        }
-      });
-    });
-  }
+    }
 
 
-  /* --- review deck: staggered cards, click or arrow to advance --- */
-  var deck = document.getElementById('deck');
-  var deckCards = deck ? Array.prototype.slice.call(deck.querySelectorAll('.deck-card')) : [];
-  if (deck && deckCards.length) {
-    var n = deckCards.length;
-    var idx = 0;
-    var timer = null;
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* --- review deck: staggered cards, click or arrow to advance --- */
+    var deck = document.getElementById('deck');
+    var deckCards = deck ? Array.prototype.slice.call(deck.querySelectorAll('.deck-card')) : [];
+    if (deck && deckCards.length) {
+      var n = deckCards.length;
+      var idx = 0;
+      var timer = null;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    var cardSize = function () {
-      return window.matchMedia('(min-width: 901px)').matches ? 365 : 290;
-    };
+      var cardSize = function () {
+        return window.matchMedia('(min-width: 901px)').matches ? 365 : 290;
+      };
 
-    var layout = function () {
-      var size = cardSize();
-      deck.style.setProperty('--card', size + 'px');
+      var layout = function () {
+        var size = cardSize();
+        deck.style.setProperty('--card', size + 'px');
+        deckCards.forEach(function (card, i) {
+          var off = i - idx;
+          if (off > n / 2) off -= n;
+          if (off < -n / 2) off += n;
+          var abs = Math.abs(off);
+          var centered = off === 0;
+          var lift = centered ? -46 : (off % 2 ? 14 : -14);
+          var tilt = centered ? 0 : (off % 2 ? 2.5 : -2.5);
+          card.style.transform =
+            'translate(-50%, -50%)' +
+            ' translateX(' + (off * size / 1.5) + 'px)' +
+            ' translateY(' + lift + 'px)' +
+            ' rotate(' + tilt + 'deg)';
+          card.style.zIndex = String(50 - abs);
+          card.style.opacity = abs > 3 ? '0' : '1';
+          card.style.pointerEvents = abs > 3 ? 'none' : 'auto';
+          card.classList.toggle('is-center', centered);
+          card.setAttribute('aria-hidden', centered ? 'false' : 'true');
+        });
+      };
+
+      var move = function (step) {
+        idx = (idx + step % n + n) % n;
+        layout();
+      };
+
+      var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+      var start = function () {
+        if (reduced || timer) return;
+        timer = setInterval(function () { move(1); }, 5200);
+      };
+
       deckCards.forEach(function (card, i) {
-        var off = i - idx;
-        if (off > n / 2) off -= n;
-        if (off < -n / 2) off += n;
-        var abs = Math.abs(off);
-        var centered = off === 0;
-        var lift = centered ? -46 : (off % 2 ? 14 : -14);
-        var tilt = centered ? 0 : (off % 2 ? 2.5 : -2.5);
-        card.style.transform =
-          'translate(-50%, -50%)' +
-          ' translateX(' + (off * size / 1.5) + 'px)' +
-          ' translateY(' + lift + 'px)' +
-          ' rotate(' + tilt + 'deg)';
-        card.style.zIndex = String(50 - abs);
-        card.style.opacity = abs > 3 ? '0' : '1';
-        card.style.pointerEvents = abs > 3 ? 'none' : 'auto';
-        card.classList.toggle('is-center', centered);
-        card.setAttribute('aria-hidden', centered ? 'false' : 'true');
+        card.addEventListener('click', function () {
+          if (i !== idx) { stop(); idx = i; layout(); start(); }
+        });
       });
-    };
 
-    var move = function (step) {
-      idx = (idx + step % n + n) % n;
-      layout();
-    };
-
-    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
-    var start = function () {
-      if (reduced || timer) return;
-      timer = setInterval(function () { move(1); }, 5200);
-    };
-
-    deckCards.forEach(function (card, i) {
-      card.addEventListener('click', function () {
-        if (i !== idx) { stop(); idx = i; layout(); start(); }
+      deck.querySelectorAll('.deck-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          stop();
+          move(parseInt(btn.getAttribute('data-dir'), 10));
+          start();
+        });
       });
-    });
 
-    deck.querySelectorAll('.deck-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        stop();
-        move(parseInt(btn.getAttribute('data-dir'), 10));
+      deck.addEventListener('mouseenter', stop);
+      deck.addEventListener('mouseleave', start);
+      deck.addEventListener('focusin', stop);
+      deck.addEventListener('focusout', start);
+      deck.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); move(-1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); stop(); move(1); }
+      });
+
+      // swipe
+      var startX = null;
+      deck.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; stop(); }, { passive: true });
+      deck.addEventListener('touchend', function (e) {
+        if (startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
+        startX = null;
         start();
       });
-    });
 
-    deck.addEventListener('mouseenter', stop);
-    deck.addEventListener('mouseleave', start);
-    deck.addEventListener('focusin', stop);
-    deck.addEventListener('focusout', start);
-    deck.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); move(-1); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); stop(); move(1); }
-    });
-
-    // swipe
-    var startX = null;
-    deck.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; stop(); }, { passive: true });
-    deck.addEventListener('touchend', function (e) {
-      if (startX === null) return;
-      var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
-      startX = null;
+      window.addEventListener('resize', layout, { passive: true });
+      layout();
       start();
-    });
+    }
 
-    window.addEventListener('resize', layout, { passive: true });
-    layout();
-    start();
+  /* --- reveal on scroll --- */
+    var revealables = document.querySelectorAll('.rv');
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(revealables, function (el) { el.classList.add('is-in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+      Array.prototype.forEach.call(revealables, function (el) { io.observe(el); });
+    }
+
+
+
   }
+  window.FFInitPage = initPage;
+  initPage();
+  document.addEventListener('ff:page', initPage);
 
   /* --- footer year --- */
   var yr = document.getElementById('yr');
