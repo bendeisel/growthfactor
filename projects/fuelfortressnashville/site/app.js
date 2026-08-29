@@ -109,6 +109,44 @@
     Array.prototype.forEach.call(revealables, function (el) { io.observe(el); });
   }
 
+
+  /* --- equipment showcase: tablist, arrow-key navigable --- */
+  var eqTabs = Array.prototype.slice.call(document.querySelectorAll('.eq-item'));
+  var eqPanels = Array.prototype.slice.call(document.querySelectorAll('.eq-panel'));
+  if (eqTabs.length && eqTabs.length === eqPanels.length) {
+    var selectEq = function (i, focus) {
+      eqTabs.forEach(function (tab, n) {
+        var on = n === i;
+        tab.classList.toggle('is-active', on);
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        tab.tabIndex = on ? 0 : -1;
+      });
+      eqPanels.forEach(function (panel, n) {
+        var on = n === i;
+        panel.classList.toggle('is-active', on);
+        panel.hidden = !on;
+      });
+      if (focus) eqTabs[i].focus();
+    };
+
+    eqTabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { selectEq(i, false); });
+      // pointer-over switches too, but never steals focus from a keyboard user
+      tab.addEventListener('mouseenter', function () { selectEq(i, false); });
+      tab.addEventListener('keydown', function (e) {
+        var delta = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (delta) {
+          e.preventDefault();
+          selectEq((i + delta + eqTabs.length) % eqTabs.length, true);
+        } else if (e.key === 'Home') {
+          e.preventDefault(); selectEq(0, true);
+        } else if (e.key === 'End') {
+          e.preventDefault(); selectEq(eqTabs.length - 1, true);
+        }
+      });
+    });
+  }
+
   /* --- footer year --- */
   var yr = document.getElementById('yr');
   if (yr) yr.textContent = new Date().getFullYear();

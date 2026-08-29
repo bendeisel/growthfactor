@@ -38,6 +38,7 @@
     <a href="#gym">The Gym</a>
     <a href="#addons">Add-Ons</a>
     <a href="#membership">Membership</a>
+    <a href="#signup">Sign Up</a>
     <a href="/kickboxing.html">Kickboxing</a>
     <a href="#location">Location</a>
   </nav>
@@ -63,46 +64,113 @@
 </section>
 
 <!-- ============ TICKER (existing motif, words kept) ============ -->
+<!-- ============ CREDENTIAL PLATE (sits on the hero's ground, hairline-ruled) ============ -->
+<div class="rail">
+  <div class="rail-item"><b>24/7</b><span>Member access</span></div>
+  <div class="rail-item"><b>4</b><span>Locations · KY &amp; TN</span></div>
+  <div class="rail-item"><b>5.0<i>★</i></b><span>8 Google reviews</span></div>
+  <div class="rail-item"><b>412</b><span>Davidson St, Nashville</span></div>
+</div>
+
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>Where Lifestyle Meets Luxury</span><span class="dot">·</span>
-    <span>Train With The Best</span><span class="dot">·</span>
-    <span>Strive Towards Greatness</span><span class="dot">·</span>
-    <span>Your Sanctuary For Results</span><span class="dot">·</span>
-    <span>The Gym Everyone's Talking About</span><span class="dot">·</span>
-    <span>Where Lifestyle Meets Luxury</span><span class="dot">·</span>
-    <span>Train With The Best</span><span class="dot">·</span>
-    <span>Strive Towards Greatness</span><span class="dot">·</span>
-    <span>Your Sanctuary For Results</span><span class="dot">·</span>
-    <span>The Gym Everyone's Talking About</span><span class="dot">·</span>
+    <span>Weightlifting</span><span class="dot">·</span>
+    <span>Powerlifting</span><span class="dot">·</span>
+    <span>Bodybuilding</span><span class="dot">·</span>
+    <span>Strength Training</span><span class="dot">·</span>
+    <span>Free Weights</span><span class="dot">·</span>
+    <span>24 Hour Gym</span><span class="dot">·</span>
+    <span>Sauna &amp; Recovery</span><span class="dot">·</span>
+    <span>Personal Training</span><span class="dot">·</span>
+    <span>Nashville</span><span class="dot">·</span>
+    <span>East Nashville</span><span class="dot">·</span>
+    <span>Weightlifting</span><span class="dot">·</span>
+    <span>Powerlifting</span><span class="dot">·</span>
+    <span>Bodybuilding</span><span class="dot">·</span>
+    <span>Strength Training</span><span class="dot">·</span>
+    <span>Free Weights</span><span class="dot">·</span>
+    <span>24 Hour Gym</span><span class="dot">·</span>
+    <span>Sauna &amp; Recovery</span><span class="dot">·</span>
+    <span>Personal Training</span><span class="dot">·</span>
+    <span>Nashville</span><span class="dot">·</span>
+    <span>East Nashville</span><span class="dot">·</span>
   </div>
 </div>
 
-<!-- ============ PROOF STRIP (verified facts only) ============ -->
-<div class="proof">
-  <div><b>24/7</b><span>Member access, every day</span></div>
-  <div><b>4</b><span>Locations, KY &amp; TN, one membership</span></div>
-  <div><b>5.0★</b><span>Across 8 Google reviews</span></div>
-</div>
-
-<!-- ============ EQUIPMENT — the lead differentiator ============ -->
-<section class="band on-raise" id="equipment">
+<!-- ============ EQUIPMENT — interactive brand rail, portable vanilla block ============ -->
+<section class="band eq-band" id="equipment">
   <div class="band-inner on-dark">
     <p class="eyebrow rv">The Equipment</p>
     <h2 class="d2 rv">The best equipment<br>in Nashville.</h2>
-    <p class="lede rv">This is the whole reason the gym exists. Nothing on this floor was picked because it was cheap or because it filled a gap in a franchise package. Every piece was chosen on purpose, by people who actually train, and it is the highest-grade equipment you will put your hands on in this city.</p>
+    <p class="lede rv">This is the whole reason the gym exists. Nothing on this floor was picked because it was cheap or because it filled a gap in a franchise package. Four names carry the room.</p>
 
-    <div class="brands rv">
-      <div><b>Arsenal Strength</b><span>Plate-loaded and selectorized</span></div>
-      <div><b>Atlantis</b><span>Precision strength machines</span></div>
-      <div><b>Hammer Strength</b><span>Iso-lateral pressing and rows</span></div>
-      <div><b>Rogers Athletic</b><span>Custom-branded platforms and racks</span></div>
+    <div class="eq rv">
+      <div class="eq-list" role="tablist" aria-label="Equipment brands">
+        <button class="eq-item is-active" role="tab" aria-selected="true"
+                id="eq-tab-0" aria-controls="eq-panel-0" tabindex="0" data-eq="0">
+          <span class="eq-num">01</span>
+          <span class="eq-name">Arsenal Strength</span>
+          <span class="eq-kick">Plate-loaded and selectorized</span>
+        </button>
+        <button class="eq-item" role="tab" aria-selected="false"
+                id="eq-tab-1" aria-controls="eq-panel-1" tabindex="-1" data-eq="1">
+          <span class="eq-num">02</span>
+          <span class="eq-name">Atlantis</span>
+          <span class="eq-kick">Precision strength machines</span>
+        </button>
+        <button class="eq-item" role="tab" aria-selected="false"
+                id="eq-tab-2" aria-controls="eq-panel-2" tabindex="-1" data-eq="2">
+          <span class="eq-num">03</span>
+          <span class="eq-name">Hammer Strength</span>
+          <span class="eq-kick">Iso-lateral pressing and rows</span>
+        </button>
+        <button class="eq-item" role="tab" aria-selected="false"
+                id="eq-tab-3" aria-controls="eq-panel-3" tabindex="-1" data-eq="3">
+          <span class="eq-num">04</span>
+          <span class="eq-name">Rogers Athletic</span>
+          <span class="eq-kick">Custom platforms and racks</span>
+        </button>
+      </div>
+      <div class="eq-stage">
+      <div class="eq-panel is-active" role="tabpanel" id="eq-panel-0"
+           aria-labelledby="eq-tab-0">
+        <div class="slot eq-shot">
+          <!-- SWAP IN: <img src="img/equip-arsenal.jpg" alt="Arsenal Strength equipment at Fuel Fortress Nashville"> -->
+          <div class="slot-ph"><b>01 — Arsenal Strength</b><code>img/equip-arsenal.jpg</code></div>
+        </div>
+        <p class="eq-body">Heavy-gauge frames and honest loading. The build quality that doesn't develop a rattle in year two.</p>
+      </div>
+      <div class="eq-panel" role="tabpanel" id="eq-panel-1"
+           aria-labelledby="eq-tab-1" hidden>
+        <div class="slot eq-shot">
+          <!-- SWAP IN: <img src="img/equip-atlantis.jpg" alt="Atlantis equipment at Fuel Fortress Nashville"> -->
+          <div class="slot-ph"><b>02 — Atlantis</b><code>img/equip-atlantis.jpg</code></div>
+        </div>
+        <p class="eq-body">Strength curves matched to how the muscle actually works through the range, not how it looked on a spec sheet.</p>
+      </div>
+      <div class="eq-panel" role="tabpanel" id="eq-panel-2"
+           aria-labelledby="eq-tab-2" hidden>
+        <div class="slot eq-shot">
+          <!-- SWAP IN: <img src="img/equip-hammer.jpg" alt="Hammer Strength equipment at Fuel Fortress Nashville"> -->
+          <div class="slot-ph"><b>03 — Hammer Strength</b><code>img/equip-hammer.jpg</code></div>
+        </div>
+        <p class="eq-body">Each side works independently, so your strong side doesn't get to quietly carry your weak one.</p>
+      </div>
+      <div class="eq-panel" role="tabpanel" id="eq-panel-3"
+           aria-labelledby="eq-tab-3" hidden>
+        <div class="slot eq-shot">
+          <!-- SWAP IN: <img src="img/equip-rogers.jpg" alt="Rogers Athletic equipment at Fuel Fortress Nashville"> -->
+          <div class="slot-ph"><b>04 — Rogers Athletic</b><code>img/equip-rogers.jpg</code></div>
+        </div>
+        <p class="eq-body">Built for college and pro weight rooms, then put on our floor custom-branded in Fuel Fortress colors.</p>
+      </div>
+      </div>
     </div>
 
-    <div class="pull rv">
+    <figure class="pull rv">
       <q>The equipment is next-level and you can tell it was chosen intentionally — not the usual big-box stuff.</q>
-      <cite>Matthew Anderson · Google review, March 2026</cite>
-    </div>
+      <figcaption><cite>Matthew Anderson · Google review, March 2026</cite></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -156,7 +224,7 @@
       <li>
         <span class="num">03</span>
         <h3>24/7 Access</h3>
-        <p>Your schedule doesn't fit in a nine-to-five window, so your gym shouldn't either. Members get their own access from day one — early mornings, late nights, holidays, whenever the gap in your day shows up.</p>
+        <p>Your schedule doesn't fit in a nine-to-five window, so your gym shouldn't either. Sign up online and your QR code is your key from that minute — early mornings, late nights, holidays, whenever the gap in your day shows up.</p>
       </li>
     </ul>
   </div>
@@ -230,6 +298,68 @@
       </div>
     </div>
     <p class="small rv" style="margin-top:24px">Family memberships include two members. Additional members +$40/month. Active duty military, first responders, and students receive special pricing — valid ID required.</p>
+  </div>
+</section>
+
+<!-- ============ INSTANT SIGNUP — real sequence, so the numerals earn their place ============ -->
+<section class="band signup" id="signup">
+  <div class="band-inner on-dark">
+    <div class="signup-head">
+      <div>
+        <p class="eyebrow rv">Sign Up Online</p>
+        <h2 class="d2 rv">Join at 2am.<br>Train at 2:15.</h2>
+        <p class="lede rv">You don't have to wait for someone to be standing at the desk. Sign up from your phone, wherever you are, whenever it occurs to you. A QR code lands the moment you're done — that's your key. Scan it at the door and get your session in tonight.</p>
+      </div>
+      <svg class="qr rv" viewBox="0 0 100 100" role="img" aria-label="Illustration of a scan code">
+        <g fill="currentColor">
+          <path d="M4 4h26v26H4V4zm6 6v14h14V10H10z"/>
+          <path d="M70 4h26v26H70V4zm6 6v14h14V10H76z"/>
+          <path d="M4 70h26v26H4V70zm6 6v14h14V76H10z"/>
+          <rect x="14" y="14" width="6" height="6"/><rect x="80" y="14" width="6" height="6"/>
+          <rect x="14" y="80" width="6" height="6"/>
+          <rect x="38" y="4" width="6" height="6"/><rect x="50" y="4" width="6" height="6"/>
+          <rect x="38" y="16" width="6" height="6"/><rect x="56" y="16" width="6" height="6"/>
+          <rect x="44" y="28" width="6" height="6"/><rect x="56" y="28" width="6" height="6"/>
+          <rect x="4" y="38" width="6" height="6"/><rect x="16" y="38" width="6" height="6"/>
+          <rect x="38" y="38" width="6" height="6"/><rect x="50" y="38" width="6" height="6"/>
+          <rect x="68" y="38" width="6" height="6"/><rect x="86" y="38" width="6" height="6"/>
+          <rect x="10" y="50" width="6" height="6"/><rect x="28" y="50" width="6" height="6"/>
+          <rect x="44" y="50" width="6" height="6"/><rect x="62" y="50" width="6" height="6"/>
+          <rect x="80" y="50" width="6" height="6"/>
+          <rect x="4" y="62" width="6" height="6"/><rect x="38" y="62" width="6" height="6"/>
+          <rect x="56" y="62" width="6" height="6"/><rect x="74" y="62" width="6" height="6"/>
+          <rect x="38" y="74" width="6" height="6"/><rect x="62" y="74" width="6" height="6"/>
+          <rect x="86" y="74" width="6" height="6"/>
+          <rect x="44" y="86" width="6" height="6"/><rect x="68" y="86" width="6" height="6"/>
+          <rect x="86" y="86" width="6" height="6"/>
+        </g>
+      </svg>
+    </div>
+
+    <ol class="steps rv">
+      <li>
+        <span class="steps-time">02:11 AM</span>
+        <span class="steps-num">01</span>
+        <h3>Sign up online</h3>
+        <p>Pick your membership and pay on your phone. No appointment, no front desk, no waiting for staffed hours to start again in the morning.</p>
+      </li>
+      <li>
+        <span class="steps-time">02:13 AM</span>
+        <span class="steps-num">02</span>
+        <h3>Get your QR code</h3>
+        <p>It arrives the second you're finished. Save it to your phone and it stays your key for as long as you're a member.</p>
+      </li>
+      <li>
+        <span class="steps-time">02:15 AM</span>
+        <span class="steps-num">03</span>
+        <h3>Scan in and train</h3>
+        <p>Hold it up at the door and you're through. Two in the morning on a Tuesday counts exactly the same as six in the evening.</p>
+      </li>
+    </ol>
+
+    <div class="btn-row rv" style="margin-top:clamp(30px,3.6vw,46px)">
+      <button class="btn" data-modal="join">Sign Up Now</button>
+    </div>
   </div>
 </section>
 
@@ -354,12 +484,14 @@
       <h4>Join</h4>
       <a href="#membership">Membership</a>
       <a href="#addons">Add-Ons</a>
+      <a href="#signup">Sign Up Online</a>
       <a href="/kickboxing.html">Kickboxing</a>
       <a href="#location">Location</a>
     </div>
     <div>
       <h4>Hours</h4>
       <p>Open 24/7 to members.</p>
+      <p class="small">Sign up online any hour and scan in the same night.</p>
       <p class="small">Staffed hours vary — call ahead if you need the front desk.</p>
     </div>
   </div>

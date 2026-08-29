@@ -80,11 +80,19 @@ the **About** and **Contact** pages pull `dji_mimo_20241121_*` and
 `dji_mimo_20250912_*`, both of which pre-date Nashville opening and are almost
 certainly other Fuel Fortress locations. Those must not be carried over.
 
+## Instant signup
+
+Members join online at any hour, receive a QR code immediately, and scan in the same
+night. This resolves the earlier keytag-vs-fob ambiguity and is now its own section —
+"Join at 2am. Train at 2:15." The step numerals are used because this genuinely is a
+sequence. The QR graphic is an abstract inline SVG glyph, deliberately not a scannable
+code.
+
 ## Open questions for the client
 
-1. **24/7 access wording** — the source site says both "digital keytag via the free
-   Fuel Fortress Members App" and "every member gets fob access from day one." Which
-   is it? Currently written neutrally as "members get their own access from day one."
+1. **Olympic lifting** — the banner keywords cover weightlifting, powerlifting and
+   bodybuilding. "Olympic weightlifting" also surfaces as a Nashville search term but
+   is left out until we confirm there are platforms and bumper plates for it.
 2. **Square footage and year established** — the source has animated counters that
    read `0K+ ft` and `Est. 0`, i.e. the real numbers were never entered. Left out
    rather than invented; the proof strip uses three verifiable facts instead.
@@ -100,8 +108,9 @@ certainly other Fuel Fortress locations. Those must not be carried over.
 - **Is every hex and face in the kernel?** Yes. 13 hexes, all from the frequency
   count in `kernel.json`; Bebas Neue and DM Sans only. No color was introduced.
 - **Which existing motif is each decision from?** Eyebrow-with-rule → the site's
-  10px/0.3em eyebrow, used on every section already. Numbered index → the `01–04`
-  Problem list. Alternating black/off-white bands → the existing `#090909`/`#F5F5F5`
+  10px/0.3em eyebrow, used on every section already. Numbered index and the equipment
+  rail's `01–04` → the `01–04` Problem list. Credential plate hairlines → the ticker's
+  own top/bottom rules. Alternating black/off-white bands → the existing `#090909`/`#F5F5F5`
   section grounds. Grayscale-to-color hover → the existing gallery hover filter.
   Mosaic with double-width 1st and 6th → the existing gallery flex rule. Hard 0px
   corners with pills reserved for dots → the existing radius pairing. Ticker → kept
