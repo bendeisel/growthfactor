@@ -1,4 +1,4 @@
-/* Fuel Fortress Nashville — kernel-locked stylesheet.
+/* Fuel Fortress Nashville: kernel-locked stylesheet.
    Every value below traces to kernel.json. No color enters here that the
    client's own site did not already declare. */
 
@@ -46,12 +46,12 @@ a{color:inherit;text-decoration:none}
 .d2{font-size:clamp(38px,6.2vw,86px)}
 .d3{font-size:clamp(26px,3.2vw,42px);letter-spacing:.08em}
 
-/* body kept small and quiet — the whole point of stance 4 */
+/* body kept small and quiet, the whole point of stance 4 */
 p{margin:0 0 1em}
 .lede{font-size:clamp(15px,1.35vw,18px);color:var(--text-soft);max-width:62ch;line-height:1.7}
 .small{font-size:13px;color:var(--text-dim);line-height:1.65}
 
-/* eyebrow — the site's most consistent existing motif, amplified */
+/* eyebrow, the site's most consistent existing motif, amplified */
 .eyebrow{
   font-family:var(--body);font-size:10px;font-weight:500;
   letter-spacing:.3em;text-transform:uppercase;color:var(--rule);
@@ -69,10 +69,11 @@ p{margin:0 0 1em}
 .hdr{
   position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:center;
   gap:var(--gut);padding:14px var(--gut);
-  background:rgba(9,9,9,0);border-bottom:1px solid transparent;
+  background:rgba(32,32,32,.55);border-bottom:1px solid transparent;
+  backdrop-filter:saturate(140%) blur(12px);
   transition:background .35s ease,border-color .35s ease;
 }
-.hdr.is-stuck{background:rgba(9,9,9,.94);border-bottom-color:var(--ground-edge);backdrop-filter:saturate(140%) blur(10px)}
+.hdr.is-stuck{background:rgba(32,32,32,.86);border-bottom-color:var(--rule)}
 .brand{font-family:var(--display);font-size:24px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .brand span{color:var(--text-mid)}
 .nav{display:flex;gap:26px;margin-left:auto;align-items:center}
@@ -92,7 +93,7 @@ p{margin:0 0 1em}
   font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.2em;
   text-transform:uppercase;padding:16px 30px;border:1px solid var(--white);
   background:var(--white);color:var(--ground);cursor:pointer;transition:.28s;
-  border-radius:0; /* hard corners — kernel motif */
+  border-radius:0; /* hard corners, kernel motif */
 }
 .btn:hover{background:transparent;color:var(--white)}
 .btn-ghost{background:transparent;color:var(--white)}
@@ -189,7 +190,7 @@ p{margin:0 0 1em}
 
 /* ---------- equipment showcase ----------
    An index of four names, one stage. Amplifies the site's own 01-04 numerals,
-   its oversized Bebas caps and its grayscale-to-color hover. Vanilla — this
+   its oversized Bebas caps and its grayscale-to-color hover. Vanilla, this
    block drops into a template platform unchanged. */
 .eq-band{background:var(--ground-raise)}
 .eq{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
@@ -227,7 +228,7 @@ p{margin:0 0 1em}
 .signup{background:var(--ground)}
 .signup-head{display:grid;grid-template-columns:1fr auto;gap:clamp(30px,5vw,80px);align-items:start}
 .qr{width:clamp(96px,11vw,150px);height:auto;color:var(--rule);flex:none}
-.steps{list-style:none;margin:clamp(40px,5vw,64px) 0 0;padding:0;
+.steps{list-style:none;margin:0;padding:0;
   display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--rule)}
 .steps>li{padding:clamp(24px,2.8vw,38px) clamp(22px,2.6vw,36px) clamp(26px,3vw,40px) 0;
   border-right:1px solid var(--rule);position:relative}
@@ -235,9 +236,7 @@ p{margin:0 0 1em}
 .steps>li::before{content:"";position:absolute;top:-1px;left:0;width:34px;height:1px;background:var(--white)}
 .steps-time{display:block;font-size:10px;letter-spacing:.24em;color:var(--text-dim);
   font-variant-numeric:tabular-nums;margin-bottom:clamp(18px,2.4vw,30px)}
-.steps-num{display:block;font-family:var(--display);font-size:clamp(38px,5vw,68px);
-  line-height:.9;letter-spacing:.03em;color:var(--rule);margin-bottom:14px;font-variant-numeric:tabular-nums}
-.steps h3{font-family:var(--display);font-size:clamp(19px,1.8vw,26px);letter-spacing:.07em;
+.steps h4{font-family:var(--display);font-size:clamp(19px,1.8vw,26px);letter-spacing:.07em;
   text-transform:uppercase;font-weight:400;margin:0 0 10px;line-height:1.1}
 .steps p{font-size:13.5px;line-height:1.65;color:var(--text-soft);margin:0}
 
@@ -263,6 +262,79 @@ p{margin:0 0 1em}
 .plan .btn{width:100%}
 .plan.is-feature .btn{background:var(--ground);color:var(--light);border-color:var(--ground)}
 .plan.is-feature .btn:hover{background:transparent;color:var(--ground)}
+
+
+/* ---------- the gym: stacked editorial rows, deliberately not cards ---------- */
+.stack{margin-top:clamp(34px,4vw,54px);border-top:1px solid var(--rule)}
+.stack-row{display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1fr);
+  gap:clamp(18px,3vw,52px);padding:clamp(24px,3vw,40px) 0;border-bottom:1px solid var(--rule);
+  transition:padding-left .35s cubic-bezier(.25,.46,.45,.94)}
+.stack-row:hover{padding-left:clamp(8px,1.2vw,18px)}
+.stack-row h3{font-family:var(--display);font-size:clamp(24px,3.2vw,44px);letter-spacing:.05em;
+  text-transform:uppercase;font-weight:400;margin:0;line-height:.98;color:var(--white)}
+.stack-row p{font-size:14.5px;line-height:1.75;color:var(--text-soft);margin:0}
+.stack-link{margin-top:14px !important}
+.stack-link a,.ulink{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--white);border-bottom:1px solid var(--rule);padding-bottom:3px;transition:border-color .25s}
+.stack-link a:hover,.ulink:hover{border-bottom-color:var(--white)}
+
+/* ---------- add-ons: two wide panels, tagged ---------- */
+.addons{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);
+  margin-top:clamp(34px,4vw,54px);border:1px solid var(--rule)}
+.addon{background:var(--ground);padding:clamp(28px,3.4vw,46px)}
+.addon-tag{display:inline-block;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ground);background:var(--text-quiet);padding:5px 10px;margin-bottom:22px}
+.addon h3{font-family:var(--display);font-size:clamp(24px,3vw,40px);letter-spacing:.05em;
+  text-transform:uppercase;font-weight:400;margin:0 0 14px;line-height:1}
+.addon p{font-size:14px;line-height:1.75;color:var(--text-soft);margin:0}
+
+/* ---------- why: unnumbered ---------- */
+.plain{list-style:none;margin:clamp(34px,4vw,54px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.plain>li{background:var(--ground-raise);padding:clamp(24px,2.8vw,38px)}
+.plain h3{font-family:var(--display);font-size:clamp(19px,1.7vw,25px);letter-spacing:.07em;
+  text-transform:uppercase;font-weight:400;margin:0 0 10px;line-height:1.1}
+.plain p{font-size:13.5px;line-height:1.65;color:var(--text-soft);margin:0}
+
+/* ---------- membership: how signing up works ---------- */
+.joinnow{margin-top:clamp(48px,6vw,80px);padding-top:clamp(34px,4vw,52px);border-top:1px solid var(--rule)}
+.joinnow-copy{max-width:64ch}
+.joinnow .qr{width:clamp(88px,9vw,126px);height:auto;color:var(--rule);
+  float:right;margin:0 0 20px clamp(20px,3vw,44px)}
+.joinnow .steps{margin-top:clamp(32px,3.6vw,46px);clear:both}
+
+/* ---------- reviews: staggered deck ---------- */
+.deck{position:relative;margin-top:clamp(34px,4vw,54px);
+  height:clamp(430px,52vw,600px);overflow:hidden;--card:365px}
+.deck-stage{position:absolute;inset:0}
+.deck-card{
+  position:absolute;left:50%;top:44%;width:var(--card);height:var(--card);
+  padding:clamp(22px,2.3vw,32px);display:flex;flex-direction:column;
+  background:var(--ground);border:1px solid var(--rule);color:var(--text-dim);
+  cursor:pointer;text-align:left;
+  clip-path:polygon(40px 0,100% 0,100% calc(100% - 40px),calc(100% - 40px) 100%,0 100%,0 40px);
+  transition:transform .55s cubic-bezier(.25,.46,.45,.94),background .4s ease,
+             border-color .4s ease,color .4s ease,opacity .4s ease;
+}
+.deck-card::before{content:"";position:absolute;left:0;top:40px;width:57px;height:1px;
+  background:var(--rule);transform:rotate(-45deg);transform-origin:0 0;transition:background .4s ease}
+.deck-card.is-center{background:var(--ground-edge);border-color:var(--white);color:var(--white);cursor:default}
+.deck-card.is-center::before{background:var(--white)}
+.deck-mark{display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:52px;background:var(--ground-raise);border:1px solid var(--rule);
+  font-family:var(--display);font-size:17px;letter-spacing:.08em;color:var(--text-mid);margin-bottom:18px}
+.deck-card.is-center .deck-mark{background:var(--ground);border-color:var(--rule);color:var(--white)}
+.deck-stars{font-size:11px;letter-spacing:.22em;margin:0 0 12px;color:inherit;opacity:.85}
+.deck-quote{margin:0;font-family:var(--display);font-size:clamp(17px,1.55vw,23px);
+  letter-spacing:.03em;line-height:1.22;text-transform:uppercase;color:inherit;flex:1}
+.deck-by{margin:14px 0 0;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:inherit;opacity:.7}
+.deck-nav{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;gap:1px;z-index:60}
+.deck-btn{width:54px;height:54px;display:flex;align-items:center;justify-content:center;
+  background:var(--ground);border:1px solid var(--rule);color:var(--white);
+  font-size:24px;line-height:1;cursor:pointer;transition:background .25s,color .25s}
+.deck-btn:hover{background:var(--white);color:var(--ground)}
+@media (prefers-reduced-motion:reduce){.deck-card{transition:none}}
 
 /* ---------- gallery mosaic (existing motif) ---------- */
 .mosaic{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(30px,3.6vw,46px)}
@@ -369,4 +441,12 @@ p{margin:0 0 1em}
   .rail{grid-template-columns:1fr}
   .rail-item{border-right:0;border-bottom:1px solid var(--ground-edge)}
   .rail-item:last-child{border-bottom:0}
+}
+
+@media (max-width:900px){
+  .stack-row{grid-template-columns:1fr;gap:12px}
+  .addons{grid-template-columns:1fr}
+  .plain{grid-template-columns:1fr}
+  .joinnow .qr{float:none;margin:0 0 24px}
+  .deck{--card:290px;height:clamp(420px,88vw,520px)}
 }

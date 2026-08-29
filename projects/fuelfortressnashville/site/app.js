@@ -1,4 +1,4 @@
-/* Fuel Fortress Nashville — portable vanilla components.
+/* Fuel Fortress Nashville, portable vanilla components.
    No framework, no build step. Each block below can drop into a template
    platform as a standalone custom block. */
 (function () {
@@ -157,6 +157,94 @@
         }
       });
     });
+  }
+
+
+  /* --- review deck: staggered cards, click or arrow to advance --- */
+  var deck = document.getElementById('deck');
+  var deckCards = deck ? Array.prototype.slice.call(deck.querySelectorAll('.deck-card')) : [];
+  if (deck && deckCards.length) {
+    var n = deckCards.length;
+    var idx = 0;
+    var timer = null;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var cardSize = function () {
+      return window.matchMedia('(min-width: 901px)').matches ? 365 : 290;
+    };
+
+    var layout = function () {
+      var size = cardSize();
+      deck.style.setProperty('--card', size + 'px');
+      deckCards.forEach(function (card, i) {
+        var off = i - idx;
+        if (off > n / 2) off -= n;
+        if (off < -n / 2) off += n;
+        var abs = Math.abs(off);
+        var centered = off === 0;
+        var lift = centered ? -46 : (off % 2 ? 14 : -14);
+        var tilt = centered ? 0 : (off % 2 ? 2.5 : -2.5);
+        card.style.transform =
+          'translate(-50%, -50%)' +
+          ' translateX(' + (off * size / 1.5) + 'px)' +
+          ' translateY(' + lift + 'px)' +
+          ' rotate(' + tilt + 'deg)';
+        card.style.zIndex = String(50 - abs);
+        card.style.opacity = abs > 3 ? '0' : '1';
+        card.style.pointerEvents = abs > 3 ? 'none' : 'auto';
+        card.classList.toggle('is-center', centered);
+        card.setAttribute('aria-hidden', centered ? 'false' : 'true');
+      });
+    };
+
+    var move = function (step) {
+      idx = (idx + step % n + n) % n;
+      layout();
+    };
+
+    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+    var start = function () {
+      if (reduced || timer) return;
+      timer = setInterval(function () { move(1); }, 5200);
+    };
+
+    deckCards.forEach(function (card, i) {
+      card.addEventListener('click', function () {
+        if (i !== idx) { stop(); idx = i; layout(); start(); }
+      });
+    });
+
+    deck.querySelectorAll('.deck-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        stop();
+        move(parseInt(btn.getAttribute('data-dir'), 10));
+        start();
+      });
+    });
+
+    deck.addEventListener('mouseenter', stop);
+    deck.addEventListener('mouseleave', start);
+    deck.addEventListener('focusin', stop);
+    deck.addEventListener('focusout', start);
+    deck.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); move(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); stop(); move(1); }
+    });
+
+    // swipe
+    var startX = null;
+    deck.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; stop(); }, { passive: true });
+    deck.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
+      startX = null;
+      start();
+    });
+
+    window.addEventListener('resize', layout, { passive: true });
+    layout();
+    start();
   }
 
   /* --- footer year --- */

@@ -1,53 +1,53 @@
 # Fuel Fortress Nashville
 
 - **Homepage preview (artifact):** https://claude.ai/code/artifact/3d3013c1-ef40-43f2-969b-2bf50799ea05
-- `kernel.json` — the locked brand kernel, extracted mechanically from the client's
+- `kernel.json`, the locked brand kernel, extracted mechanically from the client's
   WordPress/Elementor database dump (not read off a screenshot).
-- `site/` — the build, on Growth Factor's static Hostinger stack per
+- `site/`, the build, on Growth Factor's static Hostinger stack per
   `.claude/skills/house-style/references/hostinger-delivery.md`.
 - Status: **homepage only.** Content rewritten with the client in this session to
   remove claims that were not true of the Nashville location.
 
 ## Source
 
-`u213629895_YBpXO.fuelfortressnashvillecom.20260829182046.sql.gz` — WordPress 6.x,
+`u213629895_YBpXO.fuelfortressnashvillecom.20260829182046.sql.gz`, WordPress 6.x,
 Elementor Pro 3.35.1, hello-elementor theme, on Hostinger. 7 published pages,
 203 media attachments, 1,189 Elementor payloads. Parsed offline; the live site and
 Instagram are both unreachable from the build environment (see Assets below).
 
 ## What changed in the copy, and why
 
-Copy is normally frozen at 99%. It was **deliberately unfrozen for this project** —
+Copy is normally frozen at 99%. It was **deliberately unfrozen for this project** , 
 the client commissioned a content change because the live site made claims that are
 false for the Nashville location. Every change below traces to an explicit client
 instruction in the session, not to editorial preference.
 
 **Removed as untrue**
-- "Customized programming included with every membership" (personal training) — PT
+- "Customized programming included with every membership" (personal training), PT
   is a paid add-on, never included. This was the single most important fix.
-- "Custom Plans Included — Every membership includes nutrition and programming."
-- "Private Saunas · Hot-stone saunas in both men's and women's locker rooms" — there
+- "Custom Plans Included, Every membership includes nutrition and programming."
+- "Private Saunas · Hot-stone saunas in both men's and women's locker rooms", there
   is one sauna, it is not hot-stone and not private.
 - "Combat Sports Training Area · Dedicated space for Kickboxing and combat
-  conditioning classes" — client's read is that this was copied off the original
+  conditioning classes", client's read is that this was copied off the original
   Fuel Fortress site by the previous developer.
-- The "Programs & Services / Nashville Training Programs for Every Goal" section —
+- The "Programs & Services / Nashville Training Programs for Every Goal" section , 
   there are no programs. Replaced by **The Gym**, describing what is in the building.
 - 47 combat-sport template icons (gloves, pads, referee, gum shield, shin pads) that
   shipped with the source template and describe a martial arts gym, not this one.
 
-**Deduplicated** — the source homepage carried three near-identical copies of the
+**Deduplicated**, the source homepage carried three near-identical copies of the
 Problem block, the Difference block and the Why block, plus two of the services
 block. Kept one of each, using the client's latest variant where they differed.
 
-**Repositioned** — equipment is now the lead section rather than a bullet in a
+**Repositioned**, equipment is now the lead section rather than a bullet in a
 feature grid, per "we have the best equipment in Nashville, highest grade equipment."
 
-**Added** — an **Add-Ons** section (client's structure) holding personal training and
+**Added**, an **Add-Ons** section (client's structure) holding personal training and
 ready-made meals, both stated plainly as costing extra. Kickboxing sits there too as
 a free recreational extra run by Taryn, with its own page to follow.
 
-**Kept verbatim** — the ticker slogans, the four Problem items, pricing and discount
+**Kept verbatim**, the ticker slogans, the four Problem items, pricing and discount
 terms, "Train hard. Recover strong. Perform better.", the areas-served list, and all
 Google review text.
 
@@ -59,7 +59,7 @@ Client's priority terms: *weightlifting Nashville*, *weightlifting*, *East Nashv
 the location section are all built around these. `ExerciseGym` structured data
 carries the real NAP, areas served, and the genuine 5.0/8 Google rating.
 
-## Assets — outstanding
+## Assets, outstanding
 
 The build environment cannot reach `fuelfortressnashville.com` or Instagram (both
 blocked by the network egress proxy), so **no image or video files could be
@@ -68,37 +68,41 @@ belongs there; dropping real files into `site/img/` and `site/video/` and swappi
 the commented-in `<img>` / `<video>` tag completes it.
 
 Needed from the client:
-1. The hero background video (source: `0308-2.mp4`), resized for web —
+1. The hero background video (source: `0308-2.mp4`), resized for web , 
    1920×1080 max, H.264, target under ~6 MB, muted, plus a poster frame.
 2. The 10 gallery photos (`dji_mimo_20260309_*`, the March 9 2026 shoot).
 3. A photo of the actual sauna.
 4. Instagram photos, if they want any beyond the above.
 
-**Provenance warning:** the homepage's own photography is clean — every image on it
+**Provenance warning:** the homepage's own photography is clean, every image on it
 comes from the single 2026-03-09 shoot, which post-dates the Nashville opening. But
 the **About** and **Contact** pages pull `dji_mimo_20241121_*` and
 `dji_mimo_20250912_*`, both of which pre-date Nashville opening and are almost
 certainly other Fuel Fortress locations. Those must not be carried over.
 
+## Staffed hours
+
+Taken from the live site's own footer template (post 22): Mon to Fri 8:00 AM to
+8:00 PM, Saturday 8:00 AM to 4:00 PM, Sunday 11:00 AM to 4:00 PM. The gym itself is
+open 24 hours to members.
+
 ## Instant signup
 
 Members join online at any hour, receive a QR code immediately, and scan in the same
-night. This resolves the earlier keytag-vs-fob ambiguity and is now its own section —
+night. This resolves the earlier keytag-vs-fob ambiguity and is now its own section , 
 "Join at 2am. Train at 2:15." The step numerals are used because this genuinely is a
 sequence. The QR graphic is an abstract inline SVG glyph, deliberately not a scannable
 code.
 
 ## Open questions for the client
 
-1. **Olympic lifting** — the banner keywords cover weightlifting, powerlifting and
+1. **Olympic lifting**, the banner keywords cover weightlifting, powerlifting and
    bodybuilding. "Olympic weightlifting" also surfaces as a Nashville search term but
    is left out until we confirm there are platforms and bumper plates for it.
-2. **Square footage and year established** — the source has animated counters that
+2. **Square footage and year established**, the source has animated counters that
    read `0K+ ft` and `Est. 0`, i.e. the real numbers were never entered. Left out
    rather than invented; the proof strip uses three verifiable facts instead.
-3. **Staffed hours** — footer says "open 24/7 to members, staffed hours vary." Real
-   staffed hours would be better.
-4. **Branded email** — using `fuelfortress615@gmail.com` as instructed until the
+4. **Branded email**, using `fuelfortress615@gmail.com` as instructed until the
    branded address exists. One constant in `lead.php`, one line in the footer.
 
 ## Dark mode and the hero animation
@@ -106,14 +110,14 @@ code.
 The page is dark throughout. The earlier build alternated `#090909` bands with
 `#F5F5F5` ones; the client read those light bands as the page switching to light
 mode, so the color stance moved from *alternating high contrast* to *dark-dominant*.
-`#F5F5F5` now appears exactly once, on the featured membership card — the single
+`#F5F5F5` now appears exactly once, on the featured membership card, the single
 light moment lands on the primary action.
 
 The hero children fade up in sequence on load, porting the timing from a
 framer-motion hero the client liked (0.1s delay, 0.15s stagger, 0.5s ease-out, 20px
 rise) into plain CSS transitions with staggered `transition-delay`. The credential
 plate follows. `prefers-reduced-motion` disables all of it. **Only the motion was
-taken** — the source component's pill badge, gradient-clipped text, icon set and
+taken**, the source component's pill badge, gradient-clipped text, icon set and
 placeholder statistics were not, since lock 3 permits amplifying what the site has
 and forbids importing what it doesn't.
 
@@ -128,7 +132,7 @@ install.
 
 ## Step 5 self-audit (house-style)
 
-- **Did any word change?** Yes, extensively — but only under explicit client
+- **Did any word change?** Yes, extensively, but only under explicit client
   instruction, itemised above. Nothing was reworded for taste.
 - **Is every hex and face in the kernel?** Yes. 13 hexes, all from the frequency
   count in `kernel.json`; Bebas Neue and DM Sans only. No color was introduced.
@@ -144,6 +148,6 @@ install.
   Nashville MMA Training Camp: structure (F dense mosaic vs E editorial rail), type
   stance (4 condensed caps vs 1 extreme contrast), color stance (alternating high
   contrast, no accent, vs duotone gold), rhythm (interlocked vs punctuated). Bebas
-  Neue is shared and cannot change — it is Fuel Fortress's own face.
+  Neue is shared and cannot change, it is Fuel Fortress's own face.
 - **Would this be mistaken for the last three sites shipped?** No. The absence of any
   accent color is the distinguishing feature and is the client's own palette.
