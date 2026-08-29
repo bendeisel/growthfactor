@@ -1,0 +1,1504 @@
+<title>Growth Factor AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===========================================================
+   Growth Factor AI — house stylesheet
+   Kernel is locked in :root. Nothing outside these tokens.
+   Structure: offset asymmetric (content pinned left of a spine)
+   Type stance: body-led (one grotesque + one mono, no display face)
+   Color: dark-dominant + ember accent
+   Radius: zero, everywhere. No exceptions.
+   =========================================================== */
+
+:root{
+  /* ground — super dark blue */
+  --ink:        #060B16;
+  --ground:     #0A1122;
+  --raise:      #101A31;
+  --raise-2:    #16223D;
+  --line:       #1C2740;
+  --line-soft:  #141D33;
+
+  /* type */
+  --fg:         #E8ECF4;
+  --fg-2:       #B7C1D4;
+  --mute:       #8C99B0;
+
+  /* ember — burnt orange, mellow */
+  --ember:      #C9622E;
+  --ember-lift: #E58A4F;
+  --ember-deep: #7A3A1B;
+  --ember-haze: rgba(201,98,46,.10);
+  --on-ember:   #0A0603;   /* text on an ember fill — 4.99:1, passes AA */
+
+  --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --shell: 1240px;
+  --rail: 190px;          /* left label rail */
+  --gap: 94px;            /* section rhythm, accelerating downward */
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--fg);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.62;
+  font-weight:400;
+  letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+img,svg{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+
+/* -------- body-led type scale: 1.9x top ratio, weight does the work ---- */
+h1,h2,h3,h4{ font-weight:600; letter-spacing:-.028em; line-height:1.08; margin:0; }
+h1{ font-size:clamp(2.6rem, 6.1vw, 4.55rem); font-weight:700; }
+h2{ font-size:clamp(1.95rem, 3.5vw, 2.75rem); }
+h3{ font-size:1.18rem; font-weight:600; letter-spacing:-.014em; line-height:1.3; }
+h4{ font-size:.98rem; font-weight:600; letter-spacing:-.01em; }
+p{ margin:0 0 1.05em; }
+p:last-child{ margin-bottom:0; }
+
+.lede{ font-size:clamp(1.02rem,1.55vw,1.22rem); line-height:1.62; color:var(--fg-2); max-width:60ch; }
+.muted{ color:var(--mute); }
+.ember{ color:var(--ember-lift); }
+
+/* -------------------------- MOTIF: mono micro-label ------------------- */
+.label{
+  font-family:var(--mono);
+  font-size:.685rem;
+  font-weight:500;
+  letter-spacing:.19em;
+  text-transform:uppercase;
+  color:var(--ember-lift);
+  display:inline-flex;
+  align-items:center;
+  gap:.6em;
+  white-space:nowrap;
+}
+.label::before{
+  content:"";
+  width:9px; height:9px;
+  border:1px solid var(--ember);
+  flex:none;
+}
+.label--plain::before{ display:none; }
+
+/* --------------------------- shell + spine ---------------------------- */
+.shell{ width:100%; max-width:var(--shell); margin-inline:auto; padding-inline:26px; }
+
+/* MOTIF: the ember hairline spine. Content sits offset-left against it. */
+.band{ position:relative; padding-block:var(--gap); }
+.band__grid{
+  display:grid;
+  grid-template-columns:var(--rail) minmax(0,1fr);
+  gap:0 46px;
+  align-items:start;
+}
+.band__rail{ position:sticky; top:112px; padding-top:.45rem; }
+.band__rail .label{ display:flex; }
+.band__rail-note{
+  font-family:var(--mono); font-size:.66rem; line-height:1.75;
+  color:var(--mute); margin-top:.95rem; letter-spacing:.03em; max-width:15ch;
+}
+.band__body{ position:relative; min-width:0; padding-left:34px; border-left:1px solid var(--line); }
+.band__body::before{                 /* ember tick where the rail meets the spine */
+  content:""; position:absolute; left:-1px; top:0; width:1px; height:74px;
+  background:var(--ember);
+}
+.band + .band > .shell > .band__grid{ padding-top:0; }
+.band--hairline{ border-top:1px solid var(--line-soft); }
+
+/* accelerating rhythm — gaps tighten toward the primary action */
+.band--tight{ --gap:72px; }
+.band--tighter{ --gap:54px; }
+
+/* ------------------------------- header ------------------------------- */
+.hdr{
+  position:sticky; top:0; z-index:60;
+  background:rgba(10,17,34,.78);
+  backdrop-filter:saturate(150%) blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s var(--ease), background .3s var(--ease);
+}
+.hdr.is-stuck{ border-bottom-color:var(--line); background:rgba(6,11,22,.92); }
+.hdr__in{ display:flex; align-items:center; gap:34px; height:70px; }
+
+.logo{ display:flex; align-items:center; gap:11px; margin-right:auto; flex:none; }
+.logo__mark{ width:26px; height:26px; flex:none; }
+.logo__txt{ font-weight:700; font-size:.99rem; letter-spacing:-.03em; }
+.logo__txt span{ color:var(--ember-lift); font-weight:500; }
+
+.nav{ display:flex; align-items:center; gap:30px; }
+.nav a{
+  font-size:.855rem; font-weight:500; color:var(--fg-2);
+  position:relative; padding-block:6px; transition:color .2s var(--ease);
+}
+.nav a::after{                       /* MOTIF: ember hairline underline */
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--ember); transform:scaleX(0); transform-origin:left;
+  transition:transform .28s var(--ease);
+}
+.nav a:hover{ color:var(--fg); }
+.nav a:hover::after, .nav a[aria-current="page"]::after{ transform:scaleX(1); }
+.nav a[aria-current="page"]{ color:var(--fg); }
+
+.burger{
+  display:none; background:none; border:1px solid var(--line);
+  width:40px; height:38px; padding:0; cursor:pointer; color:var(--fg);
+}
+.burger span{ display:block; width:16px; height:1px; background:currentColor; margin:4px auto; }
+
+/* ------------------------------ buttons ------------------------------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6em;
+  font-family:var(--sans); font-size:.875rem; font-weight:600; letter-spacing:-.005em;
+  padding:13px 22px; border:1px solid transparent; cursor:pointer;
+  transition:background .22s var(--ease), color .22s var(--ease),
+             border-color .22s var(--ease), transform .22s var(--ease);
+}
+.btn:active{ transform:translateY(1px); }
+.btn--ember{ background:var(--ember); color:var(--on-ember); }
+.btn--ember:hover{ background:var(--ember-lift); }
+.btn--wire{ border-color:var(--line); color:var(--fg); background:transparent; }
+.btn--wire:hover{ border-color:var(--ember); color:var(--ember-lift); }
+.btn--ghost{ padding:13px 0; color:var(--fg-2); }
+.btn--ghost:hover{ color:var(--ember-lift); }
+.btn--sm{ padding:9px 16px; font-size:.82rem; }
+.btn--full{ width:100%; }
+.btn__arrow{ transition:transform .22s var(--ease); }
+.btn:hover .btn__arrow{ transform:translateX(3px); }
+
+/* -------------------------------- hero -------------------------------- */
+.hero{ position:relative; padding-block:clamp(76px,11vh,132px) clamp(74px,10vh,116px); overflow:hidden; }
+.hero__bg{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+.hero__mesh{ position:absolute; inset:0; width:100%; height:100%; opacity:.72; }
+.hero__glow{
+  position:absolute; top:-28%; right:-14%; width:min(780px,88vw); aspect-ratio:1;
+  background:radial-gradient(circle, rgba(201,98,46,.14), rgba(201,98,46,0) 66%);
+}
+.hero__in{ position:relative; z-index:1; max-width:none; }
+.hero__grid{ display:grid; grid-template-columns:var(--rail) minmax(0,1fr); gap:0 46px; }
+.hero__body{ padding-left:34px; border-left:1px solid var(--line); }
+.hero__body::before{ content:""; position:absolute; left:0; top:0; width:1px; height:96px; background:var(--ember); }
+.hero__body{ position:relative; }
+.hero h1{ margin:20px 0 0; max-width:22ch; }
+.hero h1 em{ font-style:normal; color:var(--ember-lift); }
+
+/* MOTIF: terminal caret — used exactly once on the site */
+.type{ font-family:var(--mono); font-size:clamp(.9rem,1.5vw,1.06rem); color:var(--fg-2);
+       margin-top:26px; letter-spacing:-.01em; min-height:1.6em; }
+.type__out{ color:var(--ember-lift); }
+.caret{ display:inline-block; width:.56em; height:1.05em; background:var(--ember);
+        vertical-align:-.16em; margin-left:2px; animation:blink 1.05s steps(1) infinite; }
+@keyframes blink{ 50%{ opacity:0; } }
+
+.hero__lede{ margin-top:26px; max-width:56ch; }
+.hero__cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:34px; align-items:center; }
+.hero__fine{ font-family:var(--mono); font-size:.7rem; color:var(--mute); letter-spacing:.05em; margin-top:20px; }
+
+/* the price chip that rides the hero */
+.chip{
+  display:inline-flex; align-items:baseline; gap:9px;
+  border:1px solid var(--line); padding:9px 15px; background:rgba(16,26,49,.6);
+}
+.chip__n{ font-family:var(--mono); font-size:1.02rem; font-weight:700; color:var(--ember-lift); }
+.chip__t{ font-family:var(--mono); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mute); }
+
+/* --------------------------- ticker / marquee -------------------------- */
+.ticker{ border-block:1px solid var(--line-soft); overflow:hidden; background:var(--ink); }
+.ticker__track{ display:flex; width:max-content; animation:slide 42s linear infinite; }
+.ticker__track:hover{ animation-play-state:paused; }
+.ticker__i{
+  font-family:var(--mono); font-size:.71rem; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--mute); padding:14px 26px; display:flex; align-items:center; gap:26px; white-space:nowrap;
+}
+.ticker__i::after{ content:""; width:4px; height:4px; background:var(--ember); flex:none; }
+@keyframes slide{ to{ transform:translateX(-50%); } }
+
+/* ------------------------------ index rows ---------------------------- */
+/* replaces the reflex 3-col feature grid: a dense, expandable index */
+.idx{ border-top:1px solid var(--line); }
+.idx__row{ border-bottom:1px solid var(--line); }
+.idx__btn{
+  width:100%; display:grid; grid-template-columns:auto minmax(0,1fr) auto;
+  gap:22px; align-items:center; text-align:left;
+  background:none; border:0; color:inherit; font:inherit; cursor:pointer;
+  padding:19px 4px 19px 0; transition:background .25s var(--ease), padding .25s var(--ease);
+}
+.idx__btn:hover{ background:var(--ember-haze); padding-left:12px; }
+.idx__ico{ width:22px; height:22px; color:var(--ember); flex:none; }
+.idx__name{ display:block; font-size:1.02rem; font-weight:600; letter-spacing:-.016em; }
+.idx__sub{ display:block; font-size:.855rem; color:var(--mute); margin-top:3px; line-height:1.45; }
+.idx__plus{ width:13px; height:13px; color:var(--mute); flex:none; transition:transform .3s var(--ease), color .25s var(--ease); }
+.idx__btn[aria-expanded="true"] .idx__plus{ transform:rotate(45deg); color:var(--ember-lift); }
+.idx__panel{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s var(--ease); }
+.idx__panel > div{ overflow:hidden; }
+.idx__row.is-open .idx__panel{ grid-template-rows:1fr; }
+.idx__inner{ padding:0 30px 26px 54px; max-width:78ch; }
+.idx__inner p{ font-size:.94rem; color:var(--fg-2); }
+.idx__uses{ list-style:none; margin:14px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.idx__uses li{
+  font-family:var(--mono); font-size:.67rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--mute); border:1px solid var(--line); padding:5px 9px;
+}
+
+/* ------------------------------- panels ------------------------------- */
+.panel{ border:1px solid var(--line); background:var(--raise); padding:28px; }
+.panel--flat{ background:transparent; }
+.panel__h{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.cols{ display:grid; gap:20px; }
+.cols--2{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+.cols--3{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+
+/* teach-track: the differentiator, as a stepped ladder (no numerals) */
+.ladder{ display:grid; gap:0; border-top:1px solid var(--line); }
+.ladder__s{
+  display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr); gap:32px;
+  padding:26px 0; border-bottom:1px solid var(--line); align-items:start;
+}
+.ladder__k{ display:flex; align-items:flex-start; gap:14px; }
+.ladder__tick{ width:11px; height:11px; border:1px solid var(--ember); margin-top:6px; flex:none; position:relative; }
+.ladder__s:nth-child(odd) .ladder__tick{ background:var(--ember); }
+.ladder__t{ font-size:1.02rem; font-weight:600; letter-spacing:-.016em; }
+.ladder__d{ font-size:.93rem; color:var(--fg-2); }
+
+/* ------------------------------- pricing ------------------------------ */
+.price{ border:1px solid var(--line); background:linear-gradient(180deg, var(--raise) 0%, var(--ink) 100%); }
+.price__top{ padding:34px 34px 28px; border-bottom:1px solid var(--line); }
+.price__fig{ display:flex; align-items:flex-start; gap:6px; }
+.price__cur{ font-family:var(--mono); font-size:1.5rem; font-weight:500; color:var(--ember-lift); margin-top:.55rem; }
+.price__n{ font-size:clamp(3.6rem,9vw,5.4rem); font-weight:700; letter-spacing:-.05em; line-height:.94; }
+.price__per{ font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+             color:var(--mute); align-self:flex-end; margin-bottom:.85rem; margin-left:4px; }
+.price__list{ list-style:none; margin:0; padding:26px 34px; display:grid; gap:11px; }
+.price__list li{ display:flex; gap:12px; align-items:flex-start; font-size:.93rem; color:var(--fg-2); }
+.price__list svg{ width:15px; height:15px; color:var(--ember); flex:none; margin-top:5px; }
+.price__foot{ padding:0 34px 34px; }
+
+/* -------------------------------- tiers ------------------------------- */
+.tier{ border:1px solid var(--line); padding:30px; display:flex; flex-direction:column; gap:16px;
+       transition:border-color .3s var(--ease), transform .3s var(--ease), background .3s var(--ease); }
+.tier:hover{ border-color:var(--ember-deep); background:var(--raise); transform:translateY(-3px); }
+.tier--mark{ border-color:var(--ember-deep); background:var(--raise); }
+.tier__amt{ font-family:var(--mono); font-size:1.62rem; font-weight:700; color:var(--ember-lift); letter-spacing:-.02em; }
+.tier__amt small{ display:block; font-size:.66rem; font-weight:500; letter-spacing:.14em;
+                  text-transform:uppercase; color:var(--mute); margin-top:7px; }
+.tier ul{ list-style:none; margin:0; padding:0; display:grid; gap:9px; }
+.tier li{ font-size:.885rem; color:var(--fg-2); padding-left:17px; position:relative; }
+.tier li::before{ content:""; position:absolute; left:0; top:.58em; width:6px; height:1px; background:var(--ember); }
+
+/* -------------------------------- notes ------------------------------- */
+.note{ border-left:1px solid var(--ember); padding:4px 0 4px 20px; color:var(--fg-2); font-size:.94rem; max-width:64ch; }
+
+/* -------------------------------- CTA band ---------------------------- */
+.cta{ background:var(--ink); border-top:1px solid var(--line); position:relative; overflow:hidden; }
+.cta__glow{ position:absolute; left:50%; bottom:-58%; width:min(880px,110vw); aspect-ratio:1; transform:translateX(-50%);
+            background:radial-gradient(circle, rgba(201,98,46,.13), rgba(201,98,46,0) 64%); pointer-events:none; }
+.cta__in{ position:relative; z-index:1; padding-block:clamp(64px,9vw,104px); text-align:left; max-width:none; }
+.cta h2{ max-width:26ch; }
+
+/* -------------------------------- footer ------------------------------ */
+.ftr{ background:var(--ink); border-top:1px solid var(--line); padding-block:46px 34px; }
+.ftr__grid{ display:grid; grid-template-columns:1.6fr repeat(3,1fr); gap:36px; }
+.ftr h4{ font-family:var(--mono); font-size:.66rem; letter-spacing:.17em; text-transform:uppercase;
+         color:var(--mute); font-weight:500; margin-bottom:14px; }
+.ftr ul{ list-style:none; margin:0; padding:0; display:grid; gap:9px; }
+.ftr a{ font-size:.875rem; color:var(--fg-2); transition:color .2s var(--ease); }
+.ftr a:hover{ color:var(--ember-lift); }
+.ftr__base{ display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+            margin-top:40px; padding-top:22px; border-top:1px solid var(--line);
+            font-family:var(--mono); font-size:.68rem; letter-spacing:.06em; color:var(--mute); }
+
+/* ------------------------------- modal -------------------------------- */
+/* house standing instruction: every request CTA opens the popup form */
+.modal{ position:fixed; inset:0; z-index:120; display:none; }
+.modal.is-open{ display:block; }
+.modal__veil{ position:absolute; inset:0; background:rgba(3,6,13,.82); backdrop-filter:blur(4px);
+              animation:fade .25s var(--ease); }
+.modal__box{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:min(560px,calc(100vw - 32px)); max-height:calc(100vh - 48px); overflow:auto;
+  background:var(--ground); border:1px solid var(--line); padding:32px;
+  animation:rise .32s var(--ease);
+}
+@keyframes fade{ from{ opacity:0; } }
+@keyframes rise{ from{ opacity:0; transform:translate(-50%,-46%); } }
+.modal__x{ position:absolute; top:14px; right:14px; background:none; border:1px solid var(--line);
+           width:32px; height:32px; color:var(--mute); cursor:pointer; font-size:15px; line-height:1; }
+.modal__x:hover{ color:var(--ember-lift); border-color:var(--ember); }
+
+.field{ display:grid; gap:6px; margin-bottom:14px; }
+.field label{ font-family:var(--mono); font-size:.66rem; letter-spacing:.14em;
+              text-transform:uppercase; color:var(--mute); }
+.field input, .field select, .field textarea{
+  background:var(--ink); border:1px solid var(--line); color:var(--fg);
+  font-family:var(--sans); font-size:.92rem; padding:11px 13px; width:100%;
+  transition:border-color .2s var(--ease);
+}
+.field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--ember); }
+.field textarea{ resize:vertical; min-height:92px; }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+/* ------------------------------ motion -------------------------------- */
+.rv{ opacity:0; transform:translateY(16px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.rv.is-in{ opacity:1; transform:none; }
+.rv[data-d="1"]{ transition-delay:.08s; }
+.rv[data-d="2"]{ transition-delay:.16s; }
+.rv[data-d="3"]{ transition-delay:.24s; }
+.rv[data-d="4"]{ transition-delay:.32s; }
+
+/* MOTIF: node/edge diagram draws itself in */
+.draw path, .draw line, .draw polyline{
+  stroke-dasharray:var(--len,600); stroke-dashoffset:var(--len,600);
+  transition:stroke-dashoffset 1.5s var(--ease);
+}
+.draw.is-in path, .draw.is-in line, .draw.is-in polyline{ stroke-dashoffset:0; }
+.draw rect, .draw circle{ opacity:0; transition:opacity .5s var(--ease) .6s; }
+.draw.is-in rect, .draw.is-in circle{ opacity:1; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:.01ms !important; }
+  .rv{ opacity:1; transform:none; }
+  .draw path,.draw line,.draw polyline{ stroke-dashoffset:0; }
+  .draw rect,.draw circle{ opacity:1; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ----------------------------- responsive ----------------------------- */
+@media (max-width:980px){
+  :root{ --gap:66px; }
+  .band__grid, .hero__grid{ grid-template-columns:1fr; gap:20px; }
+  .band__rail{ position:static; }
+  .band__rail-note{ display:none; }
+  .band__body, .hero__body{ padding-left:20px; }
+  .cols--3{ grid-template-columns:1fr; }
+  .ftr__grid{ grid-template-columns:1fr 1fr; }
+  .ladder__s{ grid-template-columns:1fr; gap:12px; }
+}
+@media (max-width:720px){
+  .nav{ display:none; }
+  .nav.is-open{
+    display:flex; flex-direction:column; align-items:flex-start; gap:0;
+    position:absolute; top:70px; left:0; right:0; background:var(--ink);
+    border-bottom:1px solid var(--line); padding:8px 26px 20px;
+  }
+  .nav.is-open a{ padding:13px 0; width:100%; border-bottom:1px solid var(--line-soft); font-size:.95rem; }
+  .nav.is-open .btn{ margin-top:14px; width:100%; }
+  .burger{ display:block; }
+  .hdr__in{ position:relative; }
+  .cols--2{ grid-template-columns:1fr; }
+  .idx__btn{ gap:14px; }
+  .idx__inner{ padding-left:0; padding-right:0; }
+  .row2{ grid-template-columns:1fr; }
+  .price__top,.price__list,.price__foot{ padding-inline:22px; }
+  .ftr__grid{ grid-template-columns:1fr; gap:26px; }
+}
+
+
+.view{display:none}.view.is-active{display:block}
+</style>
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="logo" data-view="home" href="#home" aria-label="Growth Factor AI — home">
+      <svg class="logo__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="1" y="15" width="6" height="8" stroke="#8C99B0" stroke-width="1.4"/>
+        <rect x="9" y="9" width="6" height="14" stroke="#8C99B0" stroke-width="1.4"/>
+        <rect x="17" y="1" width="6" height="22" fill="#C9622E"/>
+      </svg>
+      <span class="logo__txt">Growth Factor<span>.ai</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#features" data-view="features">Platform</a>
+      <a href="#dfy" data-view="dfy">Done-For-You</a>
+      <a href="#home/price">Pricing</a>
+      <a class="btn btn--ember btn--sm" href="#" data-form
+         data-form-title="Start at $100 a month"
+         data-form-intent="Start — $100/mo">Get started</a>
+    </nav>
+    <button class="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="view" id="v-home">
+<!-- ============================== HERO ============================== -->
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__glow"></div>
+    <svg class="hero__mesh" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" fill="none">
+      <defs>
+        <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M60 0H0v60" stroke="#1C2740" stroke-width="1"/>
+        </pattern>
+        <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="m"><rect width="1200" height="620" fill="url(#fade)"/></mask>
+      </defs>
+      <rect width="1200" height="620" fill="url(#grid)" mask="url(#m)"/>
+      <g stroke="#C9622E" stroke-width="1" opacity=".55">
+        <path d="M820 120h150v90h150"/>
+        <path d="M820 120v170h150"/>
+        <path d="M970 210v150"/>
+      </g>
+      <g fill="#0A1122" stroke="#C9622E" stroke-width="1.4">
+        <rect x="812" y="112" width="16" height="16"/>
+        <rect x="962" y="202" width="16" height="16"/>
+        <rect x="962" y="352" width="16" height="16"/>
+        <rect x="1112" y="202" width="16" height="16"/>
+        <rect x="962" y="282" width="16" height="16"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="shell hero__in">
+    <div class="hero__grid">
+      <div class="band__rail">
+        <span class="label">The growth stack</span>
+        <p class="band__rail-note">Software first.<br>Teaching included.<br>Agency optional.</p>
+      </div>
+      <div class="hero__body">
+        <h1 class="rv is-in">More leads. More customers.<br><em>And you built it yourself.</em></h1>
+
+        <p class="type" data-type='["Build your own ads.","Build your own funnels.","Build your own AI agents.","Build your own machine."]'>
+          <span class="muted">&gt;</span> <span class="type__out"></span><span class="caret"></span>
+        </p>
+
+        <p class="lede hero__lede rv" data-d="1">
+          Growth Factor is the entire growth stack &mdash; CRM, funnels, calendars,
+          automations, AI agents &mdash; for a hundred dollars a month, flat.
+          Then the part nobody else does: we teach you to run it, and we build
+          your first set of ads for you while you learn.
+        </p>
+
+        <div class="hero__cta rv" data-d="2">
+          <a class="btn btn--ember" href="#" data-form
+             data-form-title="Start at $100 a month" data-form-intent="Hero — Start">
+            Start at $100
+            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--wire" href="#features">See everything included</a>
+          <span class="chip"><span class="chip__n">$100</span><span class="chip__t">flat / month</span></span>
+        </div>
+
+        <p class="hero__fine rv" data-d="3">
+          First set of ads built with you &mdash; included &middot; No setup fee &middot; Cancel anytime, keep your account
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= TICKER ============================= -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <div class="ticker__i"><span>CRM &amp; Pipelines</span><span>Funnels &amp; Websites</span><span>AI Agents</span><span>Super Agents</span><span>Workflow Automation</span><span>2-Way SMS</span><span>Email Marketing</span><span>Calendars &amp; Booking</span><span>Reputation</span><span>Courses &amp; Memberships</span><span>Payments</span><span>Call Tracking</span><span>Social Planner</span><span>Forms &amp; Surveys</span><span>Reporting</span></div>
+    <div class="ticker__i"><span>CRM &amp; Pipelines</span><span>Funnels &amp; Websites</span><span>AI Agents</span><span>Super Agents</span><span>Workflow Automation</span><span>2-Way SMS</span><span>Email Marketing</span><span>Calendars &amp; Booking</span><span>Reputation</span><span>Courses &amp; Memberships</span><span>Payments</span><span>Call Tracking</span><span>Social Planner</span><span>Forms &amp; Surveys</span><span>Reporting</span></div>
+  </div>
+</div>
+
+<!-- ============================= PREMISE ============================ -->
+<section class="band">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">The premise</span>
+        <p class="band__rail-note">Own the account. Own the list. Own the skill.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">You don&rsquo;t need an agency.<br>You need the keys.</h2>
+        <div class="cols cols--2" style="margin-top:28px">
+          <p class="lede rv" data-d="1">
+            The usual arrangement: the agency owns the software, the ad account,
+            the automations and the logins. You get a PDF at the end of the month.
+            The day you leave, you leave with nothing &mdash; no list, no pixel
+            history, no idea how any of it worked.
+          </p>
+          <p class="lede rv" data-d="2">
+            We flipped it. You get the software on day one, in your name. The same
+            stack agencies charge two thousand a month to operate is a hundred
+            dollars, and we sit next to you until you can drive it. The skill is
+            the product. The software is just where it lives.
+          </p>
+        </div>
+        <p class="note rv" data-d="3" style="margin-top:30px">
+          Still want someone else to build it? We&rsquo;ll do that too &mdash; priced
+          up front, quoted before we start, and it&rsquo;s the only thing that ever
+          costs extra. <a class="ember" href="#dfy" style="border-bottom:1px solid var(--ember-deep)">See Done-For-You &rarr;</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== TEACH TRACK ========================== -->
+<section class="band band--hairline" id="teach">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">How it goes</span>
+        <p class="band__rail-note">Hands on the keyboard, then hands off.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">We build your first ads.<br>You watch. Then you take over.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          Not a course you never finish. A live campaign in your own account,
+          built with you on the call.
+        </p>
+
+        <div class="ladder" style="margin-top:34px">
+          <div class="ladder__s rv">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">We build the first set with you</span></div>
+            <p class="ladder__d">Your ad account, your card, our hands on the keyboard. Audience, creative,
+              offer, tracking and the follow-up automation behind it &mdash; wired
+              and live while you&rsquo;re on the call asking why we did each thing.</p>
+          </div>
+          <div class="ladder__s rv" data-d="1">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">You take the controls</span></div>
+            <p class="ladder__d">Same campaign, same dashboard, now you&rsquo;re driving. You write the
+              next ad, you set the next budget, and we tell you honestly whether
+              it&rsquo;s good before you spend on it.</p>
+          </div>
+          <div class="ladder__s rv" data-d="2">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">You learn the rest on your schedule</span></div>
+            <p class="ladder__d">Every workflow, funnel and agent in the platform has a short
+              walkthrough for the exact thing you&rsquo;re trying to do. Live sessions
+              and in-person events when you&rsquo;d rather be in a room than on a video.</p>
+          </div>
+          <div class="ladder__s rv" data-d="3">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">You keep all of it</span></div>
+            <p class="ladder__d">Cancel any month you like. The contacts, the creative, the ad account,
+              the pixel history and the automations were yours from the first day
+              and they stay that way.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== WHAT'S INSIDE ======================== -->
+<section class="band band--hairline">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">What&rsquo;s inside</span>
+        <p class="band__rail-note">Everything Go High Level does, plus the agents.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">One login instead of eleven subscriptions.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          Tap any line to see what it actually does.
+        </p>
+
+        <div class="idx rv" data-d="2" style="margin-top:30px">
+          <div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-crm"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h6"/></svg><span><span class="idx__name">CRM &amp; Pipelines</span><span class="idx__sub">Every lead, every stage, one board you can actually read.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-crm"><div><div class="idx__inner"><p>A drag-and-drop board of every deal you have open. Stages you name yourself, cards that carry the whole history &mdash; every text, call, email, form fill and payment attached to the person, not scattered across four apps. Move a card and an automation can fire: the estimate goes out, the reminder queues, the review request waits for the job to close.</p><ul class="idx__uses"><li>Unlimited contacts</li><li>Custom stages</li><li>Full activity history</li><li>Smart lists</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-funnels"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9L3 4z"/></svg><span><span class="idx__name">Funnels &amp; Landing Pages</span><span class="idx__sub">Build the page, the upsell and the thank-you in an afternoon.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-funnels"><div><div class="idx__inner"><p>A visual builder for the pages that actually take money: opt-ins, VSLs, application pages, order forms with order bumps and one-click upsells. Start from a template, swap the copy and the photos, point your domain at it. Split-test two versions and the platform tells you which one earns more, not which one gets more clicks.</p><ul class="idx__uses"><li>Drag-and-drop</li><li>A/B split tests</li><li>Order bumps</li><li>One-click upsells</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-workflows"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="15" width="6" height="6"/><path d="M9 6h6v9M6 9v6h9"/></svg><span><span class="idx__name">Workflow Automation</span><span class="idx__sub">The if-this-then-that engine everything else plugs into.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-workflows"><div><div class="idx__inner"><p>A visual canvas where a trigger (form filled, stage moved, call missed, tag added, date reached) fires a chain of actions: send the text, wait two days, check if they replied, branch, assign the task, update the pipeline, ping you on Slack. This is the part that replaces a part-time admin, and it is the single thing we most enjoy teaching people to build.</p><ul class="idx__uses"><li>Visual builder</li><li>Branching logic</li><li>Wait &amp; goal steps</li><li>Webhooks</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-agents"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="5" y="7" width="14" height="12"/><path d="M12 3v4M9 12h.01M15 12h.01M9.5 16h5"/></svg><span><span class="idx__name">AI Agents</span><span class="idx__sub">A conversation that qualifies and books while you sleep.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-agents"><div><div class="idx__inner"><p>Point an agent at a channel and give it your offer, your tone and your rules. It answers in seconds, asks the qualifying questions, handles the predictable objections, and books onto your calendar &mdash; then hands the thread to a human the moment it hits something it shouldn&rsquo;t decide. Voice agents answer the phone the same way.</p><ul class="idx__uses"><li>Conversation AI</li><li>Voice agents</li><li>Human handoff</li><li>Trained on your offer</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-super"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="9" y="9" width="6" height="6"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6M6 6l3 3M18 18l-3-3M18 6l-3 3M6 18l3-3"/></svg><span><span class="idx__name">Super Agents</span><span class="idx__sub">An agent that runs other agents, with memory of the whole record.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-super"><div><div class="idx__inner"><p>Where a single agent handles one conversation, a super agent coordinates the system: it reads the full contact history, decides which sequence a person belongs in, spins up the right agent for the job, rewrites the follow-up when the first one didn&rsquo;t land, reorders your day by who is actually close to buying, and escalates the handful worth your personal call. You build it in the same workflow canvas &mdash; or we build it for you.</p><ul class="idx__uses"><li>Multi-step reasoning</li><li>Full-record memory</li><li>Agent orchestration</li><li>Priority scoring</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-chat"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M4 4h16v12H9l-5 4V4z"/><path d="M8 9h8M8 12.5h5"/></svg><span><span class="idx__name">Conversations &mdash; SMS, Email, DM, WhatsApp</span><span class="idx__sub">One inbox for every channel a customer might reach you on.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-chat"><div><div class="idx__inner"><p>Text messages, emails, Facebook and Instagram DMs, Google Business chat and WhatsApp all land in a single threaded inbox on your phone and desktop. Reply from anywhere and it goes back out on the channel they used. Snippets and saved replies for the questions you answer forty times a week.</p><ul class="idx__uses"><li>Unified inbox</li><li>Mobile app</li><li>Saved replies</li><li>Missed-call text-back</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-calendar"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><span class="idx__name">Calendars &amp; Booking</span><span class="idx__sub">They book themselves, and then they actually show up.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-calendar"><div><div class="idx__inner"><p>Round-robin or single-host calendars that respect your real availability, buffer times and service durations. Confirmations, reminders and reschedule links go out by text and email on a schedule you set. No-shows drop into a recovery workflow instead of into a hole.</p><ul class="idx__uses"><li>Round-robin</li><li>Reminder sequences</li><li>Google/Outlook sync</li><li>No-show recovery</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-h-reviews"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3l2.7 5.9 6.3.7-4.7 4.3 1.3 6.3L12 17l-5.6 3.2 1.3-6.3L3 9.6l6.3-.7L12 3z"/></svg><span><span class="idx__name">Reputation &amp; Reviews</span><span class="idx__sub">Ask at the right moment and the stars take care of themselves.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-h-reviews"><div><div class="idx__inner"><p>Trigger a review request by text and email the moment a job closes or an appointment completes, route the happy ones to Google and Facebook, and catch the unhappy ones privately first. Reply to every review from the same inbox as everything else.</p><ul class="idx__uses"><li>Google &amp; Facebook</li><li>Automated requests</li><li>Reply from inbox</li><li>Review widgets</li></ul></div></div></div></div>
+        </div>
+
+        <a class="btn btn--wire" href="#features" style="margin-top:30px">
+          See the full feature list
+          <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== AGENTS ============================ -->
+<section class="band band--hairline band--tight" id="agents">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">Agents</span>
+        <p class="band__rail-note">Included. Not an upsell tier.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">Agents answer.<br>Super Agents decide.</h2>
+
+        <div class="cols cols--2" style="margin-top:32px;align-items:start">
+          <div>
+            <div class="panel rv" data-d="1">
+              <div class="panel__h"><span class="label label--plain">Agent</span></div>
+              <h3>One job, done in four seconds, at 2am</h3>
+              <p class="muted" style="font-size:.93rem;margin-top:10px">
+                A lead fills in your form or replies to an ad. The agent texts back
+                immediately, asks the qualifying questions in your words, handles the
+                &ldquo;how much is it&rdquo; objection, and books straight onto your calendar.
+                You wake up to an appointment instead of a missed opportunity.
+              </p>
+            </div>
+            <div class="panel rv" data-d="2" style="margin-top:20px">
+              <div class="panel__h"><span class="label label--plain">Super Agent</span></div>
+              <h3>Runs the whole board, not one square</h3>
+              <p class="muted" style="font-size:.93rem;margin-top:10px">
+                Chains agents and workflows together with memory of the entire contact
+                record. Watches the pipeline, decides who&rsquo;s gone cold, drafts the
+                follow-up in your voice, reshuffles the priority list, and pushes the
+                handful worth your personal attention to the top.
+              </p>
+            </div>
+          </div>
+
+          <div class="panel panel--flat rv" data-d="2" style="padding:26px 24px">
+            <svg class="draw" viewBox="0 0 340 300" fill="none" role="img" aria-label="A super agent coordinating three agents into your pipeline">
+              <g stroke="#C9622E" stroke-width="1.2">
+                <path d="M60 46h90v58h96"/>
+                <path d="M60 128h90"/>
+                <path d="M150 104v92h96"/>
+                <path d="M60 210h90v-14"/>
+                <path d="M246 104v92"/>
+              </g>
+              <g fill="#0A1122" stroke="#C9622E" stroke-width="1.3">
+                <rect x="40" y="38" width="16" height="16"/>
+                <rect x="40" y="120" width="16" height="16"/>
+                <rect x="40" y="202" width="16" height="16"/>
+              </g>
+              <g fill="#C9622E">
+                <rect x="142" y="96" width="16" height="16"/>
+                <rect x="238" y="96" width="16" height="16"/>
+                <rect x="238" y="188" width="16" height="16"/>
+              </g>
+              <g fill="#8C99B0" font-family="JetBrains Mono, monospace" font-size="9.5" letter-spacing="1.4">
+                <text x="66" y="30">NEW LEAD</text>
+                <text x="66" y="112">REPLY</text>
+                <text x="66" y="194">NO-SHOW</text>
+                <text x="142" y="132" fill="#E58A4F">SUPER AGENT</text>
+                <text x="238" y="88">BOOKED</text>
+                <text x="238" y="224">NURTURE</text>
+              </g>
+            </svg>
+            <p class="muted" style="font-size:.8rem;font-family:var(--mono);letter-spacing:.04em;margin-top:16px">
+              Build it yourself in the workflow editor &mdash; or have us build it for you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PRICE ============================= -->
+<section class="band band--hairline band--tight" id="price">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">The price</span>
+        <p class="band__rail-note">One number. That&rsquo;s the whole page.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">A hundred dollars. Flat.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          Not a starter tier. Not per contact, per seat, or per agent. The whole
+          platform, the agents, and the teaching &mdash; one price, and it&rsquo;s
+          the same price whether you have fifty contacts or fifty thousand.
+        </p>
+
+        <div class="cols cols--2 rv" data-d="2" style="margin-top:32px;align-items:start">
+          <div class="price">
+            <div class="price__top">
+              <span class="label">Everything, included</span>
+              <div class="price__fig" style="margin-top:16px">
+                <span class="price__cur">$</span><span class="price__n">100</span><span class="price__per">/ month</span>
+              </div>
+            </div>
+            <ul class="price__list">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>The full platform &mdash; every feature on the <a class="ember" href="#features">features page</a></span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>AI Agents and Super Agents, unlimited to build</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>Your first set of ads, built with you on the call</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>The full training library and live sessions</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>Unlimited contacts, users and pipelines</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span>No setup fee, no contract, cancel any month</span></li>
+            </ul>
+            <div class="price__foot">
+              <a class="btn btn--ember btn--full" href="#" data-form
+                 data-form-title="Start at $100 a month" data-form-intent="Pricing — Start">
+                Start at $100
+                <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div class="panel">
+              <span class="label">What costs extra</span>
+              <h3 style="margin-top:14px">Only work we do instead of teach.</h3>
+              <p class="muted" style="font-size:.93rem;margin-top:10px">
+                If you want an agent, a super agent, a funnel or a whole automation
+                built <em>for</em> you rather than <em>with</em> you, that&rsquo;s a
+                separate, quoted project. Simple builds start around $500. Genuinely
+                complex ones can reach $10,000. We tell you which it is before you
+                commit to anything.
+              </p>
+              <a class="btn btn--wire" href="#dfy" style="margin-top:20px">
+                How Done-For-You is priced
+                <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+            <p class="note" style="margin-top:22px">
+              Ad spend, phone and email usage are billed at cost by the carriers and
+              platforms &mdash; they go on your card, not ours, because the accounts
+              are yours.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ DFY TEASER ========================== -->
+<section class="band band--hairline band--tighter">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">If you&rsquo;d rather not</span>
+        <p class="band__rail-note">Quoted before we start. Every time.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">Or hand us the hard part.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          Some people want to learn it. Some people want it done Tuesday. Both are
+          fine &mdash; the second one is a quote, not a mystery.
+        </p>
+        <div class="cols cols--3 rv" data-d="2" style="margin-top:30px">
+          <div class="tier">
+            <span class="label">Simple</span>
+            <span class="tier__amt">from $500<small>One clear ask</small></span>
+            <p class="muted" style="font-size:.88rem">A booking agent, a funnel, a review-request automation. Days, not weeks.</p>
+          </div>
+          <div class="tier tier--mark">
+            <span class="label">Involved</span>
+            <span class="tier__amt">$1,500&ndash;$5,000<small>Several moving parts</small></span>
+            <p class="muted" style="font-size:.88rem">A full pipeline, a super agent, campaigns and the follow-up behind them.</p>
+          </div>
+          <div class="tier">
+            <span class="label">Complex</span>
+            <span class="tier__amt">up to $10,000<small>Built to your business</small></span>
+            <p class="muted" style="font-size:.88rem">Multi-location, custom integrations, a system nobody has built before.</p>
+          </div>
+        </div>
+        <a class="btn btn--wire" href="#dfy" style="margin-top:28px">
+          See how we scope and price it
+          <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== CTA ============================== -->
+<section class="cta">
+  <div class="cta__glow" aria-hidden="true"></div>
+  <div class="shell cta__in">
+    <div class="band__grid">
+      <div class="band__rail"><span class="label">Start</span></div>
+      <div class="band__body">
+        <h2 class="rv">More leads. More customers.<br>Starting with the set we build for you.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          A hundred dollars, no setup fee, and your first campaign goes live with us
+          on the call. If you can run a phone you can run this.
+        </p>
+        <div class="hero__cta rv" data-d="2">
+          <a class="btn btn--ember" href="#" data-form
+             data-form-title="Start at $100 a month" data-form-intent="Footer CTA — Start">
+            Start at $100
+            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--wire" href="#" data-form
+             data-form-title="Book a walkthrough" data-form-intent="Footer CTA — Walkthrough">Book a walkthrough</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<div class="view" id="v-features">
+<!-- ============================== HERO ============================== -->
+<section class="hero" style="padding-block:clamp(58px,8vh,92px) clamp(48px,6vh,70px)">
+  <div class="hero__bg" aria-hidden="true"><div class="hero__glow" style="opacity:.7"></div>
+    <svg class="hero__mesh" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" fill="none">
+      <defs>
+        <pattern id="grid2" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M60 0H0v60" stroke="#1C2740" stroke-width="1"/>
+        </pattern>
+        <linearGradient id="fade2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="m2"><rect width="1200" height="420" fill="url(#fade2)"/></mask>
+      </defs>
+      <rect width="1200" height="420" fill="url(#grid2)" mask="url(#m2)"/>
+      <g stroke="#C9622E" stroke-width="1" opacity=".5">
+        <path d="M900 90h120v100h120"/>
+        <path d="M1020 190v90"/>
+      </g>
+      <g fill="#0A1122" stroke="#C9622E" stroke-width="1.4">
+        <rect x="892" y="82" width="14" height="14"/>
+        <rect x="1013" y="273" width="14" height="14"/>
+      </g>
+      <g fill="#C9622E"><rect x="1013" y="183" width="14" height="14"/><rect x="1133" y="183" width="14" height="14"/></g>
+    </svg></div>
+  <div class="shell hero__in">
+    <div class="hero__grid">
+      <div class="band__rail">
+        <span class="label">The platform</span>
+        <p class="band__rail-note">All of it. One price.</p>
+      </div>
+      <div class="hero__body">
+        <h1 class="rv is-in" style="font-size:clamp(2.3rem,5vw,3.7rem)">Everything <span style="white-space:nowrap">Go High Level</span> does.<br><em>Plus the agents.</em></h1>
+        <p class="lede hero__lede rv" data-d="1">
+          This is the whole list &mdash; not a &ldquo;starter&rdquo; slice of it. Every line
+          below is included at $100 a month, and every line below has a walkthrough
+          showing you how to set it up yourself. Tap one to see what it actually does.
+        </p>
+        <div class="hero__cta rv" data-d="2">
+          <a class="btn btn--ember" href="#" data-form
+             data-form-title="Start at $100 a month" data-form-intent="Features hero — Start">
+            Start at $100
+            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--wire" href="#dfy">Have us build it instead</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <div class="ticker__i"><span>Unlimited contacts</span><span>Unlimited users</span><span>Unlimited pipelines</span><span>Unlimited funnels</span><span>Unlimited courses</span><span>Unlimited agents</span><span>No per-seat pricing</span><span>No setup fee</span><span>No contract</span></div>
+    <div class="ticker__i"><span>Unlimited contacts</span><span>Unlimited users</span><span>Unlimited pipelines</span><span>Unlimited funnels</span><span>Unlimited courses</span><span>Unlimited agents</span><span>No per-seat pricing</span><span>No setup fee</span><span>No contract</span></div>
+  </div>
+</div>
+
+<section class="band band--hairline" id="capture"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Capture</span><p class="band__rail-note">Everything that turns attention into a name, a number and a conversation.</p></div><div class="band__body"><h2 class="rv">Get the lead, and get to them first.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-crm"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h6"/></svg><span><span class="idx__name">CRM &amp; Pipelines</span><span class="idx__sub">Every lead, every stage, one board you can actually read.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-crm"><div><div class="idx__inner"><p>A drag-and-drop board of every deal you have open. Stages you name yourself, cards that carry the whole history &mdash; every text, call, email, form fill and payment attached to the person, not scattered across four apps. Move a card and an automation can fire: the estimate goes out, the reminder queues, the review request waits for the job to close.</p><ul class="idx__uses"><li>Unlimited contacts</li><li>Custom stages</li><li>Full activity history</li><li>Smart lists</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-forms"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="4" y="3" width="16" height="18"/><path d="M8 8h8M8 12h8M8 16h4"/></svg><span><span class="idx__name">Forms, Surveys &amp; Quizzes</span><span class="idx__sub">Ask the qualifying questions before you ever pick up the phone.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-forms"><div><div class="idx__inner"><p>Build a form, a multi-step survey or a scored quiz and drop it on any page, funnel or website &mdash; yours or not. Conditional logic branches the questions based on what they answered, so a tyre-kicker and a ready buyer get different paths. Every submission lands on the contact record and can start a workflow the same second.</p><ul class="idx__uses"><li>Conditional logic</li><li>Multi-step</li><li>Embeddable anywhere</li><li>Instant notifications</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-chat"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M4 4h16v12H9l-5 4V4z"/><path d="M8 9h8M8 12.5h5"/></svg><span><span class="idx__name">Conversations &mdash; SMS, Email, DM, WhatsApp</span><span class="idx__sub">One inbox for every channel a customer might reach you on.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-chat"><div><div class="idx__inner"><p>Text messages, emails, Facebook and Instagram DMs, Google Business chat and WhatsApp all land in a single threaded inbox on your phone and desktop. Reply from anywhere and it goes back out on the channel they used. Snippets and saved replies for the questions you answer forty times a week.</p><ul class="idx__uses"><li>Unified inbox</li><li>Mobile app</li><li>Saved replies</li><li>Missed-call text-back</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-phone"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M6 3h4l2 5-2.5 1.5a12 12 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg><span><span class="idx__name">Phone System &amp; Call Tracking</span><span class="idx__sub">Your number, your recordings, your attribution.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-phone"><div><div class="idx__inner"><p>Buy tracking numbers inside the platform, route calls to whoever should pick up, record and transcribe them, and see exactly which ad or page produced the call. Missed calls text back automatically &mdash; the single highest-return automation most local businesses ever turn on. Power dialer for the list you need to work through today.</p><ul class="idx__uses"><li>Call recording</li><li>Transcription</li><li>Power dialer</li><li>Missed-call text-back</li></ul></div></div></div></div></div></div></div></div></section>
+<section class="band band--hairline" id="convert"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Convert</span><p class="band__rail-note">Pages, calendars and follow-up that move a lead to a scheduled, paid outcome.</p></div><div class="band__body"><h2 class="rv">Turn the conversation into a booking.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-funnels"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9L3 4z"/></svg><span><span class="idx__name">Funnels &amp; Landing Pages</span><span class="idx__sub">Build the page, the upsell and the thank-you in an afternoon.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-funnels"><div><div class="idx__inner"><p>A visual builder for the pages that actually take money: opt-ins, VSLs, application pages, order forms with order bumps and one-click upsells. Start from a template, swap the copy and the photos, point your domain at it. Split-test two versions and the platform tells you which one earns more, not which one gets more clicks.</p><ul class="idx__uses"><li>Drag-and-drop</li><li>A/B split tests</li><li>Order bumps</li><li>One-click upsells</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-sites"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M6.5 6.5h.01M9.5 6.5h.01"/></svg><span><span class="idx__name">Websites &amp; Blogs</span><span class="idx__sub">A real site on your own domain, not a page on someone else&rsquo;s.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-sites"><div><div class="idx__inner"><p>Full multi-page websites with navigation, blogs and a proper mobile layout, hosted and SSL-secured. Same builder as the funnels, so anything you learn once works everywhere. Point an existing domain at it or buy one inside the platform.</p><ul class="idx__uses"><li>Custom domains</li><li>Free SSL</li><li>Blog</li><li>Mobile layouts</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-calendar"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><span class="idx__name">Calendars &amp; Booking</span><span class="idx__sub">They book themselves, and then they actually show up.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-calendar"><div><div class="idx__inner"><p>Round-robin or single-host calendars that respect your real availability, buffer times and service durations. Confirmations, reminders and reschedule links go out by text and email on a schedule you set. No-shows drop into a recovery workflow instead of into a hole.</p><ul class="idx__uses"><li>Round-robin</li><li>Reminder sequences</li><li>Google/Outlook sync</li><li>No-show recovery</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-email"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg><span><span class="idx__name">Email Marketing</span><span class="idx__sub">Broadcasts, sequences and the deliverability to land them.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-email"><div><div class="idx__inner"><p>Design an email once, send it to a filtered segment, and watch opens, clicks and replies come back onto the contact record. Long-running nurture sequences run in the background for the people who said &ldquo;not right now&rdquo; nine months ago and are ready today.</p><ul class="idx__uses"><li>Broadcasts</li><li>Nurture sequences</li><li>Segments</li><li>Templates</li></ul></div></div></div></div></div></div></div></div></section>
+<section class="band band--hairline" id="automate"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Automate</span><p class="band__rail-note">The engine underneath the whole platform &mdash; and the skill we most want you to have.</p></div><div class="band__body"><h2 class="rv">Do it once. Let it run forever.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-workflows"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="15" width="6" height="6"/><path d="M9 6h6v9M6 9v6h9"/></svg><span><span class="idx__name">Workflow Automation</span><span class="idx__sub">The if-this-then-that engine everything else plugs into.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-workflows"><div><div class="idx__inner"><p>A visual canvas where a trigger (form filled, stage moved, call missed, tag added, date reached) fires a chain of actions: send the text, wait two days, check if they replied, branch, assign the task, update the pipeline, ping you on Slack. This is the part that replaces a part-time admin, and it is the single thing we most enjoy teaching people to build.</p><ul class="idx__uses"><li>Visual builder</li><li>Branching logic</li><li>Wait &amp; goal steps</li><li>Webhooks</li></ul></div></div></div></div></div></div></div></div></section>
+<section class="band band--hairline" id="intelligence"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Intelligence</span><p class="band__rail-note">The AI layer. Included at $100, not sold as a tier on top of it.</p></div><div class="band__body"><h2 class="rv">Agents, Super Agents and creative.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-agents"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="5" y="7" width="14" height="12"/><path d="M12 3v4M9 12h.01M15 12h.01M9.5 16h5"/></svg><span><span class="idx__name">AI Agents</span><span class="idx__sub">A conversation that qualifies and books while you sleep.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-agents"><div><div class="idx__inner"><p>Point an agent at a channel and give it your offer, your tone and your rules. It answers in seconds, asks the qualifying questions, handles the predictable objections, and books onto your calendar &mdash; then hands the thread to a human the moment it hits something it shouldn&rsquo;t decide. Voice agents answer the phone the same way.</p><ul class="idx__uses"><li>Conversation AI</li><li>Voice agents</li><li>Human handoff</li><li>Trained on your offer</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-super"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="9" y="9" width="6" height="6"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6M6 6l3 3M18 18l-3-3M18 6l-3 3M6 18l3-3"/></svg><span><span class="idx__name">Super Agents</span><span class="idx__sub">An agent that runs other agents, with memory of the whole record.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-super"><div><div class="idx__inner"><p>Where a single agent handles one conversation, a super agent coordinates the system: it reads the full contact history, decides which sequence a person belongs in, spins up the right agent for the job, rewrites the follow-up when the first one didn&rsquo;t land, reorders your day by who is actually close to buying, and escalates the handful worth your personal call. You build it in the same workflow canvas &mdash; or we build it for you.</p><ul class="idx__uses"><li>Multi-step reasoning</li><li>Full-record memory</li><li>Agent orchestration</li><li>Priority scoring</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-content"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><span><span class="idx__name">AI Content &amp; Creative</span><span class="idx__sub">Draft the ad, the email and the landing copy without staring at a blank box.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-content"><div><div class="idx__inner"><p>Generate ad angles, subject lines, SMS copy, landing page sections and social captions from a description of your offer &mdash; then edit them, because the edit is where the money is. Built into the same editors you were already using, not a separate tab you forget about.</p><ul class="idx__uses"><li>Ad copy</li><li>Email &amp; SMS</li><li>Page sections</li><li>Image generation</li></ul></div></div></div></div></div></div></div></div></section>
+<section class="band band--hairline band--tight" id="monetize"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Monetize</span><p class="band__rail-note">The things that happen after someone says yes, and make the next yes easier.</p></div><div class="band__body"><h2 class="rv">Get paid, get reviewed, get referred.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-reviews"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3l2.7 5.9 6.3.7-4.7 4.3 1.3 6.3L12 17l-5.6 3.2 1.3-6.3L3 9.6l6.3-.7L12 3z"/></svg><span><span class="idx__name">Reputation &amp; Reviews</span><span class="idx__sub">Ask at the right moment and the stars take care of themselves.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-reviews"><div><div class="idx__inner"><p>Trigger a review request by text and email the moment a job closes or an appointment completes, route the happy ones to Google and Facebook, and catch the unhappy ones privately first. Reply to every review from the same inbox as everything else.</p><ul class="idx__uses"><li>Google &amp; Facebook</li><li>Automated requests</li><li>Reply from inbox</li><li>Review widgets</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-social"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M8.4 10.8l7.2-3.6M8.4 13.2l7.2 3.6"/></svg><span><span class="idx__name">Social Planner</span><span class="idx__sub">Plan the month once instead of panicking every morning.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-social"><div><div class="idx__inner"><p>Schedule and publish to Facebook, Instagram, Google Business, LinkedIn, TikTok and YouTube from a single calendar view. Bulk-load a month, watch the engagement land back in the same reporting as everything else.</p><ul class="idx__uses"><li>Multi-channel</li><li>Calendar view</li><li>Bulk scheduling</li><li>Engagement tracking</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-courses"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c0 1.5 2.4 3 5 3s5-1.5 5-3v-5"/></svg><span><span class="idx__name">Courses, Memberships &amp; Communities</span><span class="idx__sub">Sell what you know, on the same platform that sells what you do.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-courses"><div><div class="idx__inner"><p>Host video courses, drip the lessons, gate them behind a payment or a membership tier, and run a community space alongside. Unlimited students, and the same contact record follows them from lead to buyer to member.</p><ul class="idx__uses"><li>Unlimited courses</li><li>Drip content</li><li>Membership tiers</li><li>Communities</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-payments"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="2" y="5" width="20" height="14"/><path d="M2 10h20M6 15h4"/></svg><span><span class="idx__name">Payments, Invoices &amp; Subscriptions</span><span class="idx__sub">Take the money in the same place you made the promise.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-payments"><div><div class="idx__inner"><p>Connect Stripe, PayPal, Square or NMI and send invoices, take deposits, run subscriptions and build estimates that convert into invoices with one click. Text a payment link mid-conversation and watch it clear before they leave the driveway.</p><ul class="idx__uses"><li>Invoices &amp; estimates</li><li>Subscriptions</li><li>Text-to-pay</li><li>Coupons</li></ul></div></div></div></div></div></div></div></div></section>
+<section class="band band--hairline band--tight" id="measure"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Measure</span><p class="band__rail-note">Attribution, reporting and the fact that all of it belongs to you.</p></div><div class="band__body"><h2 class="rv">Know what worked.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-reporting"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 21h18"/><rect x="5" y="12" width="3.5" height="6"/><rect x="10.5" y="7" width="3.5" height="11"/><rect x="16" y="3" width="3.5" height="15"/></svg><span><span class="idx__name">Reporting &amp; Attribution</span><span class="idx__sub">Which ad made which dollar, without a spreadsheet.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-reporting"><div><div class="idx__inner"><p>Dashboards for pipeline value, appointment volume, call outcomes, campaign performance and agent activity &mdash; with source attribution that follows a lead from the first ad click through to the payment. Scheduled reports land in your inbox so you look at them.</p><ul class="idx__uses"><li>Attribution</li><li>Pipeline value</li><li>Call reporting</li><li>Scheduled emails</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-access"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg><span><span class="idx__name">Users, Permissions &amp; Ownership</span><span class="idx__sub">Your account, your data, your logins &mdash; on day one.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-access"><div><div class="idx__inner"><p>Add your team with the permissions each of them should have, keep an audit trail of who changed what, and export everything whenever you want. Nothing about your business is held hostage inside our account, because it was never in our account.</p><ul class="idx__uses"><li>Unlimited users</li><li>Role permissions</li><li>Full export</li><li>Your domains</li></ul></div></div></div></div></div></div></div></div></section>
+
+<!-- ============================= CLOSING ============================ -->
+<section class="band band--hairline band--tighter">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">Learning it</span>
+        <p class="band__rail-note">The list is long. You don&rsquo;t start with all of it.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">Nobody turns all of this on in week one.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          We start you with the four things that make money fastest for your kind of
+          business &mdash; usually a funnel, a calendar, the missed-call text-back and
+          one booking agent &mdash; and we build the first ads pointing at them
+          together. The other fourteen features are there the day you need them,
+          with a walkthrough waiting.
+        </p>
+        <div class="cols cols--2 rv" data-d="2" style="margin-top:28px">
+          <div class="panel">
+            <span class="label">Learn it</span>
+            <h3 style="margin-top:14px">Included at $100</h3>
+            <p class="muted" style="font-size:.92rem;margin-top:10px">
+              Walkthroughs for every feature, live sessions, events, and your first
+              set of ads built with you on the call.
+            </p>
+          </div>
+          <div class="panel">
+            <span class="label">Or skip it</span>
+            <h3 style="margin-top:14px">Quoted, from $500</h3>
+            <p class="muted" style="font-size:.92rem;margin-top:10px">
+              Want a specific agent, funnel or automation built for you? That&rsquo;s
+              a Done-For-You project and we price it before we start.
+            </p>
+            <a class="btn btn--wire btn--sm" href="#dfy" style="margin-top:16px">See the tiers</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta__glow" aria-hidden="true"></div>
+  <div class="shell cta__in">
+    <div class="band__grid">
+      <div class="band__rail"><span class="label">Start</span></div>
+      <div class="band__body">
+        <h2 class="rv">All of it, for a hundred dollars.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          Flat. No per-contact billing, no per-seat billing, no agent tier. And your
+          first campaign goes live with us on the call.
+        </p>
+        <div class="hero__cta rv" data-d="2">
+          <a class="btn btn--ember" href="#" data-form
+             data-form-title="Start at $100 a month" data-form-intent="Features CTA — Start">
+            Start at $100
+            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--wire" href="#" data-form
+             data-form-title="Book a walkthrough" data-form-intent="Features CTA — Walkthrough">Book a walkthrough</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<div class="view" id="v-dfy">
+<!-- ============================== HERO ============================== -->
+<section class="hero" style="padding-block:clamp(58px,8vh,92px) clamp(48px,6vh,70px)">
+  <div class="hero__bg" aria-hidden="true"><div class="hero__glow" style="opacity:.7"></div>
+    <svg class="hero__mesh" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" fill="none">
+      <defs>
+        <pattern id="grid2" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M60 0H0v60" stroke="#1C2740" stroke-width="1"/>
+        </pattern>
+        <linearGradient id="fade2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="m2"><rect width="1200" height="420" fill="url(#fade2)"/></mask>
+      </defs>
+      <rect width="1200" height="420" fill="url(#grid2)" mask="url(#m2)"/>
+      <g stroke="#C9622E" stroke-width="1" opacity=".5">
+        <path d="M900 90h120v100h120"/>
+        <path d="M1020 190v90"/>
+      </g>
+      <g fill="#0A1122" stroke="#C9622E" stroke-width="1.4">
+        <rect x="892" y="82" width="14" height="14"/>
+        <rect x="1013" y="273" width="14" height="14"/>
+      </g>
+      <g fill="#C9622E"><rect x="1013" y="183" width="14" height="14"/><rect x="1133" y="183" width="14" height="14"/></g>
+    </svg></div>
+  <div class="shell hero__in">
+    <div class="hero__grid">
+      <div class="band__rail">
+        <span class="label">Done-For-You</span>
+        <p class="band__rail-note">Scoped, quoted, then built.</p>
+      </div>
+      <div class="hero__body">
+        <h1 class="rv is-in" style="font-size:clamp(2.3rem,5vw,3.7rem)">Don&rsquo;t want to build it?<br><em>Then don&rsquo;t.</em></h1>
+        <p class="lede hero__lede rv" data-d="1">
+          The $100 covers the software and the teaching. This page is for the other
+          thing &mdash; when you&rsquo;d rather we just built the agent, the funnel or
+          the whole system for you. It&rsquo;s a separate project with a separate price,
+          and you get that price in writing before anyone starts.
+        </p>
+        <div class="hero__cta rv" data-d="2">
+          <a class="btn btn--ember" href="#" data-form
+             data-form-title="Tell us what you want built"
+             data-form-intent="DFY hero — Scope">
+            Tell us what you want built
+            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--wire" href="#tiers">See the price bands</a>
+        </div>
+        <p class="hero__fine rv" data-d="3">
+          Requires an active $100 subscription &middot; Quoted before work starts &middot; Handover call included
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ THE RULE ============================ -->
+<section class="band band--hairline">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">The rule</span>
+        <p class="band__rail-note">Watching is free. Building is billed.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">Everything we teach is included.<br>Everything we build is quoted.</h2>
+        <div class="cols cols--2 rv" data-d="1" style="margin-top:28px">
+          <p class="lede">
+            Come to the sessions, watch the walkthroughs, show up at the events, and
+            build your own agents and workflows with us looking over your shoulder
+            &mdash; all of that is in the hundred dollars, forever, however many
+            times you need to ask.
+          </p>
+          <p class="lede">
+            The moment you&rsquo;d rather hand it over &mdash; &ldquo;just build me the
+            thing&rdquo; &mdash; that&rsquo;s work, and work has a number on it. We
+            scope it, tell you the number, and you decide. No retainer, no surprise
+            invoice, no scope that quietly grows.
+          </p>
+        </div>
+        <p class="note rv" data-d="2" style="margin-top:28px">
+          There&rsquo;s no upsell hiding inside the platform. Nothing you can build
+          yourself is locked behind a services fee &mdash; the fee is for our hours,
+          not for your access.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TIERS ============================= -->
+<section class="band band--hairline" id="tiers">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">Price bands</span>
+        <p class="band__rail-note">Where a project usually lands. Yours gets its own quote.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">Simple starts around $500.<br>Complicated can reach $10,000.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          The honest answer is that it depends on what you&rsquo;re asking for. These
+          bands show what past projects have looked like so you know roughly which
+          conversation we&rsquo;re having before you pick up the phone.
+        </p>
+
+        <div class="cols cols--3 rv" data-d="2" style="margin-top:32px">
+          <div class="tier">
+            <span class="label">Simple</span>
+            <span class="tier__amt">from $500<small>One clear ask &middot; days</small></span>
+            <ul>
+              <li>One booking or FAQ agent, trained on your offer</li>
+              <li>A single funnel with the follow-up behind it</li>
+              <li>Review-request or missed-call automation</li>
+              <li>Calendar, reminders and no-show recovery</li>
+              <li>Migrating your contact list in cleanly</li>
+            </ul>
+            <a class="btn btn--wire btn--sm" href="#" data-form
+               data-form-title="Scope a simple build" data-form-intent="DFY — Simple ($500+)"
+               style="margin-top:auto">Scope this</a>
+          </div>
+
+          <div class="tier tier--mark">
+            <span class="label">Involved</span>
+            <span class="tier__amt">$1,500&ndash;$5,000<small>Several moving parts &middot; weeks</small></span>
+            <ul>
+              <li>A super agent coordinating multiple agents</li>
+              <li>Full pipeline design with stage automations</li>
+              <li>Ad campaigns plus the funnels they point at</li>
+              <li>A course or membership built and gated</li>
+              <li>Multi-channel nurture across SMS, email and DM</li>
+            </ul>
+            <a class="btn btn--ember btn--sm" href="#" data-form
+               data-form-title="Scope an involved build" data-form-intent="DFY — Involved ($1.5k–$5k)"
+               style="margin-top:auto">Scope this</a>
+          </div>
+
+          <div class="tier">
+            <span class="label">Complex</span>
+            <span class="tier__amt">up to $10,000<small>Built to your business &middot; months</small></span>
+            <ul>
+              <li>Multi-location or franchise rollouts</li>
+              <li>Custom integrations with software you already run</li>
+              <li>A whole sales operation designed from scratch</li>
+              <li>Agents doing something nobody has built before</li>
+              <li>Team training and rollout alongside the build</li>
+            </ul>
+            <a class="btn btn--wire btn--sm" href="#" data-form
+               data-form-title="Scope a complex build" data-form-intent="DFY — Complex (up to $10k)"
+               style="margin-top:auto">Scope this</a>
+          </div>
+        </div>
+
+        <p class="note rv" data-d="3" style="margin-top:28px">
+          Bands are ranges, not a menu. A &ldquo;simple&rdquo; ask with six exceptions
+          in it isn&rsquo;t simple, and we&rsquo;ll say so on the scoping call rather
+          than halfway through the build.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== HOW IT WORKS ========================= -->
+<section class="band band--hairline band--tight">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">How it runs</span>
+        <p class="band__rail-note">Four conversations, one of them optional.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">You&rsquo;ll know the price before we touch anything.</h2>
+        <div class="ladder" style="margin-top:32px">
+          <div class="ladder__s rv">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">You tell us what you want</span></div>
+            <p class="ladder__d">A form or a twenty-minute call. What it should do, who it&rsquo;s for,
+              what already exists, and when you need it working.</p>
+          </div>
+          <div class="ladder__s rv" data-d="1">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">We come back with a number and a scope</span></div>
+            <p class="ladder__d">In writing: exactly what gets built, what it costs, how long it takes,
+              and what we&rsquo;d need from you. If it&rsquo;s something you could
+              genuinely build yourself in an hour, we&rsquo;ll tell you that instead
+              of taking the money.</p>
+          </div>
+          <div class="ladder__s rv" data-d="2">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">We build it in your account</span></div>
+            <p class="ladder__d">Not a copy, not a sandbox &mdash; your live account, so nothing has to
+              be migrated at the end and nothing is hostage at any point.</p>
+          </div>
+          <div class="ladder__s rv" data-d="3">
+            <div class="ladder__k"><span class="ladder__tick"></span><span class="ladder__t">We hand it over and show you the wiring</span></div>
+            <p class="ladder__d">A recorded walkthrough of what we built and why, so you can change it
+              yourself later. That handover is the point &mdash; we&rsquo;d rather
+              you never needed to hire us again.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SCOPE ============================= -->
+<section class="band band--hairline band--tighter" id="scope">
+  <div class="shell">
+    <div class="band__grid">
+      <div class="band__rail">
+        <span class="label">Get a quote</span>
+        <p class="band__rail-note">Usually back the same day.</p>
+      </div>
+      <div class="band__body">
+        <h2 class="rv">Tell us what you want built.</h2>
+        <div class="cols cols--2 rv" data-d="1" style="margin-top:28px;align-items:start">
+          <div>
+            <p class="lede">
+              Describe it in plain language &mdash; &ldquo;I want something that texts
+              every lead within a minute and books them&rdquo; is a perfectly good
+              spec. We&rsquo;ll turn it into a scope, put a number on it, and send it
+              back.
+            </p>
+            <p class="note" style="margin-top:24px">
+              Not sure whether you want it built or taught? Say so on the form. Half
+              the time the answer is &ldquo;come to Thursday&rsquo;s session, you&rsquo;ll
+              have it done by Friday&rdquo; &mdash; and that answer is free.
+            </p>
+          </div>
+          <div class="panel">
+            <span class="label">Scoping request</span>
+            <h3 style="margin-top:14px">What are we building?</h3>
+            <p class="muted" style="font-size:.92rem;margin:10px 0 20px">
+              Pick the band you think you&rsquo;re in &mdash; we&rsquo;ll correct it if
+              you&rsquo;re wrong, in either direction.
+            </p>
+            <a class="btn btn--ember btn--full" href="#" data-form
+               data-form-title="Tell us what you want built" data-form-intent="DFY — Scope form">
+              Start the scope
+              <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn--wire btn--full" href="#home/price" style="margin-top:10px">Or just start at $100</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta__glow" aria-hidden="true"></div>
+  <div class="shell cta__in">
+    <div class="band__grid">
+      <div class="band__rail"><span class="label">Either way</span></div>
+      <div class="band__body">
+        <h2 class="rv">More leads. More customers.<br>Built by you, or built for you.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:20px">
+          The software is the same hundred dollars either way. The only question is
+          whose hands are on the keyboard.
+        </p>
+        <div class="hero__cta rv" data-d="2">
+          <a class="btn btn--ember" href="#" data-form
+             data-form-title="Tell us what you want built" data-form-intent="DFY CTA — Scope">
+            Get a quote
+            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--wire" href="#home/price">Start at $100 instead</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+</main>
+<footer class="ftr">
+  <div class="shell">
+    <div class="ftr__grid">
+      <div>
+        <a class="logo" href="#home" aria-label="Growth Factor AI — home">
+          <svg class="logo__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="1" y="15" width="6" height="8" stroke="#8C99B0" stroke-width="1.4"/>
+            <rect x="9" y="9" width="6" height="14" stroke="#8C99B0" stroke-width="1.4"/>
+            <rect x="17" y="1" width="6" height="22" fill="#C9622E"/>
+          </svg>
+          <span class="logo__txt">Growth Factor<span>.ai</span></span>
+        </a>
+        <p class="muted" style="font-size:.875rem;max-width:34ch;margin-top:16px">
+          The whole growth stack for a hundred dollars, and someone on the other
+          end of the line who will teach you to run it.
+        </p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#features">Everything included</a></li>
+          <li><a href="#features/intelligence">AI Agents</a></li>
+          <li><a href="#features/intelligence">Super Agents</a></li>
+          <li><a href="#features/automate">Workflows</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#dfy">Done-For-You</a></li>
+          <li><a href="#dfy/scope">Get a quote</a></li>
+          <li><a href="#home/teach">The teach track</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Start</h4>
+        <ul>
+          <li><a href="#home/price">Pricing</a></li>
+          <li><a href="#" data-form data-form-title="Start at $100 a month" data-form-intent="Start — $100/mo">Create an account</a></li>
+          <li><a href="mailto:ben@growth-factor.ai">ben@growth-factor.ai</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ftr__base">
+      <span>&copy; <span data-year>2026</span> Growth Factor AI</span>
+      <span>Built, run and owned by you.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal" id="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-t">
+  <div class="modal__veil" data-form-close></div>
+  <div class="modal__box">
+    <button class="modal__x" data-form-close aria-label="Close">&#215;</button>
+    <span class="label">Growth Factor</span>
+    <h3 id="lead-modal-t" data-modal-title style="margin:12px 0 6px;font-size:1.42rem">Start at $100 a month</h3>
+    <p class="muted" style="font-size:.88rem;margin-bottom:22px">
+      Tell us where to reach you. A real person replies — usually same day.
+    </p>
+    <form method="post" action="lead.php">
+      <input type="hidden" name="intent" data-modal-intent value="General">
+      <div class="hp"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="row2">
+        <div class="field"><label for="f-first">First name</label><input id="f-first" name="first" type="text" required></div>
+        <div class="field"><label for="f-last">Last name</label><input id="f-last" name="last" type="text" required></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" required></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" required></div>
+      </div>
+      <div class="field">
+        <label for="f-biz">What business is this for?</label>
+        <input id="f-biz" name="business" type="text" placeholder="Gym, roofing, med spa, agency&hellip;">
+      </div>
+      <div class="field">
+        <label for="f-note">Anything we should know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="f-note" name="note" placeholder="What you're selling, what you've tried, what you want built."></textarea>
+      </div>
+      <button class="btn btn--ember btn--full" type="submit">
+        Send it
+        <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="muted" style="font-size:.72rem;margin-top:14px;font-family:var(--mono);letter-spacing:.04em">
+        No spam. No auto-dialer. We use the software on ourselves, so you'll see exactly how it feels.
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>document.querySelectorAll('[data-year]').forEach(function(e){e.textContent=new Date().getFullYear();});</script>
+
+<script>
+/* Growth Factor AI — portable components. Vanilla only, no framework,
+   so each piece can drop into a template platform as a custom block. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $  = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* ---------- sticky header state ---------- */
+  var hdr = $('.hdr');
+  if (hdr) {
+    var onScroll = function () { hdr.classList.toggle('is-stuck', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* ---------- mobile nav ---------- */
+  var burger = $('.burger'), nav = $('.nav');
+  if (burger && nav) {
+    burger.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) { nav.classList.remove('is-open'); }
+    });
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  var io = null;
+  function initReveal(root) {
+    var reveals = $$('.rv, .draw', root || document);
+    if (!reveals.length) { return; }
+    if (reduce || !('IntersectionObserver' in window)) {
+      reveals.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    if (!io) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    }
+    reveals.forEach(function (el) { if (!el.classList.contains('is-in')) { io.observe(el); } });
+  }
+  initReveal();
+  window.GFReveal = initReveal;   /* preview router re-arms on view change */
+
+  /* ---------- MOTIF: node/edge diagrams draw themselves in ---------- */
+  $$('.draw').forEach(function (svg) {
+    $$('path, line, polyline', svg).forEach(function (p) {
+      var len = 600;
+      try { len = Math.ceil(p.getTotalLength()) || 600; } catch (e) {}
+      p.style.setProperty('--len', len);
+    });
+  });
+
+  /* ---------- MOTIF: terminal caret + rotating line (used once) ---------- */
+  var typer = $('[data-type]');
+  if (typer) {
+    var out = $('.type__out', typer);
+    var words;
+    try { words = JSON.parse(typer.getAttribute('data-type')); }
+    catch (e) { words = []; }
+    if (out && words.length) {
+      if (reduce) {
+        out.textContent = words[0];
+      } else {
+        var wi = 0, ci = 0, del = false;
+        (function tick() {
+          var w = words[wi];
+          ci += del ? -1 : 1;
+          out.textContent = w.slice(0, ci);
+          var wait = del ? 34 : 62;
+          if (!del && ci === w.length) { del = true; wait = 1900; }
+          else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; wait = 320; }
+          setTimeout(tick, wait);
+        })();
+      }
+    }
+  }
+
+  /* ---------- expandable feature index ---------- */
+  $$('.idx__btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var row = btn.closest('.idx__row');
+      var open = row.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+
+  /* ---------- popup lead form (house standing instruction) ---------- */
+  var modal = $('#lead-modal');
+  if (modal) {
+    var lastFocus = null;
+    var titleEl   = $('[data-modal-title]', modal);
+    var intentEl  = $('[data-modal-intent]', modal);
+
+    var open = function (trigger) {
+      lastFocus = trigger || document.activeElement;
+      var t = trigger && trigger.getAttribute('data-form-title');
+      var i = trigger && trigger.getAttribute('data-form-intent');
+      if (titleEl && t) { titleEl.textContent = t; }
+      if (intentEl) { intentEl.value = i || (t || 'General'); }
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      var first = $('input, select, textarea', modal);
+      if (first) { first.focus(); }
+    };
+    var close = function () {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      if (lastFocus) { lastFocus.focus(); }
+    };
+
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-form]');
+      if (t) { e.preventDefault(); open(t); return; }
+      if (e.target.closest('[data-form-close]')) { e.preventDefault(); close(); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) { close(); }
+      if (e.key === 'Tab' && modal.classList.contains('is-open')) {
+        var f = $$('button, input, select, textarea, a[href]', modal)
+                  .filter(function (el) { return el.offsetParent !== null; });
+        if (!f.length) { return; }
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  }
+})();
+
+</script>
+<script>
+
+(function(){
+  var views = {}, order = ['home','features','dfy'];
+  order.forEach(function(k){ views[k] = document.getElementById('v-'+k); });
+  var nav = document.querySelectorAll('.nav a[data-view]');
+
+  function show(view, frag, push){
+    if(!views[view]) view = 'home';
+    order.forEach(function(k){ views[k].classList.toggle('is-active', k===view); });
+    nav.forEach(function(a){
+      if(a.getAttribute('data-view')===view){ a.setAttribute('aria-current','page'); }
+      else { a.removeAttribute('aria-current'); }
+    });
+    if(window.GFReveal){ window.GFReveal(views[view]); }
+    if(frag){
+      var el = views[view].querySelector('#'+frag) || document.getElementById(frag);
+      if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); return; }
+    }
+    window.scrollTo(0,0);
+  }
+
+  function route(){
+    var h = (location.hash||'').replace(/^#/,'');
+    if(!h){ show('home'); return; }
+    var parts = h.split('/');
+    if(views[parts[0]]){ show(parts[0], parts[1]); return; }
+    /* a bare fragment: find whichever view owns it */
+    for(var i=0;i<order.length;i++){
+      if(views[order[i]].querySelector('#'+CSS.escape(h))){ show(order[i], h); return; }
+    }
+    show('home');
+  }
+  window.addEventListener('hashchange', route);
+  route();
+})();
+
+</script>
