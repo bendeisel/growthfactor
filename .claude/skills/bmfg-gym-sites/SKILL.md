@@ -144,3 +144,11 @@ across every programme page.
 - `references/gym-anatomy.md` — page inventory, the shared class-data model,
   and how programme/schedule/coach pages relate.
 - `references/verification.md` — the pre-publish checks that catch real bugs.
+
+## Companion artifact
+
+A readable version of this standard — the memory-palace copy Ben returns to —
+lives at https://claude.ai/code/artifact/72cad0e7-ee7c-4fb3-a11f-8af223d739af
+
+Keep the two in step: this skill is what Claude reads at build time, the
+artifact is what Ben reads when judging. If a rule changes here, update there.
