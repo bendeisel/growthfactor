@@ -4,6 +4,18 @@
 (function () {
   'use strict';
 
+
+  /* --- hero entrance: stagger the children in on load --- */
+  var hero = document.querySelector('.hero');
+  if (hero) {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        hero.classList.add('is-ready');
+        document.body.classList.add('hero-done');
+      });
+    });
+  }
+
   /* --- sticky header --- */
   var hdr = document.getElementById('hdr');
   if (hdr) {

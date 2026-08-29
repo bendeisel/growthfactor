@@ -58,12 +58,13 @@
     "type_stance": "4 condensed caps dominant",
     "density": "dense",
     "rhythm": "interlocked",
-    "color_stance": "alternating high contrast"
+    "color_stance": "dark-dominant, one light moment at the primary action"
   },
   "divergence_check": {
     "neighbour": "Nashville MMA Training Camp (martial arts gym, Nashville TN, same city)",
     "neighbour_axes": "E editorial rail / 1 extreme contrast / duotone gold #D7AD56 / dense / punctuated",
     "differs_on": ["structure", "type_stance", "color_stance", "rhythm"],
+    "color_stance_note": "Changed from alternating high contrast to dark-dominant at client request. Still differs from the neighbour's duotone gold: this palette stays achromatic, and #F5F5F5 now appears exactly once, on the featured membership card.",
     "shared_display_face": "Bebas Neue is shared with the neighbour and CANNOT be changed — it is Fuel Fortress's own face, frozen by lock 2. Divergence is therefore carried entirely by the other axes, which differ on four of five.",
     "body_face_differs": "DM Sans vs Montserrat"
   }

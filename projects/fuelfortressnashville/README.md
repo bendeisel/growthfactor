@@ -101,6 +101,31 @@ code.
 4. **Branded email** — using `fuelfortress615@gmail.com` as instructed until the
    branded address exists. One constant in `lead.php`, one line in the footer.
 
+## Dark mode and the hero animation
+
+The page is dark throughout. The earlier build alternated `#090909` bands with
+`#F5F5F5` ones; the client read those light bands as the page switching to light
+mode, so the color stance moved from *alternating high contrast* to *dark-dominant*.
+`#F5F5F5` now appears exactly once, on the featured membership card — the single
+light moment lands on the primary action.
+
+The hero children fade up in sequence on load, porting the timing from a
+framer-motion hero the client liked (0.1s delay, 0.15s stagger, 0.5s ease-out, 20px
+rise) into plain CSS transitions with staggered `transition-delay`. The credential
+plate follows. `prefers-reduced-motion` disables all of it. **Only the motion was
+taken** — the source component's pill badge, gradient-clipped text, icon set and
+placeholder statistics were not, since lock 3 permits amplifying what the site has
+and forbids importing what it doesn't.
+
+## Stack note
+
+This is a static HTML/CSS/JS site, deliberately framework-free per
+`references/hostinger-delivery.md`, so the house components drop into a template
+platform unchanged. There is no `package.json`, React, TypeScript or Tailwind here,
+and adding them would break that delivery model. React components sourced from
+shadcn/ui are therefore treated as **design reference to port**, not as code to
+install.
+
 ## Step 5 self-audit (house-style)
 
 - **Did any word change?** Yes, extensively — but only under explicit client
