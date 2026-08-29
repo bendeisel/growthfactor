@@ -80,6 +80,13 @@ the **About** and **Contact** pages pull `dji_mimo_20241121_*` and
 `dji_mimo_20250912_*`, both of which pre-date Nashville opening and are almost
 certainly other Fuel Fortress locations. Those must not be carried over.
 
+## Band color
+
+Alternating bands and the fixed header share `#232323`, taken from the client's own
+Elementor data (389 occurrences). An earlier revision had the header on an
+improvised `#202020`, which was a drift: it was never in the kernel. Corrected, so
+the header and the alternating sections are now the same declared value.
+
 ## Staffed hours
 
 Taken from the live site's own footer template (post 22): Mon to Fri 8:00 AM to

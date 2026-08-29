@@ -20,6 +20,7 @@
     "--ground": "#090909",
     "--ground-raise": "#111111",
     "--ground-edge": "#1A1A1A",
+    "--band-alt": "#232323",
     "--light": "#F5F5F5",
     "--white": "#FFFFFF",
     "--text-dim": "#666666",
@@ -34,7 +35,7 @@
   "token_colors_ranked": [
     "#FFFFFF", "#666666", "#F5F5F5", "#090909", "#888888",
     "#C8C8C8", "#1A1A1A", "#111111", "#D4D4D4", "#6E6E6E",
-    "#B8B8B8", "#E0E0E0", "#3A3A3A"
+    "#B8B8B8", "#E0E0E0", "#3A3A3A", "#232323"
   ],
   "excluded_colors": {
     "#54595F": "Elementor default system 'Secondary' — never applied.",
