@@ -319,7 +319,7 @@ PAGES["index.html"] = dict(
     <div class="stack rv">
       <div class="stack-row"><h3>The Floor</h3><div><p>Racks, competition platforms, free weights and a dumbbell run that goes heavy enough to matter.</p><p class="stack-link"><a href="gym.html">Tour the gym</a></p></div></div>
       <div class="stack-row"><h3>The Sauna</h3><div><p>Cleaned daily, included with every membership, and hot when you get there.</p><p class="stack-link"><a href="gym.html#sauna">More on recovery</a></p></div></div>
-      <div class="stack-row"><h3>Kickboxing</h3><div><p>A couple of sessions a week with Teryn, included with your membership at no extra cost.</p><p class="stack-link"><a href="kickboxing.html">More on kickboxing</a></p></div></div>
+      <div class="stack-row"><h3>Kickboxing</h3><div><p>Teryn is a former fighter and one of the owners. Twice a week she runs kickboxing for members, and it is an outstanding workout whether or not you ever want to learn to strike.</p><p class="stack-link"><a href="kickboxing.html">More on kickboxing</a></p></div></div>
       <div class="stack-row"><h3>Add-Ons</h3><div><p>Personal training and ready-made meals, both priced separately from membership.</p><p class="stack-link"><a href="addons.html">See add-ons</a></p></div></div>
     </div>
   </div>
@@ -421,7 +421,7 @@ PAGES["gym.html"] = dict(
     <div class="stack rv">
       <div class="stack-row"><h3>The Weightlifting Floor</h3><div><p>Racks, competition platforms, free weights and a dumbbell run that goes heavy enough to matter, with plate-loaded machines along the far wall. Whether you are chasing a powerlifting total or building for bodybuilding, it is laid out so you can superset without crossing the building or waiting out somebody's phone break.</p><p class="stack-link"><a href="equipment.html">See the equipment</a></p></div></div>
       <div class="stack-row"><h3>24 Hour Member Access</h3><div><p>Your schedule doesn't fit in a nine to five window, so your gym shouldn't either. Sign up online and your QR code is your key from that minute. Early mornings, late nights, holidays, whenever the gap in your day shows up.</p><p class="stack-link"><a href="membership.html#signup">How signing up works</a></p></div></div>
-      <div class="stack-row"><h3>Kickboxing</h3><div><p>Teryn, one of the owners and our GM, is a former fighter who runs a couple of kickboxing sessions a week. It comes with your membership at no extra cost.</p><p class="stack-link"><a href="kickboxing.html">More on kickboxing</a></p></div></div>
+      <div class="stack-row"><h3>Kickboxing</h3><div><p>Teryn is a former fighter and one of the owners of the gym. Twice a week she runs kickboxing for members: a serious workout on its own, and real striking instruction if you want it. You do not have to be a fighter, and it costs nothing extra.</p><p class="stack-link"><a href="kickboxing.html">More on kickboxing</a></p></div></div>
       <div class="stack-row"><h3>Clean, Every Day</h3><div><p>Wiped down daily, restocked daily, and the sauna is part of that routine rather than an exception to it. Half our Google reviews mention it without being asked.</p></div></div>
     </div>
   </div>
@@ -515,23 +515,39 @@ PAGES["membership.html"] = dict(
       <div class="plan">
         <span class="tag">Day Pass</span>
         <p class="price">$25<sub>/ day</sub></p>
-        <p>Try the fortress before you commit. Walk in, train hard, walk out.</p>
+        <p class="plan-blurb">Try the fortress before you commit. Walk in, train hard, walk out.</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>Full floor, sauna and kickboxing</span></li>
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>No commitment of any kind</span></li>
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>Same access a member gets</span></li>
+        </ul>
         <button class="btn" data-modal="daypass">Get Started</button>
       </div>
       <div class="plan is-feature">
-        <span class="tag">&#9733; Annual, best value</span>
+        <span class="plan-badge">Most Popular</span>
+        <span class="tag">Annual</span>
         <p class="price">$84.99<sub>/ mo</sub></p>
-        <p>Lock in the lowest rate. Full access to every location and every amenity.</p>
+        <p class="plan-blurb">Lock in the lowest rate we offer, billed annually.</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>Our lowest monthly rate</span></li>
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>All four locations, KY and TN</span></li>
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>Everything included, no add-on fees</span></li>
+        </ul>
         <button class="btn" data-modal="annual">Join Now</button>
       </div>
       <div class="plan">
         <span class="tag">Month to Month</span>
         <p class="price">$104.99<sub>/ mo</sub></p>
-        <p>Full access with complete flexibility. Cancel anytime, no penalties.</p>
+        <p class="plan-blurb">Full access with complete flexibility.</p>
+        <ul class="plan-feats">
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>Cancel anytime, no penalties</span></li>
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>All four locations, KY and TN</span></li>
+          <li><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><path d="M7.162 13.5 2.887 9.225l1.07-1.069 3.205 3.207 6.882-6.882 1.069 1.07z"/></svg><span>Everything included, no add-on fees</span></li>
+        </ul>
         <button class="btn" data-modal="monthly">Get Started</button>
       </div>
     </div>
-    <p class="small rv" style="margin-top:24px">Family memberships include two members. Additional members +$40/month. Active duty military, first responders and students receive special pricing, valid ID required.</p>
+    <p class="fineprint rv">Family memberships include two members. Additional members +$40/month. Active duty military, first responders and students receive special pricing, valid ID required.</p>
   </div>
 </section>
 
@@ -542,7 +558,7 @@ PAGES["membership.html"] = dict(
     <ul class="plain rv">
       <li><h3>The Weightlifting Floor</h3><p>Arsenal Strength, Atlantis, Hammer Strength and Rogers Athletic, plus free weights and competition platforms.</p></li>
       <li><h3>The Sauna</h3><p>Cleaned daily, no upcharge, no booking window.</p></li>
-      <li><h3>Kickboxing</h3><p>A couple of sessions a week with Teryn, at no extra cost.</p></li>
+      <li><h3>Kickboxing</h3><p>Twice a week with Teryn, a former fighter and one of the owners. No extra cost.</p></li>
       <li><h3>24 Hour Access</h3><p>Your QR code is your key, from the minute you sign up.</p></li>
       <li><h3>All Four Locations</h3><p>Kentucky and Tennessee, one membership, no transfer fees.</p></li>
       <li><h3>Discounts</h3><p>Military, first responders and students, with valid ID.</p></li>
@@ -608,46 +624,46 @@ PAGES["kickboxing.html"] = dict(
  title="Kickboxing in Nashville, TN | Included With Membership | Fuel Fortress",
  desc="Kickboxing at Fuel Fortress Nashville: a couple of recreational sessions a week run by Teryn, a former fighter and one of the owners. Included with every membership at no extra cost.",
  canon="kickboxing.html", ld="",
- main=page_hero("Kickboxing","Somebody to<br>hit pads with.",
-   "A couple of kickboxing sessions a week, run by Teryn, one of the owners and our general manager. It comes with your membership at no extra cost, and it is recreational rather than a program.",
+ main=page_hero("Kickboxing","Train with a<br>former fighter.",
+   "Teryn is a former fighter and one of the owners of the gym. Twice a week she runs kickboxing for members: an outstanding workout on its own, and real striking instruction if you want to take it further. You do not have to be a fighter. Included with every membership.",
    "Kickboxing hero","img/kickboxing-hero.jpg") + '''
 
 <section class="band">
   <div class="band-inner">
     <p class="eyebrow rv">Who Runs It</p>
     <h2 class="d2 rv">Teryn.</h2>
-    <p class="lede rv">Teryn is one of the owners of Fuel Fortress and the general manager here in Nashville. She is a former fighter and a Muay Thai enthusiast, and she started running these sessions for a straightforward reason: she wanted people to train with. That is still what this is.</p>
-    <p class="lede rv">It is not a revenue stream and we are not going to pretend it is a fight camp. It is a couple of sessions a week where members who want to hit something get to, with somebody who genuinely knows how.</p>
+    <p class="lede rv">Teryn is one of the owners of Fuel Fortress and the general manager here in Nashville. She is a former fighter with a Muay Thai background, and she is the one holding the pads.</p>
+    <p class="lede rv">That matters more than it sounds. You are learning from somebody who actually competed, not from an instructor who took a weekend certification and can only teach you the shapes. If you want technique, she can teach you technique. If you want to hit something hard for an hour and leave soaked, that works just as well.</p>
   </div>
 </section>
 
 <section class="band on-light">
   <div class="band-inner">
     <p class="eyebrow rv">Being Straight</p>
-    <h2 class="d2 rv">What this is,<br>and what it isn't.</h2>
+    <h2 class="d2 rv">Come for either reason.</h2>
     <div class="addons rv">
       <article class="addon">
-        <span class="addon-tag">What it is</span>
-        <h3>Recreational</h3>
-        <p>A couple of sessions a week, open to members, run by someone who fought. Come hit pads, work some rounds, get your conditioning in, and leave. No belt system, no grading, no attendance record.</p>
+        <span class="addon-tag">Reason one</span>
+        <h3>It's an incredible workout</h3>
+        <p>Rounds on the bags and the pads will do more for your conditioning than any treadmill in this building, and you get to hit something while it happens. No experience needed, nobody watching to see whether you look good doing it. Show up once a week or show up every time.</p>
       </article>
       <article class="addon">
-        <span class="addon-tag">What it isn't</span>
-        <h3>Not a program</h3>
-        <p>We do not run a martial arts program, a class timetable or a fight team out of this building. If you want structured competition coaching, we would rather point you somewhere that specialises in it than oversell what we do.</p>
+        <span class="addon-tag">Reason two</span>
+        <h3>You can actually learn to strike</h3>
+        <p>Kickboxing and Muay Thai, taught properly, by someone who competed. Take it as far as you want. Plenty of members come for the workout and end up caring about their technique, which is exactly how it should go.</p>
       </article>
     </div>
-    <p class="small rv" style="margin-top:26px">Included with every membership. <a class="ulink" href="membership.html">See pricing</a></p>
+    <p class="small rv" style="margin-top:26px">Included with every membership, at no extra cost. <a class="ulink" href="membership.html">See pricing</a></p>
   </div>
 </section>
 
 ''' + faq([
-  ("Does kickboxing cost extra?","No. It comes with your membership at no extra cost."),
-  ("Do I need experience?","No. It is recreational and beginners are welcome. Teryn will show you how to hold pads and throw properly."),
+  ("Does kickboxing cost extra?","No. It comes with your membership at no extra cost, on every plan including the day pass."),
+  ("Do I need experience?","None at all. Most people who come have never thrown a punch. Teryn will show you how to hold pads and throw properly from your first session."),
   ("Do I need my own gloves?","Ask at the front desk before your first session and we will tell you what to bring."),
-  ("When are the sessions?","A couple of times a week. Times move around, so call (615) 562-3966 or ask at the desk for this week's schedule."),
-  ("Is this Muay Thai or kickboxing?","The sessions are kickboxing. Teryn's own background is Muay Thai, so some of that turns up in how she teaches."),
-  ("Is there a fight team?","No. This is recreational only."),
+  ("When are the sessions?","Twice a week. Times move around, so call (615) 562-3966 or ask at the desk for this week's schedule."),
+  ("Is this Muay Thai or kickboxing?","The sessions are billed as kickboxing, and Teryn's own background is Muay Thai, so you can learn either. Tell her what you are interested in."),
+  ("Do you have a fight team?","No. You can learn real striking here, but we do not run a competition program. If your goal is to fight, we will happily point you to a gym that specialises in it."),
 ], "Kickboxing Questions", "Questions about kickboxing.") + "\n\n" + cta(
   "Kickboxing","It comes with the membership.",
   "Join the gym and the sessions are yours. Ask at the desk for this week's times."))

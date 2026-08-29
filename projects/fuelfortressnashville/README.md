@@ -97,6 +97,23 @@ the **About** and **Contact** pages pull `dji_mimo_20241121_*` and
 `dji_mimo_20250912_*`, both of which pre-date Nashville opening and are almost
 certainly other Fuel Fortress locations. Those must not be carried over.
 
+## Two deliberate exceptions to the hard-edge rule
+
+The kernel's radius pairing is containers-square, actions-8px. The pricing cards
+break it on purpose at the client's request: 14px corners and a pill badge, so the
+one commercial moment lifts off a page that is otherwise all hard edges. Everything
+else stays square. Easy to revert by dropping `border-radius` on `.plan`.
+
+Second: `.plan-feats` lists only what actually differs between plans. Every plan,
+day pass included, gets the whole gym, so listing the same six amenities three times
+would be noise rather than information.
+
+## Contrast
+
+Body copy previously sat on `#666666`, which is roughly 3.6:1 on the `#090909`
+ground and genuinely hard to read. Fine print, FAQ answers and plan copy are now
+white or `#C8C8C8`. Both are kernel values.
+
 ## Band color
 
 Alternating bands and the fixed header share `#232323`, taken from the client's own

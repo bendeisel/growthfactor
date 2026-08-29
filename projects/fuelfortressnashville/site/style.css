@@ -50,7 +50,7 @@ a{color:inherit;text-decoration:none}
 /* body kept small and quiet, the whole point of stance 4 */
 p{margin:0 0 1em}
 .lede{font-size:clamp(15px,1.35vw,18px);color:var(--text-soft);max-width:62ch;line-height:1.7}
-.small{font-size:13px;color:var(--text-dim);line-height:1.65}
+.small{font-size:13.5px;color:var(--text-soft);line-height:1.7}
 
 /* eyebrow, the site's most consistent existing motif, amplified */
 .eyebrow{
@@ -125,7 +125,7 @@ p{margin:0 0 1em}
   background:currentColor;transform:translateY(-50%);transition:opacity .25s,transform .25s}
 .faq-item[open] summary::before{opacity:0;transform:translateY(-50%) rotate(90deg)}
 .faq-a{padding:0 0 clamp(20px,2.4vw,28px) 0;max-width:74ch}
-.faq-a p{margin:0;font-size:14.5px;line-height:1.75;color:var(--text-dim)}
+.faq-a p{margin:0;font-size:14.5px;line-height:1.75;color:var(--text-soft)}
 
 /* ---------- header call button + current page ---------- */
 .btn-call{padding:11px 20px;font-size:10px;white-space:nowrap;flex:none}
@@ -230,7 +230,7 @@ p{margin:0 0 1em}
 .rail-item b{font-family:var(--display);font-weight:400;font-size:clamp(24px,2.6vw,34px);
   line-height:1;letter-spacing:.04em;font-variant-numeric:tabular-nums}
 .rail-item b i{font-style:normal;font-size:.62em;margin-left:3px;vertical-align:.12em}
-.rail-item span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)}
+.rail-item span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-soft)}
 
 /* ---------- equipment showcase ----------
    An index of four names, one stage. Amplifies the site's own 01-04 numerals,
@@ -255,7 +255,7 @@ p{margin:0 0 1em}
 .eq-name{font-family:var(--display);font-size:clamp(28px,4.4vw,58px);
   letter-spacing:.045em;line-height:.95;text-transform:uppercase;color:inherit}
 .eq-kick{grid-column:2;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--text-dim);margin-top:9px;opacity:0;max-height:0;overflow:hidden;
+  color:var(--text-soft);margin-top:9px;opacity:0;max-height:0;overflow:hidden;
   transition:opacity .35s ease,max-height .35s ease}
 .eq-item.is-active .eq-kick{opacity:1;max-height:3em}
 .eq-stage{position:relative;border-left:1px solid var(--rule);
@@ -282,7 +282,7 @@ p{margin:0 0 1em}
   font-variant-numeric:tabular-nums;margin-bottom:clamp(18px,2.4vw,30px)}
 .steps h4{font-family:var(--display);font-size:clamp(19px,1.8vw,26px);letter-spacing:.07em;
   text-transform:uppercase;font-weight:400;margin:0 0 10px;line-height:1.1}
-.steps p{font-size:13.5px;line-height:1.65;color:var(--text-soft);margin:0}
+.steps p{font-size:13.8px;line-height:1.7;color:var(--text-soft);margin:0}
 
 /* ---------- pull quote ---------- */
 .pull{margin-inline:0;border-left:2px solid var(--white);padding:6px 0 6px 26px;margin:clamp(34px,4vw,52px) 0 0;max-width:70ch}
@@ -291,22 +291,44 @@ p{margin:0 0 1em}
 .pull cite{display:block;margin-top:14px;font-style:normal;font-size:10.5px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)}
 
-/* ---------- pricing ---------- */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);margin-top:clamp(34px,4vw,52px)}
-.plan{background:var(--ground);padding:clamp(30px,3.4vw,46px);display:flex;flex-direction:column}
-.plan.is-feature{background:var(--light);color:var(--ground)}
-.plan .tag{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;display:block}
+/* ---------- pricing ----------
+   The one place on the site with soft corners, so it lifts off a page that is
+   otherwise all hard edges. Each card carries its own outline. */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,22px);
+  margin-top:clamp(40px,4.6vw,60px);align-items:stretch}
+.plan{position:relative;background:var(--ground);border:1px solid var(--rule);
+  border-radius:14px;padding:clamp(30px,3.2vw,42px) clamp(22px,2.4vw,32px);
+  display:flex;flex-direction:column;text-align:center;
+  transition:border-color .3s ease,transform .3s cubic-bezier(.25,.46,.45,.94)}
+.plan:hover{border-color:var(--text-mid);transform:translateY(-4px)}
+.plan.is-feature{background:var(--light);color:var(--ground);border-color:var(--light)}
+.plan.is-feature:hover{border-color:var(--light)}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--ground);color:var(--white);border:1px solid var(--rule);
+  border-radius:999px;padding:6px 16px;white-space:nowrap;
+  font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+.plan .tag{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--text-soft);margin-bottom:18px;display:block}
 .plan.is-feature .tag{color:var(--grey-6e)}
-.plan .price{font-family:var(--display);font-size:clamp(40px,4.6vw,66px);letter-spacing:.03em;line-height:1;margin:0}
-.plan .price sub{font-family:var(--body);font-size:12px;letter-spacing:.1em;
-  color:var(--text-dim);vertical-align:baseline;margin-left:7px;bottom:0}
+.plan .price{font-family:var(--display);font-size:clamp(44px,5vw,70px);letter-spacing:.03em;
+  line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.plan .price sub{font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:.1em;
+  color:var(--text-soft);vertical-align:baseline;margin-left:6px;bottom:0}
 .plan.is-feature .price sub{color:var(--grey-6e)}
-.plan p{font-size:13.5px;color:var(--text-soft);margin:16px 0 26px;flex:1}
-.plan.is-feature p{color:var(--text-dim)}
-.plan .btn{width:100%}
+.plan-blurb{font-size:14px;line-height:1.6;color:var(--white);margin:16px 0 0}
+.plan.is-feature .plan-blurb{color:var(--ground)}
+.plan-feats{list-style:none;margin:24px 0 30px;padding:0;text-align:left;flex:1;
+  display:flex;flex-direction:column;gap:11px}
+.plan-feats li{display:flex;align-items:flex-start;gap:10px;
+  font-size:13.5px;line-height:1.5;color:var(--white)}
+.plan.is-feature .plan-feats li{color:var(--ground)}
+.tick{width:17px;height:17px;flex:none;margin-top:1px;fill:var(--white)}
+.plan.is-feature .tick{fill:var(--ground)}
+.plan .btn{width:100%;border-radius:9px}
 .plan.is-feature .btn{background:var(--ground);color:var(--light);border-color:var(--ground)}
 .plan.is-feature .btn:hover{background:transparent;color:var(--ground)}
-
+.fineprint{margin:clamp(26px,3vw,36px) 0 0;font-size:14px;line-height:1.7;
+  color:var(--white);max-width:80ch}
 
 /* ---------- the gym: stacked editorial rows, deliberately not cards ---------- */
 .stack{margin-top:clamp(34px,4vw,54px);border-top:1px solid var(--rule)}
@@ -316,7 +338,7 @@ p{margin:0 0 1em}
 .stack-row:hover{padding-left:clamp(8px,1.2vw,18px)}
 .stack-row h3{font-family:var(--display);font-size:clamp(24px,3.2vw,44px);letter-spacing:.05em;
   text-transform:uppercase;font-weight:400;margin:0;line-height:.98;color:var(--white)}
-.stack-row p{font-size:14.5px;line-height:1.75;color:var(--text-soft);margin:0}
+.stack-row p{font-size:14.5px;line-height:1.78;color:var(--text-soft);margin:0}
 .stack-link{margin-top:14px !important}
 .stack-link a,.ulink{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--white);border-bottom:1px solid var(--rule);padding-bottom:3px;transition:border-color .25s}
@@ -449,7 +471,7 @@ p{margin:0 0 1em}
   .nav a{padding:14px 0;border-bottom:1px solid var(--ground-edge)}
   .navtoggle{display:block;margin-left:auto}
   .split{grid-template-columns:1fr}
-  .plans{grid-template-columns:1fr}
+  .plans{grid-template-columns:1fr;gap:26px}
   .mosaic .slot,.mosaic .slot:nth-child(1),.mosaic .slot:nth-child(6){flex:1 1 calc(50% - 6px);height:220px}
 }
 @media (max-width:620px){
