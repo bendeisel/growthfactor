@@ -46,24 +46,25 @@ def grid_rows(classes):
     # header row
     out.append('      <div></div>')
     for d in DAYS:
-        out.append('      <div style="background: %s; color: #0A0A0A; font-family: %s; font-size: 26px; '
-                   'text-align: center; padding: 10px 0; letter-spacing: 0.04em; '
+        out.append('      <div style="background: %s; color: #0A0A0A; font-family: %s; font-size: 30px; '
+                   'text-align: center; padding: 12px 0; letter-spacing: 0.04em; '
                    'border-left: 1px solid rgba(0,0,0,0.15)">%s</div>' % (GOLD, BEBAS, d))
     # time rows
     for s_ in slots:
-        out.append('      <div class="micro" style="font-size: 12px; color: rgba(255,255,255,0.62); '
-                   'padding: 14px 16px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); '
+        out.append('      <div class="micro" style="font-size: 13.5px; color: rgba(255,255,255,0.68); '
+                   'padding: 16px 16px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); '
                    'white-space: nowrap">%s</div>' % label[s_])
         for d in DAYS:
             chips = []
             for c in by[(s_, d)]:
                 head, lvl = split_name(c["name"])
-                lvl_html = ('<span style="display: block; font-size: 11px; font-weight: 700; '
-                            'letter-spacing: 0.1em; text-transform: uppercase; color: %s; margin-top: 3px">%s</span>'
+                lvl_html = ('<span style="display: block; font-size: 12.5px; font-weight: 700; '
+                            'letter-spacing: 0.09em; text-transform: uppercase; color: %s; margin-top: 5px">%s</span>'
                             % (GOLD, esc(lvl))) if lvl else ""
                 chips.append(
-                    '<div class="cls" data-aud="%s" data-prog="%s" style="%s; padding: 9px 11px">'
-                    '<span style="display: block; font-size: 13px; font-weight: 700; line-height: 1.3; color: #FFFFFF">%s</span>'
+                    '<div class="cls" data-aud="%s" data-prog="%s" style="%s; padding: 12px 14px; '
+                    'flex: 1 1 0; display: flex; flex-direction: column; justify-content: center">'
+                    '<span style="display: block; font-size: 16px; font-weight: 700; line-height: 1.28; color: #FFFFFF">%s</span>'
                     '%s</div>' % (c["audience"], " ".join(c["programs"]), PANEL, esc(head), lvl_html))
             out.append('      <div style="border-left: 1px solid rgba(255,255,255,0.09); '
                        'border-top: 1px solid rgba(255,255,255,0.09); padding: 8px; display: flex; '
