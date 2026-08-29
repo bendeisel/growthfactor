@@ -1,0 +1,1681 @@
+DrChrono Implementation Guide
+Aeterna Club & Compass Human Performance
+Step-by-Step Build Guide for Staff
+Version 2.0  •  2026-06-10  •  Aligned with CA v2026.6
+How to Use This Guide
+This document is a click-by-click implementation guide. Do not skip steps and do not invent your own sequence. Each section is numbered in the order it must be built. The entitlement tracker, smart phrases, and note templates depend on the appointment types, custom fields, and user roles being created first.
+Intended users: Office Manager, Longevity Coordinators, RN, Front Desk. Each step flags which role owns it. The Medical Director reviews clinical templates once they are loaded.
+Estimated time to execute: 32–40 staff-hours over 4 weeks. Do not attempt to complete in under a week. Build sequence is deliberate.
+Build Sequence (Follow In Order)
+Week 1 — Practice configuration, provider and user setup, appointment types, custom fields
+Week 2 — Smart phrase library, note templates, entitlement tracker per tier
+Week 3 — Reports, lab integration, pharmacy, PEMF rule enforcement, metric capture points
+Week 4 — Clinical workflows rehearsal with test patient, GoHighLevel integration, staff training dry run
+Success Criteria
+A test patient can be onboarded end-to-end in under 90 minutes with no missing fields.
+Every smart phrase fires correctly; every note template loads with prefilled fields.
+The entitlement tracker reflects tier automatically upon patient creation.
+Monthly coordinator, quarterly MD, and IV procedure notes complete cleanly with all required captures.
+A member crossing any cap triggers an alert visible to Coordinator + Office Manager within 15 minutes.
+All 14 cockpit metrics can be pulled from DrChrono reports without manual workarounds.
+Section 1 — Practice Configuration
+Role: Office Manager. Time: 90 minutes.
+1.1 — Initial Practice Setup
+Navigate to Account Settings → Practice Information. Complete each field:
+Practice Name: enter the full legal name of the entity (Aeterna Club, LLC for AC; Compass Human Performance, LLC for CHP). Build these as two separate DrChrono practices — do not combine them in one account.
+Practice Address, Phone, Fax, NPI (Type II): enter as registered with CMS.
+Operational Hours: Monday–Friday 8:00 AM – 6:00 PM; Saturday 8:00 AM – 1:00 PM [CONFIRM with Lee].
+Upload practice logo: high-resolution PNG, minimum 300 x 300 pixels, on letterhead and documents.
+Enable HIPAA-compliant messaging via Patient Portal (Settings → Communication → Secure Messaging).
+1.2 — Appointment Default Settings
+Navigate to Settings → Scheduling.
+Default appointment duration: 60 minutes.
+Appointment buffer: 10 minutes between all appointments (critical for luxury pacing and modality reset).
+Enable online patient self-scheduling: OFF for Aeterna Club (Coordinator-gated). ON for CHP with approval filter.
+1.3 — Reminders Configuration
+Navigate to Settings → Reminders. Configure two automated reminder rules:
+SMS: 48 hours prior to appointment.
+Email: 72 hours prior to appointment.
+Reminder content (paste verbatim):
+"Your Aeterna Club appointment is [Date] at [Time]. Please reply CONFIRM or call [number] to reschedule. We look forward to welcoming you."
+1.4 — Lab Integration
+Activate Quest Diagnostics eLab orders (Settings → Labs → Quest → Authenticate).
+Activate LabCorp eLab orders (same path → LabCorp).
+Configure in-house lab template for manual entry of BIA, VIBE, GSH, and Biocharger session data.
+1.5 — Billing and E-Prescribing
+Billing: Configure internal CPT tracking even though membership-based. This is critical for cost analysis and utilization reporting — without it, you cannot measure service margin per member.
+E-Prescribing: Enable via DrFirst integration. Follow DrChrono's DrFirst setup wizard. Complete EPCS enrollment for controlled substances (required for peptides and HGH).
+Enable Patient Portal for member secure messaging and document delivery.
+Section 2 — Provider and User Setup
+Role: Office Manager. Time: 60 minutes.
+2.1 — Create Provider Profiles
+Navigate to Account → Staff Members → Add Provider. Create the following profiles in this exact order:
+Profile
+Type
+Scope
+Co-Sign
+Max Member Load
+Medical Director (MD)
+Physician
+Full — prescribe, sign, review all
+N/A
+Oversight of all 75
+Registered Nurse 1
+RN / Clinical
+Clinical services, charting, labs, IV therapies
+Yes — MD for IV
+N/A (procedure-based)
+Registered Nurse 2
+RN / Clinical
+Same as RN 1
+Yes — MD for IV
+N/A
+Longevity Coordinator 1
+Care Coordinator
+Check-ins, coordination, utilization, module mgmt
+No
+S:15 / G:12 / P:8
+Longevity Coordinator 2
+Care Coordinator
+Same as LC 1
+No
+Same limits
+Longevity Coordinator 3
+Care Coordinator
+Same as LC 1
+No
+Same limits
+Physical Therapist
+Allied Health
+PT session documentation
+Per TN requirement
+N/A
+Front Desk Concierge
+Administrative
+Scheduling only — no clinical access
+N/A
+N/A
+Office Manager
+Administrative (Full)
+Full access, no prescribing
+N/A
+System oversight
+2.2 — Permission Matrix
+Apply these permissions to each role. Do not grant beyond what is listed. This matrix is the compliance backbone — violations trigger audit risk.
+Function
+MD
+RN
+Coordinator
+Front Desk
+Office Mgr
+Prescribe medications
+Yes
+No
+No
+No
+No
+Sign/co-sign clinical notes
+Yes
+Yes
+No
+No
+No
+Create clinical documentation
+Yes
+Yes
+No
+No
+No
+Create coordination notes
+Yes
+Yes
+Yes
+No
+Yes
+Schedule appointments
+Yes
+Yes
+Yes
+Yes
+Yes
+View utilization tracker
+Yes
+Yes
+Yes
+No
+Yes
+Edit utilization tracker
+Yes
+No
+Yes
+No
+Yes
+Run reports
+Yes
+No
+No
+No
+Yes
+Modify system settings
+No
+No
+No
+No
+Yes
+View all patient records
+Yes
+Yes
+Assigned only
+No
+Yes
+Critical: Front Desk never has clinical access. If a schedule change requires clinical judgment, escalate to Coordinator or RN. No exceptions, even during staff shortages.
+Section 3 — Appointment Types (Build All 34)
+Role: Office Manager + Coordinator. Time: 2–3 hours.
+Navigate to Settings → Scheduling → Appointment Types → Add New. Create each of the following as a distinct type. The color is how staff visually parse the calendar — do not deviate.
+3.1 — Category A: Intake and Administrative
+Appointment Type
+Duration
+Color
+Default Provider
+Frequency
+New Member Intake
+90 min
+Navy Blue
+Coordinator + MD
+1x onboarding
+Member Onboarding Orientation
+60 min
+Navy Blue
+Coordinator
+1x onboarding
+Quarterly MD Review
+60 min
+Dark Blue
+MD
+4x/year
+Monthly Coordinator Check-In
+30 min
+Teal
+Coordinator
+12x/year
+Baseline BIA Assessment
+30 min
+Light Blue
+Coordinator or RN
+1x onboarding
+Follow-Up BIA Assessment
+30 min
+Light Blue
+Coordinator or RN
+1–2x/year
+Urgent Care / DPC Visit
+60 min
+Red
+MD or RN
+As needed
+3.2 — Category B: Laboratory
+Appointment Type
+Duration
+Color
+Default Provider
+Frequency
+BHRT Lab Draw
+30 min
+Yellow
+RN
+2x/year
+Quarterly Comprehensive Lab Panel
+30 min
+Yellow
+RN
+4x/year
+VIBE / GSH Lab Draw
+30 min
+Yellow
+RN
+2x/year (with VIBE)
+Post-Treatment Lab Review (MD)
+30 min
+Gold
+MD
+As needed
+HGH Baseline Labs
+30 min
+Yellow
+RN
+1x — Platinum/add-on
+3.3 — Category C: IV and Infusion Therapies
+Appointment Type
+Duration
+Color
+Default Provider
+Notes
+NAD+ IV — Mitochondrial Program
+120 min
+Orange
+RN
+Part of Ultimate Mito Program
+NR Infusion
+90 min
+Orange
+RN
+Part of Ultimate Mito Program
+MOTs-c / Methblue Infusion
+90 min
+Orange
+RN
+Part of Ultimate Mito Program
+Glutathione (GSH) IV
+45 min
+Orange
+RN
+—
+Ammortal IV
+50 min
+Orange
+RN
+PEMF rule applies
+Ozone Dialysis / EBOO
+90 min
+Purple
+RN
+S:1/yr, G:1/yr, P:2/yr
+Exosomes 4.5cc IV
+60 min
+Purple
+RN
+S:1/yr, G:1/yr, P:2/yr
+Stem Cells IV — 85M (Platinum)
+90 min
+Dark Purple
+RN + MD present
+Platinum only: 3 IVs/yr
+Stem Cells IV — 100M (Gold)
+90 min
+Dark Purple
+RN + MD present
+Gold only: 1 IV/yr
+VIBE / GSH Administration
+45 min
+Orange
+RN
+With labs every 6 months
+3.4 — Category D: Injections and Peptides
+Appointment Type
+Duration
+Color
+Default Provider
+Notes
+Peptide Injection (in-clinic)
+20 min
+Green
+RN
+Counts as 1 peptide unit
+HGH Injection / Training
+30 min
+Green
+RN
+Included Platinum / add-on
+Semaglutide Administration
+20 min
+Green
+RN
+Counts as 1 peptide unit
+Tirzepatide Administration
+20 min
+Green
+RN
+Counts as 1 peptide unit
+Retatrutide Administration
+20 min
+Green
+RN
+Counts as 1 peptide unit
+Testosterone Injection
+20 min
+Dark Green
+RN
+Included in BHRT
+BHRT Pellet Placement
+45 min
+Green
+MD
+Optional delivery
+3.5 — Category E: Modality and Recovery Therapies
+Appointment Type
+Duration
+Color
+Default Provider
+Cap Rule (S/G/P)
+PEMF Session
+60 min
+Magenta
+RN or Coordinator
+6 / 12 / 18 per year
+Ammortal Table Session
+50 min
+Magenta
+RN or Coordinator
+6 / 12 / 18 per year
+VEMI Bed Session
+60 min
+Magenta
+RN or Coordinator
+6 / 12 / 18 per year
+HBOT Session
+60 min
+Light Blue
+RN or Coordinator
+6 / 12 / 18 per year
+Ballancer Pro (Upper + Lower)
+60 min
+Light Blue
+Coordinator
+6 / 12 / 18 per year
+Biocharger Session
+30 min
+Pink
+Coordinator
+6 / 12 / 18 per year
+PT Session
+60 min
+Olive
+Physical Therapist
+12 / 18 / 24 per year
+3.6 — Category F: Communication Logs (Non-Scheduled)
+These create a documentation footprint for phone and portal activity, which feeds the Cockpit's communication responsiveness metric.
+Appointment Type
+Duration
+Color
+Default Provider
+Notes
+Phone Check-In (logged)
+15 min
+Gray
+Coordinator
+Not on calendar
+Text / Portal Message Follow-Up
+10 min
+Light Gray
+Coordinator
+Not on calendar
+Service Recovery Call
+30 min
+Red-Orange
+Coordinator or Mgr
+Flag in record
+3.7 — The PEMF Technology Rule
+Critical scheduling rule: VEMI, Ammortal, and PEMF all use pulsed electromagnetic field technology. Only one of these three modalities may be used per day per member. If any one of the three is booked for a member on a given day, the other two MUST be blocked for that date. Enforce this at the scheduling layer via a custom rule or SOP discipline — DrChrono will not enforce it natively.
+Section 4 — Custom Fields for Member Records
+Role: Office Manager. Time: 45 minutes.
+Navigate to Account Settings → Custom Fields → Patient. Add each of the following. Custom fields are the primary mechanism for tracking membership state and are the key data source for the Cockpit.
+4.1 — Demographic and Membership Section
+Field Name
+Type
+Notes
+Full Name
+Text
+DrChrono default
+Date of Birth
+Date
+DrChrono default
+Emergency Contact — Name
+Text
+Required at intake
+Emergency Contact — Phone
+Phone
+Required at intake
+Membership Tier
+Dropdown: Silver / Gold / Platinum
+Drives entitlement tracker autofill
+Membership Start Date
+Date
+Critical for renewal automation
+Membership End Date
+Date
+Auto-calculated: Start + 365 days
+Founders Pricing
+Dropdown: Yes / No
+Used in revenue reports
+Payment Structure
+Dropdown: Paid in Full / 4-Payment Plan
+Tracks collection risk
+Assigned Coordinator
+Dropdown of LCs
+Drives load balancing
+Assigned MD
+Dropdown of MDs
+Single MD for now — Lee
+MD Cell Phone Provided
+Checkbox
+Must be YES at intake for all members
+GoHighLevel Contact ID
+Text
+For automation linkage
+Meevo Customer ID
+Text
+For any spa/amenity integration
+Referral Source
+Text or dropdown
+Critical for marketing ROI
+4.2 — Module Tracking Section
+Field Name
+Type
+Notes
+Current Module
+Dropdown: Cognitive / Muscle Mass / VO2 Max / Recovery / Detox
+Primary active module
+Module Priority
+Dropdown: same list
+Which module to finish first if multiple open
+Module Start Dates
+Text (multi-line)
+Format: ModuleName: YYYY-MM-DD
+Module Target End Dates
+Text (multi-line)
+Format: ModuleName: YYYY-MM-DD
+Completed Modules (YTD)
+Text (multi-line)
+ModuleName: completion date
+Module Notes
+Long text
+Member preferences, influences
+Current Member Health Score
+Number (0–100)
+Updated monthly by Coordinator
+Member Health Score Trend
+Dropdown: Improving / Stable / Declining
+Auto from month-over-month
+At-Risk Flag
+Checkbox
+Fires when score < 60 OR 2+ missed visits
+4.3 — Cockpit Metric Fields (Capture Points)
+These fields exist specifically to feed the Cockpit dashboard. Do NOT remove or rename them once built — the n8n integration maps to these field names exactly.
+Field Name
+Type
+Cockpit Metric Fed
+Total Appointments Attended (YTD)
+Auto-calculated (Report)
+Utilization Rate, Adherence
+Total Appointments Missed (YTD)
+Auto-calculated (Report)
+No-show metric, At-Risk
+Consecutive Missed Appointments
+Number
+At-Risk trigger
+Labs Overdue Status
+Auto (Current / <30d / >30d)
+Compliance
+Last Quarterly MD Visit Date
+Date
+MD review cadence
+Next Quarterly MD Visit Date
+Date
+Scheduling compliance
+Satisfaction Expressed (last visit)
+Dropdown: Positive / Neutral / Negative
+NPS proxy
+Payment Status
+Dropdown: Current / Past Due / Delinquent
+Cash flow risk
+Renewal Date
+Auto from Start + 365
+Renewal pipeline
+Add-On Revenue (YTD)
+Number, manual update
+Upsell performance
+Section 5 — Entitlement Tracker (Core of Utilization Management)
+Role: Office Manager. Time: 2–3 hours. This is the most critical section of the build.
+The entitlement tracker is the single source of truth for what each member has used vs. what they are entitled to. Without it, you cannot defend pricing at renewal, you cannot identify upsell candidates, and you cannot prevent over-delivery (revenue leak).
+5.1 — Build Approach in DrChrono
+In Custom Fields, create a Patient Form called "Entitlement Tracker". Add it as a required form for every member.
+For each row in the tier-specific tables below, create a row in the form with columns: Service | Annual Entitlement | Used YTD | Remaining | Module Allocation | Status.
+Pre-populate Annual Entitlement and Module Allocation at the moment Tier is set in the Demographic fields — use DrChrono's Form Logic or, if unavailable, a triggered macro launched by the Coordinator at intake.
+"Used YTD" must be incremented every time an IV/Procedure Note is saved for a capped service. See Template 4 (IV Infusion/Procedure Note) — the Entitlement Update section at the bottom feeds this field.
+"Remaining" auto-calculates: Annual Entitlement − Used YTD.
+"Status" is computed: Available (green) / Within 1 of cap (yellow) / Cap reached (red) / Add-on available (plus icon).
+When Remaining = 1 for any capped service, fire an alert to Coordinator + Office Manager with template: "[Member Name] has 1 remaining [Service]. Discuss add-on or schedule final session." This is the single highest-leverage upsell mechanism in the entire system.
+5.2 — Silver Tier Entitlements ($100K / $84K Founders) — 25 Seats
+Service
+Annual Entitlement
+Used YTD
+Remaining
+Module Allocation
+Status
+BHRT Lab Draws
+2
+0
+2
+Any
+Green
+HRT Medications
+Included
+—
+—
+Ongoing
+Green
+BIA Assessments
+2+ as needed
+0
+2+
+Any
+Green
+Monthly Coordinator Check-Ins
+12
+0
+12
+All
+Green
+Quarterly MD Reviews
+4
+0
+4
+All
+Green
+Medical Emergency Kit
+1
+0
+1
+Onboarding
+Green
+DPC Visits (remote/office)
+Unlimited
+0
+∞
+As needed
+Green
+Ultimate Mito Program (NAD/NR/MOTs-c/Methblue)
+1 complete
+0
+1
+VO2 Max module
+Green
+Ozone Dialysis / EBOO
+1
+0
+1
+Cognitive
+Green
+Exosomes 4.5cc
+1
+0
+1
+Cognitive
+Green
+VEMI Bed (60 min)
+6
+0
+6
+Muscle Mass (3) + VO2 (3)
+Green
+HBOT (60 min)
+6
+0
+6
+Cognitive (3) + VO2 (3)
+Green
+PEMF (60 min)
+6
+0
+6
+Detox
+Green
+Ammortal (50 min)
+6
+0
+6
+Recovery
+Green
+Ballancer Pro
+6
+0
+6
+Detox
+Green
+Biocharger (30 min)
+6
+0
+6
+Recovery
+Green
+VIBE/GSH (with labs)
+2
+0
+2
+Every 6 months
+Green
+PT Sessions
+12
+0
+12
+Muscle Mass (6) + as needed (6)
+Green
+Peptide Vials
+18
+0
+18
+Across all modules
+Green
+Silver Add-Ons Available
+HGH Program ($15,900)
+CJC/Ipa Pre-Filled Syringes ($6,800)
+Cognitive Plan (add-on)
+Stem Cells (add-on)
+Chelation (add-on, typically Detox module)
+Silver Module Allocation Rules
+Cognitive (12 wks): Peptides, 1 Ozone, 1 Exosomes, HBOT x3.
+Muscle Mass (12 wks): Peptides, Oxandrolone, VEMI x3, PT x6.
+VO2 Max (8 wks): Peptides, Mito Program x6, VEMI x3, HBOT x3.
+Recovery (10 wks): Ammortal x6, Biocharger x6, Peptides, HBOT add-on.
+Detox (10 wks): Ballancer Pro x6, PEMF x6, Peptides, Chelation add-on.
+Monthly coordinator visit bundled with module therapies.
+NO monthly PT (unlike Gold/Platinum).
+VIBE/GSH at lab draw every 6 months.
+5.3 — Gold Tier Entitlements ($156K / $138K Founders) — 40 Seats
+Service
+Annual Entitlement
+Used YTD
+Remaining
+Module Allocation
+Status
+BHRT Lab Draws
+2
+0
+2
+Any
+Green
+HRT Medications
+Included
+—
+—
+Ongoing
+Green
+BIA Assessments
+2+ as needed
+0
+2+
+Any
+Green
+Monthly Coordinator Check-Ins
+12
+0
+12
+All (incl PT + Biocharger)
+Green
+Quarterly MD Reviews
+4
+0
+4
+All
+Green
+Medical Emergency Kit
+1
+0
+1
+Onboarding
+Green
+DPC Visits
+Unlimited
+0
+∞
+As needed
+Green
+Ultimate Mito Program
+1 complete
+0
+1
+VO2 Max
+Green
+Ozone Dialysis / EBOO
+1
+0
+1
+Cognitive
+Green
+Exosomes 4.5cc
+1
+0
+1
+Cognitive
+Green
+Stem Cells 100M IV
+1
+0
+1
+Recovery
+Green
+VEMI Bed
+12
+0
+12
+Muscle Mass (6) + VO2 (6)
+Green
+HBOT
+12
+0
+12
+Cognitive (6) + VO2 (6)
+Green
+PEMF
+12
+0
+12
+Detox
+Green
+Ammortal
+12
+0
+12
+Recovery
+Green
+Ballancer Pro
+12
+0
+12
+Detox
+Green
+Biocharger
+12
+0
+12
+Monthly w/ coordinator
+Green
+VIBE/GSH (with labs)
+2
+0
+2
+Every 6 months
+Green
+PT Sessions
+18
+0
+18
+Muscle Mass (6) + monthly
+Green
+Peptide Vials
+24
+0
+24
+Across all modules
+Green
+Gold Add-Ons Available
+HGH Program ($15,900)
+Cognitive Plan
+Additional Stem Cells
+Oxandrolone (Muscle Mass module add-on)
+Chelation (Detox module add-on)
+Gold Module Allocation Rules
+Cognitive (12 wks): Peptides/Cognitive plan, 1 Ozone, 1 Exosomes, HBOT x6.
+Muscle Mass (12 wks): Peptides, Oxandrolone add-on, VEMI x6, PT x6.
+VO2 Max (8 wks): Peptides, Mito Program x6, VEMI x6 with NAD, HBOT x6.
+Recovery (10 wks): Ammortal x12, Peptides, Stem Cells 100M, HBOT add-on.
+Detox (10 wks): Ballancer Pro x12, PEMF x12, Peptides, Chelation add-on.
+Monthly coordinator visit includes PT session + Biocharger session.
+Use vibration plate before PT.
+5.4 — Platinum Tier Entitlements ($216K / $192K Founders) — 10 Seats
+Service
+Annual Entitlement
+Used YTD
+Remaining
+Module Allocation
+Status
+BHRT Lab Draws
+2
+0
+2
+Any
+Green
+HRT Medications
+Included
+—
+—
+Ongoing
+Green
+BIA Assessments
+2+ as needed
+0
+2+
+Any
+Green
+Monthly Coordinator Check-Ins
+12
+0
+12
+All (incl PT + Biocharger)
+Green
+Quarterly MD Reviews
+4
+0
+4
+All
+Green
+Medical Emergency Kit
+1
+0
+1
+Onboarding
+Green
+DPC Visits
+Unlimited
+0
+∞
+As needed
+Green
+HGH Program
+Included
+—
+Active
+Starts at onboarding
+Green
+Cognitive Plan
+Included
+—
+Active
+Cognitive module
+Green
+Ultimate Mito Program
+1 complete
+0
+1
+VO2 Max
+Green
+Ozone Dialysis / EBOO
+2
+0
+2
+Cognitive (1) + VO2/Recovery (1)
+Green
+Exosomes 4.5cc
+2
+0
+2
+Cognitive (1) + VO2/Recovery (1)
+Green
+Stem Cells 85M IV
+3
+0
+3
+1 Recovery + 2 clinically directed
+Green
+VEMI Bed
+12 listed / Unlimited (MU)
+0
+See MU
+Muscle Mass (6) + VO2 (6)
+Green
+HBOT
+18 listed / Unlimited (MU)
+0
+See MU
+Cognitive (12) + VO2 (6)
+Green
+PEMF
+18 listed / Unlimited (MU)
+0
+See MU
+Recovery (8) + Detox (10)
+Green
+Ammortal
+18 listed / Unlimited (MU)
+0
+See MU
+Cognitive (8) + Recovery (10)
+Green
+Ballancer Pro
+18 listed / Unlimited (MU)
+0
+See MU
+Across modules
+Green
+Biocharger
+18 listed / Unlimited (MU)
+0
+See MU
+Muscle Mass (6) + monthly
+Green
+VIBE/GSH (with labs)
+8
+0
+8
+Every 6 months (lab draw)
+Green
+PT Sessions
+24 listed / Unlimited (MU)
+0
+See MU
+Muscle Mass (12) + monthly
+Green
+Peptide Vials
+24 listed / Unlimited (MU)
+0
+See MU
+Across all modules
+Green
+"MU" = Meaningful Use. Platinum unlimited is clinically guided, not literal. When a member exceeds the listed quantity and outcomes are not improving, the coordinator triggers .meaningfuluse macro and routes to MD for review. This protects margin and clinical integrity.
+Platinum Add-Ons Available
+Additional Stem Cells (IV or Joint)
+Chelation (Detox module add-on, always)
+Regenerative Orthopedics (can reallocate IV cells)
+Platinum Module Allocation Rules
+Cognitive (12 wks): Peptides, Cognitive Plan INCLUDED, 1 Ozone, 1 Exosomes, HBOT x12, Ammortal x8, Ballancer Pro x2.
+Muscle Mass (12 wks): Peptides, Oxandrolone add-on, VEMI x6, PT x12, Ballancer Pro x2, Biocharger x6.
+VO2 Max (8 wks): Peptides, Mito Program x6, VEMI x6 w/ NAD, HBOT x6, Ballancer Pro x2, 1 Ozone, 1 Exosomes.
+Recovery (10 wks): Ammortal x10, Peptides, Stem Cells 85M (1 REQUIRED here), PEMF x8, Ballancer Pro x2, HBOT add-on.
+Detox (10 wks): Ballancer Pro x10, PEMF x10, Peptides, Chelation add-on.
+HGH program starts at onboarding / first module.
+Monthly coordinator visit includes PT + Biocharger.
+Use vibration plate before PT.
+2nd Ozone + 2nd Exosomes can be used in VO2 Max OR Recovery.
+Stem cell prompt: Coordinator must prompt at every monthly visit until scheduled.
+5.5 — Status Key and Cap Alert Logic
+Green icon (checkmark): Available.
+Yellow triangle icon: Within 1 of cap (alert triggered).
+Red dot icon: Cap reached.
+Plus icon: Add-on available (for services not included in tier).
+Alert automation: when any capped service Remaining = 1, trigger a DrChrono internal message to Coordinator + Office Manager with this exact template: "[Member Name] has 1 remaining [Service]. Discuss add-on or schedule final session."
+Section 6 — Smart Phrase and Macro Library
+Role: Office Manager + Medical Director (review). Time: 2 hours.
+Navigate to Account → Macros → New. Create each of the following. Macros dramatically speed charting and enforce documentation consistency. Every clinical note uses macros — invented free text is discouraged.
+6.1 — Layer 1: Core Smart Phrases
+Shortcut
+Phrase
+.visitopen
+Member presents for monthly coordinator follow-up. Tier: [ ]. Active module(s): [ ]. Last MD visit: [ ]. Last labs: [ ]. Primary concerns today: [ ].
+.checkin
+Reviewed sleep, energy, focus, recovery, exercise tolerance, GI status, mood, weight/body composition, hormone-related symptoms, and new concerns. Member reports: [ ].
+.suppreview
+Reviewed current supplement use and tolerance. Discussed whether current goals suggest need for MD/RN supplement review. Flagged: [ ].
+.therapyutil
+Confirmed completion of due therapies: Biocharger, PT, recovery services, lab-related services, and any module-specific sessions. Outstanding items: [ ].
+.nextsteps
+Next steps reviewed and scheduled: [ ]. Physician review due: [ ]. Therapy blocks due: [ ]. Supplement review needed: [ ]. Escalation: [Yes/No].
+.visitclose
+Visit completed. Summary reviewed with member. Questions addressed. Plan confirmed. Member verbalizes understanding.
+.internalnote
+Internal: Member is [on track/needs adjustment/requires escalation]. Active module(s): [ ]. Pending items: [ ]. Score: [ ]/100. Trend: [ ].
+6.2 — Layer 2: Module-Specific Smart Phrases
+Shortcut
+Phrase
+.modcog
+COGNITIVE MODULE: Brain fog? Focus trouble? Memory changes? Mood changes? Sleep disruption? Member reports: [ ].
+.modmuscle
+MUSCLE MASS MODULE: Performance changes? Lingering soreness? Protein/strength goals? Mobility? Body composition? Member reports: [ ].
+.modvo2
+VO2 MAX MODULE: Shortness of breath? Reduced stamina? Exercise intolerance? Unusual fatigue after exertion? Consistent conditioning? Member reports: [ ].
+.modrecovery
+RECOVERY MODULE: Recovering well after exertion/travel? Persistent fatigue? Non-restorative sleep? Soreness/inflammation? Reduced stress resilience? Member reports: [ ].
+.moddetox
+DETOX MODULE: GI changes? Heaviness/sluggishness? Hydration/bowel regularity? Symptom flares from exposure? Recovery burden? Member reports: [ ].
+6.3 — Layer 3: Review and Escalation Smart Phrases
+Shortcut
+Phrase
+.biocharger
+Biocharger session completed/reviewed. Tolerance: [good/fair/poor]. Notes: [ ].
+.pt
+PT session completed/reviewed. Focus: [ ]. Tolerance: [good/fair/poor]. Vibration plate used before session: [Y/N]. Notes: [ ].
+.vibe
+VIBE session completed/reviewed. Tolerance: [good/fair/poor]. Notes: [ ].
+.gsh
+GSH support completed/reviewed. Tolerance: [good/fair/poor]. Notes: [ ].
+.recmod
+Recovery modality completed/reviewed. Modality: [ ]. Tolerance: [good/fair/poor]. Notes: [ ].
+.regen
+Regenerative therapy reviewed/completed as scheduled. Type: [ ]. Tolerance: [good/fair/poor]. Notes: [ ].
+.escalateroutine
+Member has symptoms/concerns that may warrant review. Escalation reason: [ ]. Follow-up requested: [ ].
+.escalatemed
+Medication/hormone concern identified during coordinator visit. Details: [ ].
+.escalatesupp
+Supplement review requested. Details routed to MD/RN.
+.escalateurgent
+Immediate physician review recommended. Details: [ ].
+.adherence
+Member is [adherent / partially adherent / nonadherent]. Barriers: [ ].
+.missed
+Member missed/delayed [visit/lab/therapy]. Reason: [ ]. Plan: [ ].
+.education
+Reinforcement provided regarding cadence, structure, or sequencing. Understanding: [good/partial/limited].
+.moduletrans
+Module transition planning completed. Current/next module: [ ]. Schedule updated.
+.mdprep
+Prepared for quarterly review. Labs, interval history, response, med/supplement questions for MD handoff.
+.stemcellprompt
+Stem cell scheduling discussed with Platinum member. IVs completed: [ ]. Remaining: [ ]. Recovery module IV: [Scheduled/Pending/Complete]. Next scheduled: [ ].
+.meaningfuluse
+High utilization noted for [modality]. Outcomes: [Improving/Stable/Not Improving]. Per Meaningful Use guardrail, MD review requested to reassess treatment plan.
+Section 7 — Clinical Note Templates
+Role: Medical Director (clinical review) + Office Manager (build). Time: 4–5 hours.
+Navigate to Account → Clinical Notes → Templates → New. Build each template in the order listed. Each template must include ALL fields exactly as specified. MD must review before first use.
+Template 1 — New Member Intake / Onboarding
+Purpose: First clinical visit. Captures baseline, goals, initial module recommendation.
+Pre-visit requirement: Health history and supplement list completed electronically by member via Patient Portal before visit. Do not start visit without this.
+Fields (paste into template)
+AETERNA CLUB — NEW MEMBER INTAKE
+Date: [auto]  |  Provider: [auto]  |  Coordinator: [name]
+MEMBER INFORMATION
+Tier: [Silver/Gold/Platinum]
+Founders Pricing: [Y/N]
+Membership Start: [date]
+Referred By: [source]
+HEALTH HISTORY
+Chief Health Goals: [free text]
+Current Medications: [list]
+Allergies: [list]
+Surgical History: [list]
+Family History: [relevant]
+Current Supplements: [list]
+Current Exercise Regimen: [description]
+Sleep Quality (1-10): [score]
+Stress Level (1-10): [score]
+Energy Level (1-10): [score]
+BASELINE ASSESSMENTS
+Weight | Height | BMI
+BIA Results: [attach / note]
+Blood Pressure
+Resting Heart Rate
+Baseline Labs Ordered [Y/N] — Date scheduled
+INITIAL MODULE RECOMMENDATION
+Recommended First Module: [Cognitive / Muscle Mass / VO2 Max / Recovery / Detox]
+Rationale: [free text]
+MD Approval: [Y/N/Pending]
+MEMBER GOALS & EXPECTATIONS
+Primary Goal: [free text]
+Secondary Goal: [free text]
+Lifestyle Commitments Discussed: [free text]
+NEXT STEPS
+Labs scheduled for: [date]
+BIA baseline complete: [Y/N]
+First module start date: [date]
+Welcome packet delivered: [Y/N]
+Portal access confirmed: [Y/N]
+SIGNATURES: Coordinator ___ Date ___ | MD Review ___ Date ___
+Template 2 — Monthly Coordinator Check-In
+Purpose: Single most important recurring note. Runs 12x/year per member. Feeds Member Score and At-Risk triggers.
+Pre-visit data-pull: Coordinator must spend 15 min reviewing entitlement tracker, last month's attendance, missed visit notes, lab status, module progress, and stem cell schedule. Then load this template with pre-filled data.
+Fields (in order)
+Current Module: [name] | Module Week: [X of Y] | Module Progress: [On Track / Behind / Ahead]
+Last MD Visit: ___ | Next MD Visit: ___ | Last Labs: ___
+UTILIZATION REVIEW (pull from tracker, share with member)
+Appointments attended this month: [#]
+Appointments missed this month: [#]
+Services used this month: [list with counts]
+Key entitlements remaining: [summary]
+Services nearing cap: [list]
+Services at cap: [list]
+Add-on discussion appropriate: [Y/N — which service]
+Reminder to coordinator: Services do NOT rollover. Consistency of therapies drives outcomes. Use this reminder verbatim with members.
+SYMPTOM & WELLNESS CHECK (use .checkin macro)
+How have you been feeling overall?
+What has improved since last month?
+What still feels off?
+Changes in focus, recovery, strength, endurance?
+GI or hormone-related changes?
+Any new symptoms or concerns?
+Energy (1-10) | Sleep (1-10) | Mood/Stress (1-10) | Pain (0-10)
+Exercise Frequency (days/week)
+SUPPLEMENT/MEDICATION REVIEW (use .suppreview)
+Taking supplements consistently? [Y/N]
+Side effects or intolerance? [Y/N — detail]
+Stopped anything recently? [Y/N — what and why]
+Anything missing? [Y/N — detail]
+Goals changed enough for review? [Y/N]
+Would you like MD/RN review? [Y/N]
+THERAPY COMPLETION REVIEW (use .therapyutil)
+Lab Draw: [Completed / Pending / Missed]
+Biocharger: [Completed / Pending / Missed] Tolerance: [G/F/P]
+PT: [Completed / Pending / Missed] Focus: ___ Tolerance: [G/F/P] Vibration plate used before PT: [Y/N] (Gold/Platinum)
+VIBE/GSH: [Completed / Pending / N/A] Tolerance: [G/F/P]
+Recovery Modality (Ammortal/HBOT/PEMF/VEMI): [Completed / Pending] Tolerance: [G/F/P]
+Regenerative Therapy: [Reviewed / Completed / Scheduled / N/A]
+Other module-specific sessions: ___
+STEM CELL PROMPT (Gold and Platinum only) — use .stemcellprompt
+Stem cell IVs completed: [0/1/2/3]
+Stem cell IVs remaining: [3/2/1/0]
+1 must be given in Recovery module: [Scheduled / Not yet / Complete]
+Discussed scheduling with member: [Y/N]
+MEMBER HEALTH SCORE (Complete Monthly)
+Score components. Coordinator calculates this during visit using the template and enters it into the GoHighLevel Member Score field. n8n syncs to Google Sheets for Cockpit.
+Component
+Weight
+Scoring Logic
+Appointment Adherence
+30 pts
+(Attended / Scheduled in last 30 days) x 30
+Lab Compliance
+15 pts
+Current = 15 / Overdue <30d = 8 / Overdue >30d = 0
+Module Progress
+15 pts
+On track = 15 / Behind = 8 / Not started = 0
+Monthly Check-In Compliance
+10 pts
+Completed this month = 10 / Missed = 0
+Utilization Rate
+10 pts
+(Services Used YTD / Entitled YTD) x 10, capped at 10
+Member Satisfaction (expressed)
+10 pts
+Positive = 10 / Neutral = 6 / Negative = 2
+Payment Status
+10 pts
+Current = 10 / Past due = 4 / Delinquent = 0
+TOTAL
+100 pts
+TREND vs Last Month: [Improving / Stable / Declining]
+AT-RISK THRESHOLD MET (<60): [Y/N]
+FLAGS
+At-Risk Indicators Present: [ ]
+Escalation Required: [ ] — Cognitive symptoms / Poor sleep / Limited recovery / GI warranting nutritional support / Goal changes or new supplements / Any symptom warranting clinical review
+Service Recovery Needed: [ ] — triggers Service Recovery template
+VISIT CLOSURE (use .visitclose)
+Internal Summary (use .internalnote): Member is [on track / needs adjustment / requires escalation]. Active module(s): ___. Pending items: ___. Score: ___/100. Trend: ___.
+Coordinator Signature ___ Date ___
+Template 3 — Quarterly MD Review
+Purpose: Physician-led lab interpretation, protocol adjustment, and module progression decision. Feeds into retention and renewal conversations.
+Pre-Visit Questionnaire (SMS/SMS link to member)
+Coordinator sends this 48–72 hours before visit. n8n workflow routes to DrChrono upon completion.
+"Hello, it's [Assigned MD Name] with Aeterna Club. Please follow the link to answer some important questions in preparation for our upcoming visit."
+On a scale of 1–10, rate your stress over the last 3 days.
+On a scale of 1–10, how have you done managing your diet?
+On a scale of 1–10, how would you rate your physical activity?
+Thank you text sent upon completion. DrChrono and Coordinator are alerted.
+Pre-Room Coordinator Ask (just before MD enters)
+Current HRT meds — autopopulated from last visit; Coordinator verifies and lists any changes.
+Current peptides — autopopulated from last visit.
+Pull in and update supplement list — autopopulated from last visit; Coordinator verifies and lists any changes.
+Males and Females: How is your libido? (Good/Fair/Poor/Stable) How have you been eating? (Paleo/High Protein/Whatever/Vegan/Pescatarian)
+Males: Any new ED issues? [Y/N]
+Females: Breast tenderness? Hot flashes or vaginal dryness? Menstrual activity/LMP (dropdown: Yes last date was ___, Hysterectomy, Post menopause, IUD)
+Is there anything you wish to speak to the MD about privately? [Y/N]
+What would you like to see change most in the next 90 days? [free text]
+Template Fields
+AETERNA CLUB — QUARTERLY MD REVIEW
+Date [auto] | MD [name] | Member [name] | Tier [tier] | Quarter [Q1/2/3/4] | Membership Year [1/2/3...]
+LAB RESULTS REVIEW
+Review BIA
+Lab Date: [date]
+Key Biomarkers — not all labs drawn at every visit:
+Testosterone (Total/Free), Estradiol, DHEA-S, IGF-1, Thyroid Panel (TSH/Free T3/Free T4), CBC, CMP, Lipid Panel, Inflammatory Markers (CRP/ESR), HbA1c, Vitamin D, Progesterone, [additional markers]
+TREND ANALYSIS
+Improving: [markers]
+Stable: [markers]
+Declining / Needs Attention: [markers]
+CURRENT PROTOCOL REVIEW
+BHRT Status: [stable/adjusting]
+Medication Changes: [list or "none"]
+Peptide Protocol: [current regimen]
+HGH Status: [if applicable]
+Supplement Adjustments: [list]
+MODULE REVIEW
+Current Module: [name]
+Module Outcomes: [assessment]
+Recommended Next Module: [name]
+Module Change Authorization: [Approved / Deferred]
+3-MONTH PLAN
+Next-quarter goals: 1) ___ 2) ___ 3) ___
+Protocol adjustments: [detail]
+New labs to order: [list]
+Module assignment: [next module]
+Referrals: [if any]
+Follow-up needed before next quarterly: [Y/N — reason]
+SAFETY / ESCALATION ITEMS
+None identified
+Detail: ___
+MD Signature ___ Date ___
+Template 4 — IV Infusion / Procedure Note
+Completed at EVERY visit where a therapy is administered. Usage linked to client account. Drives entitlement tracker increments.
+AETERNA CLUB — IV INFUSION / PROCEDURE NOTE
+Date [auto] | RN [name] | Coordinator [name] | Member [name] | Tier [tier]
+PROCEDURE: [NAD+ / NR / MOTs-c / Methblue / GSH / Ammortal / Ozone-EBOO / Exosomes / Stem Cells / VIBE-GSH]
+PRE-PROCEDURE
+Vitals: BP ___/___ | HR ___ | SpO2 ___ | Temp ___
+Allergies Verified: [Y]
+Consent on File: [Y]
+IV Access: [site] | Gauge: [#] | Attempts: [#]
+Pre-medications: [if any]
+PROCEDURE
+Start Time | End Time | Total Duration
+Solution/Product: [exact product, lot#, dose]
+Lot Number | Expiration | Rate
+Complications During: [None / Detail]
+POST-PROCEDURE
+Vitals: BP ___/___ | HR ___ | SpO2 ___
+IV Site Assessment: [clean/dry/intact]
+Member Tolerance: [Excellent/Good/Fair/Poor]
+Adverse Reactions: [None / Detail]
+Post-Procedure Instructions Given: [Y]
+Member Verbalized Understanding: [Y]
+ENTITLEMENT UPDATE (critical — do not skip)
+Service: [name]
+Sessions Used (after this): [X of Y]
+Remaining: [#]
+Cap Alert: [N/A / Within 1 / Reached]
+RN Signature ___ Date ___ | MD Co-Sign ___ Date ___
+Template 5 — At-Risk Member Action Note
+Triggered when any of the following are true: 2+ consecutive missed appointments | Labs overdue >30d | Health Score <50 | Negative NPS response | Member-expressed dissatisfaction | Non-compliance with protocol | Payment delinquency.
+AETERNA CLUB — AT-RISK MEMBER DOCUMENTATION
+Date [auto] | Documented By [name/role] | Member [name] | Tier [tier]
+AT-RISK TRIGGER(S) (check all that apply)
+2+ consecutive missed appointments
+Labs overdue > 30 days
+Health Score < 50
+Negative NPS response
+Member-expressed dissatisfaction
+Non-compliance with protocol
+Payment delinquency
+Other: [detail]
+INTERVENTION HISTORY (running log)
+Date | Action | By Whom | Outcome
+CURRENT INTERVENTION PLAN
+Coordinator outreach call: [date]
+Office Manager review: [date]
+Owner escalation: [Y/N — date if yes]
+Service recovery offered: [detail]
+Schedule adjustment proposed: [detail]
+MEMBER RESPONSE: [free text]
+RESOLUTION STATUS
+Re-engaged — returning to regular schedule
+Partially engaged — modified plan in place
+Unresolved — escalation continues
+Churned — membership terminated
+Follow-Up Date: ___
+Template 6 — No-Show / Missed Visit Note
+AETERNA CLUB — NO-SHOW / MISSED VISIT
+Date [auto] | Member [name] | Tier [tier] | Missed Appointment [type] | Scheduled Time [time]
+OUTREACH ATTEMPT
+SMS sent: [time]
+Phone call: [time] — Answered: [Y/N]
+Voicemail left: [Y/N]
+Email sent: [Y/N]
+MEMBER RESPONSE: [free text or "no response"]
+RESCHEDULED: [Y/N]  |  New Date: [date/time]
+CUMULATIVE NO-SHOWS (YTD): [#] | CONSECUTIVE NO-SHOWS: [#]
+AT-RISK TRIGGER MET: [Y/N]
+If yes → GHL status-at-risk tag applied: [Y/N]
+Pipeline 4 (At-Risk) activated: [Y/N]
+REMINDER TO MEMBER: Services are use-it-or-lose-it on 12-month membership. No rollover.
+Template 7 — Escalation Note
+AETERNA CLUB — ESCALATION NOTE
+Member ___ | Date ___ | Documented By ___ | Role ___
+ISSUE IDENTIFIED: ___
+SYMPTOMS: ___
+ONSET / TIMING: ___
+SEVERITY: [Mild / Moderate / Severe / Urgent]
+ACTION TAKEN: ___
+MD/RN NOTIFIED: [Y/N] — Who ___ When ___
+FOLLOW-UP PLAN: ___
+ESCALATION TYPE
+Routine — to MD/RN for review at next convenient time
+Medication/Hormone concern — detail ___
+Supplement escalation — routed to MD/RN
+Urgent concern — immediate physician review recommended
+911 required — CALL 911 FIRST, document after
+RESOLUTION: ___ | FOLLOW-UP DATE: ___
+Template 8 — Module Summary Sheet
+One per module per member. Signed by coordinator at module completion.
+AETERNA CLUB — MODULE SUMMARY SHEET
+Member ___ | Tier ___
+Module: [Cognitive / Muscle Mass / VO2 Max / Recovery / Detox]
+Start Date ___ | Target End Date ___ | Duration: [8 / 10 / 12 weeks per plan]
+DESIRED OUTCOMES: 1) ___ 2) ___ 3) ___
+THERAPIES ALLOCATED TO THIS MODULE — Utilization tied to membership tier level
+Therapy | Quantity | Completed | Remaining
+MODULE PROGRESS NOTES
+Week 1–4: ___
+Week 5–8: ___
+Week 9–12: ___ (if applicable)
+MODULE COMPLETION STATUS
+Complete — All therapies delivered, outcomes assessed
+Incomplete — Reason ___
+Extended — Reason ___
+Coordinator ___ Date ___
+Template 9 — Annual Journey Tracker
+AETERNA CLUB — ANNUAL JOURNEY TRACKER
+Member ___ | Tier ___ | Year ___ | Start ___ | End ___
+MODULE PROGRESSION
+Module | Status | Start | End | Key Outcomes
+(Cognitive / Muscle Mass / VO2 Max / Recovery / Detox)
+QUARTERLY SNAPSHOTS
+Quarter | Labs | MD Visit | Score /100 | Key Notes
+UTILIZATION SUMMARY (Year-End)
+Service | Entitled | Used | % | Notes
+YEAR-END OUTCOMES
+Starting baseline vs. current: ___
+Goals met: ___
+Goals in progress: ___
+Member satisfaction: ___
+Renewal decision: ___
+Section 8 — Standard Reports to Configure
+Role: Office Manager. Time: 90 minutes.
+Navigate to Reports → Report Builder → New Report. Build each of the following. These are the primary data feeds for the Cockpit.
+Report Name
+Data Points
+Frequency
+Owner
+Visits Per Member (YTD)
+Total appointments completed per member, broken by type
+Weekly
+Office Mgr
+Missed/Canceled Appointments
+Count by member, date, type; trend over time
+Weekly
+Office Mgr
+Service Utilization % by Member
+Services used / entitled × 100 for each service line
+Monthly
+Coordinator + OM
+Service Utilization % by Tier
+Average utilization across all members in each tier
+Monthly
+Owner
+Add-On Revenue Report
+All add-on services purchased, by member, revenue
+Monthly
+Owner
+Treatment Completion Rate %
+% of module-prescribed treatments actually completed per member
+Quarterly
+MD + Coordinator
+Members At/Over Entitlement
+Any member who has reached cap on any service
+Real-time alert
+Coordinator + OM
+At-Risk Member List
+Members meeting at-risk criteria (auto-populated)
+Weekly
+Owner
+Renewal Due List
+Members within 90/60/45/30/7 days of renewal
+Weekly
+Owner + Coord
+Lab Completion Rate
+% of members with labs completed within 14 days of due date
+Monthly
+RN + OM
+Module Progress Report
+Each member's current module, week, and on-track status
+Monthly
+Coordinator
+Stem Cell Administration Log
+All stem cell IVs: member, date, cell count, lot#, outcomes
+Quarterly
+MD
+Peptide Vial Dispensing Log
+Vials dispensed per member vs. entitlement
+Monthly
+RN + Coordinator
+Provider Productivity
+Appointments per provider per week/month
+Monthly
+Office Mgr
+Capacity Utilization by Resource
+% of available appointment slots filled for each modality/room
+Weekly
+Office Mgr
+Section 9 — Seat-Based Capacity Management
+Role: Office Manager + Owner. Time: 60 minutes, then continuous.
+With 75 members at full capacity, the total annual entitled sessions across all members must not exceed available resource-days. Use the capacity table below to validate scheduling assumptions. Build a parallel capacity model in the Cockpit Google Sheet.
+Resource
+Daily Capacity
+Members Competing
+Scheduling Rule
+HBOT Chamber
+1 unit: 6 sessions/day (60min + 10min buffer)
+Up to 75
+Book 2+ weeks ahead for Platinum priority
+PEMF Device
+1 unit: 8 sessions/day (30–60min)
+Up to 75
+PEMF/VEMI/Ammortal rule: 1 per member per day
+VEMI Bed
+1 unit: 8 sessions/day (60min)
+Up to 75
+Same PEMF rule
+Ammortal Table
+1 unit: 8 sessions/day (50min)
+Up to 75
+Same PEMF rule
+Ballancer Pro
+1 unit: 8 sessions/day (60min)
+Up to 75
+Open scheduling
+Biocharger
+1 unit: 12 sessions/day (30min)
+Up to 75
+Open scheduling
+IV Suite (chairs)
+4 chairs: 16–20 infusions/day
+Up to 75
+RN:patient ratio max 1:2 during IV
+PT Room
+1 PT: 6–8 sessions/day
+Up to 75
+PT schedules directly
+MD Consult Room
+1 MD: 6–8 visits/day
+Up to 75
+Quarterly reviews + DPC
+Capacity math: 75 members × average annual entitled sessions = ~3,000+ clinical events per year. Divide by 250 operating days and compare to daily resource capacity. If any resource is projected to exceed capacity, you need a second unit, extended hours, or a waitlist rule — ideally flagged 6 months before that member count is reached. The Cockpit will track this automatically once the capacity model is populated.
+Section 10 — Clinical Workflow Summaries
+Role: Coordinator + RN + MD. Time: ongoing.
+10.1 — Onboarding Clinical Workflow (Day 0–21)
+Day 0: Member Closed in GHL — n8n creates patient in DrChrono — tier-based entitlement tracker auto-populates.
+Day 1–3: Coordinator schedules:
+New Member Intake (90 min) — Coordinator + MD
+Baseline BIA Assessment (30 min)
+BHRT Lab Draw (30 min) — or Comprehensive Lab Panel
+HGH Baseline Labs (if Platinum or add-on)
+Day 7: Intake Appointment
+Complete Intake Note Template
+Record baseline vitals, health history, goals
+MD recommends first module
+MD reviews/orders baseline labs
+Day 7–14: Labs drawn and processed
+RN performs lab draw
+Results return to DrChrono
+MD reviews and signs off
+Post-Treatment Lab Review scheduled if needed
+Day 14: Module Assignment
+Coordinator assigns module in patient record
+Module start date set
+All module-specific appointments scheduled for first 4 weeks
+Member notified of full module schedule
+Day 14–21: First Treatment
+First protocol appointment occurs
+Utilization tracker begins counting
+Coordinator confirms onboarding complete in GHL via n8n
+10.2 — Monthly Coordinator Workflow
+PRE-VISIT (Coordinator — 15 min prep)
+Review entitlement tracker: remaining sessions for all services.
+Review last month's appointment attendance.
+Review any no-show / missed visit notes.
+Review lab status: any overdue?
+Review module progress: on track for completion? Module summary sheet below.
+Check stem cell schedule: any IVs due?
+Prepare check-in note template with pre-filled data.
+DURING VISIT (30 min)
+Complete Monthly Coordinator Check-In template.
+Wellness assessment (energy, sleep, mood, pain, adherence).
+Review upcoming schedule with member.
+Discuss any concerns or service recovery needs.
+Identify upsell opportunities (if appropriate — see SOP).
+Update health score inputs.
+POST-VISIT (15 min)
+Update utilization tracker.
+Update GoHighLevel custom fields via n8n or manual.
+Schedule next month's appointments if not already booked.
+Log any flags or escalations.
+If at-risk indicators present → activate at-risk protocol.
+10.3 — Quarterly MD Review Workflow
+PRE-VISIT (Coordinator — 30 min prep)
+Pull all labs from current quarter.
+Generate utilization summary for quarter.
+Compile coordinator check-in notes from past 3 months.
+Note any at-risk flags, complaints, or escalations.
+Prepare Quarterly MD Review template with pre-filled data.
+DURING VISIT (60 min — MD + Member)
+MD completes Quarterly MD Review template.
+Lab results review and trend analysis.
+Protocol adjustments (BHRT, peptides, supplements, HGH if applicable).
+Module progress review and next module recommendation.
+3-month forward plan creation.
+Any referrals or additional testing ordered.
+POST-VISIT (Coordinator — 15 min)
+Update patient record with all MD orders.
+Schedule any ordered labs, tests, or referrals.
+Update module assignment if changed.
+Communicate 3-month plan to member in writing (secure portal message).
+Update GHL fields.
+Section 11 — DrChrono to GoHighLevel Integration (via n8n)
+Role: Dev team / Office Manager oversight. Time: 1–2 weeks of setup.
+Five critical workflows to build in n8n. These keep DrChrono (clinical truth) and GoHighLevel (member relationship + sales pipeline) in sync bi-directionally.
+11.1 — Workflow 1: New Member Sync
+Trigger: Member closed in GHL.
+Action: Create patient in DrChrono. Auto-populate entitlement tracker based on tier. Add to initial GHL pipeline stage: "Onboarding."
+Validation: GHL Contact ID written back to DrChrono custom field.
+11.2 — Workflow 2: Visit Completion Sync
+Trigger: Appointment marked complete in DrChrono.
+Action: Update GHL custom field "Last Visit Date" + append to "Visit Complete Log".
+Purpose: Keep GHL aware of engagement without manual sync.
+11.3 — Workflow 3: Weekly Health Score Calculation
+Trigger: Every Monday 7:00 AM.
+Action: Pull latest monthly check-in data from DrChrono. Recalculate health score per formula in Section 7. Update GHL custom field "Member Health Score". Also write to the Cockpit Google Sheet.
+Critical: this is the main feed for the Cockpit. If this workflow fails, the Monday briefing is stale.
+11.4 — Workflow 4: At-Risk Trigger Automation
+Trigger (any of): missed 2+ visits | overdue labs | negative health score | score <60.
+Action: Tag GHL contact with "At Risk". Move into Pipeline 4 (Retention). Notify Coordinator + Office Manager via email + Slack/Teams channel.
+Follow-up: Coordinator has 24 hours to document At-Risk Action Note in DrChrono.
+11.5 — Workflow 5: Renewal 90-Day Trigger
+Trigger: 90 days before Membership End Date.
+Action: Auto-mark renewal pipeline as "Due". Fire first renewal reminder (email + SMS). Generate renewal value report template pre-filled with member's YTD utilization, outcomes, add-on spend.
+Follow-up cadence: 90 / 60 / 45 / 30 / 15 / 7 days, each with escalating personalization.
+11.6 — Error Monitoring
+Email alert to IT/Admin for any failed n8n workflow run.
+Weekly dry run: Office Manager confirms all five workflows executed without error.
+Section 12 — Metric Capture Matrix (Cockpit Feed)
+Role: Office Manager. Time: continuous reference.
+Every Cockpit metric traces back to a specific capture point in DrChrono. This table is the authoritative map. Do not remove or rename the fields listed without also updating the n8n workflow mappings.
+Cockpit Metric
+DrChrono Source
+Frequency
+Owner
+Active Members (by tier)
+Patient list filtered by Tier field
+Real-time
+GHL + DrC sync
+MRR (recurring)
+Tier × count × monthly rate
+Monthly
+QuickBooks + DrC
+Add-On Revenue MTD/YTD
+Add-On Revenue Report
+Monthly
+Owner
+Utilization Rate (by tier)
+Service Utilization % by Tier Report
+Monthly
+Coord + OM
+At-Risk Member Count
+At-Risk Member List Report
+Weekly
+Owner
+Renewal Pipeline (90/60/30d)
+Renewal Due List
+Weekly
+Owner + Coord
+Health Score Distribution
+GHL Member Score field (synced from DrC)
+Weekly
+Owner
+No-Show Rate
+Missed/Canceled Appointments
+Weekly
+OM
+Lab Completion Rate
+Lab Completion Rate report
+Monthly
+RN + OM
+Module Completion Rate
+Module Progress Report
+Monthly
+Coordinator
+Capacity Utilization (HBOT, PEMF, IV, PT)
+Capacity Utilization by Resource
+Weekly
+OM
+Stem Cell Cadence Compliance
+Stem Cell Admin Log + prompt count
+Monthly
+MD + Coord
+Cap Alert Count (at-or-near cap)
+Members At/Over Entitlement
+Real-time
+Coord + OM
+Appendix A — Smart Phrase Quick Reference Card
+Print this page and pin at every workstation. Staff should memorize the core 6 within the first week.
+Core (must know)
+.visitopen   .checkin   .suppreview   .therapyutil   .nextsteps   .visitclose
+Module
+.modcog   .modmuscle   .modvo2   .modrecovery   .moddetox
+Review / Escalate
+.biocharger   .pt   .vibe   .gsh   .recmod   .regen   .escalateroutine   .escalatemed   .escalatesupp   .escalateurgent   .adherence   .missed   .education   .moduletrans   .mdprep   .stemcellprompt   .meaningfuluse   .internalnote
+Appendix B — Staff Training Sequence
+Week 1 — Foundation
+All staff complete HIPAA training.
+All staff complete DrChrono navigation training (DrChrono Learning Center, 4 hours).
+Coordinators master the 6 core smart phrases.
+RN masters IV/Procedure Note template.
+Week 2 — Clinical Documentation
+Coordinators run 3 mock Monthly Check-Ins per day using test patient.
+RN runs 3 mock IV Procedure Notes per day.
+MD reviews all mock notes for clinical accuracy.
+Week 3 — Utilization and Entitlement
+Coordinators master entitlement tracker updates.
+Office Manager trains team on cap alert response.
+Full test run: 1 mock Silver member, 1 mock Gold, 1 mock Platinum, each through full onboarding + 1 month of visits.
+Week 4 — Integration and Launch Readiness
+Dry run of At-Risk trigger and intervention flow.
+Dry run of Renewal 90-day trigger.
+Cockpit Monday briefing reviewed by Owner + Office Manager.
+Green light for soft launch with first 5 real members.
+Appendix C — Test Patient Walkthrough
+Before any real member is enrolled, run a test patient through the complete build. This validates every integration and every form.
+Create test patient "Test Member Aeterna" in DrChrono with DOB 1/1/1970, Tier = Gold, Founders = Y.
+Confirm entitlement tracker auto-populated with 40 Gold rows.
+Schedule New Member Intake — confirm 90 min duration, Navy Blue, Coordinator + MD.
+Complete Intake Note Template — confirm all fields save.
+RN completes BHRT Lab Draw appointment + IV Procedure Note — confirm entitlement tracker decrements from 2 to 1.
+Coordinator completes Monthly Check-In — confirm health score calculates correctly.
+Trigger a mock at-risk event (manually set score to 55) — confirm At-Risk Action Note appears and GHL tag fires.
+Manually advance test patient's Membership End Date to be 90 days away — confirm Renewal pipeline triggers in GHL.
+Run each of the 16 standard reports — confirm test patient data appears correctly.
+Verify every n8n workflow executes without error.
+Only after all 10 steps pass should real member enrollment begin.
+Appendix D — Cockpit Metric Capture Map
+Summary reference. See Section 12 for full detail. Use this as the one-page map of what feeds the Cockpit.
+Membership counts and tier mix → DrC Patient records + Tier custom field.
+Revenue (MRR and add-on) → QuickBooks (authoritative) cross-referenced to DrC Add-On Revenue Report.
+Engagement (visits, no-shows) → DrC Visits Per Member + Missed Appointments reports.
+Utilization (% used vs entitled) → DrC Service Utilization reports, by tier.
+Health (member scores, at-risk) → DrC Monthly Check-In scores, synced to GHL, written to Cockpit weekly.
+Retention (renewal pipeline) → DrC Renewal Due List, synced to GHL Pipeline 5.
+Capacity (resource load) → DrC Capacity Utilization report + Cockpit capacity model.
+Upsell (cap alerts) → DrC Members At/Over Entitlement real-time alert.
+Every metric has a single owner and a single refresh cadence. If an owner leaves, reassign within 24 hours.
+Appendix C — CA v2026.6 Field & Workflow Requirements
+This appendix lists the DrChrono fields, custom forms, and workflow triggers required to support the Client Agreement v2026.6.
+Member-level fields (custom):
+Tennessee residency confirmation flag — captured at enrollment (CA §3.1).
+Founders cohort flag (yes / no) and tier (Silver / Gold / Platinum) — drives pricing, escalator, no-replenishment logic (CA §6).
+Spouse linkage — Primary Member ID + Spouse Enrollment Window date (CA §7).
+TCPA consent confirmation timestamp — captured at signing (CA §19.3).
+Non-clinical-marketing opt-out flag — driven by GHL STOP / written-notice event (CA §19.3). Clinical comms remain enabled.
+Membership Effective Date.
+Trial Period expiration date (Membership Effective Date + 30 days, or Path C Rescission expiration).
+Initial Assessment Fee paid flag + date.
+Workflow triggers:
+Trial Period 30-Day cancellation request → §9.2 refund-mechanic worksheet generated for Coordinator.
+Post-Trial cancellation request → §8.3 unified-formula worksheet generated.
+Tennessee relocation notice → §8.3 cancellation workflow + Coordinator alert + Finance alert.
+Death notice → §8.5(b) workflow (waive 30-day notice; cease MRDs date of death; estate comm template).
+Force Majeure event declared by Aeterna → §23.7 mass-comm workflow + 60-day extension countdown timer.
