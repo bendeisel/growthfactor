@@ -22,32 +22,54 @@ BEBAS = "'Bebas Neue','Oswald','Arial Narrow',sans-serif"
 def esc(s): return html.escape(s, quote=False)
 
 # ── master grid ────────────────────────────────────────────────────────────
+# One grid for the whole table so every column and every time row lines up by
+# construction. Class names break at their own colon rather than wrapping
+# mid-phrase, so a cell is at most two deliberate lines.
+PANEL = ("background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); "
+         "border-radius: 8px")
+
+def split_name(name):
+    if ":" in name:
+        a, b = name.split(":", 1)
+        return a.strip(), b.strip()
+    return name, ""
+
 def grid_rows(classes):
     slots = sorted({c["sort"] for c in classes})
     label = {c["sort"]: c["start"] for c in classes}
     by = defaultdict(list)
     for c in classes:
         by[(c["sort"], c["day"])].append(c)
-    rows = []
-    for s in slots:
-        cells = []
+
+    out = ['    <div style="display: grid; grid-template-columns: 128px repeat(7, minmax(0, 1fr)); '
+           'align-items: stretch">']
+    # header row
+    out.append('      <div></div>')
+    for d in DAYS:
+        out.append('      <div style="background: %s; color: #0A0A0A; font-family: %s; font-size: 26px; '
+                   'text-align: center; padding: 10px 0; letter-spacing: 0.04em; '
+                   'border-left: 1px solid rgba(0,0,0,0.15)">%s</div>' % (GOLD, BEBAS, d))
+    # time rows
+    for s_ in slots:
+        out.append('      <div class="micro" style="font-size: 12px; color: rgba(255,255,255,0.62); '
+                   'padding: 14px 16px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); '
+                   'white-space: nowrap">%s</div>' % label[s_])
         for d in DAYS:
-            chips = "".join(
-                '<div class="cls" data-aud="%s" data-prog="%s" style="background: %s; border-left: 3px solid %s; '
-                'border-radius: 0 6px 6px 0; padding: 7px 10px">'
-                '<span style="font-size: 12px; font-weight: 700; line-height: 1.3; display: block; color: #FFFFFF">%s</span>'
-                '<span class="micro" style="font-size: 9px; letter-spacing: 0.14em; color: rgba(215,173,86,0.85)">%s &ndash; %s</span>'
-                '</div>' % (c["audience"], " ".join(c["programs"]), CARD, GOLD,
-                            esc(c["name"]), c["start"], c["end"])
-                for c in by[(s, d)])
-            cells.append('<div style="border-left: 1px solid rgba(255,255,255,0.08); padding: 8px 8px; '
-                         'display: flex; flex-direction: column; gap: 6px; min-height: 56px">%s</div>' % chips)
-        rows.append(
-            '    <div style="display: grid; grid-template-columns: 110px repeat(7, minmax(0, 1fr)); '
-            'border-top: 1px solid rgba(255,255,255,0.08)">'
-            '<div class="micro" style="color: rgba(255,255,255,0.55); padding-top: 10px; text-align: right; '
-            'padding-right: 14px">%s</div>%s</div>' % (label[s], "".join(cells)))
-    return "\n".join(rows)
+            chips = []
+            for c in by[(s_, d)]:
+                head, lvl = split_name(c["name"])
+                lvl_html = ('<span style="display: block; font-size: 11px; font-weight: 700; '
+                            'letter-spacing: 0.1em; text-transform: uppercase; color: %s; margin-top: 3px">%s</span>'
+                            % (GOLD, esc(lvl))) if lvl else ""
+                chips.append(
+                    '<div class="cls" data-aud="%s" data-prog="%s" style="%s; padding: 9px 11px">'
+                    '<span style="display: block; font-size: 13px; font-weight: 700; line-height: 1.3; color: #FFFFFF">%s</span>'
+                    '%s</div>' % (c["audience"], " ".join(c["programs"]), PANEL, esc(head), lvl_html))
+            out.append('      <div style="border-left: 1px solid rgba(255,255,255,0.09); '
+                       'border-top: 1px solid rgba(255,255,255,0.09); padding: 8px; display: flex; '
+                       'flex-direction: column; gap: 7px; min-height: 62px">%s</div>' % "".join(chips))
+    out.append('    </div>')
+    return "\n".join(out)
 
 # ── per-program day cards ──────────────────────────────────────────────────
 def program_cards(slug, audience=None):

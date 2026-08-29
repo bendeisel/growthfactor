@@ -17,16 +17,16 @@
       "x": 0,
       "y": 0,
       "w": 1440,
-      "h": 2682
+      "h": 3008
     },
     {
-      "file": "ProgramDetail.dc.html",
-      "title": "Brazilian Jiu Jitsu",
+      "file": "Program-jiu-jitsu.dc.html",
+      "title": "Brazilian Jiu Jitsu in Nashville",
       "page": "page-2",
       "x": 0,
       "y": 0,
       "w": 1440,
-      "h": 4627
+      "h": 5712
     },
     {
       "file": "Program-boxing.dc.html",
@@ -35,7 +35,7 @@
       "x": 1600,
       "y": 0,
       "w": 1440,
-      "h": 4588
+      "h": 4648
     },
     {
       "file": "Program-muay-thai.dc.html",
@@ -44,7 +44,7 @@
       "x": 3200,
       "y": 0,
       "w": 1440,
-      "h": 5639
+      "h": 5756
     },
     {
       "file": "Program-mixed-martial-arts.dc.html",
@@ -53,7 +53,7 @@
       "x": 4800,
       "y": 0,
       "w": 1440,
-      "h": 4856
+      "h": 4923
     },
     {
       "file": "Program-wrestling.dc.html",
@@ -62,32 +62,32 @@
       "x": 6400,
       "y": 0,
       "w": 1440,
-      "h": 4912
+      "h": 4982
     },
     {
       "file": "Program-self-defense.dc.html",
       "title": "Self-Defense Classes & Seminars In Nashville",
       "page": "page-2",
       "x": 0,
-      "y": 5869,
+      "y": 5986,
       "w": 1440,
-      "h": 6725
+      "h": 6968
     },
     {
       "file": "Program-sports-performance.dc.html",
       "title": "Sports Performance Classes In Nashville",
       "page": "page-2",
       "x": 1600,
-      "y": 5869,
+      "y": 5986,
       "w": 1440,
-      "h": 5451
+      "h": 5617
     },
     {
       "file": "Program-open-gym.dc.html",
       "title": "Open Gym in Nashville",
       "page": "page-2",
       "x": 3200,
-      "y": 5869,
+      "y": 5986,
       "w": 1440,
       "h": 3868
     },
@@ -96,54 +96,54 @@
       "title": "Women\u2019s Muay Thai & Brazilian Jiu-Jitsu Classes in Nashv",
       "page": "page-2",
       "x": 4800,
-      "y": 5869,
+      "y": 5986,
       "w": 1440,
-      "h": 4496
+      "h": 4606
     },
     {
       "file": "Program-mma-fight-team.dc.html",
       "title": "MMA Fight Team In Nashville",
       "page": "page-2",
       "x": 6400,
-      "y": 5869,
+      "y": 5986,
       "w": 1440,
-      "h": 4825
+      "h": 4905
     },
     {
       "file": "Program-personal-training.dc.html",
       "title": "Personal Training in Nashville",
       "page": "page-2",
       "x": 0,
-      "y": 12824,
+      "y": 13184,
       "w": 1440,
-      "h": 4188
+      "h": 4238
     },
     {
       "file": "Program-kids-martial-arts.dc.html",
       "title": "Kids Martial Arts in Nashville",
       "page": "page-2",
       "x": 1600,
-      "y": 12824,
+      "y": 13184,
       "w": 1440,
-      "h": 3949
+      "h": 3969
     },
     {
       "file": "Program-kids-brazilian-jiu-jitsu.dc.html",
       "title": "Kids BJJ Classes In Nashville",
       "page": "page-2",
       "x": 3200,
-      "y": 12824,
+      "y": 13184,
       "w": 1440,
-      "h": 4535
+      "h": 4605
     },
     {
       "file": "Program-kids-fitness.dc.html",
       "title": "Kids Fitness Classes in Nashville",
       "page": "page-2",
       "x": 4800,
-      "y": 12824,
+      "y": 13184,
       "w": 1440,
-      "h": 4468
+      "h": 4535
     }
   ],
   "annotations": [
@@ -153,7 +153,7 @@
       "x": 0,
       "y": -470,
       "w": 980,
-      "text": "13 PROGRAM PAGES \u2014 every word is the client's own, verbatim from their live site.\n\nTHIS ROUND:\n\u00b7 Framed hero on all 13 \u2014 photo in a matted panel, lighter-black surround, centred title.\n\u00b7 Gold wash is broad and soft again, drifting a short distance inside its own area instead of shooting off as a dot. Same speed.\n\u00b7 Outlined buttons keep the white outline and gain a slow gold spark travelling the border.\n\u00b7 'Nashville MMA Training Camp' never breaks across lines.\n\nCLASS TIMES ARE SHARED \u2014 no page has a schedule typed into it; all read data/classes.json.\n\nStill coming: mobile artboards, header dropdown, then Events, Sponsors, Recovery, Coaches, FAQ and the legal pages on their own canvas."
+      "text": "14 PROGRAM PAGES \u2014 every word is the client's own, verbatim from their live site.\n\nFIXED THIS ROUND:\n\u00b7 The gold wash really is there now. A generated section wrapper was never closing, so each\n  wash layer stretched over the whole page and its glow fell outside the visible area.\n\u00b7 Brazilian Jiu Jitsu is now generated like every other page, so it has the framed hero,\n  the centred title and the same spacing. It also carries Bryan Tidwell's real photo and bio.\n\u00b7 SCHEDULE rebuilt as ONE grid, so every column and time row lines up by construction.\n  Class names break at their own colon, with the level in gold underneath.\n\u00b7 Cards restyled: thin gold outline and a small gold accent instead of the heavy left bar.\n\nCLASS TIMES ARE SHARED \u2014 no page has a schedule typed into it; all read data/classes.json."
     },
     {
       "id": "sched-note",

@@ -29,6 +29,8 @@ SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-ax="135" data-ay="40" 
                  'radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), '
                  'radial-gradient(150% 46.8% at 51.03% 67%, rgba(197,149,67,0.92) 0%, rgba(197,149,67,0) 51%), '
                  'radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>')
+PANEL = ("background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); "
+         "border-radius: 10px")
 DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
 CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))["classes"]
@@ -130,16 +132,16 @@ def schedule_cards(tag, audience, enabled=True):
             '<span class="micro" style="font-size: 11px; flex: 0 0 62px; letter-spacing: 0.08em">%s</span>'
             '<span class="body" style="font-size: 15px; line-height: 1.45">%s</span></div>'
             % (c["start"], esc(c["name"])) for c in sorted(by[d], key=lambda x: x["sort"]))
-        out.append('      <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px">\n'
-                   '        <div style="font-family: %s; font-size: 29px; margin-bottom: 12px">%s</div>\n'
+        out.append('      <div style="%s; padding: 22px 22px">\n'
+                   '        <div style="font-family: %s; font-size: 29px; margin-bottom: 14px; color: %s">%s</div>\n'
                    '        <div style="display: flex; flex-direction: column; gap: 8px">%s</div>\n      </div>'
-                   % (CARD, GOLD, BEBAS, d, lines))
-    out.append('      <div style="background: linear-gradient(135deg, rgba(215,173,86,0.2), rgba(215,173,86,0.06)), %s; '
-               'border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px; display: flex; flex-direction: column; '
-               'justify-content: center; align-items: flex-start; gap: 12px">\n'
+                   % (PANEL, BEBAS, GOLD, d, lines))
+    out.append('      <div style="%s; background: linear-gradient(135deg, rgba(215,173,86,0.16), rgba(215,173,86,0.04)); '
+               'padding: 22px; display: flex; flex-direction: column; '
+               'justify-content: center; align-items: flex-start; gap: 14px">\n'
                '        <div style="font-family: %s; font-size: 35px; line-height: 1">90+ Classes Per Week</div>\n'
                '        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>\n'
-               '      </div>' % (CARD, GOLD, BEBAS))
+               '      </div>' % (PANEL, BEBAS))
     return "\n".join(out), len(picked)
 
 # ── render one page ────────────────────────────────────────────────────────
@@ -260,14 +262,18 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
             for it in s["items"]:
                 m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
                 if m:
-                    out.append('    <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 24px 26px">'
-                               '<h3 style="font-size: 34px; margin-bottom: 10px; color: %s">%s</h3>'
+                    out.append('    <div style="%s; padding: 28px 30px">'
+                               '<div style="width: 26px; height: 3px; background: %s; margin-bottom: 16px"></div>'
+                               '<h3 style="font-size: 32px; margin-bottom: 10px; color: #FFFFFF">%s</h3>'
                                '<p class="body" style="font-size: 17px; line-height: 1.7; margin: 0">%s</p></div>'
-                               % (CARD, GOLD, GOLD, esc(m.group(1).strip()), esc(m.group(2).strip())))
+                               % (PANEL, GOLD, esc(m.group(1).strip()), esc(m.group(2).strip())))
                 else:
-                    out.append('    <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 24px 26px">'
-                               '<p class="body" style="font-size: 17px; line-height: 1.7; margin: 0">%s</p></div>' % (CARD, GOLD, esc(it)))
+                    out.append('    <div style="%s; padding: 28px 30px">'
+                               '<div style="width: 26px; height: 3px; background: %s; margin-bottom: 14px"></div>'
+                               '<p class="body" style="font-size: 17px; line-height: 1.7; margin: 0">%s</p></div>' % (PANEL, GOLD, esc(it)))
             out.append('  </div>')
+        if gold:
+            out.append('  </div>')   # close the z-index wrapper that sits over the wash
         out.append('</div>')
 
     # schedule
@@ -300,13 +306,22 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
     if c:
         out.append('<div class="rv" style="background: linear-gradient(180deg, rgba(215,173,86,0.1) 0%, rgba(0,0,0,0) 40%), #0A0A0A; padding: 70px 48px">')
         out.append('  <div style="display: grid; grid-template-columns: 320px 1fr; gap: 44px; align-items: center">')
-        out.append('    <div style="position: relative; height: 340px; overflow: hidden; border-radius: 8px; background: %s; display: flex; align-items: center; justify-content: center">' % CARD)
-        out.append('      <span class="ph" style="font-size: 13px">[Coach photo]</span>')
-        out.append('    </div>')
+        if c.get("photo"):
+            out.append('    <div style="position: relative; height: 380px; overflow: hidden; border-radius: 10px; background: %s">' % CARD)
+            out.append('      <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top">' % (c["photo"], esc(c["name"])))
+            out.append('    </div>')
+        else:
+            out.append('    <div style="position: relative; height: 340px; overflow: hidden; border-radius: 10px; background: %s; display: flex; align-items: center; justify-content: center">' % CARD)
+            out.append('      <span class="ph" style="font-size: 13px">[Coach photo]</span>')
+            out.append('    </div>')
         out.append('    <div>')
         out.append('      <div class="micro" style="margin-bottom: 12px">%s</div>' % esc(c["role"]))
         out.append('      <h2 style="font-size: 58px; line-height: 1; margin-bottom: 18px">%s</h2>' % esc(c["name"]))
-        out.append('      <p class="ph" style="font-size: 18px; line-height: 1.7">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
+        if c.get("bio"):
+            for para in c["bio"]:
+                out.append('      <p class="body" style="font-size: 17px; line-height: 1.72">%s</p>' % esc(para))
+        else:
+            out.append('      <p class="ph" style="font-size: 18px; line-height: 1.7">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
         out.append('      <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px; display: inline-block; margin-top: 10px">Coaches &amp; Trainers</a>')
         out.append('    </div>\n  </div>\n</div>')
 
@@ -357,7 +372,7 @@ for p in PROGRAMS:
     body_html = spark_buttons(no_break_name(body_html))
     page = ('<!doctype html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <script src="./support.js"></script>\n</head>\n<body>\n'
             '<x-dc>\n' + HELMET + '\n\n<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">\n\n'
-            + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</div>\n</x-dc>\n" + SCRIPT)
+            + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</x-dc>\n" + SCRIPT)
     name = "Program-%s.dc.html" % p["slug"]
     open(os.path.join(PAGES, name), "w", encoding="utf-8").write(page)
     made.append((name, title, n_cls))
