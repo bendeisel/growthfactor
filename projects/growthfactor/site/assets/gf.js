@@ -1,12 +1,11 @@
-/* Growth Factor AI — portable components. Vanilla only, no framework,
-   so each piece can drop into a template platform as a custom block. */
+/* Growth Factor AI — portable components. Vanilla only, no framework. */
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
-  /* ---------- sticky header state ---------- */
+  /* sticky header hairline */
   var hdr = $('.hdr');
   if (hdr) {
     var onScroll = function () { hdr.classList.toggle('is-stuck', window.scrollY > 8); };
@@ -14,7 +13,7 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  /* ---------- mobile nav ---------- */
+  /* mobile nav */
   var burger = $('.burger'), nav = $('.nav');
   if (burger && nav) {
     burger.addEventListener('click', function () {
@@ -26,43 +25,12 @@
     });
   }
 
-  /* ---------- reveal on scroll ---------- */
-  var io = null;
-  function initReveal(root) {
-    var reveals = $$('.rv, .draw', root || document);
-    if (!reveals.length) { return; }
-    if (reduce || !('IntersectionObserver' in window)) {
-      reveals.forEach(function (el) { el.classList.add('is-in'); });
-      return;
-    }
-    if (!io) {
-      io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    }
-    reveals.forEach(function (el) { if (!el.classList.contains('is-in')) { io.observe(el); } });
-  }
-  initReveal();
-  window.GFReveal = initReveal;   /* preview router re-arms on view change */
-
-  /* ---------- MOTIF: node/edge diagrams draw themselves in ---------- */
-  $$('.draw').forEach(function (svg) {
-    $$('path, line, polyline', svg).forEach(function (p) {
-      var len = 600;
-      try { len = Math.ceil(p.getTotalLength()) || 600; } catch (e) {}
-      p.style.setProperty('--len', len);
-    });
-  });
-
-  /* ---------- MOTIF: terminal caret + rotating line (used once) ---------- */
+  /* "Build your own ___." types in, then back out again */
   var typer = $('[data-type]');
   if (typer) {
     var out = $('.type__out', typer);
     var words;
-    try { words = JSON.parse(typer.getAttribute('data-type')); }
-    catch (e) { words = []; }
+    try { words = JSON.parse(typer.getAttribute('data-type')); } catch (e) { words = []; }
     if (out && words.length) {
       if (reduce) {
         out.textContent = words[0];
@@ -81,7 +49,7 @@
     }
   }
 
-  /* ---------- expandable feature index ---------- */
+  /* feature rows open and close */
   $$('.idx__btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var row = btn.closest('.idx__row');
@@ -90,12 +58,12 @@
     });
   });
 
-  /* ---------- popup lead form (house standing instruction) ---------- */
+  /* popup lead form (house standing instruction) */
   var modal = $('#lead-modal');
   if (modal) {
     var lastFocus = null;
-    var titleEl   = $('[data-modal-title]', modal);
-    var intentEl  = $('[data-modal-intent]', modal);
+    var titleEl  = $('[data-modal-title]', modal);
+    var intentEl = $('[data-modal-intent]', modal);
 
     var open = function (trigger) {
       lastFocus = trigger || document.activeElement;
@@ -105,7 +73,7 @@
       if (intentEl) { intentEl.value = i || (t || 'General'); }
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
-      var first = $('input, select, textarea', modal);
+      var first = $('input, textarea', modal);
       if (first) { first.focus(); }
     };
     var close = function () {
@@ -120,9 +88,10 @@
       if (e.target.closest('[data-form-close]')) { e.preventDefault(); close(); }
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('is-open')) { close(); }
-      if (e.key === 'Tab' && modal.classList.contains('is-open')) {
-        var f = $$('button, input, select, textarea, a[href]', modal)
+      if (!modal.classList.contains('is-open')) { return; }
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') {
+        var f = $$('button, input, textarea, a[href]', modal)
                   .filter(function (el) { return el.offsetParent !== null; });
         if (!f.length) { return; }
         var first = f[0], last = f[f.length - 1];

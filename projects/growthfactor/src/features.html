@@ -1,125 +1,63 @@
-<!-- ============================== HERO ============================== -->
-<section class="hero" style="padding-block:clamp(58px,8vh,92px) clamp(48px,6vh,70px)">
-  <div class="hero__bg" aria-hidden="true"><div class="hero__glow" style="opacity:.7"></div>
-    <svg class="hero__mesh" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" fill="none">
-      <defs>
-        <pattern id="grid2" width="60" height="60" patternUnits="userSpaceOnUse">
-          <path d="M60 0H0v60" stroke="#1C2740" stroke-width="1"/>
-        </pattern>
-        <linearGradient id="fade2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#fff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <mask id="m2"><rect width="1200" height="420" fill="url(#fade2)"/></mask>
-      </defs>
-      <rect width="1200" height="420" fill="url(#grid2)" mask="url(#m2)"/>
-      <g stroke="#C9622E" stroke-width="1" opacity=".5">
-        <path d="M900 90h120v100h120"/>
-        <path d="M1020 190v90"/>
-      </g>
-      <g fill="#0A1122" stroke="#C9622E" stroke-width="1.4">
-        <rect x="892" y="82" width="14" height="14"/>
-        <rect x="1013" y="273" width="14" height="14"/>
-      </g>
-      <g fill="#C9622E"><rect x="1013" y="183" width="14" height="14"/><rect x="1133" y="183" width="14" height="14"/></g>
-    </svg></div>
-  <div class="shell hero__in">
-    <div class="hero__grid">
-      <div class="band__rail">
-        <span class="label">The platform</span>
-        <p class="band__rail-note">All of it. One price.</p>
-      </div>
-      <div class="hero__body">
-        <h1 class="rv is-in" style="font-size:clamp(2.3rem,5vw,3.7rem)">Everything <span style="white-space:nowrap">Go High Level</span> does.<br><em>Plus the agents.</em></h1>
-        <p class="lede hero__lede rv" data-d="1">
-          This is the whole list &mdash; not a &ldquo;starter&rdquo; slice of it. Every line
-          below is included at $100 a month, and every line below has a walkthrough
-          showing you how to set it up yourself. Tap one to see what it actually does.
-        </p>
-        <div class="hero__cta rv" data-d="2">
-          <a class="btn btn--ember" href="#" data-form
-             data-form-title="Start at $100 a month" data-form-intent="Features hero — Start">
-            Start at $100
-            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn btn--wire" href="done-for-you.html">Have us build it instead</a>
-        </div>
-      </div>
+<section class="hero">
+  <div class="shell">
+    <h1>Everything <span class="accent">Go High Level</span> does.<br>Plus the agents.</h1>
+    <p class="lede">
+      This is the whole list &mdash; not a &ldquo;starter&rdquo; slice of it. Every line
+      below is included at $100 a month, and every line below has a walkthrough showing
+      you how to set it up yourself. Tap one to see what it does.
+    </p>
+    <div class="actions">
+      <a class="btn btn--ember" href="#" data-form
+         data-form-title="Start at $100 a month" data-form-intent="Features hero — Start">Start at $100</a>
+      <a class="btn btn--wire" href="done-for-you.html">Have us build it instead</a>
     </div>
   </div>
 </section>
-
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__track">
-    <div class="ticker__i"><span>Unlimited contacts</span><span>Unlimited users</span><span>Unlimited pipelines</span><span>Unlimited funnels</span><span>Unlimited courses</span><span>Unlimited agents</span><span>No per-seat pricing</span><span>No setup fee</span><span>No contract</span></div>
-    <div class="ticker__i"><span>Unlimited contacts</span><span>Unlimited users</span><span>Unlimited pipelines</span><span>Unlimited funnels</span><span>Unlimited courses</span><span>Unlimited agents</span><span>No per-seat pricing</span><span>No setup fee</span><span>No contract</span></div>
-  </div>
-</div>
 
 {{CATEGORY_BANDS}}
 
-<!-- ============================= CLOSING ============================ -->
-<section class="band band--hairline band--tighter">
+<section>
   <div class="shell">
-    <div class="band__grid">
-      <div class="band__rail">
-        <span class="label">Learning it</span>
-        <p class="band__rail-note">The list is long. You don&rsquo;t start with all of it.</p>
-      </div>
-      <div class="band__body">
-        <h2 class="rv">Nobody turns all of this on in week one.</h2>
-        <p class="lede rv" data-d="1" style="margin-top:20px">
-          We start you with the four things that make money fastest for your kind of
-          business &mdash; usually a funnel, a calendar, the missed-call text-back and
-          one booking agent &mdash; and we build the first ads pointing at them
-          together. The other fourteen features are there the day you need them,
-          with a walkthrough waiting.
+    <h2 class="sec-h">Nobody turns all of this on in week one.</h2>
+    <p class="lede">
+      We start you with the four things that make money fastest for your kind of
+      business &mdash; usually a funnel, a calendar, the missed-call text-back and one
+      booking agent &mdash; and we build the first ads pointing at them together. The
+      other fourteen features are there the day you need them, with a walkthrough
+      waiting.
+    </p>
+    <div class="cols cols--2">
+      <div class="panel">
+        <h3>Learn it &mdash; included at $100</h3>
+        <p class="grey" style="font-size:.95rem;margin-top:9px">
+          Walkthroughs for every feature, live sessions, events, and your first set of
+          ads built with you on the call.
         </p>
-        <div class="cols cols--2 rv" data-d="2" style="margin-top:28px">
-          <div class="panel">
-            <span class="label">Learn it</span>
-            <h3 style="margin-top:14px">Included at $100</h3>
-            <p class="muted" style="font-size:.92rem;margin-top:10px">
-              Walkthroughs for every feature, live sessions, events, and your first
-              set of ads built with you on the call.
-            </p>
-          </div>
-          <div class="panel">
-            <span class="label">Or skip it</span>
-            <h3 style="margin-top:14px">Quoted, from $500</h3>
-            <p class="muted" style="font-size:.92rem;margin-top:10px">
-              Want a specific agent, funnel or automation built for you? That&rsquo;s
-              a Done-For-You project and we price it before we start.
-            </p>
-            <a class="btn btn--wire btn--sm" href="done-for-you.html" style="margin-top:16px">See the tiers</a>
-          </div>
-        </div>
+      </div>
+      <div class="panel">
+        <h3>Or skip it &mdash; quoted, from $500</h3>
+        <p class="grey" style="font-size:.95rem;margin-top:9px">
+          Want a specific agent, funnel or automation built for you? That&rsquo;s a
+          Done-For-You project and we price it before we start.
+          <a class="link" href="done-for-you.html">See the tiers</a>
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="cta">
-  <div class="cta__glow" aria-hidden="true"></div>
-  <div class="shell cta__in">
-    <div class="band__grid">
-      <div class="band__rail"><span class="label">Start</span></div>
-      <div class="band__body">
-        <h2 class="rv">All of it, for a hundred dollars.</h2>
-        <p class="lede rv" data-d="1" style="margin-top:20px">
-          Flat. No per-contact billing, no per-seat billing, no agent tier. And your
-          first campaign goes live with us on the call.
-        </p>
-        <div class="hero__cta rv" data-d="2">
-          <a class="btn btn--ember" href="#" data-form
-             data-form-title="Start at $100 a month" data-form-intent="Features CTA — Start">
-            Start at $100
-            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn btn--wire" href="#" data-form
-             data-form-title="Book a walkthrough" data-form-intent="Features CTA — Walkthrough">Book a walkthrough</a>
-        </div>
-      </div>
+<section>
+  <div class="shell">
+    <h2 class="sec-h">All of it, for a hundred dollars.</h2>
+    <p class="lede">
+      Flat. No per-contact billing, no per-seat billing, no agent tier. And your first
+      campaign goes live with us on the call.
+    </p>
+    <div class="actions">
+      <a class="btn btn--ember" href="#" data-form
+         data-form-title="Start at $100 a month" data-form-intent="Features CTA — Start">Start at $100</a>
+      <a class="btn btn--wire" href="#" data-form
+         data-form-title="Book a walkthrough" data-form-intent="Features CTA — Walkthrough">Book a walkthrough</a>
     </div>
   </div>
 </section>

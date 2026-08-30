@@ -11,24 +11,17 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
-<a href="#main" class="hp">Skip to content</a>
 <header class="hdr">
   <div class="shell hdr__in">
-    <a class="logo" href="index.html" aria-label="Growth Factor AI — home">
-      <svg class="logo__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="1" y="15" width="6" height="8" stroke="#8C99B0" stroke-width="1.4"/>
-        <rect x="9" y="9" width="6" height="14" stroke="#8C99B0" stroke-width="1.4"/>
-        <rect x="17" y="1" width="6" height="22" fill="#C9622E"/>
-      </svg>
-      <span class="logo__txt">Growth Factor<span>.ai</span></span>
+    <a class="logo" href="index.html">
+      <span class="logo__mark"></span>Growth Factor<span>.ai</span>
     </a>
     <nav class="nav" aria-label="Primary">
-      <a href="features.html" aria-current="page">Platform</a>
+      <a href="features.html" aria-current="page">Features</a>
       <a href="done-for-you.html">Done-For-You</a>
       <a href="index.html#price">Pricing</a>
       <a class="btn btn--ember btn--sm" href="#" data-form
-         data-form-title="Start at $100 a month"
-         data-form-intent="Start — $100/mo">Get started</a>
+         data-form-title="Start at $100 a month" data-form-intent="Nav — Start">Get started</a>
     </nav>
     <button class="burger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -37,133 +30,71 @@
 </header>
 
 <main id="main">
-<!-- ============================== HERO ============================== -->
-<section class="hero" style="padding-block:clamp(58px,8vh,92px) clamp(48px,6vh,70px)">
-  <div class="hero__bg" aria-hidden="true"><div class="hero__glow" style="opacity:.7"></div>
-    <svg class="hero__mesh" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" fill="none">
-      <defs>
-        <pattern id="grid2" width="60" height="60" patternUnits="userSpaceOnUse">
-          <path d="M60 0H0v60" stroke="#1C2740" stroke-width="1"/>
-        </pattern>
-        <linearGradient id="fade2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#fff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <mask id="m2"><rect width="1200" height="420" fill="url(#fade2)"/></mask>
-      </defs>
-      <rect width="1200" height="420" fill="url(#grid2)" mask="url(#m2)"/>
-      <g stroke="#C9622E" stroke-width="1" opacity=".5">
-        <path d="M900 90h120v100h120"/>
-        <path d="M1020 190v90"/>
-      </g>
-      <g fill="#0A1122" stroke="#C9622E" stroke-width="1.4">
-        <rect x="892" y="82" width="14" height="14"/>
-        <rect x="1013" y="273" width="14" height="14"/>
-      </g>
-      <g fill="#C9622E"><rect x="1013" y="183" width="14" height="14"/><rect x="1133" y="183" width="14" height="14"/></g>
-    </svg></div>
-  <div class="shell hero__in">
-    <div class="hero__grid">
-      <div class="band__rail">
-        <span class="label">The platform</span>
-        <p class="band__rail-note">All of it. One price.</p>
-      </div>
-      <div class="hero__body">
-        <h1 class="rv is-in" style="font-size:clamp(2.3rem,5vw,3.7rem)">Everything <span style="white-space:nowrap">Go High Level</span> does.<br><em>Plus the agents.</em></h1>
-        <p class="lede hero__lede rv" data-d="1">
-          This is the whole list &mdash; not a &ldquo;starter&rdquo; slice of it. Every line
-          below is included at $100 a month, and every line below has a walkthrough
-          showing you how to set it up yourself. Tap one to see what it actually does.
-        </p>
-        <div class="hero__cta rv" data-d="2">
-          <a class="btn btn--ember" href="#" data-form
-             data-form-title="Start at $100 a month" data-form-intent="Features hero — Start">
-            Start at $100
-            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn btn--wire" href="done-for-you.html">Have us build it instead</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__track">
-    <div class="ticker__i"><span>Unlimited contacts</span><span>Unlimited users</span><span>Unlimited pipelines</span><span>Unlimited funnels</span><span>Unlimited courses</span><span>Unlimited agents</span><span>No per-seat pricing</span><span>No setup fee</span><span>No contract</span></div>
-    <div class="ticker__i"><span>Unlimited contacts</span><span>Unlimited users</span><span>Unlimited pipelines</span><span>Unlimited funnels</span><span>Unlimited courses</span><span>Unlimited agents</span><span>No per-seat pricing</span><span>No setup fee</span><span>No contract</span></div>
-  </div>
-</div>
-
-<section class="band band--hairline" id="capture"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Capture</span><p class="band__rail-note">Everything that turns attention into a name, a number and a conversation.</p></div><div class="band__body"><h2 class="rv">Get the lead, and get to them first.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-crm"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h6"/></svg><span><span class="idx__name">CRM &amp; Pipelines</span><span class="idx__sub">Every lead, every stage, one board you can actually read.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-crm"><div><div class="idx__inner"><p>A drag-and-drop board of every deal you have open. Stages you name yourself, cards that carry the whole history &mdash; every text, call, email, form fill and payment attached to the person, not scattered across four apps. Move a card and an automation can fire: the estimate goes out, the reminder queues, the review request waits for the job to close.</p><ul class="idx__uses"><li>Unlimited contacts</li><li>Custom stages</li><li>Full activity history</li><li>Smart lists</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-forms"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="4" y="3" width="16" height="18"/><path d="M8 8h8M8 12h8M8 16h4"/></svg><span><span class="idx__name">Forms, Surveys &amp; Quizzes</span><span class="idx__sub">Ask the qualifying questions before you ever pick up the phone.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-forms"><div><div class="idx__inner"><p>Build a form, a multi-step survey or a scored quiz and drop it on any page, funnel or website &mdash; yours or not. Conditional logic branches the questions based on what they answered, so a tyre-kicker and a ready buyer get different paths. Every submission lands on the contact record and can start a workflow the same second.</p><ul class="idx__uses"><li>Conditional logic</li><li>Multi-step</li><li>Embeddable anywhere</li><li>Instant notifications</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-chat"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M4 4h16v12H9l-5 4V4z"/><path d="M8 9h8M8 12.5h5"/></svg><span><span class="idx__name">Conversations &mdash; SMS, Email, DM, WhatsApp</span><span class="idx__sub">One inbox for every channel a customer might reach you on.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-chat"><div><div class="idx__inner"><p>Text messages, emails, Facebook and Instagram DMs, Google Business chat and WhatsApp all land in a single threaded inbox on your phone and desktop. Reply from anywhere and it goes back out on the channel they used. Snippets and saved replies for the questions you answer forty times a week.</p><ul class="idx__uses"><li>Unified inbox</li><li>Mobile app</li><li>Saved replies</li><li>Missed-call text-back</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-phone"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M6 3h4l2 5-2.5 1.5a12 12 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg><span><span class="idx__name">Phone System &amp; Call Tracking</span><span class="idx__sub">Your number, your recordings, your attribution.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-phone"><div><div class="idx__inner"><p>Buy tracking numbers inside the platform, route calls to whoever should pick up, record and transcribe them, and see exactly which ad or page produced the call. Missed calls text back automatically &mdash; the single highest-return automation most local businesses ever turn on. Power dialer for the list you need to work through today.</p><ul class="idx__uses"><li>Call recording</li><li>Transcription</li><li>Power dialer</li><li>Missed-call text-back</li></ul></div></div></div></div></div></div></div></div></section>
-<section class="band band--hairline" id="convert"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Convert</span><p class="band__rail-note">Pages, calendars and follow-up that move a lead to a scheduled, paid outcome.</p></div><div class="band__body"><h2 class="rv">Turn the conversation into a booking.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-funnels"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9L3 4z"/></svg><span><span class="idx__name">Funnels &amp; Landing Pages</span><span class="idx__sub">Build the page, the upsell and the thank-you in an afternoon.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-funnels"><div><div class="idx__inner"><p>A visual builder for the pages that actually take money: opt-ins, VSLs, application pages, order forms with order bumps and one-click upsells. Start from a template, swap the copy and the photos, point your domain at it. Split-test two versions and the platform tells you which one earns more, not which one gets more clicks.</p><ul class="idx__uses"><li>Drag-and-drop</li><li>A/B split tests</li><li>Order bumps</li><li>One-click upsells</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-sites"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M6.5 6.5h.01M9.5 6.5h.01"/></svg><span><span class="idx__name">Websites &amp; Blogs</span><span class="idx__sub">A real site on your own domain, not a page on someone else&rsquo;s.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-sites"><div><div class="idx__inner"><p>Full multi-page websites with navigation, blogs and a proper mobile layout, hosted and SSL-secured. Same builder as the funnels, so anything you learn once works everywhere. Point an existing domain at it or buy one inside the platform.</p><ul class="idx__uses"><li>Custom domains</li><li>Free SSL</li><li>Blog</li><li>Mobile layouts</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-calendar"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><span class="idx__name">Calendars &amp; Booking</span><span class="idx__sub">They book themselves, and then they actually show up.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-calendar"><div><div class="idx__inner"><p>Round-robin or single-host calendars that respect your real availability, buffer times and service durations. Confirmations, reminders and reschedule links go out by text and email on a schedule you set. No-shows drop into a recovery workflow instead of into a hole.</p><ul class="idx__uses"><li>Round-robin</li><li>Reminder sequences</li><li>Google/Outlook sync</li><li>No-show recovery</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-email"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg><span><span class="idx__name">Email Marketing</span><span class="idx__sub">Broadcasts, sequences and the deliverability to land them.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-email"><div><div class="idx__inner"><p>Design an email once, send it to a filtered segment, and watch opens, clicks and replies come back onto the contact record. Long-running nurture sequences run in the background for the people who said &ldquo;not right now&rdquo; nine months ago and are ready today.</p><ul class="idx__uses"><li>Broadcasts</li><li>Nurture sequences</li><li>Segments</li><li>Templates</li></ul></div></div></div></div></div></div></div></div></section>
-<section class="band band--hairline" id="automate"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Automate</span><p class="band__rail-note">The engine underneath the whole platform &mdash; and the skill we most want you to have.</p></div><div class="band__body"><h2 class="rv">Do it once. Let it run forever.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-workflows"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="15" width="6" height="6"/><path d="M9 6h6v9M6 9v6h9"/></svg><span><span class="idx__name">Workflow Automation</span><span class="idx__sub">The if-this-then-that engine everything else plugs into.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-workflows"><div><div class="idx__inner"><p>A visual canvas where a trigger (form filled, stage moved, call missed, tag added, date reached) fires a chain of actions: send the text, wait two days, check if they replied, branch, assign the task, update the pipeline, ping you on Slack. This is the part that replaces a part-time admin, and it is the single thing we most enjoy teaching people to build.</p><ul class="idx__uses"><li>Visual builder</li><li>Branching logic</li><li>Wait &amp; goal steps</li><li>Webhooks</li></ul></div></div></div></div></div></div></div></div></section>
-<section class="band band--hairline" id="intelligence"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Intelligence</span><p class="band__rail-note">The AI layer. Included at $100, not sold as a tier on top of it.</p></div><div class="band__body"><h2 class="rv">Agents, Super Agents and creative.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-agents"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="5" y="7" width="14" height="12"/><path d="M12 3v4M9 12h.01M15 12h.01M9.5 16h5"/></svg><span><span class="idx__name">AI Agents</span><span class="idx__sub">A conversation that qualifies and books while you sleep.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-agents"><div><div class="idx__inner"><p>Point an agent at a channel and give it your offer, your tone and your rules. It answers in seconds, asks the qualifying questions, handles the predictable objections, and books onto your calendar &mdash; then hands the thread to a human the moment it hits something it shouldn&rsquo;t decide. Voice agents answer the phone the same way.</p><ul class="idx__uses"><li>Conversation AI</li><li>Voice agents</li><li>Human handoff</li><li>Trained on your offer</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-super"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="9" y="9" width="6" height="6"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6M6 6l3 3M18 18l-3-3M18 6l-3 3M6 18l3-3"/></svg><span><span class="idx__name">Super Agents</span><span class="idx__sub">An agent that runs other agents, with memory of the whole record.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-super"><div><div class="idx__inner"><p>Where a single agent handles one conversation, a super agent coordinates the system: it reads the full contact history, decides which sequence a person belongs in, spins up the right agent for the job, rewrites the follow-up when the first one didn&rsquo;t land, reorders your day by who is actually close to buying, and escalates the handful worth your personal call. You build it in the same workflow canvas &mdash; or we build it for you.</p><ul class="idx__uses"><li>Multi-step reasoning</li><li>Full-record memory</li><li>Agent orchestration</li><li>Priority scoring</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-content"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><span><span class="idx__name">AI Content &amp; Creative</span><span class="idx__sub">Draft the ad, the email and the landing copy without staring at a blank box.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-content"><div><div class="idx__inner"><p>Generate ad angles, subject lines, SMS copy, landing page sections and social captions from a description of your offer &mdash; then edit them, because the edit is where the money is. Built into the same editors you were already using, not a separate tab you forget about.</p><ul class="idx__uses"><li>Ad copy</li><li>Email &amp; SMS</li><li>Page sections</li><li>Image generation</li></ul></div></div></div></div></div></div></div></div></section>
-<section class="band band--hairline band--tight" id="monetize"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Monetize</span><p class="band__rail-note">The things that happen after someone says yes, and make the next yes easier.</p></div><div class="band__body"><h2 class="rv">Get paid, get reviewed, get referred.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-reviews"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3l2.7 5.9 6.3.7-4.7 4.3 1.3 6.3L12 17l-5.6 3.2 1.3-6.3L3 9.6l6.3-.7L12 3z"/></svg><span><span class="idx__name">Reputation &amp; Reviews</span><span class="idx__sub">Ask at the right moment and the stars take care of themselves.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-reviews"><div><div class="idx__inner"><p>Trigger a review request by text and email the moment a job closes or an appointment completes, route the happy ones to Google and Facebook, and catch the unhappy ones privately first. Reply to every review from the same inbox as everything else.</p><ul class="idx__uses"><li>Google &amp; Facebook</li><li>Automated requests</li><li>Reply from inbox</li><li>Review widgets</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-social"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M8.4 10.8l7.2-3.6M8.4 13.2l7.2 3.6"/></svg><span><span class="idx__name">Social Planner</span><span class="idx__sub">Plan the month once instead of panicking every morning.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-social"><div><div class="idx__inner"><p>Schedule and publish to Facebook, Instagram, Google Business, LinkedIn, TikTok and YouTube from a single calendar view. Bulk-load a month, watch the engagement land back in the same reporting as everything else.</p><ul class="idx__uses"><li>Multi-channel</li><li>Calendar view</li><li>Bulk scheduling</li><li>Engagement tracking</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-courses"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c0 1.5 2.4 3 5 3s5-1.5 5-3v-5"/></svg><span><span class="idx__name">Courses, Memberships &amp; Communities</span><span class="idx__sub">Sell what you know, on the same platform that sells what you do.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-courses"><div><div class="idx__inner"><p>Host video courses, drip the lessons, gate them behind a payment or a membership tier, and run a community space alongside. Unlimited students, and the same contact record follows them from lead to buyer to member.</p><ul class="idx__uses"><li>Unlimited courses</li><li>Drip content</li><li>Membership tiers</li><li>Communities</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-payments"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><rect x="2" y="5" width="20" height="14"/><path d="M2 10h20M6 15h4"/></svg><span><span class="idx__name">Payments, Invoices &amp; Subscriptions</span><span class="idx__sub">Take the money in the same place you made the promise.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-payments"><div><div class="idx__inner"><p>Connect Stripe, PayPal, Square or NMI and send invoices, take deposits, run subscriptions and build estimates that convert into invoices with one click. Text a payment link mid-conversation and watch it clear before they leave the driveway.</p><ul class="idx__uses"><li>Invoices &amp; estimates</li><li>Subscriptions</li><li>Text-to-pay</li><li>Coupons</li></ul></div></div></div></div></div></div></div></div></section>
-<section class="band band--hairline band--tight" id="measure"><div class="shell"><div class="band__grid"><div class="band__rail"><span class="label">Measure</span><p class="band__rail-note">Attribution, reporting and the fact that all of it belongs to you.</p></div><div class="band__body"><h2 class="rv">Know what worked.</h2><div class="idx rv" data-d="1" style="margin-top:28px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-reporting"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M3 21h18"/><rect x="5" y="12" width="3.5" height="6"/><rect x="10.5" y="7" width="3.5" height="11"/><rect x="16" y="3" width="3.5" height="15"/></svg><span><span class="idx__name">Reporting &amp; Attribution</span><span class="idx__sub">Which ad made which dollar, without a spreadsheet.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-reporting"><div><div class="idx__inner"><p>Dashboards for pipeline value, appointment volume, call outcomes, campaign performance and agent activity &mdash; with source attribution that follows a lead from the first ad click through to the payment. Scheduled reports land in your inbox so you look at them.</p><ul class="idx__uses"><li>Attribution</li><li>Pipeline value</li><li>Call reporting</li><li>Scheduled emails</li></ul></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-access"><svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg><span><span class="idx__name">Users, Permissions &amp; Ownership</span><span class="idx__sub">Your account, your data, your logins &mdash; on day one.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg></button></h3><div class="idx__panel" id="p-f-access"><div><div class="idx__inner"><p>Add your team with the permissions each of them should have, keep an audit trail of who changed what, and export everything whenever you want. Nothing about your business is held hostage inside our account, because it was never in our account.</p><ul class="idx__uses"><li>Unlimited users</li><li>Role permissions</li><li>Full export</li><li>Your domains</li></ul></div></div></div></div></div></div></div></div></section>
-
-<!-- ============================= CLOSING ============================ -->
-<section class="band band--hairline band--tighter">
+<section class="hero">
   <div class="shell">
-    <div class="band__grid">
-      <div class="band__rail">
-        <span class="label">Learning it</span>
-        <p class="band__rail-note">The list is long. You don&rsquo;t start with all of it.</p>
-      </div>
-      <div class="band__body">
-        <h2 class="rv">Nobody turns all of this on in week one.</h2>
-        <p class="lede rv" data-d="1" style="margin-top:20px">
-          We start you with the four things that make money fastest for your kind of
-          business &mdash; usually a funnel, a calendar, the missed-call text-back and
-          one booking agent &mdash; and we build the first ads pointing at them
-          together. The other fourteen features are there the day you need them,
-          with a walkthrough waiting.
+    <h1>Everything <span class="accent">Go High Level</span> does.<br>Plus the agents.</h1>
+    <p class="lede">
+      This is the whole list &mdash; not a &ldquo;starter&rdquo; slice of it. Every line
+      below is included at $100 a month, and every line below has a walkthrough showing
+      you how to set it up yourself. Tap one to see what it does.
+    </p>
+    <div class="actions">
+      <a class="btn btn--ember" href="#" data-form
+         data-form-title="Start at $100 a month" data-form-intent="Features hero — Start">Start at $100</a>
+      <a class="btn btn--wire" href="done-for-you.html">Have us build it instead</a>
+    </div>
+  </div>
+</section>
+
+<section id="capture"><div class="shell"><h2 class="sec-h">Get the lead, and get to them first.</h2><p class="lede">Everything that turns attention into a name, a number and a conversation.</p><div class="idx" style="margin-top:24px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-crm"><span><span class="idx__name">CRM &amp; Pipelines</span><span class="idx__sub">Every lead, every stage, one board you can actually read.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-crm"><div><div class="idx__inner"><p>A drag-and-drop board of every deal you have open. Stages you name yourself, cards that carry the whole history &mdash; every text, call, email, form fill and payment attached to the person, not scattered across four apps. Move a card and an automation can fire: the estimate goes out, the reminder queues, the review request waits for the job to close.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-forms"><span><span class="idx__name">Forms, Surveys &amp; Quizzes</span><span class="idx__sub">Ask the qualifying questions before you ever pick up the phone.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-forms"><div><div class="idx__inner"><p>Build a form, a multi-step survey or a scored quiz and drop it on any page, funnel or website &mdash; yours or not. Conditional logic branches the questions based on what they answered, so a tyre-kicker and a ready buyer get different paths. Every submission lands on the contact record and can start a workflow the same second.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-chat"><span><span class="idx__name">Conversations &mdash; SMS, Email, DM, WhatsApp</span><span class="idx__sub">One inbox for every channel a customer might reach you on.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-chat"><div><div class="idx__inner"><p>Text messages, emails, Facebook and Instagram DMs, Google Business chat and WhatsApp all land in a single threaded inbox on your phone and desktop. Reply from anywhere and it goes back out on the channel they used. Snippets and saved replies for the questions you answer forty times a week.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-phone"><span><span class="idx__name">Phone System &amp; Call Tracking</span><span class="idx__sub">Your number, your recordings, your attribution.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-phone"><div><div class="idx__inner"><p>Buy tracking numbers inside the platform, route calls to whoever should pick up, record and transcribe them, and see exactly which ad or page produced the call. Missed calls text back automatically &mdash; the single highest-return automation most local businesses ever turn on. Power dialer for the list you need to work through today.</p></div></div></div></div></div></div></section>
+<section id="convert"><div class="shell"><h2 class="sec-h">Turn the conversation into a booking.</h2><p class="lede">Pages, calendars and follow-up that move a lead to a scheduled, paid outcome.</p><div class="idx" style="margin-top:24px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-funnels"><span><span class="idx__name">Funnels &amp; Landing Pages</span><span class="idx__sub">Build the page, the upsell and the thank-you in an afternoon.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-funnels"><div><div class="idx__inner"><p>A visual builder for the pages that actually take money: opt-ins, VSLs, application pages, order forms with order bumps and one-click upsells. Start from a template, swap the copy and the photos, point your domain at it. Split-test two versions and the platform tells you which one earns more, not which one gets more clicks.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-sites"><span><span class="idx__name">Websites &amp; Blogs</span><span class="idx__sub">A real site on your own domain, not a page on someone else&rsquo;s.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-sites"><div><div class="idx__inner"><p>Full multi-page websites with navigation, blogs and a proper mobile layout, hosted and SSL-secured. Same builder as the funnels, so anything you learn once works everywhere. Point an existing domain at it or buy one inside the platform.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-calendar"><span><span class="idx__name">Calendars &amp; Booking</span><span class="idx__sub">They book themselves, and then they actually show up.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-calendar"><div><div class="idx__inner"><p>Round-robin or single-host calendars that respect your real availability, buffer times and service durations. Confirmations, reminders and reschedule links go out by text and email on a schedule you set. No-shows drop into a recovery workflow instead of into a hole.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-email"><span><span class="idx__name">Email Marketing</span><span class="idx__sub">Broadcasts, sequences and the deliverability to land them.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-email"><div><div class="idx__inner"><p>Design an email once, send it to a filtered segment, and watch opens, clicks and replies come back onto the contact record. Long-running nurture sequences run in the background for the people who said &ldquo;not right now&rdquo; nine months ago and are ready today.</p></div></div></div></div></div></div></section>
+<section id="automate"><div class="shell"><h2 class="sec-h">Do it once. Let it run forever.</h2><p class="lede">The engine underneath the whole platform &mdash; and the skill we most want you to have.</p><div class="idx" style="margin-top:24px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-workflows"><span><span class="idx__name">Workflow Automation</span><span class="idx__sub">The if-this-then-that engine everything else plugs into.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-workflows"><div><div class="idx__inner"><p>A visual canvas where a trigger (form filled, stage moved, call missed, tag added, date reached) fires a chain of actions: send the text, wait two days, check if they replied, branch, assign the task, update the pipeline, ping you on Slack. This is the part that replaces a part-time admin, and it is the single thing we most enjoy teaching people to build.</p></div></div></div></div></div></div></section>
+<section id="intelligence"><div class="shell"><h2 class="sec-h">Agents, Super Agents and creative.</h2><p class="lede">The AI layer. Included at $100, not sold as a tier on top of it.</p><div class="idx" style="margin-top:24px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-agents"><span><span class="idx__name">AI Agents</span><span class="idx__sub">A conversation that qualifies and books while you sleep.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-agents"><div><div class="idx__inner"><p>Point an agent at a channel and give it your offer, your tone and your rules. It answers in seconds, asks the qualifying questions, handles the predictable objections, and books onto your calendar &mdash; then hands the thread to a human the moment it hits something it shouldn&rsquo;t decide. Voice agents answer the phone the same way.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-super"><span><span class="idx__name">Super Agents</span><span class="idx__sub">An agent that runs other agents, with memory of the whole record.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-super"><div><div class="idx__inner"><p>Where a single agent handles one conversation, a super agent coordinates the system: it reads the full contact history, decides which sequence a person belongs in, spins up the right agent for the job, rewrites the follow-up when the first one didn&rsquo;t land, reorders your day by who is actually close to buying, and escalates the handful worth your personal call. You build it in the same workflow canvas &mdash; or we build it for you.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-content"><span><span class="idx__name">AI Content &amp; Creative</span><span class="idx__sub">Draft the ad, the email and the landing copy without staring at a blank box.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-content"><div><div class="idx__inner"><p>Generate ad angles, subject lines, SMS copy, landing page sections and social captions from a description of your offer &mdash; then edit them, because the edit is where the money is. Built into the same editors you were already using, not a separate tab you forget about.</p></div></div></div></div></div></div></section>
+<section id="monetize"><div class="shell"><h2 class="sec-h">Get paid, get reviewed, get referred.</h2><p class="lede">The things that happen after someone says yes, and make the next yes easier.</p><div class="idx" style="margin-top:24px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-reviews"><span><span class="idx__name">Reputation &amp; Reviews</span><span class="idx__sub">Ask at the right moment and the stars take care of themselves.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-reviews"><div><div class="idx__inner"><p>Trigger a review request by text and email the moment a job closes or an appointment completes, route the happy ones to Google and Facebook, and catch the unhappy ones privately first. Reply to every review from the same inbox as everything else.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-social"><span><span class="idx__name">Social Planner</span><span class="idx__sub">Plan the month once instead of panicking every morning.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-social"><div><div class="idx__inner"><p>Schedule and publish to Facebook, Instagram, Google Business, LinkedIn, TikTok and YouTube from a single calendar view. Bulk-load a month, watch the engagement land back in the same reporting as everything else.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-courses"><span><span class="idx__name">Courses, Memberships &amp; Communities</span><span class="idx__sub">Sell what you know, on the same platform that sells what you do.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-courses"><div><div class="idx__inner"><p>Host video courses, drip the lessons, gate them behind a payment or a membership tier, and run a community space alongside. Unlimited students, and the same contact record follows them from lead to buyer to member.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-payments"><span><span class="idx__name">Payments, Invoices &amp; Subscriptions</span><span class="idx__sub">Take the money in the same place you made the promise.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-payments"><div><div class="idx__inner"><p>Connect Stripe, PayPal, Square or NMI and send invoices, take deposits, run subscriptions and build estimates that convert into invoices with one click. Text a payment link mid-conversation and watch it clear before they leave the driveway.</p></div></div></div></div></div></div></section>
+<section id="measure"><div class="shell"><h2 class="sec-h">Know what worked.</h2><p class="lede">Attribution, reporting and the fact that all of it belongs to you.</p><div class="idx" style="margin-top:24px"><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-reporting"><span><span class="idx__name">Reporting &amp; Attribution</span><span class="idx__sub">Which ad made which dollar, without a spreadsheet.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-reporting"><div><div class="idx__inner"><p>Dashboards for pipeline value, appointment volume, call outcomes, campaign performance and agent activity &mdash; with source attribution that follows a lead from the first ad click through to the payment. Scheduled reports land in your inbox so you look at them.</p></div></div></div></div><div class="idx__row"><h3 style="margin:0"><button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-f-access"><span><span class="idx__name">Users, Permissions &amp; Ownership</span><span class="idx__sub">Your account, your data, your logins &mdash; on day one.</span></span><svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></h3><div class="idx__panel" id="p-f-access"><div><div class="idx__inner"><p>Add your team with the permissions each of them should have, keep an audit trail of who changed what, and export everything whenever you want. Nothing about your business is held hostage inside our account, because it was never in our account.</p></div></div></div></div></div></div></section>
+
+<section>
+  <div class="shell">
+    <h2 class="sec-h">Nobody turns all of this on in week one.</h2>
+    <p class="lede">
+      We start you with the four things that make money fastest for your kind of
+      business &mdash; usually a funnel, a calendar, the missed-call text-back and one
+      booking agent &mdash; and we build the first ads pointing at them together. The
+      other fourteen features are there the day you need them, with a walkthrough
+      waiting.
+    </p>
+    <div class="cols cols--2">
+      <div class="panel">
+        <h3>Learn it &mdash; included at $100</h3>
+        <p class="grey" style="font-size:.95rem;margin-top:9px">
+          Walkthroughs for every feature, live sessions, events, and your first set of
+          ads built with you on the call.
         </p>
-        <div class="cols cols--2 rv" data-d="2" style="margin-top:28px">
-          <div class="panel">
-            <span class="label">Learn it</span>
-            <h3 style="margin-top:14px">Included at $100</h3>
-            <p class="muted" style="font-size:.92rem;margin-top:10px">
-              Walkthroughs for every feature, live sessions, events, and your first
-              set of ads built with you on the call.
-            </p>
-          </div>
-          <div class="panel">
-            <span class="label">Or skip it</span>
-            <h3 style="margin-top:14px">Quoted, from $500</h3>
-            <p class="muted" style="font-size:.92rem;margin-top:10px">
-              Want a specific agent, funnel or automation built for you? That&rsquo;s
-              a Done-For-You project and we price it before we start.
-            </p>
-            <a class="btn btn--wire btn--sm" href="done-for-you.html" style="margin-top:16px">See the tiers</a>
-          </div>
-        </div>
+      </div>
+      <div class="panel">
+        <h3>Or skip it &mdash; quoted, from $500</h3>
+        <p class="grey" style="font-size:.95rem;margin-top:9px">
+          Want a specific agent, funnel or automation built for you? That&rsquo;s a
+          Done-For-You project and we price it before we start.
+          <a class="link" href="done-for-you.html">See the tiers</a>
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="cta">
-  <div class="cta__glow" aria-hidden="true"></div>
-  <div class="shell cta__in">
-    <div class="band__grid">
-      <div class="band__rail"><span class="label">Start</span></div>
-      <div class="band__body">
-        <h2 class="rv">All of it, for a hundred dollars.</h2>
-        <p class="lede rv" data-d="1" style="margin-top:20px">
-          Flat. No per-contact billing, no per-seat billing, no agent tier. And your
-          first campaign goes live with us on the call.
-        </p>
-        <div class="hero__cta rv" data-d="2">
-          <a class="btn btn--ember" href="#" data-form
-             data-form-title="Start at $100 a month" data-form-intent="Features CTA — Start">
-            Start at $100
-            <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn btn--wire" href="#" data-form
-             data-form-title="Book a walkthrough" data-form-intent="Features CTA — Walkthrough">Book a walkthrough</a>
-        </div>
-      </div>
+<section>
+  <div class="shell">
+    <h2 class="sec-h">All of it, for a hundred dollars.</h2>
+    <p class="lede">
+      Flat. No per-contact billing, no per-seat billing, no agent tier. And your first
+      campaign goes live with us on the call.
+    </p>
+    <div class="actions">
+      <a class="btn btn--ember" href="#" data-form
+         data-form-title="Start at $100 a month" data-form-intent="Features CTA — Start">Start at $100</a>
+      <a class="btn btn--wire" href="#" data-form
+         data-form-title="Book a walkthrough" data-form-intent="Features CTA — Walkthrough">Book a walkthrough</a>
     </div>
   </div>
 </section>
@@ -173,26 +104,19 @@
   <div class="shell">
     <div class="ftr__grid">
       <div>
-        <a class="logo" href="index.html" aria-label="Growth Factor AI — home">
-          <svg class="logo__mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="1" y="15" width="6" height="8" stroke="#8C99B0" stroke-width="1.4"/>
-            <rect x="9" y="9" width="6" height="14" stroke="#8C99B0" stroke-width="1.4"/>
-            <rect x="17" y="1" width="6" height="22" fill="#C9622E"/>
-          </svg>
-          <span class="logo__txt">Growth Factor<span>.ai</span></span>
-        </a>
-        <p class="muted" style="font-size:.875rem;max-width:34ch;margin-top:16px">
+        <a class="logo" href="index.html"><span class="logo__mark"></span>Growth Factor<span>.ai</span></a>
+        <p class="grey" style="font-size:.92rem;margin-top:14px;max-width:32ch">
           The whole growth stack for a hundred dollars, and someone on the other
           end of the line who will teach you to run it.
         </p>
       </div>
       <div>
-        <h4>Platform</h4>
+        <h4>Product</h4>
         <ul>
-          <li><a href="features.html">Everything included</a></li>
+          <li><a href="features.html">Features</a></li>
           <li><a href="features.html#intelligence">AI Agents</a></li>
           <li><a href="features.html#intelligence">Super Agents</a></li>
-          <li><a href="features.html#automate">Workflows</a></li>
+          <li><a href="index.html#price">Pricing</a></li>
         </ul>
       </div>
       <div>
@@ -200,14 +124,14 @@
         <ul>
           <li><a href="done-for-you.html">Done-For-You</a></li>
           <li><a href="done-for-you.html#scope">Get a quote</a></li>
-          <li><a href="index.html#teach">The teach track</a></li>
+          <li><a href="index.html#learn">How we teach it</a></li>
         </ul>
       </div>
       <div>
         <h4>Start</h4>
         <ul>
-          <li><a href="index.html#price">Pricing</a></li>
-          <li><a href="#" data-form data-form-title="Start at $100 a month" data-form-intent="Start — $100/mo">Create an account</a></li>
+          <li><a href="#" data-form data-form-title="Start at $100 a month" data-form-intent="Footer — Start">Create an account</a></li>
+          <li><a href="#" data-form data-form-title="Book a walkthrough" data-form-intent="Footer — Walkthrough">Book a walkthrough</a></li>
           <li><a href="mailto:ben@growth-factor.ai">ben@growth-factor.ai</a></li>
         </ul>
       </div>
@@ -223,10 +147,9 @@
   <div class="modal__veil" data-form-close></div>
   <div class="modal__box">
     <button class="modal__x" data-form-close aria-label="Close">&#215;</button>
-    <span class="label">Growth Factor</span>
-    <h3 id="lead-modal-t" data-modal-title style="margin:12px 0 6px;font-size:1.42rem">Start at $100 a month</h3>
-    <p class="muted" style="font-size:.88rem;margin-bottom:22px">
-      Tell us where to reach you. A real person replies — usually same day.
+    <h3 id="lead-modal-t" data-modal-title>Start at $100 a month</h3>
+    <p class="grey" style="font-size:.94rem;margin-bottom:20px">
+      Tell us where to reach you. A real person replies &mdash; usually same day.
     </p>
     <form method="post" action="lead.php">
       <input type="hidden" name="intent" data-modal-intent value="General">
@@ -244,15 +167,13 @@
         <input id="f-biz" name="business" type="text" placeholder="Gym, roofing, med spa, agency&hellip;">
       </div>
       <div class="field">
-        <label for="f-note">Anything we should know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+        <label for="f-note">Anything we should know? (optional)</label>
         <textarea id="f-note" name="note" placeholder="What you're selling, what you've tried, what you want built."></textarea>
       </div>
-      <button class="btn btn--ember btn--full" type="submit">
-        Send it
-        <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-      <p class="muted" style="font-size:.72rem;margin-top:14px;font-family:var(--mono);letter-spacing:.04em">
-        No spam. No auto-dialer. We use the software on ourselves, so you'll see exactly how it feels.
+      <button class="btn btn--ember btn--full" type="submit">Send it</button>
+      <p class="grey" style="font-size:.85rem;margin-top:13px">
+        No spam. No auto-dialer. We use the software on ourselves, so you&rsquo;ll
+        see exactly how it feels.
       </p>
     </form>
   </div>

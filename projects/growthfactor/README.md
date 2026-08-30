@@ -39,20 +39,23 @@ Artifact CSP requires it.
 
 - **$100 is billed monthly** in all the copy. Say the word if it's meant to be
   a one-time or annual figure and it's a one-line change.
-- **The ember hex `#C9622E` is a considered pick, not a sample** — jonmayo.com
+- **The ember hex `#D2763F` is a considered pick, not a sample** — jonmayo.com
   is blocked from the build environment. Send a screenshot and it gets swapped
-  in `site/assets/gf.css` (`--ember`) plus its two tints.
+  in `site/assets/gf.css` (`--ember`).
+- **The accent gradient** (orange → amber) runs on the hero accent line and the
+  logo mark only. Set `--accent-grad` to `var(--ember)` for flat, or to a grey
+  if you'd rather the accent stay quiet there.
 - **The `$1,500–$5,000` middle band** was invented to bridge your $500 and
   $10,000 anchors. Change or drop it.
-- Copy is all new — written for this brief, not frozen from a prior site.
-  Nothing here is precious.
 
 ## Locked decisions
 
 Kernel in `kernel.json`. The two that matter most:
 
-- **Zero border-radius everywhere.** Buttons and inputs included. It is the
-  cheapest thing to erode and the fastest way to make this look like every
-  other dark SaaS page.
-- **No numbered sections.** Sequence is carried by the ladder tick squares
-  instead — this was a specific dislike in the brief.
+- **Keep it basic.** v1 was rejected for doing too much — rails, spines, grid
+  meshes, node diagrams, a ticker, scroll reveals. One centred column, plain
+  sections, one hairline between them. Adding a device back needs a reason.
+- **Rounded everywhere, Claude-style.** 8px controls, 12px media, 16px panels.
+  No sharp corners on anything.
+- **One animated thing:** the typing line in the hero. That's the piece Ben
+  liked; everything else stays still.

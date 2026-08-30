@@ -16,40 +16,29 @@ OUT  = os.path.join(HERE, 'site')
 
 import features as F
 
-ARROW = ('<svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" '
-         'stroke="currentColor" stroke-width="2" aria-hidden="true">'
-         '<path d="M5 12h14M13 6l6 6-6 6"/></svg>')
-
-
 def read(name):
     with open(os.path.join(SRC, name), encoding='utf-8') as fh:
         return fh.read()
 
 
-def icon(key):
-    return ('<svg class="idx__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-            'stroke-width="1.5" stroke-linecap="square" aria-hidden="true">%s</svg>'
-            % F.ICONS[key])
-
-
 def row(feat, page):
+    """One feature: a plain row that opens to show what it does."""
     fid, cat, ico, name, sub, body, uses = feat
     rid = '%s-%s' % (page, fid)
-    tags = ''.join('<li>%s</li>' % u for u in uses)
     return (
         '<div class="idx__row">'
         '<h3 style="margin:0">'
         '<button class="idx__btn" type="button" aria-expanded="false" aria-controls="p-%(rid)s">'
-        '%(icon)s'
         '<span><span class="idx__name">%(name)s</span>'
         '<span class="idx__sub">%(sub)s</span></span>'
         '<svg class="idx__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-        'stroke-width="2.2" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>'
+        'stroke-width="2" stroke-linecap="round" aria-hidden="true">'
+        '<path d="M12 5v14M5 12h14"/></svg>'
         '</button></h3>'
         '<div class="idx__panel" id="p-%(rid)s">'
-        '<div><div class="idx__inner"><p>%(body)s</p><ul class="idx__uses">%(tags)s</ul></div></div>'
+        '<div><div class="idx__inner"><p>%(body)s</p></div></div>'
         '</div></div>'
-    ) % dict(rid=rid, icon=icon(ico), name=name, sub=sub, body=body, tags=tags)
+    ) % dict(rid=rid, name=name, sub=sub, body=body)
 
 
 def home_index():
@@ -59,19 +48,15 @@ def home_index():
 
 def category_bands():
     out = []
-    tight = {4: ' band--tight', 5: ' band--tight'}
-    for n, (key, title, head, note) in enumerate(F.CATEGORIES):
+    for key, title, head, note in F.CATEGORIES:
         rows = ''.join(row(f, 'f') for f in F.FEATURES if f[1] == key)
         out.append(
-            '<section class="band band--hairline%(t)s" id="%(key)s">'
-            '<div class="shell"><div class="band__grid">'
-            '<div class="band__rail"><span class="label">%(title)s</span>'
-            '<p class="band__rail-note">%(note)s</p></div>'
-            '<div class="band__body">'
-            '<h2 class="rv">%(head)s</h2>'
-            '<div class="idx rv" data-d="1" style="margin-top:28px">%(rows)s</div>'
-            '</div></div></div></section>'
-            % dict(t=tight.get(n, ''), key=key, title=title, head=head, note=note, rows=rows)
+            '<section id="%(key)s"><div class="shell">'
+            '<h2 class="sec-h">%(head)s</h2>'
+            '<p class="lede">%(note)s</p>'
+            '<div class="idx" style="margin-top:24px">%(rows)s</div>'
+            '</div></section>'
+            % dict(key=key, head=head, note=note, rows=rows)
         )
     return '\n'.join(out)
 
@@ -100,7 +85,7 @@ def shell(title, desc, body, key):
            .replace('{{NAV_FEATURES}}', ' aria-current="page"' if key == 'features' else '')
            .replace('{{NAV_DFY}}', ' aria-current="page"' if key == 'dfy' else ''))
     return ('<!doctype html>\n<html lang="en">\n<head>\n%s</head>\n<body>\n'
-            '<a href="#main" class="hp">Skip to content</a>\n%s\n<main id="main">\n%s\n</main>\n%s\n%s\n'
+            '%s\n<main id="main">\n%s\n</main>\n%s\n%s\n'
             '</body>\n</html>\n' % (head, hdr, body, read('_footer.html'), read('_modal.html')))
 
 

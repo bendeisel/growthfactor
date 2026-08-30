@@ -2,10 +2,9 @@
   <div class="modal__veil" data-form-close></div>
   <div class="modal__box">
     <button class="modal__x" data-form-close aria-label="Close">&#215;</button>
-    <span class="label">Growth Factor</span>
-    <h3 id="lead-modal-t" data-modal-title style="margin:12px 0 6px;font-size:1.42rem">Start at $100 a month</h3>
-    <p class="muted" style="font-size:.88rem;margin-bottom:22px">
-      Tell us where to reach you. A real person replies — usually same day.
+    <h3 id="lead-modal-t" data-modal-title>Start at $100 a month</h3>
+    <p class="grey" style="font-size:.94rem;margin-bottom:20px">
+      Tell us where to reach you. A real person replies &mdash; usually same day.
     </p>
     <form method="post" action="lead.php">
       <input type="hidden" name="intent" data-modal-intent value="General">
@@ -23,15 +22,13 @@
         <input id="f-biz" name="business" type="text" placeholder="Gym, roofing, med spa, agency&hellip;">
       </div>
       <div class="field">
-        <label for="f-note">Anything we should know? <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+        <label for="f-note">Anything we should know? (optional)</label>
         <textarea id="f-note" name="note" placeholder="What you're selling, what you've tried, what you want built."></textarea>
       </div>
-      <button class="btn btn--ember btn--full" type="submit">
-        Send it
-        <svg class="btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-      <p class="muted" style="font-size:.72rem;margin-top:14px;font-family:var(--mono);letter-spacing:.04em">
-        No spam. No auto-dialer. We use the software on ourselves, so you'll see exactly how it feels.
+      <button class="btn btn--ember btn--full" type="submit">Send it</button>
+      <p class="grey" style="font-size:.85rem;margin-top:13px">
+        No spam. No auto-dialer. We use the software on ourselves, so you&rsquo;ll
+        see exactly how it feels.
       </p>
     </form>
   </div>

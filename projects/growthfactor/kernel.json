@@ -1,46 +1,42 @@
 {
-  "source": "declared — Growth Factor AI is our own brand, so there is no prior site to mine. Direction set by the client (Ben) in brief: burnt orange accent borrowed from jonmayo.com, black replaced with super dark blue.",
+  "source": "declared — Growth Factor AI is our own brand. Direction from Ben: burnt orange (ref jonmayo.com) on super dark blue, kept simple, rounded corners throughout.",
   "title": "Growth Factor AI",
-  "note": "jonmayo.com could not be fetched from this environment (egress blocked), so the ember hue is a considered pick against the brief 'mellow burnt orange, not too bright, not overstimulating' rather than a sampled value. Confirm against the real site before this kernel is locked.",
+  "note": "jonmayo.com is blocked from this build environment, so --ember is a considered pick against 'more burnt, a little lighter than #C9622E', not a sampled value. Confirm against the real site.",
   "tokens": {
-    "--ink": "#060B16",
-    "--ground": "#0A1122",
-    "--raise": "#101A31",
-    "--raise-2": "#16223D",
-    "--line": "#1C2740",
-    "--line-soft": "#141D33",
-    "--fg": "#E8ECF4",
-    "--fg-2": "#B7C1D4",
-    "--mute": "#8C99B0",
-    "--ember": "#C9622E",
-    "--ember-lift": "#E58A4F",
-    "--ember-deep": "#7A3A1B",
-    "--on-ember": "#0A0603"
+    "--ground": "#0B1220",
+    "--raise": "#121A2B",
+    "--line": "#1E2839",
+    "--fg": "#E9ECF2",
+    "--grey": "#9AA3B2",
+    "--ember": "#D2763F",
+    "--ember-lift": "#E08F5C",
+    "--amber": "#E3A055",
+    "--on-ember": "#14100C"
   },
+  "accent_gradient": "linear-gradient(94deg, #D2763F, #E3A055) — used only on the hero accent line and the logo mark. Set --accent-grad to var(--ember) for a flat accent instead.",
   "type": {
-    "family": "Archivo (400/500/600/700) — one grotesque carries the whole page",
-    "utility": "JetBrains Mono (400/500) — micro-labels, figures, fine print",
-    "stance": "5 body-led — no display face; hierarchy from weight, case, rule and space",
+    "family": "Archivo (400/500/600/700)",
+    "utility": "JetBrains Mono — used for exactly one thing: the typing line",
     "hosting": "self-hosted variable woff2, latin subset, in site/assets/fonts/"
   },
   "geometry": {
-    "radius": "0px everywhere, no exceptions — including buttons and inputs",
-    "hairline": "1px, --line for structure, --ember for emphasis",
-    "shell": "1240px",
-    "rail": "190px left label rail"
+    "radius": "rounded everywhere, Claude-style — 8px controls, 12px media/notes, 16px panels. No sharp corners on anything.",
+    "shell": "900px, centred — the shell is the reading measure",
+    "sections": "72px padding, one hairline between each"
   },
-  "motifs": [
-    "Ember hairline spine — a 1px vertical rule the content sits offset to the right of; an ember tick marks where each section's rail meets it. Repeated as the nav underline and the .note left border.",
-    "Mono micro-label — uppercase JetBrains Mono with a 9px hollow ember square before it. Section eyebrows. Deliberately NOT numbered (client dislikes the 01/02/03 device on jonmayo.com).",
-    "Node/edge diagram — thin ember lines joining small squares; hollow square = input, filled square = the agent acting. Draws itself in on scroll. Hero background and the Super Agent explainer.",
-    "Terminal caret — a blinking ember block after a rotating line. Used exactly once, in the hero.",
-    "Ladder tick — an 11px square per step, alternating filled/hollow, carrying sequence without printing numerals."
+  "motion": [
+    "The typing line — 'Build your own ___.' types in and back out, with a blinking caret. This is the ONE animated thing on the site and the piece Ben specifically liked.",
+    "Feature rows open and close.",
+    "Nothing else. No scroll reveals, no drawing diagrams, no marquee."
   ],
   "axes": {
-    "structure": "D offset asymmetric",
-    "type_stance": "5 body-led",
+    "structure": "B boxed column",
+    "type_stance": "3 flat",
     "density": "balanced",
-    "rhythm": "accelerating (94px → 72px → 54px toward the primary action)",
+    "rhythm": "even",
     "color_stance": "dark-dominant + accent"
-  }
+  },
+  "history": [
+    "v1 was rejected as far too busy: label rails, hairline spines, grid meshes, node/edge diagrams, a ticker, scroll reveals and zero-radius everything. Stripped back to this. Keep it basic."
+  ]
 }
