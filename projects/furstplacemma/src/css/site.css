@@ -1,0 +1,488 @@
+/* ==========================================================================
+   Furst Place MMA
+   --------------------------------------------------------------------------
+   PROVISIONAL KERNEL. The client's real typefaces and hexes could not be
+   extracted — furstplacemma.com is blocked at the egress proxy and the theme
+   backup has not arrived. Everything in :root below is a placeholder chosen to
+   satisfy the divergence check against Nashville MMA (18 miles away, already in
+   shipped-log.csv), NOT measured from the client.
+
+   When themes.zip lands: run scripts/extract_kernel.py, replace this block, and
+   nothing below it should need to change. That is the whole reason the tokens
+   are isolated here.
+   ========================================================================== */
+
+:root {
+  /* Ground. Deliberately NOT Nashville MMA's #131313 dark-dominant ground.
+     Concrete/bone reads like a industrial-park fight gym in daylight and lets
+     the client's photography carry all the darkness in the page. */
+  --ground:        #EDEAE4;
+  --ground-deep:   #E3DFD7;
+  --ink:           #14110F;
+  --ink-soft:      #4A443E;
+
+  /* One accent, hot. Not #D7AD56 — the gold-on-black MMA cliché is exactly
+     what the neighbouring gym already owns. */
+  --accent:        #C8362A;
+  --accent-dark:   #9E2318;
+
+  --rule:          rgba(20, 17, 15, 0.16);
+  --rule-strong:   rgba(20, 17, 15, 0.42);
+
+  /* Archivo superfamily: one family, two extreme weights. Squared, industrial,
+     utilitarian — closer to stencilled crate lettering than to sport-brand
+     italics. Avoids Bebas Neue (the neighbour's face) and every banned default. */
+  --display: "Archivo Black", "Arial Black", sans-serif;
+  --body:    "Archivo", system-ui, sans-serif;
+
+  /* Radius tension: containers are square, only actions are softened. */
+  --radius-action: 3px;
+
+  --measure: 68ch;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--display);
+  /* 900 so the fallback stack renders heavy if Archivo Black fails to load.
+     Archivo Black ships only a 400 face, so this is a no-op when it does. */
+  font-weight: 900;
+  line-height: 0.94;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--ink); color: var(--ground);
+  padding: .75rem 1.25rem; z-index: 200;
+}
+.skip:focus { left: 0; }
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* --- Eyebrow label: the repeating small-caps rule-and-label device ---------- */
+.eyebrow {
+  font-family: var(--body);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 0 0 1.25rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 2.5rem; height: 2px;
+  background: var(--accent);
+  flex: none;
+}
+
+/* --- Buttons --------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .6rem;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: .875rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 1.05rem 2rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-action);
+  background: var(--ink);
+  color: var(--ground);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn--accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn--accent:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.btn--ghost { background: transparent; color: var(--ink); }
+.btn--ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--ground); }
+.btn--on-dark { border-color: #fff; background: transparent; color: #fff; }
+.btn--on-dark:hover { background: #fff; color: var(--ink); }
+
+/* --- Header ---------------------------------------------------------------- */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem var(--gutter);
+  background: var(--ground);
+  border-bottom: 2px solid var(--ink);
+}
+.header__mark {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.header__mark span { color: var(--accent); }
+.header__nav { display: flex; align-items: center; gap: 1.75rem; }
+.header__nav a {
+  font-size: .8125rem; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; text-decoration: none;
+}
+.header__nav a:hover { color: var(--accent); }
+.header__tel {
+  font-family: var(--display);
+  font-size: .95rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+/* Mobile disclosure nav. Below 900px the inline nav is replaced by a toggled
+   panel rather than simply hidden — most gym traffic is on a phone, and the
+   program pages have to stay reachable. */
+.navtoggle {
+  display: none;
+  width: 2.75rem; height: 2.75rem;
+  padding: 0; border: 2px solid var(--ink); border-radius: var(--radius-action);
+  background: transparent; color: var(--ink);
+  cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.navtoggle span {
+  display: block; width: 1.15rem; height: 2px; background: currentColor;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.navtoggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.navtoggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.navtoggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 900px) {
+  .navtoggle { display: flex; }
+  .header { flex-wrap: wrap; }
+  .header__nav {
+    display: none;
+    order: 3;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin: .85rem 0 0;
+    border-top: 2px solid var(--ink);
+  }
+  .header__nav.is-open { display: flex; }
+  .header__nav a {
+    padding: .95rem .25rem;
+    border-bottom: 1px solid var(--rule);
+    font-size: .9375rem;
+  }
+}
+
+/* ==========================================================================
+   THE MAT SPLIT — the hero, in place of a banner
+   Two halves: STAND-UP and GROUND, the two disciplines actually taught. The
+   seam between them is MMA, because MMA is literally where the two meet. The
+   structure can only ever say three things, which is the point.
+   ========================================================================== */
+
+.mat {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100svh - 66px);
+  border-bottom: 2px solid var(--ink);
+  isolation: isolate;
+}
+
+.mat__side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--gutter);
+  padding-bottom: clamp(3.5rem, 9vh, 6rem);
+  overflow: hidden;
+  text-decoration: none;
+  color: #fff;
+  background: #1a1613;
+  transition: flex-grow .45s cubic-bezier(.2,.7,.3,1);
+}
+
+/* Photograph slot. Replace background-image with the client's own photo. */
+.mat__media {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+  transition: transform .6s cubic-bezier(.2,.7,.3,1);
+  z-index: -2;
+}
+.mat__side:hover .mat__media,
+.mat__side:focus-visible .mat__media { transform: scale(1.07); }
+
+/* Graded scrim: heavier at the base where the type sits, so headings never
+   float unreadably on photography. */
+.mat__side::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(to top,
+    rgba(12,10,9,.94) 0%,
+    rgba(12,10,9,.72) 32%,
+    rgba(12,10,9,.34) 62%,
+    rgba(12,10,9,.22) 100%);
+  z-index: -1;
+}
+
+.mat__side--standup { border-right: 1px solid rgba(255,255,255,.18); }
+
+.mat__index {
+  font-family: var(--display);
+  font-size: .8125rem;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: .75rem;
+}
+.mat__title {
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  color: #fff;
+  margin-bottom: .5rem;
+}
+.mat__desc {
+  max-width: 34ch;
+  color: rgba(255,255,255,.86);
+  font-size: .9375rem;
+  margin: 0 0 1.25rem;
+}
+@media (min-width: 901px) {
+  /* Equal reserved height keeps STAND-UP and GROUND on one baseline even
+     though their descriptions differ in length. */
+  .mat__desc { min-height: 6.4em; }
+}
+.mat__more {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .8125rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.mat__more::after {
+  content: ""; width: 1.5rem; height: 2px; background: var(--accent);
+  transition: width .2s ease;
+}
+.mat__side:hover .mat__more::after { width: 2.75rem; }
+
+/* The seam. MMA lives in the join, not in a fourth tile. */
+.mat__seam {
+  position: absolute;
+  /* Held above centre: the text blocks are bottom-anchored, and at 50% the
+     seam's lower edge collided with the eyebrow on the right-hand side. */
+  left: 50%; top: 40%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex; flex-direction: column; align-items: center;
+  gap: .85rem;
+  text-align: center;
+  padding: 1.5rem 1.75rem;
+  background: var(--ground);
+  border: 2px solid var(--ink);
+  text-decoration: none;
+  max-width: min(90vw, 27rem);
+  transition: transform .2s ease;
+}
+.mat__seam:hover { transform: translate(-50%, -50%) translateY(-3px); }
+.mat__seam-label {
+  font-size: .6875rem; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.mat__seam-title { font-size: clamp(1.5rem, 3.4vw, 2.25rem); }
+.mat__seam-note {
+  font-size: .8125rem; color: var(--ink-soft); margin: 0;
+  max-width: 30ch; line-height: 1.5;
+}
+
+@media (min-width: 901px) {
+  .mat__side { flex: 1 1 50%; }
+  .mat:hover .mat__side { flex-grow: .88; }
+  .mat .mat__side:hover { flex-grow: 1.24; }
+}
+
+@media (max-width: 900px) {
+  .mat { grid-template-columns: 1fr; min-height: 0; }
+  .mat__side { min-height: 62svh; padding-bottom: 2.5rem; }
+  .mat__side--standup { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.18); }
+  .mat__seam {
+    position: static; transform: none; max-width: none;
+    border-left: 0; border-right: 0;
+  }
+  .mat__seam:hover { transform: translateY(-3px); }
+}
+
+/* --- Offer strip ----------------------------------------------------------- */
+.offer {
+  background: var(--ink);
+  color: var(--ground);
+  padding: 1.1rem var(--gutter);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: .6rem 2rem;
+  text-align: center;
+}
+.offer strong { font-family: var(--display); color: #fff; }
+.offer__sep { color: var(--accent); font-weight: 700; }
+
+/* --- Generic section ------------------------------------------------------- */
+.section { padding: clamp(4rem, 9vw, 7.5rem) var(--gutter); }
+.section--deep { background: var(--ground-deep); }
+.section--ink { background: var(--ink); color: var(--ground); }
+.section--ink .eyebrow { color: rgba(255,255,255,.7); }
+.section--ink h2 { color: #fff; }
+
+.wrap { max-width: 1180px; margin: 0 auto; }
+.wrap--narrow { max-width: 760px; }
+
+.section__head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.section__head h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
+.section__head p { max-width: var(--measure); color: var(--ink-soft); margin: 0; }
+.section--ink .section__head p { color: rgba(255,255,255,.75); }
+
+/* --- Schedule rail --------------------------------------------------------- */
+.rail { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.15fr); gap: clamp(2rem,5vw,4.5rem); align-items: start; }
+@media (max-width: 860px) { .rail { grid-template-columns: 1fr; } }
+
+.slots { border-top: 2px solid var(--ink); }
+.slot {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.slot__time { font-family: var(--display); font-size: 1rem; }
+.slot__name { font-weight: 600; }
+.slot__tag {
+  font-size: .6875rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-soft);
+  border: 1px solid var(--rule-strong);
+  padding: .2rem .5rem;
+  white-space: nowrap;
+}
+.slot--empty { color: var(--ink-soft); font-style: italic; }
+
+.callout {
+  border: 2px solid var(--accent);
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.75rem;
+  background: rgba(200,54,42,.06);
+}
+.callout p { margin: 0; font-size: .9375rem; }
+.callout strong { font-family: var(--display); text-transform: uppercase; letter-spacing: .02em; }
+
+/* --- Coach ----------------------------------------------------------------- */
+.coach { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1fr); gap: clamp(2rem,5vw,4.5rem); align-items: center; }
+@media (max-width: 860px) { .coach { grid-template-columns: 1fr; } }
+.coach__portrait {
+  aspect-ratio: 4/5;
+  background: #1a1613 center/cover;
+  border: 2px solid var(--ink);
+}
+.coach__creds { list-style: none; padding: 0; margin: 1.75rem 0 0; }
+.coach__creds li {
+  padding: .7rem 0; border-bottom: 1px solid var(--rule);
+  display: flex; gap: .85rem; align-items: baseline;
+}
+.coach__creds li::before {
+  content: ""; width: .55rem; height: .55rem; background: var(--accent); flex: none;
+}
+
+/* --- Quotes ---------------------------------------------------------------- */
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem,1fr)); gap: 1.5rem; }
+.quote { border-left: 3px solid var(--accent); padding: 0 0 0 1.5rem; }
+.quote blockquote { margin: 0; font-size: 1.0625rem; line-height: 1.55; }
+.quote figcaption { margin-top: .9rem; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+
+/* --- Visit / footer -------------------------------------------------------- */
+.visit { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem,1fr)); gap: 2.5rem; }
+.visit h3 { font-size: 1rem; margin-bottom: .85rem; }
+.visit address { font-style: normal; line-height: 1.75; }
+.visit a { text-decoration: none; }
+.visit a:hover { color: var(--accent); }
+
+.footer {
+  background: var(--ink); color: rgba(255,255,255,.7);
+  padding: clamp(3rem,6vw,4.5rem) var(--gutter) 2rem;
+  border-top: 4px solid var(--accent);
+}
+.footer h3, .footer .header__mark { color: #fff; }
+.footer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem,1fr)); gap: 2.5rem; max-width: 1180px; margin: 0 auto; }
+.footer a { text-decoration: none; }
+.footer a:hover { color: #fff; }
+.footer ul { list-style: none; padding: 0; margin: 0; }
+.footer li { padding: .3rem 0; }
+.footer__base {
+  max-width: 1180px; margin: 2.5rem auto 0; padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,.16);
+  font-size: .8125rem;
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between;
+}
+
+/* --- Lead modal (house default: popup on every request CTA) ---------------- */
+.modal[hidden] { display: none !important; }
+.modal {
+  position: fixed; inset: 0; z-index: 300;
+  display: grid; place-items: center;
+  padding: 1.25rem;
+  background: rgba(12,10,9,.72);
+}
+.modal__panel {
+  background: var(--ground);
+  border: 2px solid var(--ink);
+  width: min(30rem, 100%);
+  max-height: 90svh; overflow-y: auto;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  position: relative;
+}
+.modal__close {
+  position: absolute; top: .6rem; right: .6rem;
+  width: 2.25rem; height: 2.25rem;
+  background: transparent; border: 0; cursor: pointer;
+  font-size: 1.5rem; line-height: 1; color: var(--ink);
+}
+.modal h2 { font-size: 1.75rem; margin-bottom: .5rem; }
+.modal__intro { color: var(--ink-soft); font-size: .9375rem; margin: 0 0 1.5rem; }
+.field { margin-bottom: 1rem; }
+.field label {
+  display: block; font-size: .75rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; margin-bottom: .4rem;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: .8rem .9rem;
+  border: 2px solid var(--rule-strong); border-radius: var(--radius-action);
+  background: #fff; color: var(--ink);
+  font: inherit; font-size: .9375rem;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--accent); outline: none;
+}
+.modal .btn { width: 100%; }
+.modal__fine { font-size: .75rem; color: var(--ink-soft); margin: 1rem 0 0; text-align: center; }
+.hp { position: absolute; left: -9999px; }
