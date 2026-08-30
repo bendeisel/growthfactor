@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fuelfortressnashville.com/sitemap.xml
