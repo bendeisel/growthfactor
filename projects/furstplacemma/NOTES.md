@@ -133,6 +133,6 @@ genuinely separate site in a separate folder, so nothing is mislabelled.
 wired up. Files committed to the repo arrive on disk with zero context cost.
 6.8 MB is comfortably inside GitHub's limits.
 
-Put `db.gz`, `uploads.zip`, and `themes.zip` in
+Drag `db.gz`, `uploads.zip`, and `themes.zip` into
 `projects/furstplacemma/backup/` on any branch and push. That is all three
 blockers cleared in one step.
