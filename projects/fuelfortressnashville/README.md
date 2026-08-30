@@ -72,9 +72,21 @@ needs a **files** backup rather than a database one: Hostinger File Manager,
 compress `wp-content/uploads/2026/03/`, and send the zip. The same applies to the
 hero video.
 
-Fetching them directly is also impossible from this environment: both
-`fuelfortressnashville.com` and Instagram are blocked by the network egress proxy,
-retested with the client's explicit permission.
+Fetching them directly is impossible from this environment, and the block is
+**global rather than site-specific**: the egress proxy answers 403 to CONNECT for
+every outbound host, `example.com` included. WebSearch still works because it is
+served through Anthropic's infrastructure rather than this container's network,
+which is why research succeeds while fetching fails.
+
+The fix is the environment's network policy, chosen when the environment was
+created. See https://code.claude.com/docs/en/claude-code-on-the-web. With outbound
+access allowed, the assets can be pulled straight off the live site.
+
+`site/prep_assets.py` handles media once it arrives: `python3 prep_assets.py <folder
+or zip>`. It matches each drone shot to its gallery slot by the timestamp in the
+filename, downsamples to 1600px, writes progressive JPEG plus WebP, and transcodes
+the hero video to 1920-wide H.264 with faststart and a poster frame. Pillow and a
+PyPI-bundled ffmpeg cover it, both installable here since PyPI bypasses the proxy.
 
 ## Assets, outstanding
 
