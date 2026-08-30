@@ -1,0 +1,42 @@
+{
+  "source": "declared — Growth Factor AI is our own brand. Direction from Ben: burnt orange (ref jonmayo.com) on super dark blue, kept simple, rounded corners throughout.",
+  "title": "Growth Factor AI",
+  "note": "jonmayo.com is blocked from this build environment, so --ember is a considered pick against 'more burnt, a little lighter than #C9622E', not a sampled value. Confirm against the real site.",
+  "tokens": {
+    "--ground": "#0B1220",
+    "--raise": "#121A2B",
+    "--line": "#1E2839",
+    "--fg": "#E9ECF2",
+    "--grey": "#9AA3B2",
+    "--ember": "#D2763F",
+    "--ember-lift": "#E08F5C",
+    "--amber": "#E3A055",
+    "--on-ember": "#14100C"
+  },
+  "accent_gradient": "linear-gradient(94deg, #D2763F, #E3A055) — used only on the hero accent line and the logo mark. Set --accent-grad to var(--ember) for a flat accent instead.",
+  "type": {
+    "family": "Archivo (400/500/600/700)",
+    "utility": "JetBrains Mono — used for exactly one thing: the typing line",
+    "hosting": "self-hosted variable woff2, latin subset, in site/assets/fonts/"
+  },
+  "geometry": {
+    "radius": "rounded everywhere, Claude-style — 8px controls, 12px media/notes, 16px panels. No sharp corners on anything.",
+    "shell": "900px, centred — the shell is the reading measure",
+    "sections": "72px padding, one hairline between each"
+  },
+  "motion": [
+    "The typing line — 'Build your own ___.' types in and back out, with a blinking caret. This is the ONE animated thing on the site and the piece Ben specifically liked.",
+    "Feature rows open and close.",
+    "Nothing else. No scroll reveals, no drawing diagrams, no marquee."
+  ],
+  "axes": {
+    "structure": "B boxed column",
+    "type_stance": "3 flat",
+    "density": "balanced",
+    "rhythm": "even",
+    "color_stance": "dark-dominant + accent"
+  },
+  "history": [
+    "v1 was rejected as far too busy: label rails, hairline spines, grid meshes, node/edge diagrams, a ticker, scroll reveals and zero-radius everything. Stripped back to this. Keep it basic."
+  ]
+}

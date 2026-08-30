@@ -1,0 +1,37 @@
+<div class="modal" id="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-t">
+  <div class="modal__veil" data-form-close></div>
+  <div class="modal__box">
+    <button class="modal__x" data-form-close aria-label="Close">&#215;</button>
+    <h3 id="lead-modal-t" data-modal-title>Start at $100 a month</h3>
+    <p class="grey" style="font-size:.94rem;margin-bottom:20px">
+      Tell us where to reach you. A real person replies &mdash; usually same day.
+    </p>
+    <form method="post" action="lead.php">
+      <input type="hidden" name="intent" data-modal-intent value="General">
+      <div class="hp"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="row2">
+        <div class="field"><label for="f-first">First name</label><input id="f-first" name="first" type="text" required></div>
+        <div class="field"><label for="f-last">Last name</label><input id="f-last" name="last" type="text" required></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" required></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" required></div>
+      </div>
+      <div class="field">
+        <label for="f-biz">What business is this for?</label>
+        <input id="f-biz" name="business" type="text" placeholder="Gym, roofing, med spa, agency&hellip;">
+      </div>
+      <div class="field">
+        <label for="f-note">Anything we should know? (optional)</label>
+        <textarea id="f-note" name="note" placeholder="What you're selling, what you've tried, what you want built."></textarea>
+      </div>
+      <button class="btn btn--ember btn--full" type="submit">Send it</button>
+      <p class="grey" style="font-size:.85rem;margin-top:13px">
+        No spam. No auto-dialer. We use the software on ourselves, so you&rsquo;ll
+        see exactly how it feels.
+      </p>
+    </form>
+  </div>
+</div>
+<script src="assets/gf.js"></script>
+<script>document.querySelectorAll('[data-year]').forEach(function(e){e.textContent=new Date().getFullYear();});</script>
