@@ -2,11 +2,11 @@
 // CLASS TIMES, SYNCED
 //
 // The same schedule as /schedule/, filtered to the one class this page is
-// about. Nothing here is typed per page: give the strip the page's own href
-// and it finds the program, so one edit in Sanity updates the schedule page
-// and all three class pages together. A page whose class has no sessions
-// renders nothing.
-import SessionList from './SessionList.astro';
+// about, in the exact same grid component every other schedule on the site
+// uses. Give the strip the page's own href and it finds the program, so a
+// schedule edit updates the schedule page and every class page together. A
+// page whose class has no sessions renders nothing.
+import ScheduleGrid from './ScheduleGrid.astro';
 import { activeDays, programForHref } from '../data/schedule.js';
 import { getSessions } from '../lib/schedule-source.js';
 
@@ -32,7 +32,7 @@ const hasSessions = program ? activeDays(sessions, { program: program.slug }).le
         </div>
 
         <div class="reveal">
-          <SessionList program={program.slug} />
+          <ScheduleGrid program={program.slug} />
         </div>
       </div>
     </section>

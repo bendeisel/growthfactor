@@ -227,3 +227,14 @@ Pending for schema: opening hours from the client.
    Nashville boxing search demand, FAQPage schema, client-side search.
    Three answers (pricing, youth schedule frequency, private training)
    flagged for Ben's real numbers rather than guessed at.
+
+## Ben's revisions, round 14 (2026-08-27)
+1. Live site (fightersnashville.com) and a newer WordPress export both
+   unreachable; confirmed the WP export already in the repo has no real
+   table structure to re-check for a missed 6 AM/7 AM column.
+2. Added 6 AM and 7 AM Boxing Basics, Monday through Friday, per Ben's
+   direct statement (flagged for his confirmation, since it could not be
+   independently verified).
+3. Every schedule on the site (main board, kids block, each class page)
+   now renders through one shared grid component, so times line up the
+   same way everywhere instead of three different layouts.

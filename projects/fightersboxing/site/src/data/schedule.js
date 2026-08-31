@@ -54,35 +54,56 @@ export const programSlugs = programs.map((p) => p.slug);
 // rather than guessed at: the gym can correct it in Sanity in a few seconds
 // and every page follows.
 //
+// 6 AM and 7 AM Boxing Basics, Monday through Friday, added per Ben
+// (2026-08-27): fightersnashville.com and the production WordPress admin
+// are both outside this build's network access (confirmed again this
+// round), and no newer export exists than the 2026-08-26 one this file was
+// built from, which only carried a single weekday morning Boxing Basics
+// session (Monday, 7 AM). Ben says the real schedule runs both 6 AM and 7
+// AM every weekday; applied uniformly Mon-Fri since he did not name
+// specific days. CONFIRM WITH BEN which days actually carry both times, in
+// case it is fewer than five.
+//
 // start/end are 24 hour "HH:MM". end omitted means the client published a
 // start time only.
 export const fallbackSessions = [
   // ---- Monday ----
   { day: 'mon', name: 'Open Gym', start: '07:00', end: '10:00', audience: 'adult', programs: ['open-gym'] },
+  { day: 'mon', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'mon', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'mon', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
   { day: 'mon', name: 'Competition Team Training', start: '17:45', audience: 'adult', programs: ['competition'] },
   { day: 'mon', name: 'Boxing Basics', start: '18:00', audience: 'adult', programs: ['boxing-basics'] },
+  { day: 'mon', name: 'Youth Boxing', start: '16:30', audience: 'youth', programs: ['youth'] },
 
   // ---- Tuesday ----
   { day: 'tue', name: 'Open Gym', start: '07:00', end: '10:00', audience: 'adult', programs: ['open-gym'] },
+  { day: 'tue', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
+  { day: 'tue', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'tue', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
   { day: 'tue', name: 'Boxing Basics', start: '18:00', audience: 'adult', programs: ['boxing-basics'] },
 
   // ---- Wednesday ----
   { day: 'wed', name: 'Open Gym', start: '07:00', end: '10:00', audience: 'adult', programs: ['open-gym'] },
+  { day: 'wed', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
+  { day: 'wed', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'wed', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
   { day: 'wed', name: 'Competition Team Training', start: '17:45', audience: 'adult', programs: ['competition'] },
   { day: 'wed', name: 'Boxing Basics', start: '18:00', audience: 'adult', programs: ['boxing-basics'] },
+  { day: 'wed', name: 'Youth Boxing', start: '16:30', audience: 'youth', programs: ['youth'] },
 
   // ---- Thursday ----
   { day: 'thu', name: 'Open Gym', start: '07:00', end: '10:00', audience: 'adult', programs: ['open-gym'] },
+  { day: 'thu', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
+  { day: 'thu', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'thu', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
   { day: 'thu', name: 'Competition Sparring', start: '17:45', audience: 'adult', programs: ['competition'] },
   { day: 'thu', name: 'Foundational Sparring', start: '18:00', audience: 'adult', programs: ['competition'] },
 
   // ---- Friday ----
   { day: 'fri', name: 'Open Gym', start: '07:00', end: '10:00', audience: 'adult', programs: ['open-gym'] },
+  { day: 'fri', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
+  { day: 'fri', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'fri', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
   { day: 'fri', name: 'Boxing Basics', start: '18:00', audience: 'adult', programs: ['boxing-basics'] },
 
@@ -90,13 +111,6 @@ export const fallbackSessions = [
   { day: 'sat', name: 'Open Gym', start: '02:00', end: '12:00', audience: 'adult', programs: ['open-gym'] },
   { day: 'sat', name: 'Boxing Basics', start: '09:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'sat', name: 'IBAN Youth', start: '12:00', audience: 'youth', programs: ['youth'] },
-
-  // Monday and Wednesday evening youth classes, per Ben (2026-08-27): the
-  // client's WordPress export only carried Saturday's IBAN Youth session,
-  // missing these two. No end time was given, so these follow the same
-  // "start time only" pattern as most other sessions on this page.
-  { day: 'mon', name: 'Youth Boxing', start: '16:30', audience: 'youth', programs: ['youth'] },
-  { day: 'wed', name: 'Youth Boxing', start: '16:30', audience: 'youth', programs: ['youth'] },
 ];
 
 /** "07:00" -> 420, for sorting. */

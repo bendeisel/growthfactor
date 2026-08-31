@@ -12,7 +12,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ClassCalendar from '../components/ClassCalendar.astro';
-import SessionList from '../components/SessionList.astro';
+import ScheduleGrid from '../components/ScheduleGrid.astro';
 import { programForHref } from '../data/schedule.js';
 import ClassTicker from '../components/ClassTicker.astro';
 
@@ -32,20 +32,18 @@ const youth = programForHref('/youth-boxing-class/');
     </div>
   </section>
 
-  <!-- ====== KIDS: their own block, same dataset as the youth page ====== -->
+  <!-- ====== KIDS: their own grid, same component as everywhere else ====== -->
   <section class="kids grain fluid-host">
     <div class="wrap">
-      <div class="kids-panel reveal">
-        <div class="kids-head">
-          <p class="kicker">For the kids</p>
-          <h2>Youth boxing</h2>
-          <p class="kids-links">
-            <a href={youth.href}>See the youth boxing class</a>
-          </p>
-        </div>
-        <div class="kids-cards">
-          <SessionList audience="youth" />
-        </div>
+      <div class="kids-head reveal">
+        <p class="kicker">For the kids</p>
+        <h2>Youth boxing</h2>
+        <p class="kids-links">
+          <a href={youth.href}>See the youth boxing class</a>
+        </p>
+      </div>
+      <div class="reveal">
+        <ScheduleGrid audience="youth" />
       </div>
     </div>
   </section>
@@ -111,17 +109,7 @@ const youth = programForHref('/youth-boxing-class/');
     background: var(--ground);
     padding: var(--section-pad) 0;
   }
-  /* the kids classes sit in their own panel, so one session reads as a
-     deliberate block rather than a card adrift in white space */
-  .kids-panel {
-    background: var(--ground-alt);
-    border-radius: calc(var(--radius-panel) + 14px);
-    padding: clamp(24px, 3.2vw, 48px);
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: clamp(24px, 4vw, 56px);
-    align-items: center;
-  }
+  .kids-head { margin-bottom: clamp(22px, 3vw, 34px); }
   .kids-head h2 { font-size: clamp(28px, 3.6vw, 46px); }
   .kids-links {
     display: flex;
@@ -134,10 +122,6 @@ const youth = programForHref('/youth-boxing-class/');
     font-weight: 700;
     font-size: 15px;
   }
-  @media (max-width: 900px) {
-    .kids-panel { grid-template-columns: 1fr; }
-  }
-
   .ticker {
     overflow: hidden;
     background: var(--accent);

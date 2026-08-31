@@ -1,26 +1,14 @@
 ---
-// THE ADULT WEEK, AS ONE GRID
+// THE ADULT WEEK
 //
-// A time rail down the left and the seven days across the top, so 6 PM on
-// Monday sits beside 6 PM on Tuesday, the way Ben wanted it. Rows exist
-// only for times that actually have a class, which keeps the whole week to
-// one compact piece instead of a page of empty boxes.
-//
-// The classes come from Sanity at build time and get re-checked in the
-// browser, so the gym changes a class time once and this grid follows.
-//
-// Kids classes are not here: they get their own block further down
-// /schedule/ and their own page.
-import { matrix, programs } from '../data/schedule.js';
-import { getSessions } from '../lib/schedule-source.js';
-import { renderMatrix } from '../lib/render-schedule.js';
+// Filter chips plus the shared schedule grid (ScheduleGrid.astro), filtered
+// to adults only. Kids classes are not here: they get their own grid
+// further down /schedule/ and their own page, using the exact same
+// component so every schedule on the site looks like the same schedule.
+import ScheduleGrid from './ScheduleGrid.astro';
+import { programs } from '../data/schedule.js';
 
-const sessions = await getSessions();
-const rows = matrix(sessions, { audience: 'adult' });
 const chips = programs.filter((p) => p.audience === 'adult');
-// Rendered through the shared renderer so the browser can re-render the
-// same markup after checking Sanity for a change.
-const matrixHtml = renderMatrix(rows);
 ---
 
 <div class="cal">
@@ -35,29 +23,20 @@ const matrixHtml = renderMatrix(rows);
     }
   </div>
 
-  <div class="matrix-scroll">
-    <div class="matrix" data-live="matrix" data-audience="adult" set:html={matrixHtml} />
-  </div>
+  <ScheduleGrid audience="adult" />
   <p class="matrix-note">Adult classes and open gym. Kids classes are below.</p>
 </div>
 
-<style is:global>
-  /* Global rather than scoped because the grid is injected as HTML by the
-     shared renderer, at build time and again after a live update, so it
-     carries no scope hash. Every selector is nested under .cal to keep
-     that out of the rest of the site. */
+<style>
   .cal { position: relative; z-index: 1; }
-  /* the grid sets display on its parts, so hidden needs to win */
-  .cal [hidden] { display: none !important; }
 
-  /* ---------- filter chips ---------- */
-  .cal .filters {
+  .filters {
     display: flex;
     flex-wrap: wrap;
     gap: clamp(8px, 1vw, 12px);
     margin-bottom: clamp(20px, 2.6vw, 32px);
   }
-  .cal .chip {
+  .chip {
     font-family: var(--font-action);
     font-size: 13px;
     font-weight: 700;
@@ -71,100 +50,16 @@ const matrixHtml = renderMatrix(rows);
     cursor: pointer;
     transition: background 0.25s, color 0.25s, border-color 0.25s;
   }
-  .cal .chip:hover, .cal .chip:focus-visible { border-color: var(--accent); color: var(--accent); }
-  .cal .chip.is-on {
+  .chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--accent); }
+  .chip.is-on {
     background: var(--accent);
     border-color: var(--accent);
     color: var(--on-dark);
   }
-
-  /* ---------- the grid ----------
-     One CSS grid holds the whole week, which is what keeps a time row
-     aligned across all seven days. On a narrow screen it scrolls sideways
-     inside its own frame, with the time rail pinned, rather than breaking
-     into seven stacked blocks. */
-  .cal .matrix-scroll {
-    overflow-x: auto;
-    border: 1px solid var(--border);
-    border-radius: calc(var(--radius-panel) + 6px);
-    background: var(--ground);
-  }
-  .cal .matrix {
-    display: grid;
-    grid-template-columns: 76px repeat(7, minmax(104px, 1fr));
-    min-width: 720px;
-  }
-  .cal .m-corner, .cal .m-head {
-    background: var(--accent);
-    color: var(--on-dark);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 13px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    text-align: center;
-    padding: 11px 6px;
-  }
-  .cal .m-corner { position: sticky; left: 0; z-index: 2; }
-  .cal .m-head-short { display: none; }
-  .cal .m-time {
-    position: sticky;
-    left: 0;
-    z-index: 1;
-    background: var(--ground);
-    border-top: 1px solid var(--border);
-    padding: 12px 12px 12px 10px;
-    text-align: right;
-    font-family: var(--font-action);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .cal .m-cell {
-    border-top: 1px solid var(--border);
-    border-left: 1px solid var(--border);
-    padding: 7px;
-    display: grid;
-    gap: 5px;
-    align-content: start;
-  }
-  .cal .class-chip {
-    display: block;
-    background: var(--ground-alt);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 9px 9px 0;
-    padding: 7px 9px;
-  }
-  .cal .chip-name {
-    display: block;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 1.2;
-  }
-  .cal .chip-until {
-    display: block;
-    margin-top: 2px;
-    font-family: var(--font-action);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .cal .matrix-note {
+  .matrix-note {
     margin: 14px 0 0;
     font-size: 13px;
     color: var(--text-light);
-  }
-
-  @media (max-width: 760px) {
-    .cal .m-head-long { display: none; }
-    .cal .m-head-short { display: inline; }
-    .cal .matrix { min-width: 620px; grid-template-columns: 64px repeat(7, minmax(78px, 1fr)); }
   }
 </style>
 

@@ -455,3 +455,49 @@ confirmed two more directly: Youth Boxing, Monday and Wednesday, 4:30 PM.
 Added with no end time, matching how most other sessions on this page are
 recorded (start only). `cms/seed.ndjson` regenerated to match (24
 documents now, was 22).
+
+## One grid, everywhere, and 6/7 AM Boxing Basics added (2026-08-27, Ben round 6)
+Ben: "Before you do that make sure the schedule, the main schedule, is
+awesome. All the times line up and everything looks good but every other
+page seems like it has a different schedule and they're not accurate...
+There's 6:00 AM and 7:00 AM boxing basics. We need those on the schedule.
+We need the schedules to be uniform... I want them all to be the same.
+Just like the one on the scheduling page that you made is dope."
+
+**Tried to pull the real schedule from fightersnashville.com directly, as
+asked.** Confirmed again: this build's network access is blocked from that
+domain (same block noted earlier in this project). No newer WordPress
+export exists than the 2026-08-26 one already in
+`source/wp-export/`. Re-checked that export's raw markup line by line (it
+has no real `<table>`, the "Time / Day: 7AM...5PM" header row is a separate,
+unlinked Elementor list from the actual class cells, so column position
+never mapped to time; the true time for each session is the text inside
+that session's own cell, which is what schedule.js already encoded).
+
+**6 AM and 7 AM Boxing Basics, Monday through Friday, added per Ben's
+direct statement**, since neither the live site nor a newer export was
+reachable. The 2026-08-26 export only had one weekday morning session
+(Monday, 7 AM); the other four weekdays had no 7 AM Boxing Basics in that
+export at all. Applied uniformly across all five weekdays since Ben did
+not name specific days. **Flagged in schedule.js for Ben to confirm**: if
+it is not literally every weekday, one line changes it.
+
+**Every schedule surface is now the same component.** The card-grid
+"day-cards" and the "compact list" strips (both built in earlier rounds)
+are gone. `components/ScheduleGrid.astro` is the one grid: a time rail
+down the left, seven day columns, one row per time actually in use. It is
+used by:
+- the adult week board on `/schedule/` (with the filter chips)
+- the kids block on `/schedule/`, now full width instead of the old
+  narrow side-by-side panel, so it reads as the same schedule rather than
+  a smaller different-looking thing
+- each class page's "Class times" section, filtered to that page's own
+  program
+- the youth class page, filtered to the youth program
+
+Same hour, same row, on every one of them: 6 AM lines up with 6 AM, 7 AM
+with 7 AM, across every day and every page. `SessionList.astro` (the
+compact list component from the previous round) is deleted; nothing used
+it once ScheduleGrid replaced it everywhere.
+
+`cms/seed.ndjson` regenerated to match (33 documents, was 24).
