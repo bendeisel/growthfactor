@@ -238,3 +238,18 @@ Pending for schema: opening hours from the client.
 3. Every schedule on the site (main board, kids block, each class page)
    now renders through one shared grid component, so times line up the
    same way everywhere instead of three different layouts.
+
+## Ben's revisions, round 15 (2026-08-27)
+1. Six pages built: Coaches, What to Expect, Boxing Classes, Contact Us,
+   Privacy Policy, Terms & Conditions. Full accounting of what is verbatim,
+   what was dropped as page-builder demo content, and one sentence repair,
+   in inner-pages.md.
+2. Coaches page: nine real names and credentials, no fabricated stats, no
+   stock photos standing in for named people (initials shown instead;
+   Ben asked for real headshots).
+3. What to Expect: six em dashes replaced (comma or period).
+4. Boxing Classes hub: one sentence repaired where the client's own page
+   opened mid-thought ("that teaches the fundamentals...").
+5. Contact Us: dropped a fake "New York/Boston/LA/Austin" office block and
+   a duplicate contact form, both page-builder demo content unrelated to
+   this single Nashville gym.

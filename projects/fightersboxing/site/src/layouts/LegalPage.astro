@@ -1,0 +1,96 @@
+---
+// LEGAL PAGE TEMPLATE
+//
+// Shared by Privacy Policy and Terms & Conditions: both are the client's
+// own numbered-section boilerplate, verbatim from the WordPress export,
+// covering both Fighters Boxing Gym and Nashville MMA Training Camp under
+// one policy (the client's own choice, kept as published).
+import Base from './Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+
+export interface Section {
+  heading: string;
+  body: string;
+}
+
+interface Props {
+  pageTitle: string;
+  description: string;
+  h1Lines: [string, string];
+  effectiveDate: string;
+  intro: string;
+  sections: Section[];
+}
+
+const { pageTitle, description, h1Lines, effectiveDate, intro, sections } = Astro.props as Props;
+---
+
+<Base title={pageTitle} description={description}>
+  <PageHeader lines={h1Lines} sub={`Effective ${effectiveDate}`} />
+
+  <section class="legal grain fluid-host">
+    <div class="wrap legal-wrap">
+      <p class="intro reveal" set:html={intro} />
+      {
+        sections.map((s) => (
+          <div class="legal-section reveal">
+            <h2>{s.heading}</h2>
+            <Fragment set:html={s.body} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal {
+    background: var(--ground);
+    padding: var(--section-pad) 0;
+  }
+  .legal-wrap { max-width: 74ch; }
+  .intro { font-size: 17px; margin-bottom: clamp(30px, 4vw, 46px); }
+  .legal-section {
+    padding-top: clamp(26px, 3.4vw, 40px);
+    border-top: 1px solid var(--border);
+  }
+  .legal-section:first-of-type { border-top: 0; padding-top: 0; }
+  .legal-section h2 {
+    font-size: clamp(18px, 2vw, 22px);
+    margin-bottom: clamp(12px, 1.6vw, 18px);
+  }
+  .legal-section :global(p) { font-size: 15px; }
+  .legal-section :global(ul) {
+    margin: 0 0 1em;
+    padding-left: 20px;
+    font-size: 15px;
+  }
+  .legal-section :global(li) { margin-bottom: 6px; }
+  .legal-section :global(h3) {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 1em 0 0.5em;
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

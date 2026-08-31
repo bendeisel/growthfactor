@@ -1,0 +1,194 @@
+---
+// Copy verbatim from the client's WordPress export (Tools > Export,
+// 2026-08-26), minus em dashes per Ben's standing rule (six on this page,
+// logged in source/copy.md). This is the page both class-page "Read More"
+// links have pointed at since the first round of inner pages; it now
+// resolves.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+
+const steps = [
+  {
+    title: 'Arrive Early & Get Set Up',
+    body: `<p>Show up 20 minutes before class so we can take care of the important stuff:
+      sign your waiver, get you checked in, and give you a quick gym tour. We&rsquo;ll show
+      you the layout, explain how classes work, and introduce you to your coach. This is
+      your time to get comfortable, ask questions, and get your mind right before class
+      starts.</p><p>Our staff will make sure you&rsquo;re ready to go and that you feel like
+      part of the team from day one.</p>`,
+  },
+  {
+    title: 'Gear Up & Learn the Basics',
+    body: `<p>If you have your own gloves and wraps, bring them. If not, no problem: we&rsquo;ve
+      got loaner equipment. Your coach will walk you through stance, movement, and the basic
+      punches so you can hit the ground running (and the bag hard).</p><p>Every class is led
+      by USA Certified coaches who know how to teach safely, motivate effectively, and make
+      sure everyone, from beginners to veterans, gets real work in.</p>`,
+  },
+  {
+    title: "It's Go Time",
+    body: `<p>Once the music&rsquo;s on and the gloves are up, it&rsquo;s all business. You&rsquo;ll
+      train like a fighter, learning real technique, building endurance, and discovering what
+      you&rsquo;re made of. Each class brings a mix of skill work, bag rounds, conditioning, and
+      energy that keeps you coming back.</p><p>No two sessions are the same, but the goal never
+      changes: leave stronger, sharper, and more confident than when you walked in.</p>`,
+  },
+  {
+    title: "You're Part of the Team Now",
+    body: `<p>We&rsquo;re not just another gym, we&rsquo;re a community of people who show up, put
+      in the work, and push each other to get better. Whether you&rsquo;re here to get fit, learn
+      the sport, or chase competition, we&rsquo;re in your corner every step of the way.</p>
+      <p>You&rsquo;ll sweat. You&rsquo;ll laugh. You&rsquo;ll grow. And before long, you&rsquo;ll
+      realize you&rsquo;re a fighter too.</p>`,
+  },
+];
+---
+
+<Base
+  title="What to Expect | Fighters Boxing Gym Nashville"
+  description="Your first day at Fighters Boxing Gym: what happens when you arrive, what gear you need, what a class feels like, and why you'll come back."
+>
+  <PageHeader lines={['WHAT TO', 'EXPECT']} sub="Your first workout starts here" />
+
+  <!-- No photo on this section: every photo in public/img is already
+       placed on another page (see source/inner-pages.md), and a repeated
+       photo is worse than none. A fresh shot for this intro would be
+       welcome. -->
+  <section class="split grain fluid-host">
+    <div class="wrap intro">
+      <h2 class="reveal">Step Into the Ring</h2>
+      <div class="reveal">
+        <p>
+          Your first day at <b>Fighters Boxing Gym</b> is where it all begins. You
+          don&rsquo;t need experience, just a good attitude, a little time, and the
+          willingness to work. Here&rsquo;s what to expect when you walk through our
+          doors.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps grain alt fluid-host">
+    <div class="wrap steps-grid">
+      {
+        steps.map((s, i) => (
+          <div class="step reveal">
+            <span class="step-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <Fragment set:html={s.body} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="close grain fluid-host">
+    <div class="wrap close-inner">
+      <p class="kicker reveal">Train with the best</p>
+      <h2 class="reveal">Meet the Coaches</h2>
+      <div class="close-actions reveal">
+        <a class="btn-line" href="/coaches/">Our Coaches</a>
+        <span class="btn-ring">
+          <button class="btn js-open-lead" type="button">GET MORE INFO</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .kicker {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: clamp(10px, 1.2vw, 16px);
+  }
+  .intro { max-width: 62ch; }
+  .intro h2 { font-size: clamp(28px, 3.6vw, 46px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+
+  .steps {
+    background: var(--ground-alt);
+    padding: var(--section-pad) 0;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(32px, 4.4vw, 64px);
+  }
+  .step {
+    background: var(--ground);
+    border-radius: calc(var(--radius-panel) + 8px);
+    padding: clamp(26px, 3vw, 38px);
+  }
+  .step-num {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(30px, 3.4vw, 42px);
+    color: var(--accent);
+    margin-bottom: clamp(10px, 1.4vw, 16px);
+  }
+  .step h3 {
+    font-size: clamp(20px, 2.2vw, 26px);
+    margin-bottom: clamp(12px, 1.6vw, 18px);
+  }
+  .step :global(p) { max-width: 48ch; }
+
+  .close {
+    background: var(--ground);
+    padding: clamp(44px, 6vw, 82px) 0;
+    text-align: center;
+  }
+  .close h2 { font-size: clamp(26px, 3.2vw, 40px); margin-bottom: clamp(20px, 2.6vw, 30px); }
+  .close-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(22px, 3vw, 32px);
+  }
+  .close .btn-line {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 2px;
+  }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+
+  @media (max-width: 900px) {
+    .steps-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

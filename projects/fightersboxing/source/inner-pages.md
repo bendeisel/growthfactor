@@ -501,3 +501,81 @@ compact list component from the previous round) is deleted; nothing used
 it once ScheduleGrid replaced it everywhere.
 
 `cms/seed.ndjson` regenerated to match (33 documents, was 24).
+
+## Six pages built: Coaches, What to Expect, Boxing Classes, Contact Us, Privacy Policy, Terms & Conditions (2026-08-27, Ben round 7)
+Ben: "It looks like we still need to build the coaches page. Are there any
+other pages we need to build? If you have another page, build it."
+
+Scanned every nav link and every "Read More" target site-wide. Before this
+round, `/boxing-classes/` (the "Boxing Classes" nav parent itself, not just
+its three children), `/coaches/`, `/what-to-expect/`, `/contact-us/`,
+`/privacy-policy/`, and `/terms-conditions/` were all dead links, on every
+page, since the header and footer link to them from anywhere on the site.
+All six now resolve. The only remaining dead link site-wide is
+`/our-gyms/`, correctly held back pending the Nashville MMA interlink.
+
+**Coaches** (`/coaches/`, `data/coaches.js`). Nine real coaches from the
+client's WordPress export (cpt_team post type): name, role, and credentials
+copied verbatim from each coach's own bio page. Dr. Christy Halbert
+(Founder & Director, 2012 Olympic Coach for Team USA, IWBHF Inductee) leads
+with her own bio paragraph; the other eight are Kayla Trotter, Evan Carr,
+Nick Hicks, Steve Vernier, Mindy Vernier, Jeremiah Cline, Sena Agbeko, and
+Ernest Rodriguez (WordPress slug `jake-lawrence`, real name confirmed
+earlier in this project). Instagram links included only where the coach's
+own page carried one (Steve Vernier, Mindy Vernier, Sena Agbeko); the other
+six have none in the source, so none is shown.
+
+Two things deliberately left out, both flagged: every coach's bio page
+carried identical "Practice 80% / Championships 90% / Experience 88%"
+progress bars, which is the page builder's demo default repeated
+unchanged across all nine people, not a real measurement, so it is not
+shown. No photos: the coach headshots live in the client's media library
+on the dev domain (floralwhite-woodcock-644453.hostingersite.com), which
+this build cannot reach. Cards show the coach's initials in an accent
+roundel instead of a stock photo standing in for a named person. **Ben:
+send the real headshots (or the wp-content/uploads zip) and they replace
+the initials directly, filename per coach slug in coaches.js.**
+
+**What to Expect** (`/what-to-expect/`). The page both class-page "Read
+More" links have pointed at since the project's first inner-page round.
+Client's own four-step first-visit copy, verbatim: Arrive Early & Get Set
+Up, Gear Up & Learn the Basics, It's Go Time, You're Part of the Team Now.
+Six em dashes replaced with commas or periods (Ben's standing rule),
+logged in copy.md. Links out to the new Coaches page, matching the
+client's own "Meet the Coaches" teaser on this page. No photo: every real
+photo in `public/img` is already placed on another page (see the photo
+assignment log elsewhere in this file), and a repeated photo is worse than
+none. A fresh shot for this page's intro would be welcome.
+
+**Boxing Classes** (`/boxing-classes/`). The hub the header's "Boxing
+Classes" nav item has linked to directly since round one. Client's own
+pitch copy for each of the three classes, condensed from their full class
+pages, each linking through to it. One repair, logged in copy.md: the
+Boxing Basics paragraph opened mid-sentence on the client's own live page
+("that teaches the fundamentals stance, footwork..."), almost certainly
+the same dash-stripping issue flagged for other pages in this project.
+Repaired to a complete sentence ("Perfect. This class teaches the
+fundamentals: stance, footwork...") rather than left broken or invented
+whole. Uses each class's own thumbnail photo, same as the homepage's
+existing class-card slideshow already does; this is a hub previewing its
+own sub-pages, not a case of the site-wide no-repeat rule.
+
+**Contact Us** (`/contact-us/`). The client's export for this page was
+mostly page-builder demo junk: an "01. New York / 02. Boston / 03. Los
+Angeles / 04. Austin" fake office block with placeholder phone numbers and
+`info@email.com`, plus a Contact Form 7 duplicate of the lead popup. None
+of it kept. Real content kept: phone, email, and the same map as the
+footer, given room to breathe as its own page since "Contact Us" is a real
+footer link now.
+
+**Privacy Policy** and **Terms & Conditions** (`/privacy-policy/`,
+`/terms-conditions/`). Client's own boilerplate, verbatim, no em dashes to
+fix. Both explicitly cover Fighters Boxing Gym and Nashville MMA Training
+Camp together, the client's own choice (shared ownership), kept as
+published rather than split into two separate policies. Share one new
+layout, `layouts/LegalPage.astro`, since both pages are the same shape:
+numbered sections under a poster header.
+
+`components/ClassTicker.astro`, `ScheduleStrip.astro` and the schedule
+pages already linked to these six destinations; no other file needed a
+link added, only the destinations themselves.
