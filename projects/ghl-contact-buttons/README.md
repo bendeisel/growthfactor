@@ -17,6 +17,27 @@ One click on a contact can:
 
 Actions chain. One button can tag, drop into a workflow and ping n8n.
 
+The buttons live in an always-on dock that follows the contact in view:
+
+- **Three surfaces**: contact page, conversation, opportunity. Conversation and
+  opportunity URLs carry no contact id, so the worker resolves the contact
+  through the API rather than scraping HighLevel's markup.
+- **Shows who it is attached to**: name, phone or email, and which surface it
+  came from. No firing a button on the wrong person.
+- **Movable**: drag it anywhere, position remembered per user per sub-account.
+  Double-click the handle to reset.
+- **Layouts**: row, stacked column, or compact icons. Buttons sharing a group
+  collapse into one dropdown. Small size fits more.
+- **Self-healing**: route polling plus a heartbeat remount the dock if
+  HighLevel rebuilds the page. If the service is unreachable it says so with a
+  retry, instead of silently vanishing.
+
+**Automations** are buttons nobody clicks. The private app subscribes to
+HighLevel webhooks (OpportunityDelete, OpportunityStatusUpdate, ContactDelete,
+InvoicePaid, ...) and the worker runs an action list against that contact.
+The obvious one: tag the contact when an opportunity is deleted, so a workflow
+can trigger on an event HighLevel has no native trigger for.
+
 ## How it fits together
 
 ```
@@ -26,6 +47,7 @@ HighLevel contact page
             └─ click ──► worker /api/run ──► HighLevel API v2 (per sub-account token)
 
 HighLevel custom menu link (iframe) ──► worker /admin   (config UI)
+HighLevel app webhooks ──► worker /webhooks/ghl/<token> ──► same action engine
 ```
 
 - **Agency buttons** are inherited by every sub-account.
@@ -48,6 +70,7 @@ client/admin.html         admin UI (same)
 src/index.js              worker routes
 src/lib/ghl.js            HighLevel API v2 client
 src/lib/actions.js        action executor
+src/lib/context.js        which contact is in view (conversation/opportunity lookups)
 src/lib/store.js          KV config, credentials, logs
 src/lib/sso.js            decrypts exposeSessionDetails payloads
 src/lib/session.js        admin cookie
@@ -73,7 +96,9 @@ in the repo.
 Written and unit tested. Not yet pointed at a live HighLevel account. The two
 things most likely to need a nudge on first deploy:
 
-1. The DOM anchor the bar mounts into. It falls back to a pinned floating bar
-   and the selector list is editable in the admin without a redeploy.
-2. Endpoint shapes in `src/lib/ghl.js`, written from the API v2 docs, checked
-   against a real sub-account on first run.
+1. Route patterns for conversations and opportunities in `client/injector.js`
+   (`ROUTES`). Contact detail is certain; the other two are from memory of
+   HighLevel's URLs and take a two-line fix if they differ.
+2. Endpoint and payload shapes in `src/lib/ghl.js` and `src/lib/context.js`,
+   written from the API v2 docs, checked against a real sub-account on first
+   run. Both payload shapes we have seen for opportunities are handled.

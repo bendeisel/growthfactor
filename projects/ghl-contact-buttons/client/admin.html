@@ -169,7 +169,7 @@ function viewApp(){
       ? el('option',{value:state.locationId,selected:state.scope==='location'?'selected':null},'Sub-account '+state.locationId) : null
   );
 
-  const tabs=el('div',{class:'tabs'},...['buttons','settings','connection','activity'].map(t=>
+  const tabs=el('div',{class:'tabs'},...['buttons','automations','settings','connection','activity'].map(t=>
     el('button',{class:state.tab===t?'on':'',onclick:()=>{state.tab=t;render();if(t==='activity')refreshLogs();}},
       t[0].toUpperCase()+t.slice(1))));
 
@@ -184,6 +184,7 @@ function viewApp(){
     ),
     tabs,
     state.tab==='buttons'?viewButtons():
+    state.tab==='automations'?viewAutomations():
     state.tab==='settings'?viewSettings():
     state.tab==='connection'?viewConnection():viewActivity()
   );
@@ -199,6 +200,7 @@ function viewButtons(){
     list.append(el('div',{class:'row'+(state.selected===b.id?' on':''),onclick:()=>{state.selected=b.id;render();}},
       el('span',{class:'swatch',style:'background:'+b.color}),
       el('span',{class:'name'},b.label),
+      b.group?el('span',{class:'pill'},b.group):null,
       b.active===false?el('span',{class:'pill off'},'off'):null,
       el('span',{class:'pill'},(b.actions||[]).length+' action'+((b.actions||[]).length===1?'':'s'))
     ));
@@ -240,6 +242,8 @@ function viewEditor(){
   card.append(
     el('label',{},'Label'),
     el('input',{type:'text',value:button.label,oninput:e=>{set('label',e.target.value);document.querySelectorAll('.row.on .name').forEach(n=>n.textContent=e.target.value);updatePreview();}}),
+    el('label',{},'Group (buttons sharing a group collapse into one dropdown; blank for standalone)'),
+    el('input',{type:'text',value:button.group||'',oninput:e=>{set('group',e.target.value.trim());}}),
     el('div',{class:'inline'},
       el('div',{},el('label',{},'Icon'),el('select',{onchange:e=>{set('icon',e.target.value);updatePreview();}},
         ...ICONS.map(i=>el('option',{value:i,selected:button.icon===i?'selected':null},i)))),
@@ -347,20 +351,100 @@ function viewAction(button,action,index){
   return box;
 }
 
+const EVENTS = {
+  OpportunityDelete:'Opportunity deleted',
+  OpportunityCreate:'Opportunity created',
+  OpportunityStatusUpdate:'Opportunity status changed (won/lost/abandoned)',
+  OpportunityStageUpdate:'Opportunity stage changed',
+  OpportunityMonetaryValueUpdate:'Opportunity value changed',
+  OpportunityAssignedToUpdate:'Opportunity reassigned',
+  ContactDelete:'Contact deleted',
+  ContactDndUpdate:'Contact DND changed',
+  AppointmentCreate:'Appointment booked',
+  AppointmentUpdate:'Appointment updated',
+  AppointmentDelete:'Appointment cancelled',
+  InvoicePaid:'Invoice paid',
+  OrderStatusUpdate:'Order status changed',
+};
+
+function currentAutomations(){
+  const target=state.scope==='agency'?state.agency:state.location;
+  target.automations=target.automations||[];
+  return target.automations;
+}
+
+function viewAutomations(){
+  const list=currentAutomations();
+  const card=el('div',{class:'card'},el('h2',{},state.scope==='agency'?'Agency automations':'Sub-account automations'),
+    el('div',{class:'empty'},'Buttons nobody clicks. HighLevel sends the event to our webhook, we run the actions on that contact. Classic use: tag the contact when an opportunity is deleted so a workflow can trigger on it.'));
+
+  if(!list.length) card.append(el('div',{class:'empty'},'No automations yet.'));
+
+  list.forEach((a,index)=>{
+    const box=el('div',{class:'action'});
+    box.append(el('div',{class:'head'},
+      el('select',{onchange:e=>{a.event=e.target.value;state.dirty=true;}},
+        ...Object.entries(EVENTS).map(([v,l])=>el('option',{value:v,selected:a.event===v?'selected':null},l))),
+      el('select',{style:'flex:0 0 90px',onchange:e=>{a.active=e.target.value==='on';state.dirty=true;}},
+        el('option',{value:'on',selected:a.active!==false?'selected':null},'on'),
+        el('option',{value:'off',selected:a.active===false?'selected':null},'off')),
+      el('button',{class:'btn sm danger',onclick:()=>{list.splice(index,1);state.dirty=true;render();}},'×')));
+    box.append(el('label',{},'Name (shows in the activity log)'),
+      el('input',{type:'text',value:a.label||'',oninput:e=>{a.label=e.target.value;state.dirty=true;}}));
+    box.append(el('label',{},'Actions, in order'));
+    (a.actions||[]).forEach((action,i)=>box.append(viewAction(a,action,i)));
+    box.append(el('button',{class:'btn sm ghost',onclick:()=>{a.actions=a.actions||[];a.actions.push({type:'add_tag',tags:[]});state.dirty=true;render();}},'Add action'));
+    card.append(box);
+  });
+
+  card.append(el('div',{style:'margin-top:12px;display:flex;gap:8px'},
+    el('button',{class:'btn sm',onclick:()=>{list.push({id:'auto_'+Math.random().toString(36).slice(2,10),event:'OpportunityDelete',label:'Tag on opportunity delete',active:true,actions:[{type:'add_tag',tags:['opportunity-deleted']}]});state.dirty=true;render();}},'Add automation')));
+
+  const wrap=el('main',{},card);
+  if(state.scope==='location'&&(state.agency.automations||[]).length){
+    const inherited=el('div',{class:'card',style:'margin-top:16px'},el('h2',{},'Inherited from agency'));
+    state.agency.automations.forEach(a=>{
+      const off=(state.location.disabledAgencyAutomations||[]).includes(a.id);
+      inherited.append(el('div',{class:'row'},
+        el('span',{class:'name'},(a.label||a.event)+' · '+(EVENTS[a.event]||a.event)),
+        el('span',{class:'pill agency'},'agency'),
+        el('button',{class:'btn sm ghost',onclick:()=>{
+          const set=new Set(state.location.disabledAgencyAutomations||[]);
+          off?set.delete(a.id):set.add(a.id);
+          state.location.disabledAgencyAutomations=[...set];state.dirty=true;render();
+        }},off?'Turn on':'Turn off')));
+    });
+    wrap.append(inherited);
+  }
+  return wrap;
+}
+
 function viewSettings(){
   const target=state.scope==='agency'?state.agency:state.location;
   target.settings=target.settings||{};
-  const s=target.settings;
+  const s=target.settings; s.surfaces=s.surfaces||{};
+  const opt=(key,values,labels)=>el('select',{onchange:e=>{s[key]=e.target.value;state.dirty=true;}},
+    ...values.map((v,i)=>el('option',{value:v,selected:(s[key]||values[0])===v?'selected':null},labels?labels[i]:v)));
+  const surf=(key,label)=>el('label',{style:'display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--text);font-weight:500'},
+    el('input',{type:'checkbox',checked:s.surfaces[key]===false?null:'checked',onchange:e=>{s.surfaces[key]=e.target.checked;state.dirty=true;}}),label);
   return el('main',{},el('div',{class:'card',style:'max-width:640px'},
-    el('h2',{},'Display'),
-    el('label',{},'Placement'),
-    el('select',{onchange:e=>{s.placement=e.target.value;state.dirty=true;}},
-      ...['auto','pinned'].map(v=>el('option',{value:v,selected:(s.placement||'auto')===v?'selected':null},
-        v==='auto'?'auto (sit in the contact header when we can find it)':'pinned (floating bar, top right)'))),
-    el('label',{},'Extra anchor selectors, one per line'),
-    el('textarea',{oninput:e=>{s.anchorSelectors=e.target.value.split('\n').map(x=>x.trim()).filter(Boolean);state.dirty=true;}},
-      (s.anchorSelectors||[]).join('\n')),
-    el('div',{class:'empty'},'HighLevel reshuffles its markup now and then. If the bar lands in the wrong spot, paste a CSS selector for the element it should sit inside. No redeploy needed.')
+    el('h2',{},'Dock'),
+    el('div',{class:'empty'},'Users can drag the dock anywhere and flip layouts themselves. These are the defaults they start from.'+(state.scope==='location'?' Sub-account values win over agency values.':'')),
+    el('label',{},'Starting position'),
+    opt('dockPosition',['top-right','top-left','top-center','bottom-right','bottom-left']),
+    el('label',{},'Layout'),
+    opt('dockLayout',['row','column','compact'],['row (buttons side by side)','column (stacked)','compact (icons only)']),
+    el('label',{},'Button size'),
+    opt('buttonSize',['md','sm'],['medium','small (fit more)']),
+    el('label',{},'When no contact is on screen'),
+    opt('idleMode',['chip','hidden'],['show a small "no contact" dock so you know it is alive','hide the dock entirely']),
+    el('h2',{style:'margin-top:22px'},'Show on'),
+    surf('contact','Contact page'),
+    surf('conversation','Conversations (resolves the contact behind the thread)'),
+    surf('opportunity','Opportunities (resolves the contact behind the card)'),
+    el('label',{},'Extra CSS scopes to look for a contact link in (one per line, advanced)'),
+    el('textarea',{oninput:e=>{s.domScopes=e.target.value.split('\n').map(x=>x.trim()).filter(Boolean);state.dirty=true;}},
+      (s.domScopes||[]).join('\n'))
   ));
 }
 

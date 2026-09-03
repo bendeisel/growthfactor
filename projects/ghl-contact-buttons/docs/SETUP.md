@@ -20,6 +20,7 @@ Paste the two ids into `wrangler.toml`, then:
 wrangler secret put ADMIN_PASSWORD     # for /admin
 wrangler secret put SESSION_SECRET     # any random 32+ chars
 wrangler secret put GHL_SSO_KEY        # from step 2, come back for this
+wrangler secret put WEBHOOK_TOKEN      # any random string, used in the webhook URL
 npm run deploy
 ```
 
@@ -36,6 +37,8 @@ HighLevel Marketplace → Developer → My Apps → Create App.
   ```html
   <script src="https://<worker>/injector.js"></script>
   ```
+- Webhooks: URL `https://<worker>/webhooks/ghl/<WEBHOOK_TOKEN>`, subscribe to
+  the events you want automations for (start with `OpportunityDelete`)
 - Copy the app id into `GHL_APP_ID` in `wrangler.toml`
 - Copy the SSO / shared secret into `wrangler secret put GHL_SSO_KEY`
 - Redeploy: `npm run deploy`
@@ -82,11 +85,28 @@ A useful first set:
 | Book Trial | open URL `https://.../booking?contact_id={{contact.id}}` |
 | Flag for Follow-up | create task due in 1 day, webhook to n8n |
 
-## If the bar lands in the wrong place
+## 6. Automations (tag on opportunity delete)
 
-Settings tab → paste a CSS selector for the element the bar should sit inside.
-Saved instantly, no deploy. `pinned` placement floats it top-right regardless
-of HighLevel's markup.
+Automations tab → Add automation. The default one is exactly the common ask:
+event `Opportunity deleted`, action `add tag opportunity-deleted`. Save.
+
+In HighLevel, build a workflow with trigger **Contact Tag Added** =
+`opportunity-deleted`. Have it remove the tag at the end so the next delete
+fires it again.
+
+Agency automations run on every connected sub-account; a sub-account can turn
+one off or add its own.
+
+## The dock
+
+Users drag it anywhere; the position is remembered per browser per
+sub-account. Double-click the handle to reset. The folder icon cycles row →
+column → compact. Settings tab sets the defaults and which surfaces it shows
+on (contact, conversation, opportunity).
+
+When no contact is in view it shrinks to a "no contact on this screen" chip so
+you can see it is alive. Set `idleMode` to hidden if you would rather it
+disappear.
 
 ## Testing without SSO
 

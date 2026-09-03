@@ -18,7 +18,13 @@ binding = "BUTTONS"
 id = "REPLACE_WITH_KV_ID"
 preview_id = "REPLACE_WITH_PREVIEW_KV_ID"
 
+# Optional: HighLevel's webhook signing public key (PEM). When set, every
+# incoming webhook must carry a valid x-wh-signature as well as the path token.
+GHL_WEBHOOK_PUBLIC_KEY = ""
+
 # Secrets (set with `wrangler secret put <NAME>`), never in this file:
-#   GHL_SSO_KEY     - the marketplace app's SSO / shared secret
-#   ADMIN_PASSWORD  - password for the admin UI
-#   SESSION_SECRET  - random 32+ char string used to sign admin sessions
+#   GHL_SSO_KEY        - the marketplace app's SSO / shared secret
+#   ADMIN_PASSWORD     - password for the admin UI
+#   SESSION_SECRET     - random 32+ char string used to sign admin sessions
+#   WEBHOOK_TOKEN      - random string; webhook URL is /webhooks/ghl/<WEBHOOK_TOKEN>
+#   GHL_CLIENT_ID / GHL_CLIENT_SECRET - only if using the agency OAuth install

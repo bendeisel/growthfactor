@@ -1,7 +1,8 @@
 // Cloudflare Worker entry point.
 //
 //   GET  /injector.js      the script the HighLevel app loads in the browser
-//   POST /api/buttons      which buttons this user should see on this contact
+//   POST /api/context      resolve the contact in view + the buttons to show
+//   POST /webhooks/ghl/<token>  marketplace app webhooks (e.g. OpportunityDelete)
 //   POST /api/run          execute one button
 //   GET  /admin            configuration UI (embeds in a custom menu link)
 //   *    /admin/api/*      admin JSON API, cookie authenticated
@@ -12,6 +13,7 @@ import ADMIN_HTML from './generated/admin-html.js';
 import { decryptSession } from './lib/sso.js';
 import { Ghl } from './lib/ghl.js';
 import { runButton } from './lib/actions.js';
+import { resolveContactId, loadContactSummary } from './lib/context.js';
 import { createSessionCookie, clearSessionCookie, isAuthenticated, safeEqual } from './lib/session.js';
 import {
   getAgencyConfig,
@@ -106,47 +108,59 @@ function matchesVisibility(button, contactTags) {
 
 // --- /api ----------------------------------------------------------------
 
-async function handleButtons(request, env, body) {
+function publicButton(b) {
+  return {
+    id: b.id,
+    label: b.label,
+    icon: b.icon,
+    color: b.color,
+    textColor: b.textColor,
+    style: b.style,
+    tooltip: b.tooltip,
+    confirm: b.confirm,
+    group: b.group || null,
+    // The browser only needs to know about open_url; everything else runs
+    // server side, so the rest of the recipe never leaves the worker.
+    actions: (b.actions || [])
+      .filter((a) => a.type === 'open_url')
+      .concat((b.actions || []).some((a) => a.type !== 'open_url') ? [{ type: 'server' }] : []),
+  };
+}
+
+async function handleContext(request, env, body) {
   const session = await authenticate(env, body);
-  const { locationId, contactId } = body;
+  const { locationId, surface } = body;
   if (!locationId) throw new HttpError(400, 'locationId is required');
 
   const [agency, location] = await Promise.all([getAgencyConfig(env), getLocationConfig(env, locationId)]);
-  const buttons = mergeButtons(agency, location);
   const settings = mergeSettings(agency, location);
+  const allButtons = mergeButtons(agency, location);
 
-  // Only pay for a contact lookup when some button actually filters on tags.
-  let contactTags = null;
-  if (contactId && buttons.some((b) => b.visibleIf?.hasTag?.length || b.visibleIf?.missingTag?.length)) {
-    try {
-      const { token } = await resolveLocationToken(env, locationId);
-      const contact = await new Ghl(token).getContact(contactId);
-      contactTags = contact?.contact?.tags || [];
-    } catch {
-      contactTags = null; // fall through and show the button rather than hide it
-    }
+  const { token } = await resolveLocationToken(env, locationId);
+  const ghl = new Ghl(token);
+
+  const { contactId, via } = await resolveContactId({
+    env,
+    ghl,
+    surface,
+    contactId: body.contactId,
+    conversationId: body.conversationId,
+    opportunityId: body.opportunityId,
+    contactIdHint: body.contactIdHint,
+  });
+
+  if (!contactId) {
+    return { contactId: null, via, contact: null, settings, buttons: [], user: { id: session.userId || null } };
   }
 
+  const contact = await loadContactSummary(ghl, contactId);
   return {
+    contactId,
+    via,
+    contact: { id: contactId, name: contact.name, email: contact.email, phone: contact.phone },
     settings,
     user: { id: session.userId || null, email: session.email || null },
-    buttons: buttons
-      .filter((b) => (contactTags === null ? true : matchesVisibility(b, contactTags)))
-      .map((b) => ({
-        id: b.id,
-        label: b.label,
-        icon: b.icon,
-        color: b.color,
-        textColor: b.textColor,
-        style: b.style,
-        tooltip: b.tooltip,
-        confirm: b.confirm,
-        // The browser only needs to know about open_url; everything else runs
-        // server side, so the rest of the recipe never leaves the worker.
-        actions: (b.actions || [])
-          .filter((a) => a.type === 'open_url')
-          .concat((b.actions || []).some((a) => a.type !== 'open_url') ? [{ type: 'server' }] : []),
-      })),
+    buttons: allButtons.filter((b) => matchesVisibility(b, contact.tags)).map(publicButton),
   };
 }
 
@@ -294,6 +308,83 @@ async function handleOauthCallback(request, env, url) {
   });
 }
 
+// --- webhooks (marketplace app events) -----------------------------------
+
+async function verifyWebhookSignature(env, rawBody, signature) {
+  if (!env.GHL_WEBHOOK_PUBLIC_KEY) return true; // path token is the only check
+  if (!signature) return false;
+  const pem = env.GHL_WEBHOOK_PUBLIC_KEY.replace(/-----[A-Z ]+-----/g, '').replace(/\s+/g, '');
+  const der = Uint8Array.from(atob(pem), (c) => c.charCodeAt(0));
+  const key = await crypto.subtle.importKey('spki', der, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+  const sig = Uint8Array.from(atob(signature), (c) => c.charCodeAt(0));
+  return crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, sig, new TextEncoder().encode(rawBody));
+}
+
+/**
+ * Automations are buttons nobody clicks: an event from HighLevel (say,
+ * OpportunityDelete) runs the same action list a button would, against the
+ * contact in the payload. Tagging on delete gives workflows a trigger
+ * HighLevel does not offer natively.
+ */
+async function handleWebhook(request, env, ctx, url) {
+  const token = url.pathname.split('/').pop();
+  if (!env.WEBHOOK_TOKEN || !safeEqual(token, env.WEBHOOK_TOKEN)) throw new HttpError(404, 'Not found');
+
+  const raw = await request.text();
+  if (!(await verifyWebhookSignature(env, raw, request.headers.get('x-wh-signature')))) {
+    throw new HttpError(401, 'Bad webhook signature');
+  }
+
+  let event;
+  try {
+    event = JSON.parse(raw);
+  } catch {
+    throw new HttpError(400, 'Webhook body was not JSON');
+  }
+
+  const type = event.type || event.event;
+  const locationId = event.locationId || event.location_id;
+  const contactId = event.contactId || event.contact_id || event.contact?.id;
+  if (!type || !locationId) return json({ ok: true, ignored: 'no type or location' });
+
+  const [agency, location] = await Promise.all([getAgencyConfig(env), getLocationConfig(env, locationId)]);
+  const disabled = new Set(location.disabledAgencyAutomations || []);
+  const automations = [
+    ...(agency.automations || []).filter((a) => !disabled.has(a.id)),
+    ...(location.automations || []),
+  ].filter((a) => a.active !== false && a.event === type);
+
+  if (!automations.length) return json({ ok: true, ignored: 'no automation for ' + type });
+  if (!contactId) return json({ ok: true, ignored: 'event carries no contact' });
+
+  const { token: accessToken } = await resolveLocationToken(env, locationId);
+  const results = [];
+  for (const automation of automations) {
+    const result = await runButton({
+      env,
+      token: accessToken,
+      contactId,
+      locationId,
+      user: { userId: 'webhook', email: type },
+      button: { id: automation.id, label: automation.label || type, actions: automation.actions || [] },
+    });
+    results.push({ id: automation.id, ...result });
+    ctx.waitUntil(
+      writeLog(env, locationId, {
+        at: new Date().toISOString(),
+        buttonId: automation.id,
+        buttonLabel: (automation.label || type) + ' (automation)',
+        contactId,
+        user: type,
+        ok: result.ok,
+        message: result.message,
+        steps: result.steps,
+      }),
+    );
+  }
+  return json({ ok: results.every((r) => r.ok), results });
+}
+
 // --- router --------------------------------------------------------------
 
 export default {
@@ -314,15 +405,19 @@ export default {
         return new Response(source, {
           headers: {
             'Content-Type': 'application/javascript; charset=utf-8',
-            'Cache-Control': 'public, max-age=300',
+            'Cache-Control': 'public, max-age=60, must-revalidate',
             'Access-Control-Allow-Origin': '*',
           },
         });
       }
 
-      if (url.pathname === '/api/buttons' && request.method === 'POST') {
-        const data = await handleButtons(request, env, await request.json());
+      if (url.pathname === '/api/context' && request.method === 'POST') {
+        const data = await handleContext(request, env, await request.json());
         return json(data, { headers: corsHeaders(request, env) });
+      }
+
+      if (url.pathname.startsWith('/webhooks/ghl/') && request.method === 'POST') {
+        return await handleWebhook(request, env, ctx, url);
       }
 
       if (url.pathname === '/api/run' && request.method === 'POST') {

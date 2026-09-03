@@ -58,13 +58,16 @@ export function mergeButtons(agencyConfig, locationConfig) {
 }
 
 export function mergeSettings(agencyConfig, locationConfig) {
+  const agency = agencyConfig.settings || {};
+  const location = locationConfig.settings || {};
   return {
-    placement: 'auto',
-    theme: 'auto',
-    showOnConversations: true,
-    confirmDestructive: true,
-    ...(agencyConfig.settings || {}),
-    ...(locationConfig.settings || {}),
+    dockPosition: 'top-right', // where the dock starts before the user drags it
+    dockLayout: 'row', // row | column | compact
+    buttonSize: 'md', // sm | md
+    idleMode: 'chip', // chip (show "no contact" dock) | hidden
+    ...agency,
+    ...location,
+    surfaces: { contact: true, conversation: true, opportunity: true, ...(agency.surfaces || {}), ...(location.surfaces || {}) },
   };
 }
 

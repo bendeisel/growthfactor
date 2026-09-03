@@ -78,6 +78,15 @@ export class Ghl {
     return this.request('POST', `/contacts/${contactId}/tasks`, { body: task });
   }
 
+  // --- conversations / opportunities (contact resolution) ------------------
+  getConversation(conversationId) {
+    return this.request('GET', `/conversations/${conversationId}`);
+  }
+
+  getOpportunity(opportunityId) {
+    return this.request('GET', `/opportunities/${opportunityId}`);
+  }
+
   // --- workflows ----------------------------------------------------------
   listWorkflows(locationId) {
     return this.request('GET', '/workflows/', { query: { locationId } });
