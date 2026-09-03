@@ -1,0 +1,50 @@
+/* shared across every page — lifted from the approved artboards */
+
+    body { margin: 0; background: #000000; color: #FFFFFF;
+           font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+           font-size: 16px; line-height: 1.7; }
+    h1,h2,h3,h4 { margin: 0; font-weight: 400;
+           font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; }
+    p  { margin: 0 0 18px 0; }
+    ul { margin: 0; padding: 0; list-style: none; }
+    a  { color: #D7AD56; text-decoration: none; }
+    a:hover { color: #FFFFFF; }
+    .body { color: rgba(255,255,255,0.66); }
+    .micro { font-size: 10px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: 0.24em; color: #D7AD56; }
+    .btn { background: #D7AD56; color: #0A0A0A; border-radius: 8px; display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 16px 36px; text-transform: uppercase;
+           letter-spacing: 0.12em; cursor: pointer; }
+    .btn:hover { background: #FFFFFF; }
+    .btn-line { background: transparent; color: #FFFFFF; border-radius: 8px;
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3); display: inline-block;
+           font-size: 13px; font-weight: 800; padding: 16px 30px; text-transform: uppercase;
+           letter-spacing: 0.12em; cursor: pointer; }
+    .btn-line:hover { box-shadow: inset 0 0 0 1px #D7AD56; color: #D7AD56; }
+    .nav { color: rgba(255,255,255,0.78); font-size: 12.8px; text-transform: uppercase;
+           letter-spacing: 0.05em; }
+    .nav:hover { color: #D7AD56; }
+    .tick { font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif; font-size: 38px;
+            color: #0A0A0A; letter-spacing: 0.03em; white-space: nowrap; }
+    .ctl { width: 46px; height: 46px; border-radius: 8px; background: rgba(255,255,255,0.06);
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); display: flex; align-items: center;
+           justify-content: center; cursor: pointer; color: #FFFFFF; }
+    .ctl:hover { background: #D7AD56; color: #0A0A0A; box-shadow: inset 0 0 0 1px #D7AD56; }
+    /* hover link-preview: gold word, small popup card above it */
+    .lp { color: #D7AD56; font-weight: 700; position: relative; cursor: pointer;
+          border-bottom: 1px dotted rgba(215,173,86,0.55); white-space: nowrap; }
+    .lp-card { position: absolute; bottom: calc(100% + 12px); left: 50%;
+          transform: translate(-50%, 10px) scale(0.9); opacity: 0; pointer-events: none;
+          transition: opacity 0.22s ease, transform 0.22s ease; width: 232px;
+          background: #0F0F10; box-shadow: 0 20px 50px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.16);
+          padding: 6px; z-index: 30; display: block; }
+    .lp:hover .lp-card { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    .lp-card img { display: block; width: 220px; height: 130px; object-fit: cover; border-radius: 6px; }
+    .lp-lab { display: block; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+          text-transform: uppercase; letter-spacing: 0.18em; color: #D7AD56; padding: 8px 4px 4px 4px;
+          white-space: normal; }
+    @keyframes roll  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
+    @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
+    @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  
