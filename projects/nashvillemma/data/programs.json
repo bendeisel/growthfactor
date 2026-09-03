@@ -1,0 +1,135 @@
+{
+  "note": "One entry per program page. schedule_tag/schedule_audience select class times from classes.json; nothing about a class is written here.",
+  "programs": [
+    {
+      "slug": "jiu-jitsu",
+      "content": "classes-jiu-jitsu",
+      "hero": "BJJ-Page-1-263298.png",
+      "body": "BJJ-Page-2-263299.png",
+      "schedule_tag": "jiu-jitsu",
+      "hero_style": "inset",
+      "coach": {
+        "name": "Bryan Tidwell",
+        "role": "Head Coach — Brazilian Jiu-Jitsu",
+        "photo": "coach-tidwell.jpg",
+        "bio": [
+          "Meet Bryan “The Matrix” Tidwell, the Head Coach of the Brazilian Jiu-Jitsu (BJJ) program at Nashville MMA Training Camp and founder and head black belt of the Matrix Jiu-Jitsu Association. With over 20 years of martial arts experience, Bryan brings extensive knowledge, leadership, and passion to our BJJ program.",
+          "Originally from Nashville, Tennessee, Bryan holds a prestigious 3rd-degree black belt in Brazilian Jiu-Jitsu. His martial arts journey was inspired by the pioneering days of the UFC, driving him to achieve notable accomplishments, including becoming the WKA State Champion with a solid amateur MMA record of 4-1."
+        ]
+      }
+    },
+    {
+      "slug": "boxing",
+      "content": "classes-boxing",
+      "hero": "Boxing-Page-1-263313.png",
+      "body": "Boxing-Header-Page-2-263314.png",
+      "schedule_tag": "boxing",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "muay-thai",
+      "content": "classes-muay-thai",
+      "hero": "Muay-Thai-Page-1-263309.png",
+      "body": "Muay-Thai-Page-2-263310.png",
+      "schedule_tag": "muay-thai",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "mixed-martial-arts",
+      "content": "classes-mixed-martial-arts",
+      "hero": "MMA-Classes-Cover-Page-1-263319.png",
+      "body": "MMA-Classes-Header-Page-2-263320.png",
+      "schedule_tag": "mixed-martial-arts",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "wrestling",
+      "content": "classes-wrestling",
+      "hero": "Wrestling-Header-Page-1-263328.png",
+      "body": "Wrestling-Cover-and-Page-2-263329.png",
+      "schedule_tag": "wrestling",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "self-defense",
+      "content": "classes-self-defense-classes-and-seminars",
+      "hero": "selfdefensemainpng-264047.png",
+      "body": "8943-selfdefense-261427.jpg",
+      "schedule_tag": "self-defense",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "sports-performance",
+      "content": "overrides/sports-performance",
+      "hero": "Iron-Pile-Cover-Page-1-263304.JPG",
+      "body": "Iron-Pile-Header-Page-2-263305.png",
+      "schedule_tag": "sports-performance",
+      "coach": {
+        "name": "Tim Sumich",
+        "role": "Head Coach — Sports Performance"
+      },
+      "hero_style": "inset"
+    },
+    {
+      "slug": "open-gym",
+      "content": "overrides/open-gym",
+      "hero": "fitnessweightsmainpng-264039.png",
+      "body": "13sep-19-fitness-280893.jpg",
+      "schedule_tag": null,
+      "schedule": false,
+      "hero_style": "inset"
+    },
+    {
+      "slug": "womens-classes",
+      "content": "classes-womens-classes",
+      "hero": "womenbjj-297296.jpg",
+      "body": "womenmt-297295.jpg",
+      "schedule_tag": "womens-classes",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "mma-fight-team",
+      "content": "classes-mixed-martial-arts-competition-team",
+      "hero": "MMA-Fight-Team-Page-1-263321.png",
+      "body": "MMA-Fight-Team-Page-2-263322.jpg",
+      "schedule_tag": "sparring",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "personal-training",
+      "content": "classes-personal-training",
+      "hero": "PT-Page-1-263302.png",
+      "body": "PT-Page-2-263303.png",
+      "schedule_tag": null,
+      "schedule": false,
+      "hero_style": "inset"
+    },
+    {
+      "slug": "kids-martial-arts",
+      "content": "classes-kids-martial-arts",
+      "hero": "kids-273867.jpeg",
+      "body": "192024-07-07-Kids-fitness-279078.jpg",
+      "schedule_tag": null,
+      "schedule_audience": "kids",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "kids-brazilian-jiu-jitsu",
+      "content": "classes-kids-brazilian-jiu-jitsu",
+      "hero": "Kids-BJJ-Cover-Page-1-263338.jpg",
+      "body": "Kids-BJJ-Page-2-263339.png",
+      "schedule_tag": "jiu-jitsu",
+      "schedule_audience": "kids",
+      "hero_style": "inset"
+    },
+    {
+      "slug": "kids-fitness",
+      "content": "classes-kids-fitness-classes",
+      "hero": "142024-07-07-Kids-fitness-279081.jpg",
+      "body": "222024-07-07-Kids-fitness-279082.jpg",
+      "schedule_tag": "kids-fitness-classes",
+      "schedule_audience": "kids",
+      "hero_style": "inset"
+    }
+  ]
+}

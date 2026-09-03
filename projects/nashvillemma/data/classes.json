@@ -1,0 +1,967 @@
+{
+  "source": "https://nashvillemma.com/Home/Schedule",
+  "note": "Single source of truth. Every schedule view is generated from this file.",
+  "classes": [
+    {
+      "day": "Monday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 360
+    },
+    {
+      "day": "Monday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Sports Performance",
+      "programs": [
+        "sports-performance"
+      ],
+      "audience": "fitness",
+      "sort": 360
+    },
+    {
+      "day": "Monday",
+      "start": "7:00 AM",
+      "end": "8:00 AM",
+      "name": "Boxing Fundamentals",
+      "programs": [
+        "boxing"
+      ],
+      "audience": "adult",
+      "sort": 420
+    },
+    {
+      "day": "Monday",
+      "start": "9:00 AM",
+      "end": "10:00 AM",
+      "name": "Muay Thai: Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 540
+    },
+    {
+      "day": "Monday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Monday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Monday",
+      "start": "4:15 PM",
+      "end": "5:00 PM",
+      "name": "Kids No Gi Brazilian Jiu-Jitsu (Ages 6-10)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 975
+    },
+    {
+      "day": "Monday",
+      "start": "5:00 PM",
+      "end": "6:00 PM",
+      "name": "Kids No Gi Brazilian Jiu-Jitsu (ages 9-14)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 1020
+    },
+    {
+      "day": "Monday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "Rolling Class (Gi & No Gi)",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Monday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Monday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "Boxing: Intermediate",
+      "programs": [
+        "boxing"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Monday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "Boxing: Fundamentals",
+      "programs": [
+        "boxing"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Monday",
+      "start": "6:00 PM",
+      "end": "7:00 PM",
+      "name": "Kids Fitness (ages 9-14)",
+      "programs": [
+        "kids-fitness-classes"
+      ],
+      "audience": "kids",
+      "sort": 1080
+    },
+    {
+      "day": "Monday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Muay Thai: Advanced",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Monday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "No Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Monday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "No Gi Brazilian Jiu-Jitsu: Fundamentals",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Monday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "Muay Thai: Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Tuesday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "No-Gi Brazilian Jiu-Jitsu: Advanced",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 360
+    },
+    {
+      "day": "Tuesday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Sports Performance",
+      "programs": [
+        "sports-performance"
+      ],
+      "audience": "fitness",
+      "sort": 360
+    },
+    {
+      "day": "Tuesday",
+      "start": "7:00 AM",
+      "end": "8:00 AM",
+      "name": "MMA Fundamentals & Self Defense",
+      "programs": [
+        "mixed-martial-arts",
+        "self-defense"
+      ],
+      "audience": "adult",
+      "sort": 420
+    },
+    {
+      "day": "Tuesday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Tuesday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Tuesday",
+      "start": "4:15 PM",
+      "end": "5:00 PM",
+      "name": "Kids Gi Brazilian Jiu-Jitsu (ages 6-10)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 975
+    },
+    {
+      "day": "Tuesday",
+      "start": "5:00 PM",
+      "end": "6:00 PM",
+      "name": "Kids Gi Brazilian Jiu Jitsu (ages 9-14)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 1020
+    },
+    {
+      "day": "Tuesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "No Gi Brazilian Jiu-Jitsu: Advanced",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Tuesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA Fundamental & Self-Defense",
+      "programs": [
+        "mixed-martial-arts",
+        "self-defense"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Tuesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Tuesday",
+      "start": "6:00 PM",
+      "end": "7:00 PM",
+      "name": "Kids Fitness (ages 9-14)",
+      "programs": [
+        "kids-fitness-classes"
+      ],
+      "audience": "kids",
+      "sort": 1080
+    },
+    {
+      "day": "Tuesday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Tuesday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Muay Thai: Advanced",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Tuesday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Wrestling: All Levels",
+      "programs": [
+        "wrestling"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Tuesday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "Gi Brazilian Jiu-Jitsu Fundamentals",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Tuesday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "Muay Thai Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Wednesday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 360
+    },
+    {
+      "day": "Wednesday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Sports Performance",
+      "programs": [
+        "sports-performance"
+      ],
+      "audience": "fitness",
+      "sort": 360
+    },
+    {
+      "day": "Wednesday",
+      "start": "7:00 AM",
+      "end": "8:00 AM",
+      "name": "MMA Fundamentals & Self Defense",
+      "programs": [
+        "mixed-martial-arts",
+        "self-defense"
+      ],
+      "audience": "adult",
+      "sort": 420
+    },
+    {
+      "day": "Wednesday",
+      "start": "9:00 AM",
+      "end": "10:00 AM",
+      "name": "Muay Thai: Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 540
+    },
+    {
+      "day": "Wednesday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Wednesday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Wednesday",
+      "start": "4:15 PM",
+      "end": "5:00 PM",
+      "name": "Kids No Gi Brazilian Jiu-Jitsu (ages 6-10)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 975
+    },
+    {
+      "day": "Wednesday",
+      "start": "5:00 PM",
+      "end": "6:00 PM",
+      "name": "Kids No Gi Brazilian Jiu-Jitsu (ages 9-14)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 1020
+    },
+    {
+      "day": "Wednesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Wednesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu Fundamentals",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Wednesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "Boxing: Intermediate",
+      "programs": [
+        "boxing"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Wednesday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "Boxing: Fundamentals",
+      "programs": [
+        "boxing"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Wednesday",
+      "start": "6:00 PM",
+      "end": "7:00 PM",
+      "name": "Kids Fitness (ages 9-14)",
+      "programs": [
+        "kids-fitness-classes"
+      ],
+      "audience": "kids",
+      "sort": 1080
+    },
+    {
+      "day": "Wednesday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "No Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Wednesday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Member's Sparring (Invite only)",
+      "programs": [
+        "sparring"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Wednesday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu: Fundamentals",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Wednesday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "Muay Thai: Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Thursday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Gi Brazilian Jiu-Jitsu: Advanced",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 360
+    },
+    {
+      "day": "Thursday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Sports Performance",
+      "programs": [
+        "sports-performance"
+      ],
+      "audience": "fitness",
+      "sort": 360
+    },
+    {
+      "day": "Thursday",
+      "start": "7:00 AM",
+      "end": "8:00 AM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 420
+    },
+    {
+      "day": "Thursday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Thursday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Thursday",
+      "start": "4:15 PM",
+      "end": "5:00 PM",
+      "name": "Kids Gi Brazilian Jiu-Jitsu(ages 6-10)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 975
+    },
+    {
+      "day": "Thursday",
+      "start": "5:00 PM",
+      "end": "6:00 PM",
+      "name": "Kids Gi Brazilian Jiu Jitsu(ages 9-14)",
+      "programs": [
+        "jiu-jitsu",
+        "kids-martial-arts"
+      ],
+      "audience": "kids",
+      "sort": 1020
+    },
+    {
+      "day": "Thursday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu: Advanced",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Thursday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA Fundamental & Self-Defense",
+      "programs": [
+        "mixed-martial-arts",
+        "self-defense"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Thursday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Thursday",
+      "start": "6:00 PM",
+      "end": "7:00 PM",
+      "name": "Kids Fitness (ages 9-14)",
+      "programs": [
+        "kids-fitness-classes"
+      ],
+      "audience": "kids",
+      "sort": 1080
+    },
+    {
+      "day": "Thursday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Thursday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Muay Thai: Advanced",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Thursday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Wrestling: All Levels",
+      "programs": [
+        "wrestling"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Thursday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu: Fundamentals",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Thursday",
+      "start": "7:30 PM",
+      "end": "8:30 PM",
+      "name": "Muay Thai: Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1170
+    },
+    {
+      "day": "Friday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "No-Gi Brazilian Jiu-Jitsu: Advanced",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 360
+    },
+    {
+      "day": "Friday",
+      "start": "6:00 AM",
+      "end": "7:00 AM",
+      "name": "Sports Performance",
+      "programs": [
+        "sports-performance"
+      ],
+      "audience": "fitness",
+      "sort": 360
+    },
+    {
+      "day": "Friday",
+      "start": "7:00 AM",
+      "end": "8:00 AM",
+      "name": "Boxing Fundamentals",
+      "programs": [
+        "boxing"
+      ],
+      "audience": "adult",
+      "sort": 420
+    },
+    {
+      "day": "Friday",
+      "start": "9:00 AM",
+      "end": "10:00 AM",
+      "name": "Muay Thai: Fundamentals",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 540
+    },
+    {
+      "day": "Friday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Friday",
+      "start": "11:30 AM",
+      "end": "12:30 AM",
+      "name": "No-Gi Brazilian Jiu-Jitsu",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Friday",
+      "start": "4:30 PM",
+      "end": "5:30 PM",
+      "name": "No-Gi Brazilian Jiu-Jitsu: Intermediate",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 990
+    },
+    {
+      "day": "Friday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "Wrestling: All Levels",
+      "programs": [
+        "wrestling"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Friday",
+      "start": "5:30 PM",
+      "end": "6:30 PM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 1050
+    },
+    {
+      "day": "Friday",
+      "start": "6:30 PM",
+      "end": "7:30 PM",
+      "name": "Muay Thai: Intermediate",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 1110
+    },
+    {
+      "day": "Saturday",
+      "start": "8:30 AM",
+      "end": "10:00 AM",
+      "name": "Brazilian Jiu-Jitsu OPEN MAT ROLLING (All Levels)",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 510
+    },
+    {
+      "day": "Saturday",
+      "start": "9:00 AM",
+      "end": "10:00 AM",
+      "name": "MMA: Intermediate",
+      "programs": [
+        "mixed-martial-arts"
+      ],
+      "audience": "adult",
+      "sort": 540
+    },
+    {
+      "day": "Saturday",
+      "start": "9:00 AM",
+      "end": "10:00 AM",
+      "name": "MMA Fundamentals & Self Defense",
+      "programs": [
+        "mixed-martial-arts",
+        "self-defense"
+      ],
+      "audience": "adult",
+      "sort": 540
+    },
+    {
+      "day": "Saturday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Women's Muay Thai",
+      "programs": [
+        "muay-thai",
+        "womens-classes"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Saturday",
+      "start": "10:30 AM",
+      "end": "12:00 PM",
+      "name": "Judo",
+      "programs": [
+        "judo"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Saturday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "No Gi Brazilian Jiu Jitsu: Fundamentals",
+      "programs": [
+        "jiu-jitsu"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Saturday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "Muay Thai: All-Levels",
+      "programs": [
+        "muay-thai"
+      ],
+      "audience": "adult",
+      "sort": 690
+    },
+    {
+      "day": "Sunday",
+      "start": "9:00 AM",
+      "end": "10:00 AM",
+      "name": "Wrestling: All Levels",
+      "programs": [
+        "wrestling"
+      ],
+      "audience": "adult",
+      "sort": 540
+    },
+    {
+      "day": "Sunday",
+      "start": "10:30 AM",
+      "end": "11:30 AM",
+      "name": "Women's Jiu Jitsu All Levels",
+      "programs": [
+        "jiu-jitsu",
+        "womens-classes"
+      ],
+      "audience": "adult",
+      "sort": 630
+    },
+    {
+      "day": "Sunday",
+      "start": "11:30 AM",
+      "end": "12:30 PM",
+      "name": "Beginner Sparring",
+      "programs": [
+        "sparring"
+      ],
+      "audience": "adult",
+      "sort": 690
+    }
+  ]
+}
