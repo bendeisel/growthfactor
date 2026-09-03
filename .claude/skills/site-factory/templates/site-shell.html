@@ -1,0 +1,443 @@
+<title>CLIENT NAME — site preview</title>
+
+<!--
+  Growth Factor multi-page site shell.
+
+  ONE artifact holds every page. Pages are <section class="gf-page">; the
+  chrome nav switches between them. scripts/split_pages.py turns this file into
+  production HTML, one file per page, with the chrome stripped.
+
+  This file is artifact-shaped on purpose: no <!doctype>, <html>, <head> or
+  <body> — the artifact host supplies those, and split_pages.py adds them for
+  production.
+
+  The demo sections below are STRUCTURAL PLACEHOLDERS, not a layout. Replace
+  them with the sections the axes and motif inventory actually called for.
+  Shipping this skeleton's arrangement is exactly the generic default
+  house-style exists to prevent.
+
+  To add a page: copy a <section class="gf-page">, give it an id, data-title
+  and data-file. The chrome nav builds itself from the sections, so there is
+  nothing else to update.
+-->
+
+<style>
+  /* ---- KERNEL — replace every value from projects/<slug>/kernel.json ---- */
+  :root {
+    --ground:      #131313;
+    --ground-alt:  #171820;
+    --surface:     #1E1E29;
+    --ink:         #FFFFFF;
+    --ink-quiet:   #B9B9C0;
+    --accent:      #D7AD56;
+    --accent-deep: #C0883A;
+    --rule:        #303030;
+
+    --face-display: "Bebas Neue", "Arial Narrow", sans-serif;
+    --face-body:    "Montserrat", system-ui, sans-serif;
+
+    --radius-panel:  0px;   /* kernel geometry: containers square, */
+    --radius-action: 8px;   /* actions 8px — the tension is the motif */
+    --gap-section:   80px;
+    --measure:       1600px;
+  }
+
+  /* Explicit ground and ink: the artifact host paints its own background
+     behind a transparent body, and a dark client site must not go light
+     because the reviewer's laptop is in light mode. Client sites commit to
+     one look, so there is deliberately no prefers-color-scheme swap. */
+  /* The artifact host ships `[hidden]{display:none!important}` in its own
+     reset, but a split-out production page has no such reset — and any
+     `display` we set (.lead-scrim is `grid`) outranks the UA's [hidden] rule.
+     Without this, the lead popup covers every production page permanently.
+     Keep it: it is the one line that makes `hidden` mean the same thing in
+     the artifact and in the shipped site. */
+  [hidden] { display: none !important; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--face-body);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--face-display);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+    margin: 0 0 0.4em;
+  }
+  h1 { font-size: clamp(2.75rem, 7vw, 6rem); }
+  h2 { font-size: clamp(1.9rem, 4vw, 3.2rem); }
+
+  a { color: var(--accent); }
+
+  .wrap {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 3rem);
+  }
+
+  section.gf-page > .band { padding: var(--gap-section) 0; }
+  section.gf-page > .band.alt { background: var(--ground-alt); }
+
+  /* The 3px gold hairline — one motif, used as the page's spine. Amplifying a
+     device the client's site already owns is the point; see house-style. */
+  .hairline {
+    height: 3px;
+    background: var(--accent);
+    border: 0;
+    margin: 0;
+    width: clamp(64px, 12vw, 200px);
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent-deep);
+    color: var(--ink);
+    border: 0;
+    border-radius: var(--radius-action);
+    padding: 0.9em 1.8em;
+    font-family: var(--face-body);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* ---- site header / footer (shared across every page) ---- */
+  .site-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 1.1rem clamp(1rem, 4vw, 3rem);
+    background: var(--ground);
+    border-bottom: 1px solid var(--rule);
+  }
+  .site-head nav { display: flex; gap: clamp(0.75rem, 2vw, 1.75rem); flex-wrap: wrap; }
+  .site-head nav a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .site-head nav a[aria-current="page"] { color: var(--accent); }
+  .wordmark {
+    font-family: var(--face-display);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .site-foot {
+    background: var(--ground);
+    border-top: 1px solid var(--rule);
+    padding: var(--gap-section) 0;
+    color: var(--ink-quiet);
+    font-size: 0.9rem;
+  }
+
+  /* ---- popup lead form: house default, every request CTA opens this ---- */
+  .lead-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    z-index: 60;
+  }
+  .lead-card {
+    background: var(--surface);
+    border-radius: var(--radius-panel);
+    border-top: 3px solid var(--accent);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    width: min(460px, 100%);
+  }
+  .lead-card input {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-action);
+    color: var(--ink);
+    font: inherit;
+    padding: 0.75em 0.9em;
+    margin: 0 0 0.6rem;
+  }
+  .lead-card .hp { position: absolute; left: -9999px; }
+  .lead-close {
+    float: right;
+    background: none;
+    border: 0;
+    color: var(--ink-quiet);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
+    .reveal.seen { opacity: 1; transform: none; }
+  }
+</style>
+
+<!-- GF-CHROME:START -->
+<style>
+  /* Preview chrome. Deliberately neutral so it never reads as part of the
+     client's design. This whole block is stripped for production, which is
+     why the body offset it needs lives in here rather than in the site CSS. */
+  .gf-chrome {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    flex-wrap: wrap;
+    padding: 0.5rem 0.9rem;
+    background: #101014;
+    border-bottom: 1px solid #2a2a33;
+    font: 500 12px/1.4 system-ui, sans-serif;
+    color: #9a9aa6;
+  }
+  .gf-chrome-brand { display: flex; align-items: center; gap: 0.5rem; }
+  .gf-chrome-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #46d17f; flex: none;
+  }
+  .gf-chrome-client { color: #e8e8ee; font-weight: 700; letter-spacing: 0.02em; }
+  .gf-chrome-slug {
+    color: #7a7a86; font-family: ui-monospace, monospace; font-size: 11px;
+    padding: 1px 6px; border: 1px solid #2a2a33; border-radius: 4px;
+  }
+  .gf-chrome-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+  .gf-tab {
+    background: none; border: 1px solid transparent; border-radius: 5px;
+    color: #9a9aa6; font: inherit; padding: 4px 10px; cursor: pointer;
+  }
+  .gf-tab:hover { color: #e8e8ee; border-color: #2a2a33; }
+  .gf-tab[aria-current="true"] { color: #101014; background: #e8e8ee; font-weight: 700; }
+  .gf-chrome-note {
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 10px;
+    color: #101014; background: #d8b25c; padding: 3px 8px; border-radius: 4px;
+    font-weight: 700;
+  }
+</style>
+
+<div class="gf-chrome">
+  <span class="gf-chrome-brand">
+    <span class="gf-chrome-dot"></span>
+    <span class="gf-chrome-client">CLIENT NAME</span>
+    <span class="gf-chrome-slug">slug</span>
+  </span>
+  <span class="gf-chrome-note">Preview</span>
+  <span class="gf-chrome-tabs" id="gf-tabs" role="tablist" aria-label="Pages"></span>
+</div>
+<!-- GF-CHROME:END -->
+
+<header class="site-head" data-gf-shared>
+  <a class="wordmark" href="index.html" data-gf-link>CLIENT NAME</a>
+  <nav>
+    <a href="index.html" data-gf-link>Home</a>
+    <a href="programs.html" data-gf-link>Programs</a>
+    <a href="contact.html" data-gf-link>Contact</a>
+  </nav>
+  <button class="btn" data-lead-open>Request info</button>
+</header>
+
+<main id="gf-pages">
+
+  <section class="gf-page" id="home" data-title="Home" data-file="index.html">
+    <div class="band">
+      <div class="wrap">
+        <hr class="hairline">
+        <h1>Replace with the client's own headline, verbatim</h1>
+        <p class="reveal">
+          Copy is frozen at 99%. Their words, not better words.
+        </p>
+        <button class="btn" data-lead-open>Request info</button>
+      </div>
+    </div>
+    <div class="band alt">
+      <div class="wrap">
+        <h2>A second band</h2>
+        <p>
+          Structure comes from the axes; the devices come from the client's
+          own motif inventory.
+        </p>
+        <a href="programs.html" data-gf-link>See the programs</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="gf-page" id="programs" data-title="Programs" data-file="programs.html" hidden>
+    <div class="band">
+      <div class="wrap">
+        <hr class="hairline">
+        <h1>Programs</h1>
+        <p>One section per program, named exactly as the client names them.</p>
+        <!-- GF-TODO: example of a recorded gap — class schedule not published anywhere -->
+      </div>
+    </div>
+  </section>
+
+  <section class="gf-page" id="contact" data-title="Contact" data-file="contact.html" hidden>
+    <div class="band">
+      <div class="wrap">
+        <hr class="hairline">
+        <h1>Contact</h1>
+        <p>
+          NAP here must match the Google Business Profile exactly, and the
+          LocalBusiness schema must match both.
+        </p>
+        <button class="btn" data-lead-open>Request info</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot" data-gf-shared>
+  <div class="wrap">
+    <hr class="hairline">
+    <p>&copy; <span data-year></span> CLIENT NAME. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Popup lead form: shared, so split_pages.py puts it on every page. -->
+<div class="lead-scrim" id="lead" data-gf-shared hidden>
+  <div class="lead-card" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+    <button class="lead-close" data-lead-close aria-label="Close">&times;</button>
+    <h2 id="lead-title">Request info</h2>
+    <form method="post" action="/lead.php">
+      <input name="first" placeholder="First name" autocomplete="given-name" required>
+      <input name="last" placeholder="Last name" autocomplete="family-name" required>
+      <input name="email" type="email" placeholder="Email" autocomplete="email" required>
+      <input name="phone" type="tel" placeholder="Phone" autocomplete="tel" required>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+</div>
+
+<!-- GF-CHROME:START -->
+<script>
+  /* Page switcher. Builds its own tabs from the sections, so adding a page
+     means adding a section and nothing else. */
+  (function () {
+    var pages = [].slice.call(document.querySelectorAll('.gf-page'));
+    if (!pages.length) return;
+    var tabBar = document.getElementById('gf-tabs');
+    var KEY = 'gf-page:' + (location.pathname || 'shell');
+
+    function fileOf(p) { return p.getAttribute('data-file') || ''; }
+
+    function show(id, remember) {
+      var target = pages.filter(function (p) { return p.id === id; })[0] || pages[0];
+      pages.forEach(function (p) { p.hidden = p !== target; });
+
+      [].forEach.call(tabBar.children, function (t) {
+        t.setAttribute('aria-current', String(t.dataset.page === target.id));
+      });
+
+      // Keep the site's own nav honest about where you are.
+      [].forEach.call(document.querySelectorAll('[data-gf-link]'), function (a) {
+        var match = a.getAttribute('href') === fileOf(target);
+        if (match) { a.setAttribute('aria-current', 'page'); }
+        else { a.removeAttribute('aria-current'); }
+      });
+
+      if (remember) {
+        try { localStorage.setItem(KEY, target.id); } catch (e) { /* private mode */ }
+      }
+      window.scrollTo(0, 0);
+    }
+
+    pages.forEach(function (p) {
+      var b = document.createElement('button');
+      b.className = 'gf-tab';
+      b.type = 'button';
+      b.dataset.page = p.id;
+      b.textContent = p.getAttribute('data-title') || p.id;
+      b.addEventListener('click', function () {
+        history.replaceState(null, '', '#' + p.id);
+        show(p.id, true);
+      });
+      tabBar.appendChild(b);
+    });
+
+    // Internal site links switch pages instead of navigating.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-gf-link]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      var hit = pages.filter(function (p) { return fileOf(p) === href; })[0];
+      if (!hit) return;              // external or unknown: let it navigate
+      e.preventDefault();
+      history.replaceState(null, '', '#' + hit.id);
+      show(hit.id, true);
+    });
+
+    window.addEventListener('hashchange', function () {
+      show(location.hash.slice(1), true);
+    });
+
+    var start = location.hash.slice(1);
+    if (!start) {
+      try { start = localStorage.getItem(KEY) || ''; } catch (e) { start = ''; }
+    }
+    show(start || pages[0].id, false);
+  })();
+</script>
+<!-- GF-CHROME:END -->
+
+<script>
+  /* Site behaviour. Vanilla on purpose: these drop into a template platform as
+     a custom block without a framework. Ships to production unchanged. */
+  (function () {
+    var lead = document.getElementById('lead');
+
+    function openLead() {
+      if (!lead) return;
+      lead.hidden = false;
+      var f = lead.querySelector('input');
+      if (f) f.focus();
+    }
+    function closeLead() { if (lead) lead.hidden = true; }
+
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('[data-lead-open]')) { e.preventDefault(); openLead(); }
+      else if (e.target.closest('[data-lead-close]')) { closeLead(); }
+      else if (e.target === lead) { closeLead(); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeLead();
+    });
+
+    [].forEach.call(document.querySelectorAll('[data-year]'), function (el) {
+      el.textContent = new Date().getFullYear();
+    });
+
+    var revealables = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && revealables.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('seen'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -10%' });
+      [].forEach.call(revealables, function (el) { io.observe(el); });
+    } else {
+      [].forEach.call(revealables, function (el) { el.classList.add('seen'); });
+    }
+  })();
+</script>
