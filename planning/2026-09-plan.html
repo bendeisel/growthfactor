@@ -1,0 +1,515 @@
+<title>The September Board</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root{
+    --ground:#EDEFF4; --surface:#FFFFFF; --sunk:#E3E7EF;
+    --ink:#0A1122; --body:#232F45; --muted:#5B6479;
+    --line:#C7CDDA; --hair:#D9DEE8;
+    --accent:#A94E1C; --accent-bright:#C9622E;
+    --ship:#1F6B4E; --ship-bg:#DCEDE4;
+    --cut:#9E3A32; --cut-bg:#F3DFDC;
+    --park:#4A5568; --park-bg:#DFE3EB;
+    --maxw:1080px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0A1122; --surface:#111A2E; --sunk:#0D1526;
+      --ink:#E7ECF5; --body:#C3CCDC; --muted:#8794AC;
+      --line:#243252; --hair:#1B2740;
+      --accent:#E58A4F; --accent-bright:#F0A272;
+      --ship:#63C297; --ship-bg:#12291F;
+      --cut:#E58177; --cut-bg:#2C1614;
+      --park:#93A0B8; --park-bg:#1A2338;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0A1122; --surface:#111A2E; --sunk:#0D1526;
+    --ink:#E7ECF5; --body:#C3CCDC; --muted:#8794AC;
+    --line:#243252; --hair:#1B2740;
+    --accent:#E58A4F; --accent-bright:#F0A272;
+    --ship:#63C297; --ship-bg:#12291F;
+    --cut:#E58177; --cut-bg:#2C1614;
+    --park:#93A0B8; --park-bg:#1A2338;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground); color:var(--body);
+    font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+    font-size:16px; line-height:1.62; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px 96px}
+  .prose{max-width:70ch}
+  p{margin:0 0 1em}
+  a{color:var(--accent); text-underline-offset:3px}
+  strong{color:var(--ink); font-weight:600}
+  code,.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  code{font-size:.86em; background:var(--sunk); padding:1px 5px; color:var(--ink)}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',ui-monospace,monospace; font-size:11px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin:0 0 10px;
+  }
+  h1{
+    font-size:clamp(38px,6.2vw,60px); line-height:1.02; letter-spacing:-.024em;
+    font-weight:700; color:var(--ink); margin:0 0 18px; text-wrap:balance;
+  }
+  h2{
+    font-size:clamp(24px,3.4vw,32px); line-height:1.14; letter-spacing:-.017em;
+    font-weight:700; color:var(--ink); margin:0 0 6px; text-wrap:balance;
+  }
+  h3{font-size:19px; line-height:1.3; letter-spacing:-.01em; font-weight:600; color:var(--ink); margin:0 0 8px}
+  h4{font-size:15px; font-weight:600; color:var(--ink); margin:0 0 6px}
+
+  /* ---- masthead ---- */
+  header.top{border-bottom:1px solid var(--line); padding:56px 0 30px; margin-bottom:0}
+  .kicker{
+    display:flex; flex-wrap:wrap; gap:14px; align-items:baseline;
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:26px;
+  }
+  .kicker .b{color:var(--accent)}
+  .lede{font-size:19px; line-height:1.55; color:var(--body); max-width:62ch; margin:0}
+
+  /* ---- stat strip ---- */
+  .strip{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+    border-bottom:1px solid var(--line); margin-bottom:56px;
+  }
+  .stat{padding:22px 20px 22px 0; border-right:1px solid var(--hair)}
+  .stat:last-child{border-right:0}
+  .stat .n{
+    font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums;
+    font-size:32px; font-weight:600; line-height:1; color:var(--ink); display:block;
+  }
+  .stat.hot .n{color:var(--accent)}
+  .stat .l{
+    display:block; margin-top:8px; font-size:11px; font-weight:600; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; line-height:1.5;
+  }
+
+  section{padding-top:52px}
+  .rule{border:0; border-top:1px solid var(--line); margin:52px 0 0}
+
+  /* ---- pull quote ---- */
+  .thesis{
+    border-left:4px solid var(--accent); padding:4px 0 4px 22px; margin:26px 0 30px;
+    font-size:clamp(20px,2.8vw,26px); line-height:1.3; font-weight:600; color:var(--ink);
+    letter-spacing:-.012em; max-width:26ch;
+  }
+
+  /* ---- conflict blocks ---- */
+  .conflicts{display:flex; flex-direction:column; gap:0; margin-top:28px}
+  .conflict{border-top:1px solid var(--hair); padding:24px 0}
+  .conflict:last-child{border-bottom:1px solid var(--hair)}
+  .conflict .hd{display:flex; gap:12px; align-items:baseline; margin-bottom:12px}
+  .conflict .tag{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--muted); white-space:nowrap; padding-top:3px;
+  }
+  .vals{display:flex; flex-direction:column; gap:0; margin:0 0 14px; border-left:1px solid var(--line)}
+  .val{
+    display:flex; flex-wrap:wrap; gap:4px 16px; align-items:baseline;
+    padding:8px 0 8px 16px; font-family:'JetBrains Mono',monospace; font-size:13px;
+  }
+  .val .src{color:var(--muted); min-width:24ch; font-size:12px}
+  .val .v{color:var(--ink); font-weight:600}
+  .val.win{border-left:3px solid var(--accent); margin-left:-2px; padding-left:15px; background:var(--surface)}
+  .val.win .v{color:var(--accent)}
+  .fix{font-size:15px; color:var(--body); max-width:66ch}
+  .fix b{color:var(--ink)}
+
+  /* ---- board ---- */
+  .lane{margin-top:34px}
+  .lane-hd{display:flex; align-items:baseline; gap:12px; margin-bottom:2px}
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.13em;
+    text-transform:uppercase; padding:4px 9px; white-space:nowrap;
+  }
+  .chip.ship{background:var(--ship-bg); color:var(--ship)}
+  .chip.cut{background:var(--cut-bg); color:var(--cut)}
+  .chip.park{background:var(--park-bg); color:var(--park)}
+  .lane-hd .cnt{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .lane-sub{font-size:14px; color:var(--muted); margin:6px 0 14px; max-width:70ch}
+  .tblwrap{overflow-x:auto}
+  table{border-collapse:collapse; width:100%; min-width:560px}
+  th{
+    text-align:left; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+    letter-spacing:.13em; text-transform:uppercase; color:var(--muted);
+    padding:0 14px 8px 0; border-bottom:1px solid var(--line);
+  }
+  td{padding:12px 14px 12px 0; border-bottom:1px solid var(--hair); vertical-align:top; font-size:14.5px; line-height:1.5}
+  td.pr{
+    font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:var(--accent);
+    white-space:nowrap; width:1%; font-variant-numeric:tabular-nums;
+  }
+  td.what{color:var(--ink); font-weight:500; width:30%}
+  td.why{color:var(--muted)}
+
+  /* ---- goals ---- */
+  .goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0; margin-top:30px}
+  .goal{padding:26px 26px 26px 0; border-top:3px solid var(--accent)}
+  .goal + .goal{border-left:1px solid var(--hair); padding-left:26px}
+  .goal .gid{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:10px;
+  }
+  .goal p{font-size:14.5px; line-height:1.55; color:var(--muted); margin:0 0 12px}
+  .done{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6;
+    color:var(--ink); border-top:1px solid var(--hair); padding-top:12px;
+  }
+  .done span{display:block; color:var(--muted); font-size:10px; letter-spacing:.13em; text-transform:uppercase; margin-bottom:6px}
+
+  /* ---- weeks ---- */
+  .week{border-top:1px solid var(--line); padding:30px 0 8px; display:grid; grid-template-columns:184px 1fr; gap:28px}
+  .week:last-of-type{border-bottom:1px solid var(--line); padding-bottom:30px}
+  .week .when{position:relative}
+  .when .dates{
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.08em;
+    color:var(--accent); text-transform:uppercase; display:block; margin-bottom:6px;
+  }
+  .when .name{font-size:20px; font-weight:700; color:var(--ink); line-height:1.15; letter-spacing:-.014em}
+  .when .days{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);
+    margin-top:8px; display:block; font-variant-numeric:tabular-nums;
+  }
+  ul.steps{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px}
+  ul.steps li{position:relative; padding-left:24px; font-size:15px; line-height:1.55}
+  ul.steps li::before{
+    content:""; position:absolute; left:0; top:.52em; width:9px; height:9px;
+    border:1.5px solid var(--accent); background:transparent;
+  }
+  ul.steps li.key::before{background:var(--accent)}
+  ul.steps li b{color:var(--ink); font-weight:600}
+  ul.steps li .note{color:var(--muted); font-size:14px}
+
+  /* ---- rules ---- */
+  ol.rules{list-style:none; counter-reset:r; margin:26px 0 0; padding:0; display:flex; flex-direction:column; gap:0}
+  ol.rules li{
+    counter-increment:r; border-top:1px solid var(--hair); padding:18px 0 18px 52px; position:relative;
+  }
+  ol.rules li:last-child{border-bottom:1px solid var(--hair)}
+  ol.rules li::before{
+    content:counter(r,decimal-leading-zero); position:absolute; left:0; top:18px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--accent);
+    letter-spacing:.06em;
+  }
+  ol.rules b{display:block; color:var(--ink); font-size:16px; font-weight:600; margin-bottom:3px}
+  ol.rules span{font-size:14.5px; color:var(--muted); line-height:1.55}
+
+  footer{border-top:1px solid var(--line); margin-top:56px; padding-top:22px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); letter-spacing:.04em}
+
+  @media (max-width:720px){
+    .wrap{padding:0 20px 72px}
+    .week{grid-template-columns:1fr; gap:16px}
+    .goal + .goal{border-left:0; padding-left:0; border-top:3px solid var(--accent)}
+    .goal{padding-right:0}
+    .stat{padding-right:14px}
+    .val .src{min-width:0; width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span class="b">Growth Factor AI</span>
+    <span>&#183;</span>
+    <span>Nashville MMA</span>
+    <span>&#183;</span>
+    <span>Q3 close</span>
+    <span>&#183;</span>
+    <span>Sep 3 to Sep 30, 2026</span>
+  </div>
+  <h1>The September Board</h1>
+  <p class="lede">Twenty-two open pull requests, three contradictions in the docs, and 27 days
+  left in the quarter. This is what gets merged, what gets closed, and what happens each week.</p>
+</header>
+
+<div class="strip">
+  <div class="stat"><span class="n">23</span><span class="l">PRs opened<br>since Aug 5</span></div>
+  <div class="stat hot"><span class="n">1</span><span class="l">merged<br>into main</span></div>
+  <div class="stat"><span class="n">22</span><span class="l">still open<br>right now</span></div>
+  <div class="stat"><span class="n">7</span><span class="l">unrelated to<br>either rock</span></div>
+  <div class="stat hot"><span class="n">27</span><span class="l">days left<br>in Q3</span></div>
+</div>
+
+<section>
+  <p class="eyebrow">What the history actually says</p>
+  <h2>The problem is not ideas</h2>
+  <p class="thesis">You have a landing problem, not an idea problem.</p>
+  <div class="prose">
+    <p>Every open PR is finished or close to it. Browser-verified Astro builds. A 56-page content
+    harvest with 115 images. A brand kernel measured out of 2,099 Elementor payloads. An SEO audit
+    that found roughly 84 near-duplicate URLs. That is not idea soup. That is a quarter of real
+    output sitting on branches.</p>
+    <p>The cost is not the branches themselves. It is that <strong>every new session opens a repo
+    with no settled answers</strong>, so the first thing any conversation does is re-decide
+    something you already decided. Three of those unsettled answers are sitting in the docs right
+    now, and they contradict each other.</p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">Fix these first, they cost minutes</p>
+  <h2>Three contradictions</h2>
+  <p class="prose" style="color:var(--muted);font-size:15px">Each one is a decision you have already
+  made in conversation but never wrote down in one place. Until they are settled, they get
+  re-litigated in every session.</p>
+
+  <div class="conflicts">
+    <div class="conflict">
+      <div class="hd"><span class="tag">01 &#183; Price</span><h3>Three live numbers for the same product</h3></div>
+      <div class="vals">
+        <div class="val"><span class="src">hostinger-delivery.md</span><span class="v">$100 once, then $10 to $25 / mo</span></div>
+        <div class="val"><span class="src">PR #17, the GF AI site</span><span class="v">$100 flat</span></div>
+        <div class="val win"><span class="src">Your Q3 rock</span><span class="v">$100 / month, 10 pages</span></div>
+      </div>
+      <p class="fix"><b>Fix:</b> one commit to <code>hostinger-delivery.md</code>. Fifteen minutes.
+      Note that the economics invert: 100 sites at $100 recurring is <strong>$10,000 MRR</strong>,
+      not $10,000 once. That makes the care plan the product instead of the thing that eats the
+      margin, and it changes what a support minute is worth.</p>
+    </div>
+
+    <div class="conflict">
+      <div class="hd"><span class="tag">02 &#183; Stack</span><h3>Two factories, one lane</h3></div>
+      <div class="vals">
+        <div class="val"><span class="src">PR #1</span><span class="v">WordPress + Bricks template library</span></div>
+        <div class="val win"><span class="src">PR #20 + house-style</span><span class="v">Static Astro on Hostinger</span></div>
+      </div>
+      <p class="fix"><b>Fix:</b> close #1. <code>house-style</code> already locked the static stack
+      and demoted template platforms to source material you extract a kernel from. The depth-system
+      and token notes in #1 are worth keeping; the second factory is not.</p>
+    </div>
+
+    <div class="conflict">
+      <div class="hd"><span class="tag">03 &#183; Offer</span><h3>Three go-to-markets in one repo</h3></div>
+      <div class="vals">
+        <div class="val"><span class="src">PR #3, Lead Factory</span><span class="v">$500 / mo + $1,500 build</span></div>
+        <div class="val"><span class="src">PR #17, GF AI site</span><span class="v">Software you build yourself, $100 flat</span></div>
+        <div class="val win"><span class="src">Your Q3 rock</span><span class="v">$297 / mo coaching + $100 / mo sites</span></div>
+      </div>
+      <p class="fix"><b>Fix:</b> #17 has the right <em>stance</em> and the wrong <em>price</em>.
+      "You build it, we teach you, we build the first ads with you" is the coaching model already
+      written down. Reprice it in week 2, do not rebuild it. Close #3.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">One sitting, roughly three hours</p>
+  <h2>The board</h2>
+  <p class="prose" style="color:var(--muted);font-size:15px">Twenty-two open PRs, sorted three ways.
+  Closing a PR does not delete the branch or the work, so nothing here is lost. Every close gets a
+  one-line reason so the next session does not reopen the question.</p>
+
+  <div class="lane">
+    <div class="lane-hd"><span class="chip ship">Merge now</span><span class="cnt">6 of 22</span></div>
+    <p class="lane-sub">Done, verified, and blocking a rock. Nothing about the 100-site number is
+    real until #20 is in <code>main</code>.</p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>PR</th><th>What it is</th><th>Why it goes in</th></tr></thead>
+      <tbody>
+        <tr><td class="pr">#12</td><td class="what">NMMA content harvest</td><td class="why">56 pages of verbatim copy, 115 images, full inventory. The 18-page build has no input without it.</td></tr>
+        <tr><td class="pr">#10</td><td class="what">NMMA hero video</td><td class="why">Dual-source VP9 and H.264, playback verified in a headless browser. Finished.</td></tr>
+        <tr><td class="pr">#23</td><td class="what">NMMA search audit</td><td class="why">The 84-duplicate-URL finding is the SEO half of the rock. Also carries the redirect map.</td></tr>
+        <tr><td class="pr">#7</td><td class="what">Fighters Boxing homepage</td><td class="why">Astro build, Playwright verified at 1440 and 390. Needs a domain confirmed, not more work.</td></tr>
+        <tr><td class="pr">#22</td><td class="what">Motion axis</td><td class="why">house-style had zero coverage of motion. Every site shipped this month wants it.</td></tr>
+        <tr><td class="pr">#20</td><td class="what">Build routines and console</td><td class="why">This is the factory. Goal 3 cannot start until it lands.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="lane">
+    <div class="lane-hd"><span class="chip cut">Close</span><span class="cnt">7 of 22</span></div>
+    <p class="lane-sub">Superseded, or a different business. Branches survive. Reopen any of them in
+    Q4 by pointing at the branch.</p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>PR</th><th>What it is</th><th>Reason to post on close</th></tr></thead>
+      <tbody>
+        <tr><td class="pr">#1</td><td class="what">WordPress template library</td><td class="why">Superseded by #20. The stack decision is already made in house-style.</td></tr>
+        <tr><td class="pr">#3</td><td class="what">Lead Factory playbook</td><td class="why">Priced against a model you are not running. 30k words of GTM for $500/mo + $1,500.</td></tr>
+        <tr><td class="pr">#5</td><td class="what">Distressed property leads</td><td class="why">Real estate. Not a gym, not a website. Different business.</td></tr>
+        <tr><td class="pr">#2</td><td class="what">Command Center</td><td class="why">Internal dashboard. Zero revenue this quarter.</td></tr>
+        <tr><td class="pr">#11</td><td class="what">agentmux</td><td class="why">Parallel agent tooling. Solve it when the factory volume actually demands it.</td></tr>
+        <tr><td class="pr">#13</td><td class="what">21st.dev MCP</td><td class="why">A component generator, which is import. Lock 3 rules it out of client work.</td></tr>
+        <tr><td class="pr">#4</td><td class="what">CI audit status</td><td class="why">Blocked on four access gaps, none of them fixable inside a session. Move it to an issue.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="lane">
+    <div class="lane-hd"><span class="chip park">Park</span><span class="cnt">9 of 22</span></div>
+    <p class="lane-sub">Real work, wrong month. Label them <code>parked</code> and leave them open so
+    they stay findable. Two get unparked on a specific date.</p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>PR</th><th>What it is</th><th>When it comes back</th></tr></thead>
+      <tbody>
+        <tr><td class="pr">#9</td><td class="what">Review Happy</td><td class="why"><strong>Week 1.</strong> This is a line item inside the $297 coaching offer. Pull the deliverable list out of it, leave the build parked.</td></tr>
+        <tr><td class="pr">#17</td><td class="what">Growth Factor AI site</td><td class="why"><strong>Week 2.</strong> Reprice to $297 coaching plus $100/mo sites. Keep the design and the stance.</td></tr>
+        <tr><td class="pr">#15</td><td class="what">Fuel Fortress homepage</td><td class="why">Q4, unless the client is waiting. If they are waiting, it moves to Merge now.</td></tr>
+        <tr><td class="pr">#18</td><td class="what">Furst Place MMA</td><td class="why">Blocked on the site backup arriving. Chase it, do not build around it.</td></tr>
+        <tr><td class="pr">#16</td><td class="what">Aeterna DrChrono</td><td class="why">Client work outside both rocks. Keep it warm, do not expand it.</td></tr>
+        <tr><td class="pr">#21</td><td class="what">GHL contact buttons</td><td class="why">Q4. Strong tool, no September revenue attached to it.</td></tr>
+        <tr><td class="pr">#8</td><td class="what">GHL MCP docs</td><td class="why">Reference. Merge it any time it stops being a review job.</td></tr>
+        <tr><td class="pr">#14</td><td class="what">Offboarding kill switch</td><td class="why">Needed the day you hire. Not before.</td></tr>
+        <tr><td class="pr">#19</td><td class="what">Obsidian vault and memory</td><td class="why">Q4. Fix the repo contradictions first, then teach a vault to remember them.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">Rocks, cut to a month</p>
+  <h2>Three goals for September</h2>
+  <div class="goals">
+    <div class="goal">
+      <span class="gid">Goal 1 &#183; NMMA</span>
+      <h3>Both sites live, search fixed</h3>
+      <p>The audit found the real drag: every program published under <code>/classes</code> and
+      <code>/services</code>, multiplied by three city suffixes with unlocalized titles. Roughly 84
+      near-duplicate URLs serving 14 programs.</p>
+      <div class="done"><span>Done means</span>
+        18 pages, not 84 URLs<br>
+        Every dropped URL 301'd<br>
+        LocalBusiness + FAQPage + Person<br>
+        Fighters live on its own domain
+      </div>
+    </div>
+    <div class="goal">
+      <span class="gid">Goal 2 &#183; Coaching</span>
+      <h3>$297 per month, first three signed</h3>
+      <p>You already serve four gyms: Nashville MMA, Fighters, Furst Place, Fuel Fortress. Coaching
+      is a second sale to a list that already trusts you, not cold prospecting. Three signed is
+      $891 MRR. Twenty is $5,940.</p>
+      <div class="done"><span>Done means</span>
+        A fixed deliverable list, written<br>
+        A price page that exists<br>
+        3 gyms paying<br>
+        Call one run and documented
+      </div>
+    </div>
+    <div class="goal">
+      <span class="gid">Goal 3 &#183; Factory</span>
+      <h3>Ten sites, and one honest number</h3>
+      <p>100 sites in 27 days is not a September number. Your own doc says the human work has to fit
+      under an hour or $100 is a loss by accident, and the factory has never been run. So September
+      measures the minutes, and the minutes set the Q4 target.</p>
+      <div class="done"><span>Done means</span>
+        10 sites through the pipeline<br>
+        Each one timed, no guessing<br>
+        Human minutes per site, published<br>
+        Q4 number set from that, not a wish
+      </div>
+    </div>
+  </div>
+  <p class="prose" style="margin-top:26px;font-size:15px">If site ten costs 40 minutes of human time,
+  100 sites is a fulfillment schedule and you can sell it. If it costs six hours, the price changes,
+  not the effort. That is under-promise and over-deliver pointed at your own roadmap instead of at a
+  client.</p>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">Micro steps, week by week</p>
+  <h2>Four weeks</h2>
+
+  <div class="week">
+    <div class="when">
+      <span class="dates">Sep 3 to 11</span>
+      <span class="name">Clear the board</span>
+      <span class="days">6 working days</span>
+    </div>
+    <ul class="steps">
+      <li class="key"><b>Merge six.</b> #12, #10, #23, #7, #22, #20. Review each, merge, move on. <span class="note">One sitting.</span></li>
+      <li class="key"><b>Close seven</b> with a one-line reason each. #1, #3, #5, #2, #11, #13, #4.</li>
+      <li><b>Label the nine parked</b> so they stop reading as active work.</li>
+      <li class="key"><b>Rewrite the pricing block</b> in <code>hostinger-delivery.md</code>: $100/mo, 10 pages, $20 per extra page unadvertised, basic and local SEO included, AEO and GEO quoted at $200 to $500.</li>
+      <li class="key"><b>Write the $297 offer</b> as a one-page deliverable list. Parts already exist: the review engine in #9, the build-ads-with-you track in #17, the GHL capability ceiling in #8.</li>
+      <li><b>Send NMMA the 18-page sitemap and redirect map</b> for sign-off. Nothing gets built until that comes back.</li>
+      <li><b>Run <code>site-new</code> once on a throwaway domain.</b> Find what breaks before a client does.</li>
+    </ul>
+  </div>
+
+  <div class="week">
+    <div class="when">
+      <span class="dates">Sep 14 to 18</span>
+      <span class="name">Build and pitch</span>
+      <span class="days">5 working days</span>
+    </div>
+    <ul class="steps">
+      <li class="key"><b>Assemble NMMA's 18 pages</b> in Astro from the harvested content. The copy is already verbatim and frozen, so this is assembly, not writing.</li>
+      <li><b>Confirm the Fighters domain</b>, build the "Our Gyms" interlink page, deploy.</li>
+      <li class="key"><b>Reprice the Growth Factor AI site</b> from #17 and add a coaching page. Design stays, numbers change.</li>
+      <li class="key"><b>Pitch all four warm gyms.</b> A real pitch with a price and a start date, not a mention.</li>
+      <li><b>Three sites through the factory.</b> Start a timer on each one and write the number down.</li>
+    </ul>
+  </div>
+
+  <div class="week">
+    <div class="when">
+      <span class="dates">Sep 21 to 25</span>
+      <span class="name">Ship</span>
+      <span class="days">5 working days</span>
+    </div>
+    <ul class="steps">
+      <li class="key"><b>NMMA goes live</b> on Hostinger with the 301 map in <code>.htaccess</code>.</li>
+      <li class="key"><b>Mark up the coach roster.</b> The audit called Dustin Ortiz, Monty Burks and the rest your strongest AI-retrieval asset, and it currently carries no <code>Person</code> or <code>sameAs</code> markup at all.</li>
+      <li><b>Kill the duplicate Yelp listing</b> at 1504 Elm Hill Pike. Eleven reviews are stranded on a page titled "CLOSED".</li>
+      <li><b>Match the Google Business Profile NAP</b> and settle the class count. 90+ is the approved figure; program pages still say 80+.</li>
+      <li class="key"><b>Close two coaching deals.</b></li>
+      <li><b>Five more sites through the factory.</b> Timed.</li>
+      <li><b>Append the shipped-log rows</b> the same day each site goes live, not later.</li>
+    </ul>
+  </div>
+
+  <div class="week">
+    <div class="when">
+      <span class="dates">Sep 28 to 30</span>
+      <span class="name">Prove and set Q4</span>
+      <span class="days">3 working days, so nothing new starts here</span>
+    </div>
+    <ul class="steps">
+      <li><b>Submit both sitemaps</b>, spot-check that the 301s resolve, watch Search Console for the duplicates collapsing.</li>
+      <li class="key"><b>Publish the factory number:</b> human minutes per site across all ten builds.</li>
+      <li><b>Run the first coaching call</b> and write down what happened, so gym five does not cost five times gym one.</li>
+      <li class="key"><b>Set the Q4 site target</b> from the measured minutes and the capacity you actually have.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">So the pile does not rebuild</p>
+  <h2>Five rules</h2>
+  <ol class="rules">
+    <li><b>Ideas become issues, not branches.</b><span>This is the whole fix. Right now an idea turns into a fully implemented PR, which costs a full session. An issue costs thirty seconds and loses nothing. Twenty-two open PRs is twenty-two sessions of work that never landed.</span></li>
+    <li><b>One open PR per rock at a time.</b><span>When there are two, the second one is a queue pretending to be parallelism.</span></li>
+    <li><b>Merge or close inside seven days.</b><span>A PR older than a week is a decision you already made and never recorded.</span></li>
+    <li><b>No client build starts before the sitemap is signed off.</b><span>NMMA's 84 duplicate URLs are what building without one looks like three years later.</span></li>
+    <li><b>Friday closes, it does not start.</b><span>Merge, close, append the shipped-log row, stop. At 100 sites that log is the only thing standing between a factory and a template mill.</span></li>
+  </ol>
+</section>
+
+<footer>
+  Built from 23 pull requests, the house-style skill, and the Nashville MMA brand kernel &#183;
+  Growth Factor AI &#183; September 2026
+</footer>
+
+</div>
