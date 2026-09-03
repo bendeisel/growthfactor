@@ -1,0 +1,1052 @@
+<title>Growth Factor Build Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  /* Dark-first. The bare :root carries the full dark palette; the light
+     variant is redefined in both directions so an explicit choice always
+     beats the OS setting. Every colour below comes from these tokens. */
+  :root {
+    --ground:     #14161C;
+    --panel:      #1B1E26;
+    --panel-2:    #22262F;
+    --line:       #2B303B;
+    --line-soft:  #23272F;
+    --ink:        #E7E9EE;
+    --ink-mid:    #B4BAC7;
+    --ink-quiet:  #8B93A3;
+    --accent:     #FF7A2F;
+    --accent-ink: #17130F;
+    --accent-dim: #C2591C;
+    --s-building: #8A93A6;
+    --s-preview:  #4EA8FF;
+    --s-approved: #39C07C;
+    --danger:     #FF5A5A;
+    --focus:      #FF7A2F;
+    --shadow:     0 1px 0 #00000040;
+
+    --f-display: "Anton", "Arial Narrow", sans-serif;
+    --f-body:    "Archivo", ui-sans-serif, system-ui, sans-serif;
+    --f-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ground:     #E9ECF1;
+      --panel:      #FFFFFF;
+      --panel-2:    #F2F4F8;
+      --line:       #C9D0DB;
+      --line-soft:  #DDE3EB;
+      --ink:        #15181F;
+      --ink-mid:    #3D4553;
+      --ink-quiet:  #626C7D;
+      --accent:     #C2521A;
+      --accent-ink: #FFFFFF;
+      --accent-dim: #9C4114;
+      --s-building: #6B7484;
+      --s-preview:  #1F6FCC;
+      --s-approved: #1E8A57;
+      --danger:     #C22B2B;
+      --focus:      #C2521A;
+      --shadow:     0 1px 2px #1518200f;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:     #E9ECF1;
+    --panel:      #FFFFFF;
+    --panel-2:    #F2F4F8;
+    --line:       #C9D0DB;
+    --line-soft:  #DDE3EB;
+    --ink:        #15181F;
+    --ink-mid:    #3D4553;
+    --ink-quiet:  #626C7D;
+    --accent:     #C2521A;
+    --accent-ink: #FFFFFF;
+    --accent-dim: #9C4114;
+    --s-building: #6B7484;
+    --s-preview:  #1F6FCC;
+    --s-approved: #1E8A57;
+    --danger:     #C22B2B;
+    --focus:      #C2521A;
+    --shadow:     0 1px 2px #1518200f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .shell {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px 72px;
+  }
+
+  /* ---------- masthead: a job-ticket header, not a hero ---------- */
+  .mast {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px 32px;
+    flex-wrap: wrap;
+    padding: 26px 0 18px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .mast-id { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .mast h1 {
+    font-family: var(--f-display);
+    font-size: clamp(1.75rem, 4.2vw, 2.6rem);
+    letter-spacing: 0.015em;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 0.95;
+  }
+  .slogan {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .mast-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    color: var(--ink-quiet);
+  }
+  .store-state { display: flex; align-items: center; gap: 7px; }
+  .lamp {
+    width: 8px; height: 8px; flex: none;
+    background: var(--s-building);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--s-building) 22%, transparent);
+  }
+  .lamp[data-on="yes"] { background: var(--s-approved);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--s-approved) 22%, transparent); }
+  .lamp[data-on="no"] { background: var(--s-building); }
+
+  /* ---------- tabs ---------- */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin: 0 0 26px;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+  }
+  .tab {
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    color: var(--ink-quiet);
+    font-family: var(--f-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 13px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+  h2.sec {
+    font-family: var(--f-display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 1.15rem;
+    margin: 0 0 4px;
+  }
+  .sec-note { color: var(--ink-quiet); font-size: 13.5px; margin: 0 0 18px; max-width: 62ch; }
+
+  /* ---------- routine picker: three real choices, stated plainly ---------- */
+  .routines {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+    gap: 10px;
+    margin: 0 0 26px;
+  }
+  .routine {
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--line);
+    padding: 14px 15px 15px;
+    cursor: pointer;
+    color: var(--ink);
+    font-family: var(--f-body);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .routine:hover { border-color: var(--ink-quiet); }
+  .routine[aria-pressed="true"] {
+    border-color: var(--accent);
+    border-top-color: var(--accent);
+    background: var(--panel-2);
+  }
+  .routine code {
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .routine b {
+    font-size: 14.5px;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .routine span { color: var(--ink-quiet); font-size: 12.5px; line-height: 1.45; }
+
+  /* ---------- the brief form ---------- */
+  form { margin: 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px 18px;
+    margin: 0 0 18px;
+  }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.wide { grid-column: 1 / -1; }
+  .field label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+  }
+  .field .hint { font-size: 12px; color: var(--ink-quiet); font-weight: 400; letter-spacing: 0; text-transform: none; }
+  input, textarea, select {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 14px;
+    padding: 9px 11px;
+    width: 100%;
+    border-radius: 0;
+  }
+  input.mono, textarea.mono { font-family: var(--f-mono); font-size: 13px; }
+  textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
+  input::placeholder, textarea::placeholder { color: var(--ink-quiet); opacity: 0.75; }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 4px;
+  }
+  .btn {
+    font-family: var(--f-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .btn:hover { border-color: var(--ink-quiet); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn.primary:hover { background: var(--accent-dim); border-color: var(--accent-dim); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn.small { padding: 7px 11px; font-size: 10.5px; letter-spacing: 0.09em; }
+
+  .say { font-size: 13px; color: var(--ink-quiet); }
+  .say[data-kind="bad"] { color: var(--danger); }
+  .say[data-kind="good"] { color: var(--s-approved); }
+
+  /* ---------- the generated command ---------- */
+  .ticket {
+    margin: 22px 0 0;
+    border: 1px solid var(--line);
+    background: var(--panel);
+  }
+  .ticket-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 13px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+  }
+  .ticket-head strong {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+  }
+  .ticket pre {
+    margin: 0;
+    padding: 13px;
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    color: var(--ink-mid);
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  /* ---------- builds table ---------- */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--panel); }
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  thead th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-quiet);
+    padding: 11px 13px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+    white-space: nowrap;
+  }
+  tbody td { padding: 12px 13px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.slug { font-family: var(--f-mono); font-size: 12.5px; font-weight: 500; white-space: nowrap; }
+  td.client { font-weight: 600; }
+  td.where { font-family: var(--f-mono); font-size: 11.5px; }
+  td.where a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  td.where a:hover { border-bottom-color: var(--accent); }
+  td.where div + div { margin-top: 3px; }
+  td.where span { color: var(--ink-quiet); }
+
+  .chip {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .chip[data-s="building"] { color: var(--s-building); }
+  .chip[data-s="preview"]  { color: var(--s-preview); }
+  .chip[data-s="approved"] { color: var(--s-approved); }
+  /* live is the end of the line, so it gets the one solid accent on the page */
+  .chip[data-s="live"] {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .empty {
+    padding: 34px 16px;
+    text-align: center;
+    color: var(--ink-quiet);
+    font-size: 13.5px;
+  }
+
+  /* ---------- pipeline strip on the routines tab ---------- */
+  .pipe {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: wrap;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    margin: 0 0 24px;
+  }
+  .pipe-step {
+    flex: 1 1 150px;
+    padding: 13px 15px;
+    border-right: 1px solid var(--line);
+  }
+  .pipe-step:last-child { border-right: 0; }
+  .pipe-step em {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-style: normal;
+    margin-bottom: 4px;
+  }
+  .pipe-step b { display: block; font-size: 13.5px; }
+  .pipe-step span { font-size: 12.5px; color: var(--ink-quiet); }
+
+  .ref { display: grid; gap: 10px; }
+  .ref-row {
+    display: grid;
+    grid-template-columns: minmax(150px, 200px) 1fr;
+    gap: 4px 20px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 13px 15px;
+  }
+  .ref-row code {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .ref-row p { margin: 0; font-size: 13.5px; color: var(--ink-mid); }
+  @media (max-width: 620px) {
+    .ref-row { grid-template-columns: 1fr; }
+  }
+
+  .warn {
+    border: 1px solid var(--danger);
+    border-left-width: 4px;
+    background: var(--panel);
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--ink-mid);
+    margin: 0 0 22px;
+  }
+  .warn b { color: var(--danger); }
+</style>
+
+<div class="shell">
+
+  <header class="mast">
+    <div class="mast-id">
+      <h1>Build Console</h1>
+      <span class="slogan">Automate Everything</span>
+    </div>
+    <div class="mast-meta">
+      <span class="store-state">
+        <span class="lamp" id="lamp" data-on="wait"></span>
+        <span id="store-label">connecting to store</span>
+      </span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-brief" data-view="brief" aria-selected="true">New brief</button>
+    <button class="tab" role="tab" id="tab-builds" data-view="builds" aria-selected="false">Builds</button>
+    <button class="tab" role="tab" id="tab-routines" data-view="routines" aria-selected="false">Routines</button>
+  </nav>
+
+  <!-- ============ NEW BRIEF ============ -->
+  <section id="view-brief" role="tabpanel" aria-labelledby="tab-brief">
+    <h2 class="sec">Which build is this?</h2>
+    <p class="sec-note">
+      The three builds differ in where the brand identity comes from. Pick by
+      that, not by how much work it looks like.
+    </p>
+
+    <div class="routines" id="routine-picker"></div>
+
+    <form id="brief-form" autocomplete="off">
+      <div class="grid" id="fields"></div>
+      <div class="actions">
+        <button class="btn primary" type="button" id="save">Save brief</button>
+        <button class="btn" type="button" id="copy">Copy command</button>
+        <button class="btn" type="button" id="clear">Clear</button>
+        <span class="say" id="form-say"></span>
+      </div>
+    </form>
+
+    <div class="ticket">
+      <div class="ticket-head">
+        <strong>Paste this into Claude</strong>
+        <button class="btn small" type="button" id="copy2">Copy</button>
+      </div>
+      <pre id="command">Pick a build type above.</pre>
+    </div>
+  </section>
+
+  <!-- ============ BUILDS ============ -->
+  <section id="view-builds" role="tabpanel" aria-labelledby="tab-builds" hidden>
+    <h2 class="sec">Builds</h2>
+    <p class="sec-note">
+      Every brief saved here, and where it stands. Use the buttons to get the
+      command for the next step without retyping a slug.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Slug</th><th>Client</th><th>Build</th><th>Status</th>
+            <th>Where</th><th>Next step</th>
+          </tr>
+        </thead>
+        <tbody id="builds-body"></tbody>
+      </table>
+    </div>
+    <div class="ticket" id="row-ticket" hidden>
+      <div class="ticket-head">
+        <strong id="row-ticket-label">Command</strong>
+        <button class="btn small" type="button" id="copy3">Copy</button>
+      </div>
+      <pre id="row-command"></pre>
+    </div>
+  </section>
+
+  <!-- ============ ROUTINES ============ -->
+  <section id="view-routines" role="tabpanel" aria-labelledby="tab-routines" hidden>
+    <h2 class="sec">The pipeline</h2>
+    <p class="sec-note">
+      Three ways a build starts, one way it gets reviewed, one way it goes live.
+    </p>
+
+    <div class="pipe">
+      <div class="pipe-step">
+        <em>Step 1</em><b>Build</b>
+        <span>One of the three build routines. Produces one artifact holding
+        every page.</span>
+      </div>
+      <div class="pipe-step">
+        <em>Step 2</em><b>Preview</b>
+        <span>Split to real pages, uploaded noindex to
+        preview.growth-factor.ai/&lt;slug&gt;.</span>
+      </div>
+      <div class="pipe-step">
+        <em>Step 3</em><b>Approve</b>
+        <span>Client opens the link and says yes. Nothing ships before this.</span>
+      </div>
+      <div class="pipe-step">
+        <em>Step 4</em><b>Ship</b>
+        <span>Split for production with canonical and sitemap, deployed to
+        their domain.</span>
+      </div>
+    </div>
+
+    <div class="warn">
+      <b>The preview URL survives launch.</b> Production is a separate
+      Hostinger website, so shipping a site touches nothing under
+      <code>previews/</code>. Both URLs stay on the build's row, which is how
+      two builds are told apart without opening either.
+    </div>
+
+    <h2 class="sec">The routines</h2>
+    <p class="sec-note">Type the name into Claude, or let the brief command do it.</p>
+    <div class="ref" id="ref-list"></div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- the routines, and what each brief needs ---------------- */
+
+  var COMMON = [
+    { k: "client",   label: "Client name", required: true, ph: "Spiders Boxing" },
+    { k: "slug",     label: "Slug", mono: true, required: true,
+      hint: "The preview path and the registry key. Set once, never changed." },
+    { k: "vertical", label: "Vertical", ph: "boxing gym" },
+    { k: "city",     label: "City", ph: "Nashville" },
+    { k: "state",    label: "State", ph: "TN" }
+  ];
+
+  var ROUTINES = [
+    {
+      id: "site-redesign",
+      name: "Redesign an existing site",
+      blurb: "They have a live site. It is the identity — copy it down and amplify it.",
+      what: "Rebuild and upgrade a site the client already has.",
+      fields: [
+        { k: "site_url", label: "Existing site URL", mono: true, required: true,
+          ph: "https://spidersboxing.com" },
+        { k: "pages", label: "Pages and URLs", area: true,
+          hint: "One per line. Keeping the old paths protects rankings they already have." },
+        { k: "broken", label: "What is broken", area: true,
+          hint: "Illegible text, dead form, carousel showing one of thirteen. These become the handover wins." },
+        { k: "supplied", label: "What the client supplied", area: true,
+          hint: "Logo files, photography, anything they sent over." }
+      ]
+    },
+    {
+      id: "site-new",
+      name: "Build from scratch",
+      blurb: "No site. Identity gets assembled from real material, never invented.",
+      what: "Research them and build the whole site from nothing.",
+      fields: [
+        { k: "supplied", label: "What Ben and the client supplied", area: true, required: true,
+          hint: "This outranks anything findable. Logo form, colours if written down, photography, hours." },
+        { k: "logo", label: "Logo — where and what format", mono: true,
+          ph: "drive: spiders-logo.svg", hint: "Vector gives exact fills. Raster gets sampled once, then frozen." },
+        { k: "gbp", label: "Google Business Profile", mono: true,
+          hint: "NAP here must match the site's schema exactly." },
+        { k: "socials", label: "Social accounts", area: true, mono: true,
+          hint: "Instagram, Facebook, TikTok, YouTube. Bio copy, real photos, how they name their own classes." },
+        { k: "print", label: "Print, signage, vehicle wrap", area: true,
+          hint: "Print is usually spec'd to a chosen Pantone, which beats anything sampled off a screen." },
+        { k: "known", label: "Facts we know", area: true,
+          hint: "Hours, phone, address, class or service names. Anything missing stays a marked gap — it does not get invented." }
+      ]
+    },
+    {
+      id: "site-match",
+      name: "Reference plus their brand",
+      blurb: "A site they want to be like, in their own identity. Structure from one, brand from the other.",
+      what: "Borrow another site's structure, keep the client's brand.",
+      fields: [
+        { k: "reference", label: "Reference site", mono: true, required: true,
+          ph: "https://somegym.com" },
+        { k: "likes", label: "What they actually like about it", area: true, required: true,
+          hint: "Usually one thing: the video hero, the pricing table, the booking flow. Ask, do not assume." },
+        { k: "supplied", label: "Their own brand material", area: true, required: true,
+          hint: "Logo, colours, typefaces, photography. This is the identity; the reference never is." },
+        { k: "competitor", label: "Is the reference a local competitor?", ph: "yes / no",
+          hint: "If yes, structure has to diverge harder — that is the one collision a client can see." }
+      ]
+    }
+  ];
+
+  var NEXT = {
+    building: { routine: "site-preview", label: "Publish preview" },
+    preview:  { routine: "site-ship",    label: "Ship it (after approval)" },
+    approved: { routine: "site-ship",    label: "Ship it" },
+    live:     { routine: null,           label: "Done" }
+  };
+
+  /* ---------------- state ---------------- */
+
+  var db = null;
+  var picked = null;
+  var values = {};
+  var briefs = [];
+  var saved = {};        // slugs actually written to the store this session
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function slugify(s) {
+    return String(s || "").toLowerCase().replace(/&/g, " and ")
+      .replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function say(el, msg, kind) {
+    el.textContent = msg || "";
+    if (kind) { el.setAttribute("data-kind", kind); } else { el.removeAttribute("data-kind"); }
+  }
+
+  /* ---------------- routine picker ---------------- */
+
+  function renderPicker() {
+    var wrap = $("routine-picker");
+    wrap.textContent = "";
+    ROUTINES.forEach(function (r) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "routine";
+      b.setAttribute("aria-pressed", String(picked === r.id));
+      b.innerHTML = '<code>/' + esc(r.id) + '</code><b>' + esc(r.name) + '</b><span>'
+        + esc(r.blurb) + '</span>';
+      b.addEventListener("click", function () { pick(r.id); });
+      wrap.appendChild(b);
+    });
+  }
+
+  function pick(id) {
+    picked = id;
+    renderPicker();
+    renderFields();
+    renderCommand();
+  }
+
+  function routine(id) {
+    return ROUTINES.filter(function (r) { return r.id === id; })[0] || null;
+  }
+
+  /* ---------------- the form ---------------- */
+
+  function fieldsFor(id) {
+    var r = routine(id);
+    return r ? COMMON.concat(r.fields).concat([
+      { k: "notes", label: "Anything else", area: true, wide: true }
+    ]) : [];
+  }
+
+  function renderFields() {
+    var host = $("fields");
+    host.textContent = "";
+    if (!picked) { return; }
+
+    fieldsFor(picked).forEach(function (f) {
+      var d = document.createElement("div");
+      d.className = "field" + (f.area || f.wide ? " wide" : "");
+
+      var lab = document.createElement("label");
+      lab.setAttribute("for", "f-" + f.k);
+      lab.textContent = f.label + (f.required ? " *" : "");
+      d.appendChild(lab);
+
+      var el = document.createElement(f.area ? "textarea" : "input");
+      el.id = "f-" + f.k;
+      el.name = f.k;
+      if (f.mono) { el.className = "mono"; }
+      if (f.ph) { el.placeholder = f.ph; }
+      el.value = values[f.k] || "";
+      el.addEventListener("input", function () {
+        values[f.k] = el.value;
+        // Slug follows the client name until someone types a slug by hand.
+        if (f.k === "client" && !values._slugTouched) {
+          values.slug = slugify(el.value);
+          var s = $("f-slug");
+          if (s) { s.value = values.slug; }
+        }
+        if (f.k === "slug") { values._slugTouched = true; }
+        renderCommand();
+      });
+      d.appendChild(el);
+
+      if (f.hint) {
+        var h = document.createElement("span");
+        h.className = "hint";
+        h.textContent = f.hint;
+        d.appendChild(h);
+      }
+      host.appendChild(d);
+    });
+  }
+
+  /* ---------------- the command ---------------- */
+
+  function buildCommand() {
+    var r = routine(picked);
+    if (!r) { return "Pick a build type above."; }
+
+    var out = [];
+    out.push("/" + r.id);
+    out.push("");
+    out.push(r.what);
+    out.push("");
+
+    var name = values.client || "(client name missing)";
+    var slug = values.slug || slugify(values.client) || "(slug missing)";
+    out.push("Client:   " + name);
+    out.push("Slug:     " + slug);
+
+    var place = [values.city, values.state].filter(Boolean).join(", ");
+    if (values.vertical || place) {
+      out.push("Vertical: " + (values.vertical || "-") + (place ? "   ·   " + place : ""));
+    }
+
+    fieldsFor(picked).forEach(function (f) {
+      if (["client", "slug", "vertical", "city", "state"].indexOf(f.k) !== -1) { return; }
+      var v = (values[f.k] || "").trim();
+      if (!v) { return; }
+      out.push("");
+      out.push(f.label + ":");
+      v.split("\n").forEach(function (line) { out.push("  " + line); });
+    });
+
+    out.push("");
+    out.push("---");
+    out.push(saved[slug]
+      ? "Brief saved in the build console at briefs/" + slug + "."
+      : "Not saved to the console yet — this command carries the whole brief.");
+    out.push("Follow site-factory: build as ONE multi-page artifact from");
+    out.push("templates/site-shell.html, publish it at build start, and register");
+    out.push("the row. Anything missing above stays a marked GF-TODO gap.");
+    return out.join("\n");
+  }
+
+  function renderCommand() {
+    $("command").textContent = buildCommand();
+  }
+
+  /* ---------------- clipboard ---------------- */
+
+  function copyText(text, sayEl) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      say(sayEl, ok ? "Copied." : "Could not copy — select the text and copy it.",
+          ok ? "good" : "bad");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        say(sayEl, "Copied.", "good");
+      }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  /* ---------------- store ---------------- */
+
+  function setLamp(on, label) {
+    $("lamp").setAttribute("data-on", on);
+    $("store-label").textContent = label;
+  }
+
+  function watchBriefs() {
+    if (!db) { return; }
+    db.collection("briefs").orderBy("updated", "desc").limit(200)
+      .onSnapshot(function (snap) {
+        briefs = snap.docs.map(function (d) {
+          var v = d.data() || {};
+          v._id = d.id;
+          return v;
+        });
+        renderBuilds();
+      }, function (err) {
+        setLamp("no", "store error: " + err.code);
+        renderBuilds();
+      });
+  }
+
+  function saveBrief() {
+    var out = $("form-say");
+    var r = routine(picked);
+    if (!r) { return say(out, "Pick a build type first.", "bad"); }
+
+    var slug = (values.slug || slugify(values.client) || "").trim();
+    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
+      return say(out, "Slug must be lowercase letters, numbers and dashes.", "bad");
+    }
+    var missing = fieldsFor(picked).filter(function (f) {
+      return f.required && !String(values[f.k] || "").trim();
+    }).map(function (f) { return f.label; });
+    if (missing.length) {
+      return say(out, "Still needed: " + missing.join(", "), "bad");
+    }
+    if (!db) {
+      return say(out, "No store on this view — copy the command instead; it carries the whole brief.", "bad");
+    }
+
+    var body = { routine: picked, slug: slug, status: "building",
+                 updated: new Date().toISOString() };
+    fieldsFor(picked).forEach(function (f) {
+      body[f.k] = String(values[f.k] || "");
+    });
+
+    say(out, "Saving…");
+    db.doc("briefs/" + slug).get().then(function (snap) {
+      if (snap.exists) {
+        var prev = snap.data() || {};
+        // Never silently retarget an existing build: keep its status and
+        // links, merge the new intake over the rest.
+        body.status = prev.status || "building";
+        body.created = prev.created || body.updated;
+        body.artifact_url = prev.artifact_url || "";
+        body.preview_url = prev.preview_url || "";
+        body.production_domain = prev.production_domain || "";
+        if (prev.client && values.client && prev.client !== values.client) {
+          say(out, "Slug " + slug + " already belongs to " + prev.client
+                 + ". Pick a different slug.", "bad");
+          return null;
+        }
+      } else {
+        body.created = body.updated;
+        body.artifact_url = "";
+        body.preview_url = "";
+        body.production_domain = "";
+      }
+      return db.doc("briefs/" + slug).set(body).then(function () {
+        saved[slug] = true;
+        renderCommand();
+        say(out, "Saved as briefs/" + slug + ".", "good");
+      });
+    }).catch(function (e) {
+      say(out, "Could not save (" + (e && e.code ? e.code : "error") + "). "
+             + "Copy the command instead — it carries the whole brief.", "bad");
+    });
+  }
+
+  /* ---------------- builds table ---------------- */
+
+  function rowCommand(b) {
+    var nx = NEXT[b.status] || NEXT.building;
+    if (!nx.routine) {
+      return "/site-factory\n\n" + b.client + " (" + b.slug + ") is live at "
+        + (b.production_domain || "their domain")
+        + ".\nPreview stays at " + (b.preview_url || "the preview path") + ".";
+    }
+    if (nx.routine === "site-preview") {
+      return "/site-preview\n\nPublish the " + b.client + " build (slug: " + b.slug
+        + ") to the preview host.\n\n"
+        + "  ./deploy_preview.sh " + b.slug + " projects/" + b.slug
+        + "/site.html --assets projects/" + b.slug + "/img\n\n"
+        + "Then send me the URL — not the client.";
+    }
+    return "/site-ship\n\nThe client approved the " + b.client + " preview (slug: "
+      + b.slug + "). Ship it.\n\n"
+      + "  ./deploy_production.sh " + b.slug + " projects/" + b.slug
+      + "/site.html <their-domain>\\\n"
+      + "      --assets projects/" + b.slug + "/img --include projects/" + b.slug + "/php\n\n"
+      + "Confirm the lead form emails through after launch, and add redirects for\n"
+      + "any path that changed from their old site.";
+  }
+
+  function renderBuilds() {
+    var body = $("builds-body");
+    body.textContent = "";
+
+    if (!briefs.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.className = "empty";
+      td.colSpan = 6;
+      td.textContent = db
+        ? "No briefs yet. Fill one in on the New brief tab and save it."
+        : "The store is not available on this view, so saved briefs cannot be listed. The New brief tab still works — copy the command out.";
+      tr.appendChild(td);
+      body.appendChild(tr);
+      return;
+    }
+
+    briefs.forEach(function (b) {
+      var tr = document.createElement("tr");
+      var st = b.status || "building";
+      var nx = NEXT[st] || NEXT.building;
+
+      var where = [];
+      if (b.artifact_url) {
+        where.push('<div><span>artifact</span> <a href="' + esc(b.artifact_url)
+          + '" target="_blank" rel="noopener">open</a></div>');
+      }
+      if (b.preview_url) {
+        where.push('<div><span>preview</span> <a href="' + esc(b.preview_url)
+          + '" target="_blank" rel="noopener">' + esc(b.preview_url.replace(/^https?:\/\//, ""))
+          + '</a></div>');
+      }
+      if (b.production_domain) {
+        where.push('<div><span>live</span> <a href="https://' + esc(b.production_domain)
+          + '" target="_blank" rel="noopener">' + esc(b.production_domain) + '</a></div>');
+      }
+      if (!where.length) { where.push('<div><span>not published yet</span></div>'); }
+
+      tr.innerHTML =
+        '<td class="slug">' + esc(b.slug) + '</td>' +
+        '<td class="client">' + esc(b.client || "-") +
+          (b.city ? '<div style="font-weight:400;color:var(--ink-quiet);font-size:12.5px">'
+            + esc([b.city, b.state].filter(Boolean).join(", ")) + '</div>' : '') + '</td>' +
+        '<td style="font-family:var(--f-mono);font-size:11.5px;white-space:nowrap">'
+          + esc((b.routine || "").replace("site-", "")) + '</td>' +
+        '<td><span class="chip" data-s="' + esc(st) + '">' + esc(st) + '</span></td>' +
+        '<td class="where">' + where.join("") + '</td>' +
+        '<td></td>';
+
+      var cell = tr.lastChild;
+      if (nx.routine) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn small";
+        btn.textContent = nx.label;
+        btn.addEventListener("click", function () {
+          $("row-ticket").hidden = false;
+          $("row-ticket-label").textContent = nx.routine + " — " + b.slug;
+          $("row-command").textContent = rowCommand(b);
+          $("row-command").scrollIntoView({ block: "nearest" });
+        });
+        cell.appendChild(btn);
+      } else {
+        cell.innerHTML = '<span style="color:var(--ink-quiet);font-size:12.5px">done</span>';
+      }
+      body.appendChild(tr);
+    });
+  }
+
+  /* ---------------- routines reference ---------------- */
+
+  function renderRef() {
+    var host = $("ref-list");
+    var all = ROUTINES.map(function (r) { return { id: r.id, what: r.what }; }).concat([
+      { id: "site-preview", what: "Publish a build to preview.growth-factor.ai/<slug>, noindex, for the client to approve." },
+      { id: "site-ship", what: "Deploy an approved build to the client's own domain. The preview keeps working." },
+      { id: "site-factory", what: "The shared spine: build pipeline, site registry, preview architecture, Hostinger recipes." },
+      { id: "house-style", what: "The design law: copy frozen at 99%, kernel frozen, amplify never import, diverge from the log." }
+    ]);
+    all.forEach(function (r) {
+      var d = document.createElement("div");
+      d.className = "ref-row";
+      d.innerHTML = '<code>/' + esc(r.id) + '</code><p>' + esc(r.what) + '</p>';
+      host.appendChild(d);
+    });
+  }
+
+  /* ---------------- tabs ---------------- */
+
+  function showView(name) {
+    ["brief", "builds", "routines"].forEach(function (v) {
+      $("view-" + v).hidden = v !== name;
+      $("tab-" + v).setAttribute("aria-selected", String(v === name));
+    });
+  }
+
+  /* ---------------- wire up ---------------- */
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) {
+    t.addEventListener("click", function () { showView(t.dataset.view); });
+  });
+
+  $("save").addEventListener("click", saveBrief);
+  $("copy").addEventListener("click", function () {
+    copyText(buildCommand(), $("form-say"));
+  });
+  $("copy2").addEventListener("click", function () {
+    copyText(buildCommand(), $("form-say"));
+  });
+  $("copy3").addEventListener("click", function () {
+    copyText($("row-command").textContent, $("form-say"));
+  });
+  $("clear").addEventListener("click", function () {
+    values = {};
+    renderFields();
+    renderCommand();
+    say($("form-say"), "Cleared.");
+  });
+
+  renderPicker();
+  renderRef();
+  renderBuilds();
+  pick("site-redesign");
+
+  // The store arrives later, or never. The page is fully usable either way.
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("db").then(function (store) {
+      db = store;
+      if (!db) {
+        setLamp("no", "no store on this view");
+        renderBuilds();
+        return;
+      }
+      setLamp("yes", "store connected");
+      watchBriefs();
+    }, function () {
+      setLamp("no", "no store on this view");
+    });
+  } else {
+    setLamp("no", "no store on this view");
+  }
+})();
+</script>
