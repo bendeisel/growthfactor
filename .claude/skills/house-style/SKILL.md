@@ -77,6 +77,11 @@ element it came from. If you cannot point at one, you drifted — revert it.
 This is deliberately checkable: anyone reviewing the work can ask "which
 existing motif is this from?" and get a real answer or catch the drift.
 
+This lock is also what rules out the popular "feed a URL to a generator and
+swap the branding" workflow, which is import in its purest form. There are
+three legitimate ways to use reference material and a set of hard limits on
+it: `references/reference-intake.md`.
+
 ### 4. Diverge from the log, not from randomness
 
 `data/shipped-log.csv` records what has already shipped: client, vertical,
@@ -110,11 +115,14 @@ band, an unusual radius pairing. This list is the palette of moves available in
 Step 4, so be concrete and generous. Note how many times each is currently
 used; anything used once is an amplification candidate.
 
-**Step 3 — Pick the axes.** Choose structure, scale, density, and rhythm from
-`references/axes.md`, constrained by Step 0's divergence check. This is the
-only place variation is allowed to come from outside the client.
+**Step 3 — Pick the axes.** Choose structure, type stance, density, rhythm,
+color stance, and motion stance from `references/axes.md`, constrained by
+Step 0's divergence check. This is the only place variation is allowed to come
+from outside the client. Motion is Axis 6 and it is chosen here, at design
+time, not discovered later during the build.
 
-**Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified. Build as
+**Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified, motion
+derived from the geometry rather than picked (`references/motion.md`). Build as
 ONE multi-page artifact from `../site-factory/templates/site-shell.html`, never
 one artifact per page — see `../site-factory/references/multipage-artifact.md`.
 House defaults for small-business builds (standing client instruction): lead-capture
@@ -133,8 +141,22 @@ reading what such a site currently uses, never as a thing we build on.
 - Did any word change? Which, and why was it mechanical?
 - Is every hex and face in the kernel?
 - For each visual decision: which existing motif is it from?
+- For each animation: which existing motif is it from, and does its easing match
+  the kernel's geometry?
+- If a reference informed anything, which single mechanism was taken, and is it
+  rebuilt entirely in the client's kernel?
 - Which two of {type, color, layout} differ from same-vertical neighbours?
 - Would this be mistaken for the last three sites shipped?
+
+**Step 5b — Run the craft audit.** The audit above catches drift. It does not
+catch craft. Run the `polish` skill over the built files before handover:
+
+```bash
+python3 .claude/skills/polish/scripts/audit.py <site-dir> --kernel kernel.json
+```
+
+Blockers ship broken, so clear them. A polish pass may not introduce anything,
+which is the same lock as Step 4.
 
 **Step 6 — Log it.** Append a row to `data/shipped-log.csv`. A skipped row
 makes the next project's divergence check silently useless.
@@ -163,6 +185,10 @@ banned as *defaults* — if the client's kernel genuinely contains one, it stays
 Reaching for one of these is the tell that the vacuum is being filled with
 defaults instead of the client's identity. Stop and go back to Step 2.
 
+Motion has its own banned list — the site-wide scroll library, counting stat
+counters, typewriter headlines, hover-lift-plus-shadow, autoplay carousels,
+preloaders, scroll-jacking. See `references/motion.md`.
+
 ## The routines that run this process
 
 This skill is the design law. The `site-*` skills are the procedures that
@@ -184,8 +210,13 @@ because a routine is in a hurry.
 
 - `references/extraction.md` — mining a kernel from a site, a logo, or print
   when there is no CSS to read.
-- `references/axes.md` — the axes kit (structure, scale, density, rhythm) and
-  the collision arithmetic behind preferring axes to a theme catalog.
+- `references/axes.md` — the axes kit (structure, type, density, rhythm, color,
+  motion) and the collision arithmetic behind preferring axes to a theme
+  catalog.
+- `references/motion.md` — Axis 6 in full: the five motion stances, the
+  physics, the house reveal implementation, and the banned motion defaults.
+- `references/reference-intake.md` — how to use Awwwards, screenshot-to-code,
+  and URL-to-site generators without importing someone else's identity.
 - `references/hostinger-delivery.md` — the build target: static stack on
   Hostinger, form handling, deploy paths, and the volume-pricing economics.
 - `references/97display.md` — LEGACY/source-platform reference: reading the
@@ -194,3 +225,5 @@ because a routine is in a hurry.
   motif inventory, and what amplification versus substitution looks like on a
   real bland template.
 - `data/shipped-log.csv` — the divergence log. Read at Step 0, append at Step 6.
+
+The separate `polish` skill runs the craft audit at Step 5b.
