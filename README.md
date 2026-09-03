@@ -37,6 +37,15 @@ is how a build is found by name later, and a row in
 `.claude/skills/house-style/data/shipped-log.csv`, which is what stops two
 clients in the same city and vertical from getting the same-looking site.
 
+## The build console
+
+https://claude.ai/code/artifact/4e896679-5d8a-4268-90b5-c7745c80bd43
+
+A page for the intake half of the job: pick the build type, type in what the
+client gave us, and it hands back the exact command to run in Claude. Briefs
+save to the console's own store, so a brief typed there can be read back in a
+later session instead of re-pasted.
+
 ## Setup
 
 ```bash

@@ -59,10 +59,12 @@ the registry key, the project directory, the artifact title. Pick it once at
 intake and never change it.
 
 - lowercase, `a-z0-9-` only, no leading or trailing dash
-- the business name, not the vertical: `spidersboxing`, not `boxing`
-- collapse spaces and drop punctuation: "Spider's Boxing & Fitness" →
-  `spidersboxing`
-- on collision with an existing registry row, append the city: `fighters-nash`
+- the business name, not the vertical: `spiders-boxing`, not `boxing`
+- `registry.py slugify "Spider's Boxing & Fitness"` gives
+  `spiders-boxing-and-fitness` — that is a starting point, not the answer.
+  Shorten it by hand to the name people actually use: `spiders-boxing`
+- on collision with an existing registry row, append the city:
+  `fighters-nashville`
 
 `registry.py` validates the slug and rejects a duplicate rather than
 overwriting a row, because the failure it prevents is quietly replacing one

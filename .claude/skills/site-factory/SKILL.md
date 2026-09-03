@@ -42,6 +42,12 @@ files cover only Steps 1 and 2; from Step 3 they all converge here.
 per-routine checklist and, importantly, what to do with a gap rather than
 inventing a filler.
 
+Ben can type a brief straight into the **build console** instead of pasting it
+into chat: https://claude.ai/code/artifact/4e896679-5d8a-4268-90b5-c7745c80bd43. It saves to its own store, so a
+brief filled in there is readable from any later session with
+`Artifact action=read_db db_op=get collection=briefs doc_id=<slug>` — start
+there when Ben names a client without repeating the details.
+
 **Step 2 — Kernel.** Routine-specific. Ends the same way in all three: a
 stated kernel, in one line, confirmed with the user before anything is built.
 A wrong kernel caught here costs a sentence.
@@ -122,3 +128,6 @@ guessing at a domain or silently deploying to the wrong account.
 - `scripts/deploy_preview.sh` — built dir → `preview.<domain>/<slug>/`.
 - `scripts/deploy_production.sh` — built dir → client production domain.
 - `data/sites.csv` — the registry itself.
+- `../../console/build-console.html` — the build console page, published at
+  https://claude.ai/code/artifact/4e896679-5d8a-4268-90b5-c7745c80bd43. Republish it from that file path to
+  update it in place.
