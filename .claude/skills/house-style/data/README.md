@@ -22,6 +22,7 @@ out. See `references/axes.md` for why a catalog cannot do this job.
 | `structure` | Axis 1 |
 | `density` | Axis 3 |
 | `rhythm` | Axis 4 |
+| `motion_stance` | Axis 6 from `references/motion.md` (M1 Static through M5 Cinematic) |
 | `accent_hex`, `ground_hex` | The two colors that define the site at a glance |
 | `platform` | 97Display, WordPress, custom, etc. |
 | `notes` | Anything a future project needs to know |
@@ -35,6 +36,11 @@ differ from every one of those rows. Record what you checked in
 
 If nothing is logged nearby, say so explicitly rather than leaving it blank —
 an empty cell is ambiguous between "checked, all clear" and "forgot".
+
+`motion_stance` is not one of the three required differences, because a client
+cannot see it in a screenshot. It is the tiebreaker: two neighbours that share
+a motion stance feel closer than the three axes predict, so when the required
+two differences are already satisfied, take a third here.
 
 ## Keeping it honest
 

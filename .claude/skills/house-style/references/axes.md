@@ -26,12 +26,17 @@ Worse, the model is optimistic: it assumes collisions are spread evenly. Real
 ones cluster inside a vertical and a city, which is exactly where they get
 noticed.
 
-The axes below give 3,840 combinations from 27 maintained items:
+The axes below give 19,200 combinations from 32 maintained items:
 
 ```
-8 structures × 5 type stances × 4 densities × 4 rhythms × 6 color stances = 3,840
-8 + 5 + 4 + 4 + 6 = 27 things to maintain
+8 structures × 5 type stances × 4 densities × 4 rhythms × 6 color stances
+                                            × 5 motion stances = 19,200
+8 + 5 + 4 + 4 + 6 + 5 = 32 things to maintain
 ```
+
+Matching that with finished themes would take roughly 19,200 of them. Adding one
+axis of five items multiplied the space five times over; adding five more themes
+to a catalog of thirty buys nothing measurable.
 
 Catalogs multiply maintenance. Axes multiply output. And the log — not the
 count — is what actually prevents repeats, because it checks against
@@ -95,11 +100,31 @@ Again: no new colors. This is how the kernel's existing hexes get deployed.
 - **Monochrome + one accent moment** — accent appears exactly once, at the
   primary action.
 
+## Axis 6 — Motion stance
+
+A still artboard is not a website, and motion is the axis that decides whether
+the built page reads as designed or as an export. Full treatment, including the
+physics and the banned defaults, is in `references/motion.md`.
+
+- **M1. Static** — no motion beyond instant state change. Utilitarian, fast.
+- **M2. Reveal** — content arrives on scroll, then the page is still.
+- **M3. Continuous** — exactly one element never stops; everything else is dead
+  still, and the contrast is the effect.
+- **M4. Reactive** — motion only on input: hover, drag, cursor, scroll direction.
+- **M5. Cinematic** — sustained scroll-driven choreography. High effort, real
+  performance risk, needs justifying.
+
+Motion is kernel-derived like everything else. Hard-edged 0px geometry wants
+linear cuts; round geometry can carry a spring. Picking an easing curve because
+you like it is the same drift as picking a typeface because you like it.
+
 ## Picking a combination
 
 1. Read `data/shipped-log.csv` and find same-vertical neighbours within ~100mi.
 2. Choose a combination where at least two of {type stance, color stance,
-   structure} differ from every one of them.
+   structure} differ from every one of them. Motion stance is not one of the
+   three required differences, but a neighbour sharing it will feel closer than
+   the three axes predict, so break the tie there when you can.
 3. Sanity-check against the client's kernel — an accent-dominant stance needs an
    accent that can carry a whole ground, and a flat type stance needs a body face
    with usable weights. If the kernel cannot support the combination, pick again
