@@ -253,3 +253,12 @@ Pending for schema: opening hours from the client.
 5. Contact Us: dropped a fake "New York/Boston/LA/Austin" office block and
    a duplicate contact form, both page-builder demo content unrelated to
    this single Nashville gym.
+
+## Ben's revisions, round 16 (2026-08-27)
+1. Our Gyms page built, the last remaining page on the site. Real content
+   from the client's export; four em dashes repaired; fake testimonials
+   and a fake pricing tier block dropped as page-builder demo content.
+2. Nashville MMA's section rendered in their own real kernel colors
+   (black, gold #D7AD56) as the "opposite" pairing this page exists to
+   express, since their own site isn't built yet to mirror against
+   directly.

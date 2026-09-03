@@ -1,0 +1,369 @@
+---
+// OUR GYMS: the interlink page with Nashville MMA Training Camp.
+//
+// Copy from the client's WordPress export (Tools > Export, 2026-08-26),
+// verbatim where real. Four em dashes repaired to a comma, period or
+// colon per Ben's standing rule, logged in source/copy.md. Two things
+// dropped as page-builder demo content, not real: three Lorem Ipsum
+// testimonials under fake names, and a "Basic/Standard/Advanced" pricing
+// tier block with the same Lorem Ipsum body under each price.
+//
+// This is the light half of the pair the project has called for since
+// day one: Fighters light, Nashville MMA dark, an "Our Gyms" page on each
+// that mirrors the other. Nashville MMA has no built site yet (see
+// projects/nashvillemma/, design canvas only), so there is no live page
+// to link out to. Its own future /our-gyms/ page is the dark mirror of
+// this one: same real content, Nashville MMA leads, Fighters sits in the
+// inset panel instead. The Nashville MMA section below already renders in
+// their own real kernel colors (black ground, #D7AD56 gold, Bebas Neue),
+// pulled from projects/nashvillemma/kernel.json, so the "opposite" pairing
+// is visible on this page today even without their site to link to.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+import { coaches } from '../data/coaches.js';
+
+const teaser = coaches.slice(0, 3);
+const initials = (name) =>
+  name.replace(/^Dr\.\s+/, '').split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+---
+
+<Base
+  title="Our Gyms | Fighters Boxing Gym &amp; Nashville MMA Training Camp"
+  description="Two Nashville powerhouses under one membership: Fighters Boxing Gym and Nashville MMA Training Camp. See what each gym offers, and what the Championship Package unlocks."
+>
+  <PageHeader lines={['OUR', 'GYMS']} sub="Two Nashville powerhouses. One championship team." />
+
+  <!-- ============ INTRO ============ -->
+  <section class="split grain fluid-host">
+    <div class="wrap intro">
+      <div class="reveal">
+        <p>
+          For over two decades, <b>Nashville MMA Training Camp</b> and <b>Fighters Boxing
+          Gym</b> have set the standard for combat sports and fitness in Tennessee. Each gym
+          stands strong on its own: world-class training, expert coaches, and championship
+          results. But together, they create something even bigger, a complete training
+          experience built for every kind of fighter.
+        </p>
+        <p>
+          Whether your goal is to step into the ring, master martial arts, or simply get in
+          the best shape of your life, you&rsquo;ll find the environment, equipment, and
+          coaching you need inside our doors.
+        </p>
+      </div>
+      <span class="btn-ring reveal">
+        <button class="btn js-open-lead" type="button">GET MORE INFORMATION</button>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ FIGHTERS BOXING GYM ============ -->
+  <section class="split alt grain fluid-host">
+    <div class="wrap gym-grid">
+      <div class="gym-copy reveal">
+        <p class="kicker">Right here, in Nashville</p>
+        <h2>Fighters Boxing Gym</h2>
+        <p>
+          The heart of Nashville&rsquo;s boxing scene. Fighters Boxing Gym delivers top-tier
+          instruction in boxing for all skill levels, from beginners learning the basics to
+          professionals preparing for competition. You&rsquo;ll train under USA Certified
+          coaches with real fight experience and a passion for helping you grow stronger,
+          sharper, and more confident.
+        </p>
+        <p>Step into a space built for real boxing: bags, rings, and a community that pushes you to perform.</p>
+        <span class="btn-ring">
+          <button class="btn js-open-lead" type="button">GET MORE INFO</button>
+        </span>
+      </div>
+
+      <div class="teaser reveal">
+        <p class="teaser-label">Meet the Coaches</p>
+        <ul class="teaser-list">
+          {
+            teaser.map((c) => (
+              <li>
+                <span class="teaser-mark" aria-hidden="true">{initials(c.name)}</span>
+                <span class="teaser-name">{c.name}</span>
+                <span class="teaser-role">{c.role}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="teaser-link" href="/coaches/">Our full coaching staff</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NASHVILLE MMA TRAINING CAMP: the dark, gold sister site ============ -->
+  <section class="mma-section grain">
+    <div class="wrap mma-grid">
+      <div class="mma-copy reveal">
+        <p class="mma-kicker">Nashville&rsquo;s other legend</p>
+        <h2>Nashville MMA Training Camp</h2>
+        <p>
+          Home to some of the best martial artists in the Southeast, Nashville MMA Training
+          Camp offers elite-level instruction in <b>Brazilian Jiu-Jitsu, Kickboxing, Muay
+          Thai, Wrestling, MMA, and Fitness</b>. With a reputation built over 20+ years,
+          it&rsquo;s where athletes of all levels come to train smart, train hard, and train
+          like champions.
+        </p>
+        <p>
+          From professional fighters to everyday warriors, Nashville MMA&rsquo;s world-class
+          coaching staff and top-tier facility make it one of the most complete training
+          environments in the country.
+        </p>
+        <span class="mma-ring">
+          <button class="mma-btn js-open-lead" type="button">GET MORE INFO</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHAMPIONSHIP PACKAGE: literally split down the middle ============ -->
+  <section class="package">
+    <div class="wrap">
+      <p class="package-kicker reveal">The Championship Package</p>
+      <h2 class="package-title reveal">Can&rsquo;t pick just one? You don&rsquo;t have to.</h2>
+      <p class="package-lead reveal">
+        Full access to <b>both gyms</b> and all of their amenities, under one membership.
+      </p>
+
+      <div class="package-split reveal">
+        <div class="package-half light">
+          <p class="half-label">Fighters Boxing Gym</p>
+          <ul>
+            <li>Professional boxing rings</li>
+            <li>Endless rows of heavy bags and striking tools</li>
+          </ul>
+        </div>
+        <div class="package-half dark">
+          <p class="half-label">Nashville MMA Training Camp</p>
+          <ul>
+            <li>MMA cages and grappling mats</li>
+            <li>State-of-the-art Recovery Room</li>
+          </ul>
+        </div>
+      </div>
+      <p class="package-shared reveal">Plus a full fitness gym: weights, cardio, and functional training equipment, shared by both sides of the membership.</p>
+
+      <p class="package-close reveal">
+        Train like a fighter, recover like a pro, and experience the best that Nashville
+        combat sports has to offer, all under one membership.
+      </p>
+      <span class="btn-ring reveal">
+        <button class="btn js-open-lead" type="button">GET MORE INFORMATION</button>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ CLOSE ============ -->
+  <section class="close grain fluid-host">
+    <div class="wrap close-inner">
+      <p class="kicker reveal">One community. Two legends.</p>
+      <p class="close-body reveal">
+        For over 20 years, both gyms have built reputations for excellence, toughness, and
+        integrity. Now, they&rsquo;re united by a shared mission: to help every athlete, from
+        first-timers to pros, reach their potential.
+      </p>
+      <p class="close-body reveal">
+        Whether you start at Fighters Boxing Gym, dive into training at Nashville MMA, or
+        join the Championship Package, you&rsquo;re stepping into a system that&rsquo;s
+        produced champions, built confidence, and changed lives.
+      </p>
+      <span class="btn-ring reveal">
+        <button class="btn js-open-lead" type="button">GET MORE INFORMATION</button>
+      </span>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .kicker {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: clamp(10px, 1.2vw, 16px);
+  }
+
+  .intro { max-width: 68ch; }
+  .intro p { font-size: 17px; }
+  .intro .btn-ring { margin-top: clamp(22px, 3vw, 32px); }
+
+  /* ---------- Fighters ---------- */
+  .gym-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(36px, 5vw, 70px);
+    align-items: start;
+  }
+  .gym-copy .btn-ring { margin-top: clamp(18px, 2.4vw, 28px); }
+  .teaser {
+    background: var(--ground);
+    border-radius: calc(var(--radius-panel) + 10px);
+    padding: clamp(24px, 3vw, 34px);
+    box-shadow: var(--shadow-popup);
+  }
+  .teaser-label {
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: clamp(16px, 2vw, 22px);
+  }
+  .teaser-list { list-style: none; margin: 0 0 clamp(18px, 2.2vw, 26px); padding: 0; display: grid; gap: clamp(14px, 1.8vw, 20px); }
+  .teaser-list li { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; }
+  .teaser-mark {
+    grid-row: 1 / 3;
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--on-dark);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .teaser-name { font-family: var(--font-display); font-weight: 700; font-size: 15px; align-self: end; }
+  .teaser-role { font-size: 12px; color: var(--text-light); align-self: start; }
+  .teaser-link { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+
+  /* ---------- Nashville MMA: their own real kernel colors ---------- */
+  .mma-section {
+    background: #000000;
+    color: #ffffff;
+    padding: var(--section-pad) 0;
+  }
+  .mma-grid { max-width: 68ch; }
+  .mma-kicker {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d7ad56;
+    margin-bottom: clamp(10px, 1.2vw, 16px);
+  }
+  .mma-copy h2 {
+    font-family: 'Oswald', var(--font-display), sans-serif;
+    color: #ffffff;
+    font-size: clamp(28px, 3.6vw, 46px);
+    margin-bottom: clamp(20px, 2.6vw, 30px);
+  }
+  .mma-copy p { color: rgba(255, 255, 255, 0.75); font-size: 16px; }
+  .mma-copy b { color: #ffffff; }
+  .mma-ring {
+    display: inline-block;
+    margin-top: clamp(18px, 2.4vw, 28px);
+  }
+  .mma-btn {
+    font-family: var(--font-action);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #000000;
+    background: #d7ad56;
+    border: 0;
+    border-radius: 8px;
+    padding: 18px 34px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .mma-btn:hover, .mma-btn:focus-visible { background: #c0883a; }
+
+  /* ---------- Championship Package: split light/dark down the middle ---------- */
+  .package {
+    background: var(--ground);
+    padding: var(--section-pad) 0;
+    text-align: center;
+  }
+  .package-title { font-size: clamp(28px, 3.6vw, 46px); margin-bottom: clamp(14px, 1.8vw, 20px); }
+  .package-lead { max-width: 52ch; margin: 0 auto clamp(30px, 4vw, 44px); font-size: 17px; }
+  .package-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: calc(var(--radius-panel) + 14px);
+    overflow: hidden;
+    text-align: left;
+    margin-bottom: clamp(18px, 2.4vw, 26px);
+  }
+  .package-half { padding: clamp(28px, 3.6vw, 46px); }
+  .package-half.light { background: var(--ground-alt); }
+  .package-half.dark { background: #000000; color: #ffffff; }
+  .half-label {
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: clamp(14px, 1.8vw, 20px);
+  }
+  .package-half.light .half-label { color: var(--accent); }
+  .package-half.dark .half-label { color: #d7ad56; }
+  .package-half ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .package-half li {
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .package-half.dark li { border-left-color: #d7ad56; }
+  .package-shared {
+    max-width: 56ch;
+    margin: 0 auto clamp(30px, 4vw, 44px);
+    font-size: 14px;
+    color: var(--text-light);
+  }
+  .package-close { max-width: 56ch; margin: 0 auto clamp(22px, 3vw, 32px); font-size: 16px; }
+
+  /* ---------- close ---------- */
+  .close {
+    background: var(--ground-alt);
+    padding: clamp(44px, 6vw, 82px) 0;
+    text-align: center;
+  }
+  .close-body { max-width: 60ch; margin: 0 auto clamp(16px, 2vw, 22px); }
+  .close .btn-ring { margin-top: clamp(10px, 1.4vw, 16px); }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+
+  @media (max-width: 900px) {
+    .gym-grid { grid-template-columns: 1fr; }
+    .package-split { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

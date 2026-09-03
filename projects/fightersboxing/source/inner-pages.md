@@ -579,3 +579,58 @@ numbered sections under a poster header.
 `components/ClassTicker.astro`, `ScheduleStrip.astro` and the schedule
 pages already linked to these six destinations; no other file needed a
 link added, only the destinations themselves.
+
+## Our Gyms built: the last remaining page (2026-08-27, Ben round 8)
+Ben confirmed the site was otherwise complete, then: "Yeah basically it'll
+just be the upside down version of the current our gym page."
+
+"The current our gym page" is the client's own real WordPress page
+(`our-gyms`, in the 2026-08-26 export), the only Our Gyms page that
+currently exists anywhere (Nashville MMA has no built site yet, design
+canvas only, per `projects/nashvillemma/`). Read "upside down" as the
+project's own founding brief: Fighters light, Nashville MMA dark, an Our
+Gyms page on each that mirrors the other. Since there is no live Nashville
+MMA page to literally flip, the mirroring is expressed on this page itself
+instead of deferred: the Nashville MMA section renders in their own real
+kernel colors (black ground, `#D7AD56` gold, pulled from
+`projects/nashvillemma/kernel.json`), sitting inside Fighters' otherwise
+all-light page as a deliberate dark inset. The Championship Package
+section, the one piece of content genuinely about both gyms together, is
+split light/dark down the middle, literally the two brands meeting. When
+Nashville MMA's own site is built, its `/our-gyms/` page is the dark
+mirror of this one: same real content, Nashville MMA leads, Fighters sits
+in the inset.
+
+Real content, from the client's export: the two-gym hero pitch, the
+Fighters section (matches the client's own real pitch, and the coach
+teaser here, Halbert/Trotter/Carr, matches `data/coaches.js` exactly,
+confirming that file), the Nashville MMA section, the Championship Package
+(a real cross-membership offer: boxing rings and heavy bags on the
+Fighters side, MMA cages, grappling mats and the Recovery Room on the
+Nashville MMA side, a shared fitness gym across both), and the closing
+"One Community. Two Legends." pitch.
+
+Four em dashes repaired (comma, period, or colon, never invented content):
+"Each gym stands strong on its own: world-class training, expert coaches,
+and championship results. But together..." (one spot had two missing
+dashes bracketing a parenthetical, split into two sentences with a colon);
+"...for all skill levels, from beginners..."; "...has to offer, all under
+one membership."; "...a shared mission: to help every athlete...".
+
+Two things dropped as page-builder demo content, not real: three Lorem
+Ipsum testimonials under fake names (Mark Stevens, Jenny Chanson, Hank
+Smith, the exact same three names already rejected as review sources
+earlier in this project); a "Basic $60 / Standard $80 / Advanced $95"
+pricing tier block, Lorem Ipsum body text under each price, obvious theme
+defaults, not this gym's real pricing (same open question already flagged
+for the FAQ page).
+
+No new photos: same problem as every other page this round, the client's
+media library is unreachable. The coach-teaser here reuses the initials
+treatment from the Coaches page rather than a stock photo standing in for
+Halbert, Trotter or Carr.
+
+This closes every planned page. The only remaining dead link anywhere on
+the site was `/our-gyms/` itself; it now resolves. Nothing else is
+pending except real coach photos, real pricing, and whatever Ben decides
+about the Sanity CMS setup for the schedule and FAQs.
