@@ -114,8 +114,10 @@ used; anything used once is an amplification candidate.
 `references/axes.md`, constrained by Step 0's divergence check. This is the
 only place variation is allowed to come from outside the client.
 
-**Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified. House
-defaults for small-business builds (standing client instruction): lead-capture
+**Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified. Build as
+ONE multi-page artifact from `../site-factory/templates/site-shell.html`, never
+one artifact per page — see `../site-factory/references/multipage-artifact.md`.
+House defaults for small-business builds (standing client instruction): lead-capture
 forms open as a popup/modal from every request CTA rather than living only
 inline, and interactive showcases should be portable — vanilla JS/CSS that can
 drop into a template platform as a custom block, not framework-bound
@@ -160,6 +162,23 @@ banned as *defaults* — if the client's kernel genuinely contains one, it stays
 
 Reaching for one of these is the tell that the vacuum is being filled with
 defaults instead of the client's identity. Stop and go back to Step 2.
+
+## The routines that run this process
+
+This skill is the design law. The `site-*` skills are the procedures that
+apply it end to end, and `site-factory` is the shared spine underneath them:
+
+| Routine | For |
+| --- | --- |
+| `site-redesign` | The client has a live site to upgrade |
+| `site-new` | No site; identity assembled from research |
+| `site-match` | A reference site for structure, client brand for identity |
+| `site-preview` | Publish a build to `preview.<domain>/<slug>` for approval |
+| `site-ship` | Deploy an approved build to the client's domain |
+| `site-factory` | The spine: build pipeline, registry, Hostinger, artifact shell |
+
+Every one of them runs Steps 0 through 6 above. The locks are not optional
+because a routine is in a hurry.
 
 ## Reference files
 
