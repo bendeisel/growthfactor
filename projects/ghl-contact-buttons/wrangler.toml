@@ -1,0 +1,24 @@
+name = "gf-contact-buttons"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+workers_dev = true
+
+# Public, non-secret config.
+[vars]
+# Marketplace app id, used by the injector to request an SSO session from HighLevel.
+GHL_APP_ID = ""
+# Comma separated origins allowed to embed / call the API.
+ALLOWED_ORIGINS = "https://app.gohighlevel.com,https://app.leadconnectorhq.com"
+# Optional: your white-label domain, e.g. "https://app.growth-factor.ai"
+WHITELABEL_ORIGIN = ""
+
+# Create with: wrangler kv namespace create BUTTONS
+[[kv_namespaces]]
+binding = "BUTTONS"
+id = "REPLACE_WITH_KV_ID"
+preview_id = "REPLACE_WITH_PREVIEW_KV_ID"
+
+# Secrets (set with `wrangler secret put <NAME>`), never in this file:
+#   GHL_SSO_KEY     - the marketplace app's SSO / shared secret
+#   ADMIN_PASSWORD  - password for the admin UI
+#   SESSION_SECRET  - random 32+ char string used to sign admin sessions

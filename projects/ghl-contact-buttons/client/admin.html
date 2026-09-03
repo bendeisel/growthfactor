@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact Buttons</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1c2330; --line:#2a3441;
+    --text:#e6edf3; --muted:#8b98a8; --accent:#5b6cff; --good:#2ea043; --bad:#da3633;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  a{color:var(--accent)}
+  header{display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:5}
+  header h1{font-size:16px;margin:0;letter-spacing:-.01em}
+  .grow{flex:1}
+  .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+  button,select,input,textarea{font:inherit;color:inherit}
+  .btn{background:var(--accent);border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
+  .btn:hover{filter:brightness(1.1)}
+  .btn.ghost{background:transparent;border:1px solid var(--line)}
+  .btn.danger{background:var(--bad)}
+  .btn.sm{padding:5px 10px;font-size:12px;border-radius:6px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .tabs button{background:0;border:0;border-bottom:2px solid transparent;padding:10px 14px;color:var(--muted);cursor:pointer;font-weight:600}
+  .tabs button.on{color:var(--text);border-bottom-color:var(--accent)}
+  main{padding:20px;max-width:1200px}
+  .grid{display:grid;grid-template-columns:minmax(280px,1fr) minmax(320px,1.2fr);gap:20px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0 0 12px}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;margin-bottom:8px;background:var(--panel-2);cursor:pointer}
+  .row.on{border-color:var(--accent)}
+  .row .swatch{width:12px;height:12px;border-radius:4px;flex:0 0 12px}
+  .row .name{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pill{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+  .pill.agency{color:#a78bfa;border-color:#4c1d95}
+  .pill.off{color:#f0883e;border-color:#7d4a1a}
+  label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px;font-weight:600}
+  input[type=text],input[type=password],input[type=number],select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  input[type=color]{width:44px;height:34px;padding:2px;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+  textarea{min-height:64px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+  .inline{display:flex;gap:10px;align-items:flex-end}
+  .inline>*{flex:1}
+  .action{border:1px solid var(--line);border-radius:9px;padding:12px;margin-bottom:10px;background:var(--panel-2)}
+  .action .head{display:flex;gap:8px;align-items:center}
+  .action .head select{flex:1}
+  .preview{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:#f6f8fa;border-radius:10px;margin-top:6px}
+  .preview button{border:0;border-radius:999px;padding:7px 15px;font-size:13px;font-weight:600;color:#fff;cursor:default}
+  .empty{color:var(--muted);font-size:13px;padding:10px 0}
+  .toast{position:fixed;right:20px;bottom:20px;background:#0f172a;border:1px solid var(--line);padding:11px 16px;border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.5);z-index:20}
+  .toast.err{background:#450a0a;border-color:#7f1d1d}
+  .login{max-width:340px;margin:12vh auto;text-align:left}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted);word-break:break-all}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  .ok{color:var(--good)} .no{color:var(--bad)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const ICONS = ['bolt','tag','alert','user','check','trash','link','calendar','note','dot'];
+const ACTIONS = {
+  add_tag:{label:'Add tag(s)',fields:[['tags','Tags (comma separated)','list']]},
+  remove_tag:{label:'Remove tag(s)',fields:[['tags','Tags (comma separated)','list']]},
+  remove_all_tags:{label:'Remove all tags',fields:[]},
+  add_to_workflow:{label:'Add to workflow',fields:[['workflowId','Workflow','workflow']]},
+  remove_from_workflow:{label:'Remove from workflow',fields:[['workflowId','Workflow','workflow']]},
+  remove_from_all_workflows:{label:'Remove from all workflows',fields:[]},
+  add_to_campaign:{label:'Add to campaign',fields:[['campaignId','Campaign id','text']]},
+  remove_from_campaign:{label:'Remove from campaign',fields:[['campaignId','Campaign id','text']]},
+  remove_from_all_campaigns:{label:'Remove from all campaigns',fields:[]},
+  set_field:{label:'Set custom field(s)',fields:[['fields','Field id to value (JSON)','json']]},
+  set_dnd:{label:'Set DND',fields:[['dnd','On','bool']]},
+  add_note:{label:'Add note',fields:[['body','Note body','text']]},
+  add_task:{label:'Create task',fields:[['title','Title','text'],['body','Details','text'],['dueInDays','Due in days','number']]},
+  move_opportunity:{label:'Move opportunity stage',fields:[['pipelineId','Pipeline id','text'],['stageId','Stage id','text'],['status','Status','text']]},
+  webhook:{label:'Send webhook',fields:[['url','https:// endpoint','text'],['method','Method','text']]},
+  open_url:{label:'Open a URL',fields:[['url','URL (merge fields allowed)','text'],['target','Target','text']]},
+};
+
+const state = {
+  authed:false, tab:'buttons', scope:'agency', locationId:'', locations:[],
+  agency:{buttons:[],settings:{}}, location:{buttons:[],disabledAgencyButtons:[],settings:{}},
+  selected:null, workflows:[], logs:[], dirty:false, creds:null,
+};
+
+const params = new URLSearchParams(location.search);
+state.locationId = params.get('locationId') || localStorage.getItem('gfb_last_location') || '';
+if (state.locationId) state.scope = 'location';
+
+const el = (t,p={},...kids)=>{const n=document.createElement(t);
+  for(const [k,v] of Object.entries(p)){
+    if(k==='class')n.className=v; else if(k==='html')n.innerHTML=v;
+    else if(k.startsWith('on'))n.addEventListener(k.slice(2),v); else if(v!==null&&v!==undefined)n.setAttribute(k,v);
+  }
+  for(const kid of kids.flat()) if(kid!=null) n.append(kid.nodeType?kid:document.createTextNode(kid));
+  return n;};
+
+function toast(msg,isErr){
+  const t=el('div',{class:'toast'+(isErr?' err':'')},msg);
+  document.body.append(t); setTimeout(()=>t.remove(),isErr?7000:2800);
+}
+
+async function api(path,opts={}){
+  const res=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...opts});
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401){state.authed=false;render();throw new Error('Session expired');}
+  if(!res.ok) throw new Error(data.error||('Request failed ('+res.status+')'));
+  return data;
+}
+
+async function loadState(){
+  const q=state.locationId?('?locationId='+encodeURIComponent(state.locationId)):'';
+  const data=await api('/admin/api/state'+q);
+  state.agency=data.agency; state.location=data.location; state.locations=data.locations||[];
+  state.creds=data.creds; state.authed=true;
+}
+
+function currentButtons(){
+  if(state.scope==='agency') return state.agency.buttons;
+  return state.location.buttons;
+}
+
+function uid(){return 'btn_'+Math.random().toString(36).slice(2,10);}
+
+function newButton(){
+  return {id:uid(),label:'New button',icon:'bolt',color:'#5b6cff',style:'solid',order:(currentButtons().length+1)*10,active:true,confirm:'',successMessage:'',actions:[]};
+}
+
+// ---- rendering ----------------------------------------------------------
+
+function render(){
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  app.append(state.authed?viewApp():viewLogin());
+}
+
+function viewLogin(){
+  const input=el('input',{type:'password',placeholder:'Admin password',autofocus:'true'});
+  const submit=async()=>{
+    try{ await api('/admin/api/login',{method:'POST',body:JSON.stringify({password:input.value})});
+      await loadState(); render(); }
+    catch(e){ toast(e.message,true); }
+  };
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')submit();});
+  return el('main',{},el('div',{class:'card login'},
+    el('h2',{},'Contact Buttons'),
+    el('label',{},'Admin password'), input,
+    el('div',{style:'margin-top:14px'}, el('button',{class:'btn',onclick:submit},'Unlock'))
+  ));
+}
+
+function viewApp(){
+  const scopeSelect=el('select',{style:'max-width:280px',onchange:e=>{
+    if(e.target.value==='agency'){state.scope='agency';}
+    else{state.scope='location';state.locationId=e.target.value;localStorage.setItem('gfb_last_location',e.target.value);}
+    state.selected=null;
+    loadState().then(render).catch(err=>toast(err.message,true));
+  }},
+    el('option',{value:'agency',selected:state.scope==='agency'?'selected':null},'Agency defaults (all sub-accounts)'),
+    ...state.locations.map(id=>el('option',{value:id,selected:state.scope==='location'&&state.locationId===id?'selected':null},'Sub-account '+id)),
+    state.locationId&&!state.locations.includes(state.locationId)
+      ? el('option',{value:state.locationId,selected:state.scope==='location'?'selected':null},'Sub-account '+state.locationId) : null
+  );
+
+  const tabs=el('div',{class:'tabs'},...['buttons','settings','connection','activity'].map(t=>
+    el('button',{class:state.tab===t?'on':'',onclick:()=>{state.tab=t;render();if(t==='activity')refreshLogs();}},
+      t[0].toUpperCase()+t.slice(1))));
+
+  return el('div',{},
+    el('header',{},
+      el('h1',{},'Contact Buttons'),
+      el('span',{class:'tag'},'Growth Factor'),
+      scopeSelect,
+      el('span',{class:'grow'}),
+      el('button',{class:'btn',onclick:save},'Save changes'),
+      el('button',{class:'btn ghost',onclick:async()=>{await api('/admin/api/logout',{method:'POST'});state.authed=false;render();}},'Lock')
+    ),
+    tabs,
+    state.tab==='buttons'?viewButtons():
+    state.tab==='settings'?viewSettings():
+    state.tab==='connection'?viewConnection():viewActivity()
+  );
+}
+
+function viewButtons(){
+  const list=el('div',{class:'card'},el('h2',{},state.scope==='agency'?'Agency buttons':'Sub-account buttons'));
+
+  const buttons=currentButtons();
+  if(!buttons.length) list.append(el('div',{class:'empty'},'Nothing here yet. Add your first button.'));
+
+  buttons.slice().sort((a,b)=>(a.order??0)-(b.order??0)).forEach(b=>{
+    list.append(el('div',{class:'row'+(state.selected===b.id?' on':''),onclick:()=>{state.selected=b.id;render();}},
+      el('span',{class:'swatch',style:'background:'+b.color}),
+      el('span',{class:'name'},b.label),
+      b.active===false?el('span',{class:'pill off'},'off'):null,
+      el('span',{class:'pill'},(b.actions||[]).length+' action'+((b.actions||[]).length===1?'':'s'))
+    ));
+  });
+
+  list.append(el('div',{style:'margin-top:12px;display:flex;gap:8px'},
+    el('button',{class:'btn sm',onclick:()=>{const b=newButton();currentButtons().push(b);state.selected=b.id;state.dirty=true;render();}},'Add button')
+  ));
+
+  if(state.scope==='location'&&state.agency.buttons.length){
+    const inherited=el('div',{class:'card',style:'margin-top:16px'},el('h2',{},'Inherited from agency'));
+    state.agency.buttons.forEach(b=>{
+      const off=(state.location.disabledAgencyButtons||[]).includes(b.id);
+      inherited.append(el('div',{class:'row'},
+        el('span',{class:'swatch',style:'background:'+b.color}),
+        el('span',{class:'name'},b.label),
+        el('span',{class:'pill agency'},'agency'),
+        el('button',{class:'btn sm ghost',onclick:e=>{
+          e.stopPropagation();
+          const set=new Set(state.location.disabledAgencyButtons||[]);
+          off?set.delete(b.id):set.add(b.id);
+          state.location.disabledAgencyButtons=[...set]; state.dirty=true; render();
+        }},off?'Turn on':'Turn off')
+      ));
+    });
+    return el('main',{},el('div',{class:'grid'},el('div',{},list,inherited),viewEditor()));
+  }
+
+  return el('main',{},el('div',{class:'grid'},list,viewEditor()));
+}
+
+function viewEditor(){
+  const button=currentButtons().find(b=>b.id===state.selected);
+  if(!button) return el('div',{class:'card'},el('h2',{},'Editor'),el('div',{class:'empty'},'Pick a button on the left, or add one.'));
+
+  const set=(key,value)=>{button[key]=value;state.dirty=true;};
+  const card=el('div',{class:'card'},el('h2',{},'Editor'));
+
+  card.append(
+    el('label',{},'Label'),
+    el('input',{type:'text',value:button.label,oninput:e=>{set('label',e.target.value);document.querySelectorAll('.row.on .name').forEach(n=>n.textContent=e.target.value);updatePreview();}}),
+    el('div',{class:'inline'},
+      el('div',{},el('label',{},'Icon'),el('select',{onchange:e=>{set('icon',e.target.value);updatePreview();}},
+        ...ICONS.map(i=>el('option',{value:i,selected:button.icon===i?'selected':null},i)))),
+      el('div',{},el('label',{},'Style'),el('select',{onchange:e=>{set('style',e.target.value);updatePreview();}},
+        ...['solid','outline'].map(s=>el('option',{value:s,selected:button.style===s?'selected':null},s)))),
+      el('div',{style:'flex:0 0 auto'},el('label',{},'Colour'),
+        el('input',{type:'color',value:button.color,oninput:e=>{set('color',e.target.value);updatePreview();}}))
+    ),
+    el('div',{class:'inline'},
+      el('div',{},el('label',{},'Order'),el('input',{type:'number',value:button.order??0,oninput:e=>set('order',Number(e.target.value))})),
+      el('div',{},el('label',{},'Active'),el('select',{onchange:e=>{set('active',e.target.value==='yes');}},
+        el('option',{value:'yes',selected:button.active!==false?'selected':null},'yes'),
+        el('option',{value:'no',selected:button.active===false?'selected':null},'no')))
+    ),
+    el('label',{},'Confirm before running (leave blank for no prompt)'),
+    el('input',{type:'text',value:button.confirm||'',oninput:e=>set('confirm',e.target.value)}),
+    el('label',{},'Success message'),
+    el('input',{type:'text',value:button.successMessage||'',oninput:e=>set('successMessage',e.target.value)}),
+    el('label',{},'Only show when contact has tag (comma separated, blank for always)'),
+    el('input',{type:'text',value:(button.visibleIf&&button.visibleIf.hasTag||[]).join(', '),oninput:e=>{
+      button.visibleIf=Object.assign({},button.visibleIf,{hasTag:splitList(e.target.value)});state.dirty=true;}}),
+    el('label',{},'Hide when contact has tag'),
+    el('input',{type:'text',value:(button.visibleIf&&button.visibleIf.missingTag||[]).join(', '),oninput:e=>{
+      button.visibleIf=Object.assign({},button.visibleIf,{missingTag:splitList(e.target.value)});state.dirty=true;}}),
+    el('label',{},'Preview'),
+    el('div',{class:'preview',id:'preview'})
+  );
+
+  const actionsCard=el('div',{class:'card',style:'margin-top:16px'},el('h2',{},'Actions, in order'));
+  (button.actions||[]).forEach((action,index)=>actionsCard.append(viewAction(button,action,index)));
+  actionsCard.append(el('button',{class:'btn sm',onclick:()=>{
+    button.actions=button.actions||[]; button.actions.push({type:'add_tag',tags:[]}); state.dirty=true; render();
+  }},'Add action'));
+
+  const dangerCard=el('div',{style:'margin-top:16px;display:flex;gap:8px'},
+    el('button',{class:'btn danger sm',onclick:()=>{
+      if(!confirm('Delete "'+button.label+'"?'))return;
+      const list=currentButtons(); list.splice(list.indexOf(button),1); state.selected=null; state.dirty=true; render();
+    }},'Delete button'),
+    el('button',{class:'btn ghost sm',onclick:()=>{
+      const copy=JSON.parse(JSON.stringify(button)); copy.id=uid(); copy.label=button.label+' copy';
+      currentButtons().push(copy); state.selected=copy.id; state.dirty=true; render();
+    }},'Duplicate')
+  );
+
+  const wrap=el('div',{},card,actionsCard,dangerCard);
+  setTimeout(updatePreview,0);
+  return wrap;
+}
+
+function updatePreview(){
+  const button=currentButtons().find(b=>b.id===state.selected);
+  const node=document.getElementById('preview');
+  if(!button||!node)return;
+  node.innerHTML='';
+  const b=el('button',{},button.label);
+  if(button.style==='outline'){b.style.background='transparent';b.style.color=button.color;b.style.border='1.5px solid '+button.color;}
+  else{b.style.background=button.color;}
+  node.append(b);
+}
+
+function splitList(value){return value.split(',').map(s=>s.trim()).filter(Boolean);}
+
+function viewAction(button,action,index){
+  const spec=ACTIONS[action.type]||{label:action.type,fields:[]};
+  const box=el('div',{class:'action'});
+
+  box.append(el('div',{class:'head'},
+    el('select',{onchange:e=>{button.actions[index]={type:e.target.value};state.dirty=true;render();}},
+      ...Object.entries(ACTIONS).map(([value,meta])=>el('option',{value,selected:action.type===value?'selected':null},meta.label))),
+    el('button',{class:'btn sm ghost',onclick:()=>{if(index>0){const a=button.actions;[a[index-1],a[index]]=[a[index],a[index-1]];state.dirty=true;render();}}},'↑'),
+    el('button',{class:'btn sm ghost',onclick:()=>{const a=button.actions;if(index<a.length-1){[a[index+1],a[index]]=[a[index],a[index+1]];state.dirty=true;render();}}},'↓'),
+    el('button',{class:'btn sm danger',onclick:()=>{button.actions.splice(index,1);state.dirty=true;render();}},'×')
+  ));
+
+  spec.fields.forEach(([key,label,kind])=>{
+    box.append(el('label',{},label));
+    if(kind==='workflow'&&state.workflows.length){
+      box.append(el('select',{onchange:e=>{action[key]=e.target.value;state.dirty=true;}},
+        el('option',{value:''},'-- pick a workflow --'),
+        ...state.workflows.map(w=>el('option',{value:w.id,selected:action[key]===w.id?'selected':null},w.name||w.id))));
+      box.append(el('div',{class:'mono',style:'margin-top:4px'},action[key]||''));
+    } else if(kind==='list'){
+      box.append(el('input',{type:'text',value:(action[key]||[]).join(', '),oninput:e=>{action[key]=splitList(e.target.value);state.dirty=true;}}));
+    } else if(kind==='json'){
+      box.append(el('textarea',{oninput:e=>{try{action[key]=JSON.parse(e.target.value||'{}');e.target.style.borderColor='';state.dirty=true;}catch{e.target.style.borderColor='var(--bad)';}},
+        html:''},JSON.stringify(action[key]||{},null,2)));
+    } else if(kind==='bool'){
+      box.append(el('select',{onchange:e=>{action[key]=e.target.value==='yes';state.dirty=true;}},
+        el('option',{value:'yes',selected:action[key]!==false?'selected':null},'yes'),
+        el('option',{value:'no',selected:action[key]===false?'selected':null},'no')));
+    } else if(kind==='number'){
+      box.append(el('input',{type:'number',value:action[key]??1,oninput:e=>{action[key]=Number(e.target.value);state.dirty=true;}}));
+    } else {
+      box.append(el('input',{type:'text',value:action[key]||'',oninput:e=>{action[key]=e.target.value;state.dirty=true;}}));
+    }
+  });
+
+  if(spec.fields.length){
+    box.append(el('label',{},'Keep going if this step fails'),
+      el('select',{onchange:e=>{action.continueOnError=e.target.value==='yes';state.dirty=true;}},
+        el('option',{value:'no',selected:!action.continueOnError?'selected':null},'no'),
+        el('option',{value:'yes',selected:action.continueOnError?'selected':null},'yes')));
+  }
+  return box;
+}
+
+function viewSettings(){
+  const target=state.scope==='agency'?state.agency:state.location;
+  target.settings=target.settings||{};
+  const s=target.settings;
+  return el('main',{},el('div',{class:'card',style:'max-width:640px'},
+    el('h2',{},'Display'),
+    el('label',{},'Placement'),
+    el('select',{onchange:e=>{s.placement=e.target.value;state.dirty=true;}},
+      ...['auto','pinned'].map(v=>el('option',{value:v,selected:(s.placement||'auto')===v?'selected':null},
+        v==='auto'?'auto (sit in the contact header when we can find it)':'pinned (floating bar, top right)'))),
+    el('label',{},'Extra anchor selectors, one per line'),
+    el('textarea',{oninput:e=>{s.anchorSelectors=e.target.value.split('\n').map(x=>x.trim()).filter(Boolean);state.dirty=true;}},
+      (s.anchorSelectors||[]).join('\n')),
+    el('div',{class:'empty'},'HighLevel reshuffles its markup now and then. If the bar lands in the wrong spot, paste a CSS selector for the element it should sit inside. No redeploy needed.')
+  ));
+}
+
+function viewConnection(){
+  if(state.scope==='agency'){
+    return el('main',{},el('div',{class:'card',style:'max-width:640px'},
+      el('h2',{},'Connection'),
+      el('div',{class:'empty'},'Credentials are per sub-account. Pick a sub-account in the dropdown above, then paste its Private Integration Token here.')
+    ));
+  }
+  const input=el('input',{type:'password',placeholder:state.creds?'Token saved — paste a new one to replace':'pit-...'});
+  const out=el('div',{class:'empty'});
+  return el('main',{},el('div',{class:'card',style:'max-width:640px'},
+    el('h2',{},'Private Integration Token for '+state.locationId),
+    el('label',{},'Token'), input,
+    el('div',{style:'margin-top:14px;display:flex;gap:8px'},
+      el('button',{class:'btn',onclick:async()=>{
+        try{ await api('/admin/api/credentials?locationId='+encodeURIComponent(state.locationId),
+          {method:'PUT',body:JSON.stringify({pit:input.value})});
+          state.creds=true; input.value=''; toast('Token saved'); }
+        catch(e){ toast(e.message,true); }
+      }},'Save token'),
+      el('button',{class:'btn ghost',onclick:async()=>{
+        out.textContent='Testing...';
+        try{ const r=await api('/admin/api/test?locationId='+encodeURIComponent(state.locationId),{method:'POST'});
+          out.innerHTML='<span class="ok">Connected.</span> '+r.workflowCount+' workflows visible, token source: '+r.source;
+          state.workflows=r.workflows||[]; }
+        catch(e){ out.innerHTML='<span class="no">'+e.message+'</span>'; }
+      }},'Test connection')),
+    out,
+    el('div',{class:'empty',style:'margin-top:14px'},
+      'Sub-account → Settings → Private Integrations → Create. Scopes needed: contacts read/write, workflows read, campaigns write, opportunities read/write, locations read.')
+  ));
+}
+
+function viewActivity(){
+  const body=el('tbody',{});
+  state.logs.forEach(l=>body.append(el('tr',{},
+    el('td',{},new Date(l.at).toLocaleString()),
+    el('td',{},l.buttonLabel||l.buttonId),
+    el('td',{},l.user||''),
+    el('td',{class:l.ok?'ok':'no'},l.ok?'ok':'failed'),
+    el('td',{class:'mono'},l.message||'')
+  )));
+  return el('main',{},el('div',{class:'card'},
+    el('h2',{},'Recent runs'+(state.scope==='location'?' for '+state.locationId:'')),
+    state.scope==='agency'?el('div',{class:'empty'},'Pick a sub-account to see its activity.'):
+    el('table',{},el('thead',{},el('tr',{},...['When','Button','User','Result','Detail'].map(h=>el('th',{},h)))),body)
+  ));
+}
+
+async function refreshLogs(){
+  if(state.scope!=='location')return;
+  try{ const r=await api('/admin/api/logs?locationId='+encodeURIComponent(state.locationId));
+    state.logs=r.logs||[]; render(); }
+  catch(e){ toast(e.message,true); }
+}
+
+async function save(){
+  try{
+    if(state.scope==='agency'){
+      await api('/admin/api/agency',{method:'PUT',body:JSON.stringify(state.agency)});
+    }else{
+      await api('/admin/api/location?locationId='+encodeURIComponent(state.locationId),
+        {method:'PUT',body:JSON.stringify(state.location)});
+    }
+    state.dirty=false; toast('Saved');
+  }catch(e){ toast(e.message,true); }
+}
+
+window.addEventListener('beforeunload',e=>{ if(state.dirty){e.preventDefault();e.returnValue='';} });
+
+loadState().then(()=>{
+  render();
+  if(state.scope==='location'){
+    api('/admin/api/workflows?locationId='+encodeURIComponent(state.locationId))
+      .then(r=>{state.workflows=r.workflows||[];})
+      .catch(()=>{});
+  }
+}).catch(()=>{ render(); });
+</script>
+</body>
+</html>
