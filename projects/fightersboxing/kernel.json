@@ -1,0 +1,73 @@
+{
+  "client": "Fighters Boxing Gym (Fighters Nashville)",
+  "source": "WordPress build (Ring theme + Elementor) at floralwhite-woodcock-644453.hostingersite.com, captured 2026-08-24 (browser-save zip from Ben; egress proxy blocks the domain)",
+  "typefaces": {
+    "display": "Archivo 800/900 (revised per Ben 2026-08-24; WP build's Jost read too newspaper and was dropped). Wide heavy cuts, deliberately opposite Nashville MMA's condensed Bebas.",
+    "body": "Didact Gothic (16px, unchanged from WP build)",
+    "action": "Josefin Sans 700, 14px, letter-spacing 1px (all buttons; Ben approved)"
+  },
+  "colors": {
+    "ground": "#FFFFFF",
+    "ground_alt": "#F5F5EF",
+    "ground_dark_band": "#090909",
+    "ground_footer": "#000000",
+    "text_dark": "#181817",
+    "text_light": "#ABABA3",
+    "border": "#DCDCD1",
+    "accent": "#CC0000",
+    "accent_hover": "#B70000",
+    "on_dark": "#FFFFFF"
+  },
+  "flagged_not_kernel": {
+    "#B6D40E / #A3BE0C": "lime used on the pre-footer email heading; it is the Ring theme skin's default text_link2/text_hover2, appears nowhere in the logo or anywhere else on the site. Treated as an unconfigured vendor default, replaced with on_dark white + accent hover. Listed at handover.",
+    "#00CCCC / #00B7B7": "theme skin default text_link3 set, unused on the page"
+  },
+  "geometry": {
+    "button_radius": "36px (pill)",
+    "panel_radius": "20px (Elementor popup dialog + popup column; the only measured container radius on the site)",
+    "image_crop": "aspect-ratio 3/4, object-fit cover (both content-section photos, via custom CSS)",
+    "button_shadow": "0px 4px 14px 0px rgba(0,0,0,0.3)",
+    "popup_shadow": "2px 8px 23px 3px rgba(0,0,0,0.2)",
+    "popup_width": "640px",
+    "popup_overlay": "rgba(0,0,0,0.8)"
+  },
+  "type_scale": {
+    "h1_hero": "96px desktop / 70px tablet / 30px phone, Jost, #FFF on the current dark hero",
+    "hero_sub": "27px / 17px phone",
+    "section_title": "55px / 40px / 32px (sc_item_title)",
+    "marquee_char": "150px desktop / 50px phone, weight 500, uppercase, #181817",
+    "contact_band_heading": "62px / 55px / 30px, weight 500, line-height 0.8",
+    "body": "16px"
+  },
+  "motifs": [
+    "Red ring in a white diamond (logo mark): a red circle outlined inside a rotated square: the entire brand geometry (circle = round/pill, diamond = rotated square)",
+    "Pill buttons: #CC0000, radius 36px, Josefin Sans 700 caps copy, drop shadow, hover #B70000: used 3x on the page plus header CTA",
+    "Grain texture tile (GPaZLL3k4Gmh.png 250px) at opacity 0.04 over light sections: used on 4 sections",
+    "3/4 portrait photo crops with object-fit cover: both content sections",
+    "Giant background/marquee text (trx_addons_bg_text): configured at 150px uppercase #181817 on a 150px-min-height band that currently renders EMPTY: prime amplification candidate",
+    "Parallax entrance reveals: opacity 0→1, y 20px→0 on section titles/content (trx_addons parallax params)",
+    "Dark punctuation bands: #090909 pre-footer contact band + #000 footer against the white page",
+    "Popup lead capture: every CTA opens Elementor popup 81729 → LeadConnector iframe https://link.growth-factor.ai/widget/form/0maCMu9uqM7cqIfqR9Mb (\"New Trial Form\"), 20px radius, 640px, 0.8 black overlay"
+  ],
+  "nap": {
+    "name": "Fighters Boxing Gym",
+    "address": "405 42nd Ave N, Nashville, TN 37209",
+    "email": "support@fightersnashville.com",
+    "phone": "629-289-2988"
+  },
+  "hero_current": "background video fbg-header.mp4 (not in capture) + near-black overlay jpg at 0.7, padding 130px/0: the 'short' hero Ben flagged",
+  "assets": {
+    "logo_on_dark": "NNQLhuxelcyq.png 800x284 (white FIGHTERS text)",
+    "logo_on_light": "dMDrR8e3UV6j.png 400x126 (black FIGHTERS text)",
+    "photo_mitts": "vSgJGmZ92CCW.jpg (coach + double-end bag work; 800px max in capture, 2560px original on server)",
+    "photo_sparring": "VpKaCo4RKC1g.webp 2560x1710 (sparring pair + FIGHTERS shirt coach; alt on live site reads 'nashvile-mma')",
+    "texture": "GPaZLL3k4Gmh.png",
+    "favicons": "NIrC38hlsySB.png 180 / pQ8IzUg5ZEPr.png 192 / SWx1dPgs1W73.png 32"
+  },
+  "revisions": [
+    "2026-08-24 Ben, round 1: display face Jost -> Archivo; no em dashes anywhere; no blog; hero back to background video with photos moved into sections (one use each); marquee replaced by red Our Classes ticker (Ben's class names); classes section added with 01-04 ring numerals; color worked in (dark hero, red ticker, dark classes band).",
+    "2026-08-24 Ben, round 2: circles retired as decoration, boxing-ring square outline (ropes + red corner posts) is the deco motif; photos landscape 3/2 (the 3/4 crop butchered the landscape shots); pre-footer email band removed; Google Map + Facebook into the footer; phone in the header; classes become a self-advancing fanned card-stack slideshow (vanilla rebuild of the React CardStack Ben shared), numbering dropped; testimonials section added with placeholder cards awaiting real reviews; ambient red glow drifting on light sections, leaning toward the pointer.",
+    "2026-08-25 Ben, round 3: boxing-ring square decor dropped everywhere (gradient bg code coming from Ben); ticker slimmed to class names with slash separators, no label; testimonials filled with real verbatim reviews (one named Google review, two site testimonials from fightersnashville.com).",
+    "2026-08-26: WordPress content export received (Tools>Export XML). Found 16 real pages: Coaches/Schedule/Boxing-Classes-index/What-to-Expect are finished real copy; Beginners/Youth/Competition-Team class pages have 3 genuine paragraphs each buried in unfinished CrossFit-theme demo furniture (fake service cards, pricing table, 4-city contact list) which was dropped, not shipped; Our Gyms is 2/3 real (matches the light/dark interlink concept) with a placeholder testimonials/pricing tail; FAQs is entirely Lorem Ipsum answers, not buildable yet. First class-page template built and published as its own artifact: Beginners Boxing Class, photo hero (reusing the AI class-card photo) + real copy + cross-page ticker linking the four classes to each other. New shared files src/data/classes.js and src/components/ClassTicker.astro."
+  ]
+}

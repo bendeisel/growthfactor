@@ -1,0 +1,100 @@
+---
+import '@fontsource/archivo/500.css';
+import '@fontsource/archivo/700.css';
+import '@fontsource/archivo/800.css';
+import '@fontsource/archivo/900.css';
+import '@fontsource/didact-gothic/400.css';
+import '@fontsource/josefin-sans/700.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LeadPopup from '../components/LeadPopup.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsActivityLocation',
+  name: 'Fighters Boxing Gym',
+  url: Astro.site?.toString(),
+  email: 'support@fightersnashville.com',
+  telephone: '+1-629-289-2988',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '405 42nd Ave N',
+    addressLocality: 'Nashville',
+    addressRegion: 'TN',
+    postalCode: '37209',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 36.1527649,
+    longitude: -86.8374466,
+  },
+  sameAs: ['https://www.instagram.com/fightersnashville/'],
+  image: new URL('/img/sparring-1600.webp', Astro.site).toString(),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Fighters Boxing Gym" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/img/sparring-1600.webp', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/favicon-180.png" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <!-- pages add page-specific structured data here -->
+    <slot name="head" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <LeadPopup />
+
+    <script>
+      // The schedule pages carry their times in the HTML already; this
+      // re-checks Sanity on load so a class-time edit reaches the live site
+      // without a rebuild. No-ops on pages with no schedule on them.
+      import { syncSchedule } from '../scripts/schedule-live.js';
+      syncSchedule();
+    </script>
+
+    <script>
+      // Reveal on scroll: the entrance move measured on the WP build
+      // (opacity 0->1, y 20px->0). Vanilla so it can drop into any platform.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

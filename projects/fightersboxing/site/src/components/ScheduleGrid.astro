@@ -1,0 +1,124 @@
+---
+// THE ONE SCHEDULE GRID
+//
+// Every place on the site that shows class times renders this same
+// component: the main week board, each class page's own times, and the
+// kids block. One row per time actually in use, seven day columns, time
+// rail down the left, so the same hour lines up across every day and every
+// page looks like the same schedule instead of three different ones.
+//
+// The classes come from Sanity at build time and get re-checked in the
+// browser, so the gym changes a class time once and every grid on the site
+// follows.
+import { matrix } from '../data/schedule.js';
+import { getSessions } from '../lib/schedule-source.js';
+import { renderMatrix } from '../lib/render-schedule.js';
+
+interface Props {
+  program?: string;
+  audience?: string;
+}
+const { program, audience } = Astro.props as Props;
+
+const sessions = await getSessions();
+const rows = matrix(sessions, { program, audience });
+// Rendered through the shared renderer so the browser can re-render the
+// same markup after checking Sanity for a change.
+const matrixHtml = renderMatrix(rows);
+---
+
+<div class="matrix-scroll">
+  <div
+    class="matrix"
+    data-live="matrix"
+    data-program={program}
+    data-audience={audience}
+    set:html={matrixHtml}
+  />
+</div>
+
+<style is:global>
+  /* Global rather than scoped because the grid is injected as HTML by the
+     shared renderer, at build time and again after a live update, so it
+     carries no scope hash. Every selector is nested under .matrix-scroll
+     so this can drop into any page without leaking. */
+  .matrix-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius-panel) + 6px);
+    background: var(--ground);
+  }
+  .matrix-scroll [hidden] { display: none !important; }
+  .matrix {
+    display: grid;
+    grid-template-columns: 76px repeat(7, minmax(104px, 1fr));
+    min-width: 720px;
+  }
+  .matrix .m-corner, .matrix .m-head {
+    background: var(--accent);
+    color: var(--on-dark);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 11px 6px;
+  }
+  .matrix .m-corner { position: sticky; left: 0; z-index: 2; }
+  .matrix .m-head-short { display: none; }
+  .matrix .m-time {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--ground);
+    border-top: 1px solid var(--border);
+    padding: 12px 12px 12px 10px;
+    text-align: right;
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .matrix .m-cell {
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    padding: 7px;
+    display: grid;
+    gap: 5px;
+    align-content: start;
+  }
+  .matrix .class-chip {
+    display: block;
+    background: var(--ground-alt);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 9px 9px 0;
+    padding: 7px 9px;
+  }
+  .matrix .chip-name {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+  .matrix .chip-until {
+    display: block;
+    margin-top: 2px;
+    font-family: var(--font-action);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .matrix .m-head-long { display: none; }
+    .matrix .m-head-short { display: inline; }
+    .matrix { min-width: 620px; grid-template-columns: 64px repeat(7, minmax(78px, 1fr)); }
+  }
+</style>

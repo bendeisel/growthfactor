@@ -1,0 +1,106 @@
+---
+// THE ADULT WEEK
+//
+// Filter chips plus the shared schedule grid (ScheduleGrid.astro), filtered
+// to adults only. Kids classes are not here: they get their own grid
+// further down /schedule/ and their own page, using the exact same
+// component so every schedule on the site looks like the same schedule.
+import ScheduleGrid from './ScheduleGrid.astro';
+import { programs } from '../data/schedule.js';
+
+const chips = programs.filter((p) => p.audience === 'adult');
+---
+
+<div class="cal">
+  <div class="filters" role="group" aria-label="Filter the schedule by class">
+    <button class="chip is-on" type="button" data-filter="all" aria-pressed="true">All classes</button>
+    {
+      chips.map((p) => (
+        <button class="chip" type="button" data-filter={p.slug} aria-pressed="false">
+          {p.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <ScheduleGrid audience="adult" />
+  <p class="matrix-note">Adult classes and open gym. Kids classes are below.</p>
+</div>
+
+<style>
+  .cal { position: relative; z-index: 1; }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(8px, 1vw, 12px);
+    margin-bottom: clamp(20px, 2.6vw, 32px);
+  }
+  .chip {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .chip:hover, .chip:focus-visible { border-color: var(--accent); color: var(--accent); }
+  .chip.is-on {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-dark);
+  }
+  .matrix-note {
+    margin: 14px 0 0;
+    font-size: 13px;
+    color: var(--text-light);
+  }
+</style>
+
+<script>
+  // Filtering is progressive: without JavaScript every class is already on
+  // the page and the chips simply do nothing.
+  const cal = document.querySelector('.cal');
+  if (cal) {
+    const chips = cal.querySelectorAll('.chip');
+
+    const apply = (filter) => {
+      chips.forEach((c) => {
+        const on = c.dataset.filter === filter;
+        c.classList.toggle('is-on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+
+      // Queried at apply time, not cached: the browser may have re-rendered
+      // the grid from Sanity since the page loaded.
+      const shownPerRow = new Map();
+      cal.querySelectorAll('.class-chip').forEach((chip) => {
+        const row = chip.closest('.m-cell')?.dataset.row;
+        const match =
+          filter === 'all' || (chip.dataset.programs || '').split(' ').includes(filter);
+        chip.hidden = !match;
+        if (match && row) shownPerRow.set(row, (shownPerRow.get(row) || 0) + 1);
+      });
+
+      // A time with nothing left in it drops out, so filtering keeps the
+      // grid as tight as it is unfiltered.
+      cal.querySelectorAll('[data-row]').forEach((el) => {
+        el.hidden = !shownPerRow.get(el.dataset.row);
+      });
+    };
+
+    chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter)));
+
+    // A live update replaces the grid, so re-apply the active filter.
+    document.addEventListener('schedule:updated', () => {
+      const active = cal.querySelector('.chip.is-on');
+      apply(active ? active.dataset.filter : 'all');
+    });
+  }
+</script>

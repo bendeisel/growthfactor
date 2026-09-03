@@ -1,0 +1,74 @@
+---
+// The red Our-Classes ticker, reused on every class page. On the homepage
+// each item points here via #classes; on an inner page each item points to
+// its own class page for real internal linking (site-wide navigation, not
+// just a homepage jump-link).
+import { classes } from '../data/classes.js';
+
+interface Props {
+  currentHref?: string;
+}
+const { currentHref } = Astro.props as Props;
+const tickerRepeats = 3;
+---
+
+<div class="ticker-track">
+  {
+    [0, 1].map(() => (
+      <span class="ticker-seg" aria-hidden="true">
+        {Array.from({ length: tickerRepeats }).map(() => (
+          <>
+            {classes.map((c) => (
+              <>
+                {c.href === currentHref ? (
+                  <span class="ticker-item is-current">{c.name}</span>
+                ) : (
+                  <a class="ticker-item" href={c.href}>{c.name}</a>
+                )}
+                <span class="ticker-sep" aria-hidden="true" />
+              </>
+            ))}
+          </>
+        ))}
+      </span>
+    ))
+  }
+</div>
+
+<style>
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 30s linear infinite;
+  }
+  .ticker-seg { display: flex; align-items: center; }
+  .ticker-item {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(20px, 2.6vw, 34px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: var(--on-dark);
+    white-space: nowrap;
+    padding: 0 0.55em;
+  }
+  a.ticker-item:hover, a.ticker-item:focus-visible { color: rgba(255, 255, 255, 0.75); }
+  .ticker-item.is-current { color: rgba(255, 255, 255, 0.55); text-decoration: underline; text-underline-offset: 4px; }
+  .ticker-sep {
+    display: inline-block;
+    width: clamp(8px, 1vw, 12px);
+    height: clamp(8px, 1vw, 12px);
+    background: rgba(255, 255, 255, 0.75);
+    transform: rotate(45deg);
+    margin: 0 0.5em;
+    flex: none;
+    align-self: center;
+  }
+  @keyframes ticker-scroll {
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { animation: none; }
+  }
+</style>

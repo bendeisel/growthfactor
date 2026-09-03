@@ -1,0 +1,132 @@
+---
+// BOXING CLASSES: the hub the header's "Boxing Classes" nav item has
+// pointed at since the first round of inner pages (it links here directly,
+// not just to its three children).
+//
+// Copy from the client's WordPress export (Tools > Export, 2026-08-26),
+// with one repair logged in source/copy.md: the Boxing Basics paragraph
+// opened mid-sentence on the client's own live page ("that teaches the
+// fundamentals..."), almost certainly from the same dash-stripping issue
+// flagged for other pages in this project. Repaired to a complete sentence
+// rather than left broken or invented from nothing.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+import { classes } from '../data/classes.js';
+
+const pitches = {
+  'Boxing basics': {
+    eyebrow: 'New to boxing?',
+    body: `<p>Perfect. This class teaches the fundamentals: stance, footwork, defense, and
+      proper punching mechanics, all in a safe, high-energy environment.</p>
+      <p>You&rsquo;ll learn how to move like a boxer, hit the bag with purpose, and build
+      real conditioning without ever taking a punch. Every round is designed to challenge
+      you, build confidence, and help you see progress fast.</p>
+      <p>No experience needed. Just bring your gloves, your determined attitude, and
+      we&rsquo;ll handle the rest.</p>`,
+  },
+  'Youth boxing': {
+    eyebrow: 'For ages 8 and up',
+    body: `<p>Our <b>Youth Boxing Program</b> teaches kids more than just how to throw
+      punches. It builds confidence, discipline, and focus.</p>
+      <p>This class introduces proper boxing fundamentals in a fun, structured, and
+      <b>non-contact</b> environment. Kids learn stance, movement, blocking, coordination,
+      and technique while developing the respect and work ethic that only come from real
+      training.</p>
+      <p>Led by experienced coaches who know how to challenge and motivate, every session
+      helps kids grow stronger inside and out. Whether your child&rsquo;s goal is fitness,
+      confidence, or competition down the road, this is where it all starts.</p>`,
+  },
+  'Competition Team': {
+    eyebrow: 'For the serious',
+    body: `<p>This is where the work gets put to the test. Our <b>Competition Team
+      Training</b> program is built for dedicated athletes ready to level up, whether
+      you&rsquo;re chasing your first amateur fight or already grinding toward the pros.</p>
+      <p>This advanced class combines technical refinement, ring strategy, sparring, and
+      fight conditioning under the guidance of experienced coaches who&rsquo;ve been there
+      and done it. Every round is focused, every drill has a purpose, and every session
+      moves you closer to being fight-ready.</p>
+      <p>If you&rsquo;re ready to see what you&rsquo;re made of, this is the place to prove
+      it.</p>`,
+  },
+};
+---
+
+<Base
+  title="Boxing Classes | Fighters Boxing Gym Nashville"
+  description="Three ways to train at Fighters Boxing Gym: Boxing Basics for beginners, Youth Boxing for ages 8 and up, and Competition Team Training for serious athletes."
+>
+  <PageHeader lines={['BOXING', 'CLASSES']} sub="Three programs, one gym, every level" />
+
+  {
+    classes.map((c, i) => {
+      const pitch = pitches[c.name];
+      return (
+        <section class={`split grain fluid-host ${i % 2 ? 'alt' : ''}`}>
+          <div class={`wrap split-grid ${i % 2 ? '' : 'flip'}`}>
+            <figure class="split-media mat mat-warm reveal">
+              <img
+                src={c.image}
+                alt={`${c.name} at Fighters Boxing Gym`}
+                loading="lazy"
+                width="1040"
+                height="640"
+              />
+            </figure>
+            <div class="split-copy">
+              <p class="kicker reveal">{pitch.eyebrow}</p>
+              <h2 class="reveal">{c.name}</h2>
+              <div class="reveal" set:html={pitch.body} />
+              <span class="btn-ring reveal">
+                <a class="btn" href={c.href}>See the class</a>
+              </span>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .kicker {
+    font-family: var(--font-action);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: clamp(10px, 1.2vw, 16px);
+  }
+  .split .btn-ring { margin-top: clamp(18px, 2.5vw, 30px); }
+  .split .btn { text-decoration: none; }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>
