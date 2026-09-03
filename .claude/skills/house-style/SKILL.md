@@ -122,8 +122,10 @@ from outside the client. Motion is Axis 6 and it is chosen here, at design
 time, not discovered later during the build.
 
 **Step 4 — Build.** Copy verbatim, kernel exact, motifs amplified, motion
-derived from the geometry rather than picked (`references/motion.md`). House
-defaults for small-business builds (standing client instruction): lead-capture
+derived from the geometry rather than picked (`references/motion.md`). Build as
+ONE multi-page artifact from `../site-factory/templates/site-shell.html`, never
+one artifact per page — see `../site-factory/references/multipage-artifact.md`.
+House defaults for small-business builds (standing client instruction): lead-capture
 forms open as a popup/modal from every request CTA rather than living only
 inline, and interactive showcases should be portable — vanilla JS/CSS that can
 drop into a template platform as a custom block, not framework-bound
@@ -186,6 +188,23 @@ defaults instead of the client's identity. Stop and go back to Step 2.
 Motion has its own banned list — the site-wide scroll library, counting stat
 counters, typewriter headlines, hover-lift-plus-shadow, autoplay carousels,
 preloaders, scroll-jacking. See `references/motion.md`.
+
+## The routines that run this process
+
+This skill is the design law. The `site-*` skills are the procedures that
+apply it end to end, and `site-factory` is the shared spine underneath them:
+
+| Routine | For |
+| --- | --- |
+| `site-redesign` | The client has a live site to upgrade |
+| `site-new` | No site; identity assembled from research |
+| `site-match` | A reference site for structure, client brand for identity |
+| `site-preview` | Publish a build to `preview.<domain>/<slug>` for approval |
+| `site-ship` | Deploy an approved build to the client's domain |
+| `site-factory` | The spine: build pipeline, registry, Hostinger, artifact shell |
+
+Every one of them runs Steps 0 through 6 above. The locks are not optional
+because a routine is in a hurry.
 
 ## Reference files
 
