@@ -1,0 +1,399 @@
+<title>The $297 Gym Program</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root{
+    --ground:#EDEFF4; --surface:#FFFFFF; --sunk:#E3E7EF;
+    --ink:#0A1122; --body:#232F45; --muted:#5B6479;
+    --line:#C7CDDA; --hair:#D9DEE8;
+    --accent:#A94E1C; --bar:#C9622E; --bench:#0A1122;
+    --warn:#9E3A32; --warn-bg:#F3DFDC;
+    --ok:#1F6B4E; --ok-bg:#DCEDE4;
+    --maxw:1060px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0A1122; --surface:#111A2E; --sunk:#0D1526;
+      --ink:#E7ECF5; --body:#C3CCDC; --muted:#8794AC;
+      --line:#243252; --hair:#1B2740;
+      --accent:#E58A4F; --bar:#E58A4F; --bench:#E7ECF5;
+      --warn:#E58177; --warn-bg:#2C1614;
+      --ok:#63C297; --ok-bg:#12291F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0A1122; --surface:#111A2E; --sunk:#0D1526;
+    --ink:#E7ECF5; --body:#C3CCDC; --muted:#8794AC;
+    --line:#243252; --hair:#1B2740;
+    --accent:#E58A4F; --bar:#E58A4F; --bench:#E7ECF5;
+    --warn:#E58177; --warn-bg:#2C1614;
+    --ok:#63C297; --ok-bg:#12291F;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground); color:var(--body);
+    font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+    font-size:16px; line-height:1.62; margin:0; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px 96px}
+  .prose{max-width:70ch}
+  p{margin:0 0 1em}
+  strong{color:var(--ink); font-weight:600}
+  code,.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  code{font-size:.86em; background:var(--sunk); padding:1px 5px; color:var(--ink)}
+  .num{font-variant-numeric:tabular-nums}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin:0 0 10px;
+  }
+  h1{font-size:clamp(38px,6vw,58px); line-height:1.02; letter-spacing:-.024em; font-weight:700; color:var(--ink); margin:0 0 18px; text-wrap:balance}
+  h2{font-size:clamp(24px,3.4vw,31px); line-height:1.14; letter-spacing:-.017em; font-weight:700; color:var(--ink); margin:0 0 6px; text-wrap:balance}
+  h3{font-size:18px; line-height:1.3; letter-spacing:-.008em; font-weight:600; color:var(--ink); margin:0 0 8px}
+
+  header.top{border-bottom:1px solid var(--line); padding:56px 0 30px}
+  .kicker{
+    display:flex; flex-wrap:wrap; gap:14px; align-items:baseline;
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:26px;
+  }
+  .kicker .b{color:var(--accent)}
+  .lede{font-size:19px; line-height:1.55; max-width:62ch; margin:0}
+
+  .strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); border-bottom:1px solid var(--line); margin-bottom:52px}
+  .stat{padding:22px 20px 22px 0; border-right:1px solid var(--hair)}
+  .stat:last-child{border-right:0}
+  .stat .n{font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; font-size:30px; font-weight:600; line-height:1; color:var(--ink); display:block}
+  .stat.hot .n{color:var(--accent)}
+  .stat .l{display:block; margin-top:8px; font-size:11px; font-weight:600; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; line-height:1.5}
+
+  section{padding-top:52px}
+  hr.rule{border:0; border-top:1px solid var(--line); margin:52px 0 0}
+
+  /* ---------- chart ---------- */
+  .chart{margin-top:30px}
+  .chart-note{font-size:13px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin:0 0 18px; letter-spacing:.02em}
+  .row{
+    display:grid; grid-template-columns:minmax(150px,210px) 1fr 62px;
+    gap:16px; align-items:center; padding:7px 0; position:relative;
+  }
+  .row .who{min-width:0}
+  .row .who .cname{display:block; font-size:14px; font-weight:600; color:var(--ink); line-height:1.25; overflow-wrap:anywhere}
+  .row .who .gym{display:block; font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; margin-top:2px}
+  .track{position:relative; height:26px; background:var(--sunk)}
+  .bar{position:absolute; left:0; top:0; bottom:0; background:var(--bar)}
+  .bench{position:absolute; top:-4px; bottom:-4px; width:0; border-left:2px dashed var(--bench); opacity:.62; z-index:2}
+  .row .val{font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; font-size:14px; font-weight:600; color:var(--ink); text-align:right}
+  .tip{
+    position:absolute; left:calc(150px + 16px); bottom:100%; margin-bottom:2px;
+    background:var(--ink); color:var(--ground); font-family:'JetBrains Mono',monospace;
+    font-size:11px; padding:4px 8px; white-space:nowrap; opacity:0; pointer-events:none;
+    transition:opacity .12s ease; z-index:3;
+  }
+  .row:hover .tip, .row:focus-within .tip{opacity:1}
+  .axis{display:grid; grid-template-columns:minmax(150px,210px) 1fr 62px; gap:16px; margin-top:6px}
+  .axis .ticks{position:relative; height:22px; border-top:1px solid var(--line)}
+  .axis .ticks span{
+    position:absolute; top:5px; transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted); font-variant-numeric:tabular-nums;
+  }
+  .benchkey{
+    display:flex; align-items:center; gap:8px; margin-top:16px;
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); letter-spacing:.04em;
+  }
+  .benchkey i{display:inline-block; width:0; height:14px; border-left:2px dashed var(--bench); opacity:.62}
+
+  .tblwrap{overflow-x:auto; margin-top:26px}
+  table{border-collapse:collapse; width:100%; min-width:540px}
+  th{text-align:left; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); padding:0 14px 8px 0; border-bottom:1px solid var(--line)}
+  th.r,td.r{text-align:right}
+  td{padding:11px 14px 11px 0; border-bottom:1px solid var(--hair); font-size:14.5px; line-height:1.5; vertical-align:top}
+  td.name{color:var(--ink); font-weight:500}
+  td.r{font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums}
+  tr.tot td{border-bottom:0; border-top:2px solid var(--line); color:var(--ink); font-weight:600; padding-top:12px}
+
+  /* ---------- findings ---------- */
+  .finds{display:flex; flex-direction:column; margin-top:26px}
+  .find{border-top:1px solid var(--hair); padding:22px 0; display:grid; grid-template-columns:64px 1fr; gap:20px}
+  .find:last-child{border-bottom:1px solid var(--hair)}
+  .find .fig{font-family:'JetBrains Mono',monospace; font-size:19px; font-weight:600; color:var(--accent); font-variant-numeric:tabular-nums; line-height:1.25; padding-top:2px}
+  .find p{margin:0; font-size:15px; color:var(--muted); line-height:1.55}
+  .find p + p{margin-top:8px}
+
+  /* ---------- in / out ---------- */
+  .split{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:0; margin-top:28px}
+  .col{padding:24px 26px 24px 0}
+  .col + .col{border-left:1px solid var(--hair); padding-left:26px}
+  .col.in{border-top:3px solid var(--ok)}
+  .col.out{border-top:3px solid var(--warn)}
+  .col h3{margin-bottom:14px}
+  ul.list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px}
+  ul.list li{position:relative; padding-left:22px; font-size:14.5px; line-height:1.5}
+  ul.list li::before{content:""; position:absolute; left:0; top:.5em; width:8px; height:8px}
+  .col.in ul.list li::before{background:var(--ok)}
+  .col.out ul.list li::before{border:1.5px solid var(--warn)}
+  ul.list li b{color:var(--ink); font-weight:600}
+
+  /* ---------- modules ---------- */
+  .mods{margin-top:28px; border-top:1px solid var(--line)}
+  .mod{display:grid; grid-template-columns:46px 1fr 84px; gap:20px; padding:18px 0; border-bottom:1px solid var(--hair); align-items:baseline}
+  .mod .mid{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--accent); letter-spacing:.06em}
+  .mod .mt{font-size:16px; font-weight:600; color:var(--ink); line-height:1.3}
+  .mod .md{font-size:14px; color:var(--muted); margin-top:4px; line-height:1.5}
+  .mod .mr{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); text-align:right; font-variant-numeric:tabular-nums}
+  .mod .badge{display:inline-block; font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; padding:2px 6px; margin-left:8px; vertical-align:2px; background:var(--ok-bg); color:var(--ok)}
+
+  /* ---------- callout ---------- */
+  .callout{border-left:4px solid var(--warn); background:var(--surface); padding:22px 24px; margin-top:28px}
+  .callout h3{color:var(--warn); margin-bottom:8px}
+  .callout p{font-size:15px; margin-bottom:.8em}
+  .callout p:last-child{margin-bottom:0}
+
+  ol.opens{list-style:none; counter-reset:o; margin:26px 0 0; padding:0}
+  ol.opens li{counter-increment:o; border-top:1px solid var(--hair); padding:18px 0 18px 50px; position:relative}
+  ol.opens li:last-child{border-bottom:1px solid var(--hair)}
+  ol.opens li::before{content:counter(o,decimal-leading-zero); position:absolute; left:0; top:18px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--accent)}
+  ol.opens b{display:block; color:var(--ink); font-size:16px; font-weight:600; margin-bottom:3px}
+  ol.opens span{font-size:14.5px; color:var(--muted); line-height:1.55}
+
+  footer{border-top:1px solid var(--line); margin-top:56px; padding-top:22px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); letter-spacing:.04em; line-height:1.7}
+
+  @media (max-width:760px){
+    .wrap{padding:0 20px 72px}
+    .row,.axis{grid-template-columns:1fr 56px}
+    .row .who{grid-column:1 / -1}
+    .axis .spacer{display:none}
+    .tip{left:0}
+    .col + .col{border-left:0; padding-left:0}
+    .col{padding-right:0}
+    .mod{grid-template-columns:40px 1fr; }
+    .mod .mr{grid-column:2; text-align:left; margin-top:4px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span class="b">Growth Factor AI</span><span>&#183;</span>
+    <span>Gym coaching</span><span>&#183;</span>
+    <span>Baseline 4 Aug to 2 Sep 2026</span>
+  </div>
+  <h1>The $297 Gym Program</h1>
+  <p class="lede">Three gyms already pay. Between them they spend $3,101 a month
+  on ads and buy the same lead for anywhere from $6.42 to $16.19. The program
+  exists to close that gap, and the gap is measured, not claimed.</p>
+</header>
+
+<div class="strip">
+  <div class="stat"><span class="n">$3,101</span><span class="l">ad spend<br>last 30 days</span></div>
+  <div class="stat"><span class="n">279</span><span class="l">leads<br>last 30 days</span></div>
+  <div class="stat"><span class="n">$11.12</span><span class="l">blended<br>cost per lead</span></div>
+  <div class="stat hot"><span class="n">2.5&#215;</span><span class="l">spread between<br>best and worst</span></div>
+</div>
+
+<section>
+  <p class="eyebrow">Measured, not estimated</p>
+  <h2>What a lead costs, by campaign</h2>
+  <p class="chart-note">Meta &#183; 4 Aug to 2 Sep 2026 &#183; live campaigns only &#183; pulled from AdKit</p>
+
+  <div class="chart">
+    <div class="row" tabindex="0"><div class="who"><span class="cname">Kids Martial Arts</span><span class="gym">Nashville MMA</span></div><div class="track"><span class="bar" style="width:89.9%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$16.19</div><span class="tip">$599.14 spent &#183; 37 leads &#183; hook 32.87%</span></div>
+    <div class="row" tabindex="0"><div class="who"><span class="cname">$80/m for a 3 month commitment</span><span class="gym">Fighters Boxing</span></div><div class="track"><span class="bar" style="width:88.6%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$15.94</div><span class="tip">$573.66 spent &#183; 36 leads &#183; hook 13.99%</span></div>
+    <div class="row" tabindex="0"><div class="who"><span class="cname">$99 Unlimited Deal (July Video)</span><span class="gym">Fighters Boxing</span></div><div class="track"><span class="bar" style="width:62.7%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$11.29</div><span class="tip">$474.37 spent &#183; 42 leads &#183; hook 16.33%</span></div>
+    <div class="row" tabindex="0"><div class="who"><span class="cname">Wrestling Ads</span><span class="gym">Nashville MMA</span></div><div class="track"><span class="bar" style="width:58.1%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$10.45</div><span class="tip">$302.94 spent &#183; 29 leads &#183; hook 29.53%</span></div>
+    <div class="row" tabindex="0"><div class="who"><span class="cname">Jiu-Jitsu Ads</span><span class="gym">Nashville MMA</span></div><div class="track"><span class="bar" style="width:55.6%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$10.01</div><span class="tip">$600.73 spent &#183; 60 leads</span></div>
+    <div class="row" tabindex="0"><div class="who"><span class="cname">Adult Boxing</span><span class="gym">Fighters Boxing</span></div><div class="track"><span class="bar" style="width:48.9%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$8.80</div><span class="tip">$255.18 spent &#183; 29 leads &#183; hook 20.99%</span></div>
+    <div class="row" tabindex="0"><div class="who"><span class="cname">Q3 MMA Super Ad (copy)</span><span class="gym">Furst Place MMA</span></div><div class="track"><span class="bar" style="width:35.7%"></span><span class="bench" style="left:35.7%"></span></div><div class="val">$6.42</div><span class="tip">$295.18 spent &#183; 46 leads &#183; CTR 2.78%</span></div>
+
+    <div class="axis">
+      <div class="spacer"></div>
+      <div class="ticks">
+        <span style="left:0">$0</span>
+        <span style="left:22.2%">$4</span>
+        <span style="left:44.4%">$8</span>
+        <span style="left:66.7%">$12</span>
+        <span style="left:88.9%">$16</span>
+      </div>
+      <div></div>
+    </div>
+    <div class="benchkey"><i></i> Cohort best, $6.42 at Furst Place MMA</div>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <caption class="visually-hidden" style="position:absolute;left:-9999px">Ad spend, leads and cost per lead by gym</caption>
+      <thead><tr><th>Gym</th><th class="r">Spend</th><th class="r">Leads</th><th class="r">Blended CPL</th><th class="r">Live</th><th class="r">Dormant</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Nashville MMA Training Camp</td><td class="r">$1,502.81</td><td class="r">126</td><td class="r">$11.93</td><td class="r">3</td><td class="r">13</td></tr>
+        <tr><td class="name">Fighters Boxing Gym</td><td class="r">$1,303.21</td><td class="r">107</td><td class="r">$12.18</td><td class="r">3</td><td class="r">2</td></tr>
+        <tr><td class="name">Furst Place MMA</td><td class="r">$295.18</td><td class="r">46</td><td class="r">$6.42</td><td class="r">1</td><td class="r">0</td></tr>
+        <tr class="tot"><td>Cohort</td><td class="r">$3,101.20</td><td class="r">279</td><td class="r">$11.12</td><td class="r">7</td><td class="r">15</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">What the numbers say</p>
+  <h2>Four findings that set the curriculum</h2>
+  <div class="finds">
+    <div class="find">
+      <div class="fig">$361</div>
+      <div>
+        <p><strong>One campaign is leaking more than the coaching costs.</strong>
+        Kids Martial Arts bought 37 leads for $599.14. At the cohort's own best
+        rate of $6.42, those same 37 leads cost $237.54. That is $361.60 a month
+        inside a single campaign, in one gym, this month.</p>
+      </div>
+    </div>
+    <div class="find">
+      <div class="fig">32.9%</div>
+      <div>
+        <p><strong>The worst CPL has the best creative, so the offer is the
+        problem.</strong> Kids Martial Arts stops more scrolls than anything else
+        on the board and still buys the most expensive lead. Changing the video
+        will not fix it.</p>
+        <p>The opposite case is right there too: Fighters' <code>$80/m for a 3 month
+        commitment</code> hooks 13.99% and pays $15.94. That one really is the
+        creative. Telling those two apart is module 4.</p>
+      </div>
+    </div>
+    <div class="find">
+      <div class="fig">279</div>
+      <div>
+        <p><strong>The leads are already arriving and nobody has timed the
+        reply.</strong> 279 people asked about training last month across three
+        gyms. Response time is not measured anywhere. That makes the follow-up
+        bot the cheapest available win, because it costs nothing per lead, which
+        is why it is module 2 and not module 6.</p>
+      </div>
+    </div>
+    <div class="find">
+      <div class="fig">107<span style="color:var(--muted)">/</span>45</div>
+      <div>
+        <p><strong>At Fighters, leads outnumber landing page views.</strong> 107
+        leads against 45 page views means they arrive through Meta instant forms
+        and never touch the website. Worth saying plainly for a company that
+        sells websites: on these campaigns the site is not in the ad path.</p>
+        <p>Instant-form leads are also lower intent, which raises the value of a
+        fast reply rather than lowering it. Modules 2 and 5 are one system.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">$297 per month</p>
+  <h2>The offer</h2>
+  <div class="split">
+    <div class="col in">
+      <h3>What it buys</h3>
+      <ul class="list">
+        <li><b>Onboarding, 90 minutes one to one.</b> Connect the accounts, pull the baseline, build one ad together while they watch.</li>
+        <li><b>Weekly call, 60 minutes.</b> Whole cohort, same time every week. Hot seats and account reviews.</li>
+        <li><b>Eight modules.</b> Guided builds they run on their own account, async.</li>
+        <li><b>Four systems they own.</b> Follow-up bot, front desk agent, review engine, ad build. In their GHL, their ad account.</li>
+        <li><b>Monthly numbers.</b> The baseline re-pulled and compared. Spend, leads, CPL per campaign, what moved.</li>
+        <li><b>A channel</b> for questions between calls.</li>
+      </ul>
+    </div>
+    <div class="col out">
+      <h3>What it does not</h3>
+      <ul class="list">
+        <li><b>We do not run the ads.</b> They do. We build the first one with them.</li>
+        <li><b>We do not answer the leads.</b> Their bot does, and they own it.</li>
+        <li><b>Website is separate.</b> $100 a month, up to 10 pages.</li>
+        <li><b>AEO, GEO and technical SEO are quoted</b> at $200 to $500. Local and basic on-page SEO are already in the website plan.</li>
+        <li><b>Ad spend is theirs</b>, paid to the platform directly. It never runs through us.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="prose" style="margin-top:28px;font-size:15px">The price only works if
+  the human time is bounded. Onboarding is 90 minutes once per member. The weekly
+  call is 60 minutes and does not get longer as the cohort grows. Everything else
+  is async and reusable. That is <strong>four hours of live time a month
+  regardless of headcount</strong>. Twenty members is $5,940 a month against
+  those four hours plus onboarding spread across the quarter. The failure mode is
+  the same one that kills $100 websites: if an answer is not in a module yet,
+  answering it on the weekly call is what turns it into one.</p>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">Ordered by money, not difficulty</p>
+  <h2>Eight modules</h2>
+  <div class="mods">
+    <div class="mod"><span class="mid">01</span><div><span class="mt">Know your number<span class="badge">Scripted</span></span><span class="md">Pull the report, read a real row, say the blended CPL out loud. Ends with four numbers posted before the call.</span></div><span class="mr">9 min</span></div>
+    <div class="mod"><span class="mid">02</span><div><span class="mt">Speed to lead<span class="badge">Scripted</span></span><span class="md">Build the GHL follow-up bot, fill twelve knowledge base slots, run two weeks in suggestive mode. Ends with the owner booking themselves in by text.</span></div><span class="mr">12 min</span></div>
+    <div class="mod"><span class="mid">03</span><div><span class="mt">Clean the account</span><span class="md">Archive 15 dormant campaigns, resolve the duplicate name, adopt <code>Audience | Offer | Month</code>. Turn Messenger off.</span></div><span class="mr">8 min</span></div>
+    <div class="mod"><span class="mid">04</span><div><span class="mt">Two ways an ad fails</span><span class="md">Hook rate against CPL. High hook plus high CPL is an offer problem; low hook plus high CPL is a creative problem. Diagnose their own worst campaign.</span></div><span class="mr">11 min</span></div>
+    <div class="mod"><span class="mid">05</span><div><span class="mt">Build the ad</span><span class="md">One campaign built as a draft in their own AdKit project. Drafts by default, published only by them, reviewed on the weekly call first.</span></div><span class="mr">12 min</span></div>
+    <div class="mod"><span class="mid">06</span><div><span class="mt">The front desk</span><span class="md">Same knowledge base, second surface. Site and social DMs, with a hard handoff rule for complaints, injuries and billing.</span></div><span class="mr">9 min</span></div>
+    <div class="mod"><span class="mid">07</span><div><span class="mt">Reviews without breaking the law</span><span class="md">Seven fields, three lifetime asks 30 days apart, exit on any star rating. The bot never drafts review text and the link is never withheld on sentiment.</span></div><span class="mr">11 min</span></div>
+    <div class="mod"><span class="mid">08</span><div><span class="mt">The monthly loop</span><span class="md">Same report, same window, same four numbers, one change per month. Ends with a recurring appointment in the calendar.</span></div><span class="mr">8 min</span></div>
+  </div>
+  <p class="prose" style="margin-top:24px;font-size:15px">Recording standard:
+  screen recording of a real account, 8 to 12 minutes, one deliverable stated in
+  the first 30 seconds and shown working in the last 60, and every module shows
+  the thing that goes wrong. No slides, no music, no intro animation.</p>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">Who is in</p>
+  <h2>The cohort</h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>Gym</th><th>Status</th><th>Ads</th><th>Site</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Nashville MMA Training Camp</td><td>Paying</td><td>Meta, Google</td><td>16 pages built, not shipped</td></tr>
+        <tr><td class="name">Fighters Boxing Gym</td><td>Paying</td><td>Meta</td><td>Homepage merged, domain unconfirmed</td></tr>
+        <tr><td class="name">Furst Place MMA</td><td>Paying</td><td>Meta</td><td>Rebuild blocked on backup</td></tr>
+        <tr><td class="name">Fuel Fortress Nashville</td><td style="color:var(--warn);font-weight:600">4 months behind</td><td>Meta, Google</td><td>Homepage built, hold</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <h3>Fuel Fortress</h3>
+    <p>Four months in arrears, roughly $1,188 outstanding, and a finished
+    homepage rebuild sitting unshipped.</p>
+    <p>Recommendation, once, then it is a business call and not a technical one:
+    <strong>do not ship the rebuild and do not add them to the cohort until the
+    balance is current.</strong> Delivering more work into an unpaid account
+    makes the balance harder to collect, because it spends the only leverage
+    left. Offer a payment plan or a clean exit. The build stays on the branch
+    either way and stays ready.</p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <p class="eyebrow">Answer before the sales page</p>
+  <h2>Open items</h2>
+  <ol class="opens">
+    <li><b>Contract length and cohort cap.</b><span>Month to month is easier to sell and easier to churn out of in week 3, before anything has worked. Three months matches how long the modules take to pay off. Separately, the weekly call stops working somewhere past 15 to 20 live participants, so pick the number before it arrives. Neither blocks recording.</span></li>
+    <li><b>AdKit access for members.</b><span>Checked against the live AdKit contract on 3 Sep. There is a public brief share link and there are workspaces, but no client seat or affiliate program surfaced in the help catalog. All five projects sit in one workspace Ben owns, which is enough to produce every member's monthly report today. The revenue share is unverified, so do not promise a seat yet. Three questions to put to AdKit are in the project README.</span></li>
+    <li><b>Google Ads is missing from the baseline.</b><span>Connected on Nashville MMA and Fuel Fortress, not pulled. Add it before the first monthly review or the report understates spend and flatters the CPL.</span></li>
+    <li><b>Nothing has measured speed to lead.</b><span>Module 2 rests on response time being the cheapest win. That is sound in general and unmeasured here. The first member to switch the bot on should record their before number, even roughly, so the module gets a real result attached to it.</span></li>
+  </ol>
+</section>
+
+<footer>
+  Baseline pulled live from AdKit, Meta, 4 Aug to 2 Sep 2026. Reach and frequency are Meta estimates.<br>
+  Rows where Meta could not match its own Results metric are excluded rather than inferred.<br>
+  Growth Factor AI &#183; September 2026
+</footer>
+
+</div>

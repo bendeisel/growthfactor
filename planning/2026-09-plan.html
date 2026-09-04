@@ -227,18 +227,21 @@
     <span>&#183;</span>
     <span>Q3 close</span>
     <span>&#183;</span>
+    <span class="b">Board cleared 3 Sep</span>
+    <span>&#183;</span>
     <span>Sep 3 to Sep 30, 2026</span>
   </div>
   <h1>The September Board</h1>
   <p class="lede">Twenty-two open pull requests, three contradictions in the docs, and 27 days
-  left in the quarter. This is what gets merged, what gets closed, and what happens each week.</p>
+  left in the quarter. The board is now cleared. This is what landed, what got closed and why, and
+  what happens each week from here.</p>
 </header>
 
 <div class="strip">
-  <div class="stat"><span class="n">23</span><span class="l">PRs opened<br>since Aug 5</span></div>
-  <div class="stat hot"><span class="n">1</span><span class="l">merged<br>into main</span></div>
-  <div class="stat"><span class="n">22</span><span class="l">still open<br>right now</span></div>
-  <div class="stat"><span class="n">7</span><span class="l">unrelated to<br>either rock</span></div>
+  <div class="stat"><span class="n">24</span><span class="l">PRs opened<br>since Aug 5</span></div>
+  <div class="stat hot"><span class="n">6</span><span class="l">merged<br>into main</span></div>
+  <div class="stat"><span class="n">8</span><span class="l">closed with<br>a reason</span></div>
+  <div class="stat"><span class="n">10</span><span class="l">still open,<br>9 of them parked</span></div>
   <div class="stat hot"><span class="n">27</span><span class="l">days left<br>in Q3</span></div>
 </div>
 
@@ -309,21 +312,27 @@
 <hr class="rule">
 
 <section>
-  <p class="eyebrow">One sitting, roughly three hours</p>
-  <h2>The board</h2>
-  <p class="prose" style="color:var(--muted);font-size:15px">Twenty-two open PRs, sorted three ways.
-  Closing a PR does not delete the branch or the work, so nothing here is lost. Every close gets a
-  one-line reason so the next session does not reopen the question.</p>
+  <p class="eyebrow">Done, 3 September</p>
+  <h2>The board, cleared</h2>
+  <p class="prose" style="color:var(--muted);font-size:15px">Executed. Five merged, eight closed
+  with a written reason, nine parked and labelled. No branch was deleted, so every closed idea is
+  still recoverable by name.</p>
+  <p class="prose" style="font-size:15px"><strong>Two corrections came out of doing it rather than
+  planning it.</strong> #12 was not merged: a file-level check showed it is a strict subset of #10,
+  so merging #10 delivered it and #12 was closed instead. And #10 is badly named. It says "hero
+  video" and it carries <strong>16 built pages of the Nashville MMA site</strong>, the data
+  pipeline behind them, and a whole <code>bmfg-gym-sites</code> build standard. That changes week 2:
+  the NMMA build is largely done, not pending.</p>
 
   <div class="lane">
-    <div class="lane-hd"><span class="chip ship">Merge now</span><span class="cnt">6 of 22</span></div>
-    <p class="lane-sub">Done, verified, and blocking a rock. Nothing about the 100-site number is
-    real until #20 is in <code>main</code>.</p>
+    <div class="lane-hd"><span class="chip ship">Merged</span><span class="cnt">5</span></div>
+    <p class="lane-sub">Two hit conflicts on the way in. #20 collided with #22 on the house-style
+    skill and <code>.gitignore</code>; #22 collided with #7 on the shipped log, which had gained a
+    <code>motion_stance</code> column. Both resolved by keeping both sides.</p>
     <div class="tblwrap"><table>
       <thead><tr><th>PR</th><th>What it is</th><th>Why it goes in</th></tr></thead>
       <tbody>
-        <tr><td class="pr">#12</td><td class="what">NMMA content harvest</td><td class="why">56 pages of verbatim copy, 115 images, full inventory. The 18-page build has no input without it.</td></tr>
-        <tr><td class="pr">#10</td><td class="what">NMMA hero video</td><td class="why">Dual-source VP9 and H.264, playback verified in a headless browser. Finished.</td></tr>
+        <tr><td class="pr">#10</td><td class="what">NMMA site, harvest and hero video</td><td class="why">16 built pages, the 56-page content harvest, 115 images, the data pipeline, and the <code>bmfg-gym-sites</code> standard. Far more than the title said.</td></tr>
         <tr><td class="pr">#23</td><td class="what">NMMA search audit</td><td class="why">The 84-duplicate-URL finding is the SEO half of the rock. Also carries the redirect map.</td></tr>
         <tr><td class="pr">#7</td><td class="what">Fighters Boxing homepage</td><td class="why">Astro build, Playwright verified at 1440 and 390. Needs a domain confirmed, not more work.</td></tr>
         <tr><td class="pr">#22</td><td class="what">Motion axis</td><td class="why">house-style had zero coverage of motion. Every site shipped this month wants it.</td></tr>
@@ -333,12 +342,13 @@
   </div>
 
   <div class="lane">
-    <div class="lane-hd"><span class="chip cut">Close</span><span class="cnt">7 of 22</span></div>
-    <p class="lane-sub">Superseded, or a different business. Branches survive. Reopen any of them in
-    Q4 by pointing at the branch.</p>
+    <div class="lane-hd"><span class="chip cut">Closed</span><span class="cnt">8</span></div>
+    <p class="lane-sub">Superseded, or a different business. Each carries a written reason naming
+    what to salvage. Branches survive, so reopening any of them is a one-line ask.</p>
     <div class="tblwrap"><table>
-      <thead><tr><th>PR</th><th>What it is</th><th>Reason to post on close</th></tr></thead>
+      <thead><tr><th>PR</th><th>What it is</th><th>Reason posted on the PR</th></tr></thead>
       <tbody>
+        <tr><td class="pr">#12</td><td class="what">NMMA content harvest</td><td class="why">Strict subset of #10, verified file by file before closing. Merging #10 delivered every path in it.</td></tr>
         <tr><td class="pr">#1</td><td class="what">WordPress template library</td><td class="why">Superseded by #20. The stack decision is already made in house-style.</td></tr>
         <tr><td class="pr">#3</td><td class="what">Lead Factory playbook</td><td class="why">Priced against a model you are not running. 30k words of GTM for $500/mo + $1,500.</td></tr>
         <tr><td class="pr">#5</td><td class="what">Distressed property leads</td><td class="why">Real estate. Not a gym, not a website. Different business.</td></tr>
@@ -351,15 +361,15 @@
   </div>
 
   <div class="lane">
-    <div class="lane-hd"><span class="chip park">Park</span><span class="cnt">9 of 22</span></div>
-    <p class="lane-sub">Real work, wrong month. Label them <code>parked</code> and leave them open so
-    they stay findable. Two get unparked on a specific date.</p>
+    <div class="lane-hd"><span class="chip park">Parked</span><span class="cnt">9</span></div>
+    <p class="lane-sub">Real work, wrong month. Left open so they stay findable. Two are already
+    unparked below.</p>
     <div class="tblwrap"><table>
       <thead><tr><th>PR</th><th>What it is</th><th>When it comes back</th></tr></thead>
       <tbody>
-        <tr><td class="pr">#9</td><td class="what">Review Happy</td><td class="why"><strong>Week 1.</strong> This is a line item inside the $297 coaching offer. Pull the deliverable list out of it, leave the build parked.</td></tr>
+        <tr><td class="pr">#9</td><td class="what">Review Happy</td><td class="why"><strong>Unparked.</strong> Now module 7 of the coaching curriculum, including its compliance rules. Build still parked.</td></tr>
         <tr><td class="pr">#17</td><td class="what">Growth Factor AI site</td><td class="why"><strong>Week 2.</strong> Reprice to $297 coaching plus $100/mo sites. Keep the design and the stance.</td></tr>
-        <tr><td class="pr">#15</td><td class="what">Fuel Fortress homepage</td><td class="why">Q4, unless the client is waiting. If they are waiting, it moves to Merge now.</td></tr>
+        <tr><td class="pr">#15</td><td class="what">Fuel Fortress homepage</td><td class="why"><strong>Hold, do not ship.</strong> The client is four months in arrears. Shipping spends the only leverage left on collecting.</td></tr>
         <tr><td class="pr">#18</td><td class="what">Furst Place MMA</td><td class="why">Blocked on the site backup arriving. Chase it, do not build around it.</td></tr>
         <tr><td class="pr">#16</td><td class="what">Aeterna DrChrono</td><td class="why">Client work outside both rocks. Keep it warm, do not expand it.</td></tr>
         <tr><td class="pr">#21</td><td class="what">GHL contact buttons</td><td class="why">Q4. Strong tool, no September revenue attached to it.</td></tr>
@@ -380,9 +390,10 @@
     <div class="goal">
       <span class="gid">Goal 1 &#183; NMMA</span>
       <h3>Both sites live, search fixed</h3>
-      <p>The audit found the real drag: every program published under <code>/classes</code> and
-      <code>/services</code>, multiplied by three city suffixes with unlocalized titles. Roughly 84
-      near-duplicate URLs serving 14 programs.</p>
+      <p>16 pages are already built and merged. The remaining work is search, not construction:
+      every program is published under both <code>/classes</code> and <code>/services</code>, then
+      multiplied by three city suffixes with unlocalized titles. Roughly 84 near-duplicate URLs
+      serving 14 programs.</p>
       <div class="done"><span>Done means</span>
         18 pages, not 84 URLs<br>
         Every dropped URL 301'd<br>
@@ -392,15 +403,15 @@
     </div>
     <div class="goal">
       <span class="gid">Goal 2 &#183; Coaching</span>
-      <h3>$297 per month, first three signed</h3>
-      <p>You already serve four gyms: Nashville MMA, Fighters, Furst Place, Fuel Fortress. Coaching
-      is a second sale to a list that already trusts you, not cold prospecting. Three signed is
-      $891 MRR. Twenty is $5,940.</p>
+      <h3>Three already pay. Deliver.</h3>
+      <p>Nashville MMA, Fighters and Furst Place are paying now, so this is a delivery month before
+      it is a sales month. Fuel Fortress is four months behind and gets collected, not served.
+      Three is $891 MRR. Twenty is $5,940.</p>
       <div class="done"><span>Done means</span>
-        A fixed deliverable list, written<br>
-        A price page that exists<br>
-        3 gyms paying<br>
-        Call one run and documented
+        Modules 01 and 02 recorded<br>
+        Follow-up bot live at 1 gym<br>
+        First monthly report sent<br>
+        Fuel Fortress resolved either way
       </div>
     </div>
     <div class="goal">
@@ -436,11 +447,13 @@
       <span class="days">6 working days</span>
     </div>
     <ul class="steps">
-      <li class="key"><b>Merge six.</b> #12, #10, #23, #7, #22, #20. Review each, merge, move on. <span class="note">One sitting.</span></li>
-      <li class="key"><b>Close seven</b> with a one-line reason each. #1, #3, #5, #2, #11, #13, #4.</li>
-      <li><b>Label the nine parked</b> so they stop reading as active work.</li>
+      <li class="key"><b>Merge five.</b> #10, #23, #7, #22, #20. <span class="note">Done 3 Sep.</span></li>
+      <li class="key"><b>Close eight</b> with a written reason each. #12, #1, #3, #5, #2, #11, #13, #4. <span class="note">Done 3 Sep.</span></li>
+      <li><b>Record the coaching baseline</b> from the live ad accounts. <span class="note">Done 3 Sep: $3,101 spend, 279 leads, $11.12 blended CPL, 2.5x spread.</span></li>
       <li class="key"><b>Rewrite the pricing block</b> in <code>hostinger-delivery.md</code>: $100/mo, 10 pages, $20 per extra page unadvertised, basic and local SEO included, AEO and GEO quoted at $200 to $500.</li>
-      <li class="key"><b>Write the $297 offer</b> as a one-page deliverable list. Parts already exist: the review engine in #9, the build-ads-with-you track in #17, the GHL capability ceiling in #8.</li>
+      <li class="key"><b>Record modules 01 and 02.</b> Both are scripted. 02 is the follow-up bot, and 279 leads a month are arriving with no measured response time.</li>
+      <li><b>Decide contract length and cohort cap.</b> Neither blocks recording. Both block the sales page.</li>
+      <li><b>Put the three AdKit access questions</b> to AdKit before promising any member a seat.</li>
       <li><b>Send NMMA the 18-page sitemap and redirect map</b> for sign-off. Nothing gets built until that comes back.</li>
       <li><b>Run <code>site-new</code> once on a throwaway domain.</b> Find what breaks before a client does.</li>
     </ul>
@@ -453,10 +466,12 @@
       <span class="days">5 working days</span>
     </div>
     <ul class="steps">
-      <li class="key"><b>Assemble NMMA's 18 pages</b> in Astro from the harvested content. The copy is already verbatim and frozen, so this is assembly, not writing.</li>
+      <li class="key"><b>Finish NMMA's remaining pages</b> against the approved sitemap. 16 are built and merged, so this is the gap, not the build.</li>
+      <li class="key"><b>Collect or close Fuel Fortress.</b> Four months, roughly $1,188. Payment plan or clean exit. Do not ship #15 either way.</li>
       <li><b>Confirm the Fighters domain</b>, build the "Our Gyms" interlink page, deploy.</li>
       <li class="key"><b>Reprice the Growth Factor AI site</b> from #17 and add a coaching page. Design stays, numbers change.</li>
-      <li class="key"><b>Pitch all four warm gyms.</b> A real pitch with a price and a start date, not a mention.</li>
+      <li class="key"><b>Switch the follow-up bot on at one gym</b> in suggestive mode, and record their before number first so module 02 gets a real result attached.</li>
+      <li><b>Record modules 03 and 04.</b> Both outlined, both built on the cohort's own numbers.</li>
       <li><b>Three sites through the factory.</b> Start a timer on each one and write the number down.</li>
     </ul>
   </div>
@@ -472,7 +487,8 @@
       <li class="key"><b>Mark up the coach roster.</b> The audit called Dustin Ortiz, Monty Burks and the rest your strongest AI-retrieval asset, and it currently carries no <code>Person</code> or <code>sameAs</code> markup at all.</li>
       <li><b>Kill the duplicate Yelp listing</b> at 1504 Elm Hill Pike. Eleven reviews are stranded on a page titled "CLOSED".</li>
       <li><b>Match the Google Business Profile NAP</b> and settle the class count. 90+ is the approved figure; program pages still say 80+.</li>
-      <li class="key"><b>Close two coaching deals.</b></li>
+      <li class="key"><b>Send the first monthly report</b> to all three paying gyms: their baseline re-pulled and compared.</li>
+      <li><b>Go after the $361.</b> Nashville MMA's Kids campaign is the single worst CPL in the cohort with the best hook rate on the board, so fix the offer, not the video.</li>
       <li><b>Five more sites through the factory.</b> Timed.</li>
       <li><b>Append the shipped-log rows</b> the same day each site goes live, not later.</li>
     </ul>
