@@ -1,0 +1,1044 @@
+<title>Nashville MMA SEO Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FCFBF8;
+    --surface:#FFFFFF;
+    --ink:#16161A;
+    --ink-2:#43434D;
+    --ink-3:#6E6E7A;
+    --rule:#E2DED4;
+    --rule-2:#CFC9BA;
+    --accent:#C0883A;
+    --accent-text:#8A6020;
+    --indigo:#1E1E29;
+    --crit:#A32B21;
+    --crit-bg:#F7E9E7;
+    --mod:#2C6178;
+    --mod-bg:#E7EFF3;
+    --good:#3B7355;
+    --good-bg:#E8F0EB;
+    --shadow:0 1px 2px rgba(22,22,26,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#111114;
+      --surface:#1A1A20;
+      --ink:#F2EFE8;
+      --ink-2:#B9B5AC;
+      --ink-3:#8B8880;
+      --rule:#2C2C34;
+      --rule-2:#3D3D47;
+      --accent:#D7AD56;
+      --accent-text:#D7AD56;
+      --indigo:#0C0C0F;
+      --crit:#E8867A;
+      --crit-bg:#2E1A18;
+      --mod:#8FC0D6;
+      --mod-bg:#16262E;
+      --good:#8CC1A4;
+      --good-bg:#17251D;
+      --shadow:0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#111114;
+    --surface:#1A1A20;
+    --ink:#F2EFE8;
+    --ink-2:#B9B5AC;
+    --ink-3:#8B8880;
+    --rule:#2C2C34;
+    --rule-2:#3D3D47;
+    --accent:#D7AD56;
+    --accent-text:#D7AD56;
+    --indigo:#0C0C0F;
+    --crit:#E8867A;
+    --crit-bg:#2E1A18;
+    --mod:#8FC0D6;
+    --mod-bg:#16262E;
+    --good:#8CC1A4;
+    --good-bg:#17251D;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Montserrat",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:15.5px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px 96px}
+  .col{max-width:70ch}
+
+  h1,h2,h3,.display{font-family:"Bebas Neue","Haettenschweiler","Arial Narrow",sans-serif;font-weight:400;text-wrap:balance;letter-spacing:.01em}
+  h1{font-size:clamp(44px,7.5vw,76px);line-height:.94;margin:0}
+  h2{font-size:clamp(28px,4vw,40px);line-height:1.02;margin:0}
+  h3{font-size:20px;line-height:1.2;margin:0;letter-spacing:.02em}
+  p{margin:0}
+  a{color:var(--accent-text);text-decoration-thickness:1px;text-underline-offset:2px}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  code,.mono{font-family:"IBM Plex Mono",ui-monospace,"SFMono-Regular",monospace;font-size:.87em}
+  code{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:.1em .34em;color:var(--ink)}
+
+  /* ---------- masthead ---------- */
+  header.mast{border-bottom:2px solid var(--ink);padding:40px 0 22px;margin-bottom:0}
+  .mast-top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:26px}
+  .gf{font-family:"Bebas Neue",sans-serif;font-size:17px;letter-spacing:.06em}
+  .gf span{color:var(--accent-text)}
+  .mast-meta{display:flex;flex-wrap:wrap;gap:18px}
+  .mast h1{margin-bottom:14px}
+  .sub{font-size:17px;color:var(--ink-2);max-width:60ch}
+  .scope{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
+  .scope b{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;
+    border:1px solid var(--rule-2);border-radius:2px;padding:5px 9px;color:var(--ink-2);
+  }
+
+  /* ---------- generic section ---------- */
+  section{padding-top:56px}
+  .shead{display:flex;flex-direction:column;gap:7px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  .num{color:var(--accent-text)}
+
+  .stack{display:flex;flex-direction:column;gap:18px}
+  .stack-sm{display:flex;flex-direction:column;gap:10px}
+
+  /* ---------- verdict ---------- */
+  .verdict{background:var(--indigo);color:#F2EFE8;border-radius:3px;padding:34px 32px;margin-top:34px}
+  .verdict .eyebrow{color:var(--accent)}
+  .verdict h2{color:#FFF;margin:10px 0 16px;font-size:clamp(26px,3.6vw,36px)}
+  .verdict p{color:#CFCAC0;max-width:64ch}
+  .verdict strong{color:#FFF;font-weight:600}
+  .vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#33333D;margin-top:28px;border:1px solid #33333D;border-radius:2px;overflow:hidden}
+  .vcell{background:var(--indigo);padding:16px 14px}
+  .vcell .n{font-family:"Bebas Neue",sans-serif;font-size:38px;line-height:1;color:var(--accent)}
+  .vcell .l{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#8B8880;margin-top:7px}
+
+  /* ---------- method note ---------- */
+  .note{border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:var(--surface);border-radius:2px;padding:18px 20px}
+  .note .eyebrow{color:var(--accent-text);display:block;margin-bottom:8px}
+  .note p{color:var(--ink-2);max-width:66ch}
+  .note p + p{margin-top:9px}
+
+  /* ---------- findings ---------- */
+  .find{display:grid;grid-template-columns:auto 1fr;gap:0 18px;background:var(--surface);border:1px solid var(--rule);border-radius:2px;box-shadow:var(--shadow);overflow:hidden}
+  .stripe{width:4px;background:var(--mod)}
+  .find[data-sev="crit"] .stripe{background:var(--crit)}
+  .find[data-sev="good"] .stripe{background:var(--good)}
+  .find-body{padding:18px 20px 20px;min-width:0}
+  .find-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:9px}
+  .chip{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:2px;white-space:nowrap;
+    background:var(--mod-bg);color:var(--mod);
+  }
+  .find[data-sev="crit"] .chip-sev{background:var(--crit-bg);color:var(--crit)}
+  .find[data-sev="good"] .chip-sev{background:var(--good-bg);color:var(--good)}
+  .chip-id{background:transparent;border:1px solid var(--rule-2);color:var(--ink-3)}
+  .find h3{margin-bottom:10px}
+  .rowlabel{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;
+  }
+  .find-body .blk + .blk{margin-top:13px}
+  .find-body p{color:var(--ink-2)}
+  .find-body .fix p{color:var(--ink)}
+  .urls{display:flex;flex-direction:column;gap:3px}
+  .urls span{font-family:"IBM Plex Mono",monospace;font-size:12.4px;color:var(--ink-2);word-break:break-all}
+  .urls span::before{content:"/ ";color:var(--rule-2)}
+
+  /* ---------- tables ---------- */
+  .tw{overflow-x:auto;border:1px solid var(--rule);border-radius:2px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.4px}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);background:var(--paper);white-space:nowrap;
+  }
+  tr:last-child td{border-bottom:none}
+  td.m{font-family:"IBM Plex Mono",monospace;font-size:12.4px;word-break:break-all}
+  td.tgt{font-family:"IBM Plex Mono",monospace;font-size:12.4px;color:var(--accent-text);word-break:break-all;white-space:nowrap}
+
+  /* ---------- runbook ---------- */
+  .phase{display:grid;grid-template-columns:auto 1fr;gap:0 20px;border-top:1px solid var(--rule);padding-top:18px}
+  .phase:last-child{border-bottom:1px solid var(--rule);padding-bottom:20px}
+  .pnum{font-family:"Bebas Neue",sans-serif;font-size:34px;line-height:.8;color:var(--accent);width:2.1ch}
+  .phase h3{margin-bottom:4px}
+  .when{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:11px}
+  ul.tight{margin:0;padding-left:1.15em;color:var(--ink-2)}
+  ul.tight li{margin-bottom:6px;padding-left:.15em}
+  ul.tight li::marker{color:var(--rule-2)}
+  ul.tight li:last-child{margin-bottom:0}
+
+  pre{
+    margin:0;overflow-x:auto;background:var(--indigo);color:#E6E1D6;
+    border-radius:2px;padding:16px 18px;font-family:"IBM Plex Mono",monospace;
+    font-size:12.3px;line-height:1.7;
+  }
+  pre .c{color:#8B8880}
+  pre .k{color:var(--accent)}
+
+  footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:baseline}
+  footer p{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+
+  @media (max-width:620px){
+    .find{grid-template-columns:4px 1fr;gap:0}
+    .stripe{width:100%}
+    .find-body{padding:16px}
+    .phase{grid-template-columns:1fr;gap:8px}
+    .pnum{font-size:26px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <div class="gf">GROWTH FACTOR <span>AI</span></div>
+    <div class="mast-meta">
+      <span class="eyebrow">nashvillemma.com</span>
+      <span class="eyebrow">3 Sep 2026</span>
+      <span class="eyebrow">Rev A</span>
+    </div>
+  </div>
+  <h1>THE BLOG ISN'T<br>YOUR PROBLEM.</h1>
+  <p class="sub">Full audit of nashvillemma.com across search, local, answer engines and AI
+  retrieval. Plus the answer on those blog backlinks, and how to cut over to a new site
+  without giving up a single ranking.</p>
+  <div class="scope">
+    <b>Technical SEO</b><b>Local</b><b>AEO</b><b>GEO</b><b>Migration plan</b>
+  </div>
+</header>
+
+<div class="verdict">
+  <span class="eyebrow">The verdict</span>
+  <h2>You are competing against yourself, roughly 80 times over.</h2>
+  <p>Every program on the site is published at two different addresses, then multiplied
+  again by three city names, and the city versions do not even change their own titles.
+  That is around <strong>84 near-identical URLs doing the work of 14</strong>. It is a far
+  bigger drag on rankings than anything on the blog.</p>
+  <p style="margin-top:14px">Killing the blog is safe. Killing the blog <strong>URLs</strong>
+  is not, and you never have to. A 301 to a relevant live page keeps the link equity.
+  The redirect map is in section 05.</p>
+  <div class="vgrid">
+    <div class="vcell"><div class="n">~84</div><div class="l">Program URLs live</div></div>
+    <div class="vcell"><div class="n">14</div><div class="l">Programs that exist</div></div>
+    <div class="vcell"><div class="n">4.9</div><div class="l">Google rating</div></div>
+    <div class="vcell"><div class="n">483</div><div class="l">Google reviews</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">01</span> &nbsp;/&nbsp; Method and limits</span>
+    <h2>What I could verify, and what I could not</h2>
+  </div>
+  <div class="stack">
+    <div class="note">
+      <span class="eyebrow">Read this before you action anything</span>
+      <p>This session's network policy blocked direct access to nashvillemma.com, to
+      web.archive.org and to every third-party host. I could not crawl the site, so I could
+      not read the HTML, the robots.txt, the sitemap, the canonical tags, the existing schema
+      or Core Web Vitals.</p>
+      <p>Everything below is built from Google's own index (live titles, live URLs, live
+      descriptions), from the review platforms, and from the brand kernel we already
+      extracted off the client's 97Display build. That turned out to be enough to find the
+      structural problems, because the URL patterns and the title tags <em>are</em> the
+      evidence. Findings marked <span class="chip chip-sev" style="background:var(--mod-bg);color:var(--mod)">Verify</span>
+      need a crawl before you quote work on them.</p>
+    </div>
+    <div class="col stack-sm">
+      <p>Two things follow from that. First, the URL and title findings are solid: those
+      strings came out of the live index, not from inference. Second, get me these five
+      exports and the audit closes completely, including the exact backlink list:</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Source</th><th>Export</th><th>What it settles</th></tr></thead>
+        <tbody>
+          <tr><td>Search Console</td><td class="m">Links &gt; Top linked pages</td><td>Google's own view of which pages hold links. This is the view that decides equity.</td></tr>
+          <tr><td>Search Console</td><td class="m">Pages &gt; all indexed, 16 mo</td><td>The real indexed inventory, including URLs I could not surface.</td></tr>
+          <tr><td>Ahrefs or Semrush</td><td class="m">Referring pages, filter /blog/</td><td>The definitive per-post backlink list. Sort by referring domains.</td></tr>
+          <tr><td>GA4</td><td class="m">Landing pages, 16 mo</td><td>Which posts actually earn sessions and trials. Kill the rest without ceremony.</td></tr>
+          <tr><td>Screaming Frog</td><td class="m">Full crawl, JS rendering on</td><td>Status codes, canonicals, existing schema, thin pages, CWV.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">02</span> &nbsp;/&nbsp; Technical SEO</span>
+    <h2>Four structural faults, in priority order</h2>
+  </div>
+  <div class="stack">
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">SEO-01</span>
+        </div>
+        <h3>EVERY PROGRAM IS PUBLISHED TWICE, UNDER /CLASSES AND /SERVICES</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, live in the index</div>
+          <div class="urls">
+            <span>classes &nbsp;and&nbsp; /services &nbsp;&rarr; both titled "Martial Arts &amp; Fitness Classes - Nashville MMA Training Camp"</span>
+            <span>classes/Mixed-Martial-Arts-Competition-Team</span>
+            <span>services/Mixed-Martial-Arts-Competition-Team</span>
+            <span>services/Muay-Thai</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>Two URLs holding the same content compete for the same query. Internal links
+          split between them, any external links split between them, and Google picks the
+          winner instead of you. Identical title tags on two hub pages is the clearest
+          possible signal that neither is the canonical one.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Pick <code>/classes</code> and 301 the whole <code>/services</code> tree onto it.
+          "Classes" matches how people actually search. Do this at the server, one rule, not
+          page by page.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">SEO-02</span>
+        </div>
+        <h3>CITY URLS ARE DOORWAY PAGES, AND THEY DO NOT EVEN SWAP THEIR OWN TITLES</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, live in the index</div>
+          <div class="urls">
+            <span>classes/Mixed-Martial-Arts/Nashville</span>
+            <span>classes/Mixed-Martial-Arts/Antioch &nbsp;&rarr; titled "<em>Nashville</em> Mixed Martial Arts ... <em>Nashville, Tennessee</em>"</span>
+            <span>classes/Brazilian-Jiu-Jitsu/Hermitage</span>
+            <span>classes/Kids-Brazilian-Jiu-Jitsu-/Hermitage &nbsp;&rarr; titled "<em>Nashville</em> Kids Brazilian Jiu Jitsu ... <em>Nashville, Tennessee</em>"</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>The city is in the URL and nowhere else. The Antioch page says Nashville in its
+          title, so it cannot rank for Antioch anyway, and it is a duplicate of the Nashville
+          page in Google's eyes. This is the scaled-content and doorway pattern Google names
+          by name in its spam policies. Best case these get ignored and burn crawl budget.
+          Worst case they drag a quality signal across the whole domain.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Delete the city dimension. One page per program, no exceptions. Antioch and
+          Hermitage get served by the Business Profile service area, by one strong location
+          page that names real neighborhoods and drive times, and by reviews from people who
+          live there. Not by URL permutations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">SEO-03</span>
+        </div>
+        <h3>THE HOMEPAGE SERVES DIFFERENT PAGES OFF A QUERY PARAMETER</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, live in the index</div>
+          <div class="urls">
+            <span>?p=38 &nbsp;&rarr; titled "Nashville Jiu Jitsu - Nashville MMA - Nashville, Tennessee"</span>
+            <span>Blog/?p=42 &nbsp;&rarr; blog pagination on a capitalised path</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>A parameter on the root that changes the content is a duplicate factory and a
+          crawl trap. It also means the homepage's authority, your strongest page, is being
+          split across parameter variants of itself.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>No parameter routing on the new build. Clean static paths only. 301 the known
+          parameter URLs to their real destinations and strip the rest at the server.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">SEO-04</span>
+        </div>
+        <h3>URL CASE IS INCONSISTENT, SO PAGES EXIST TWICE BY ACCIDENT</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, live in the index</div>
+          <div class="urls">
+            <span>Contact &nbsp;/Event&nbsp; /FAQ &nbsp;/Instructors&nbsp; /Home/Reviews &nbsp;/Home/Schedule &nbsp;&rarr; capitalised</span>
+            <span>classes &nbsp;/services&nbsp; /blog &nbsp;/reviews &nbsp;&rarr; lowercase</span>
+            <span>reviews &nbsp;<em>and</em>&nbsp; /Home/Reviews &nbsp;&rarr; same content, both indexed</span>
+            <span>blog &nbsp;<em>and</em>&nbsp; /Blog/?p=42 &nbsp;&rarr; same section, both indexed</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>URLs are case sensitive to search engines even when the server is not. <code>/Blog</code>
+          and <code>/blog</code> are two different pages as far as Google is concerned, and the
+          legacy <code>/Home/</code> prefix duplicates pages that already exist at a clean path.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Lowercase every path on the new build and pick one trailing-slash convention.
+          Enumerate the capitalised legacy paths explicitly in the redirect file. Do not try
+          to force lowercase with a RewriteMap on shared hosting, it is unreliable there and
+          there are only about twenty of them.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Moderate</span><span class="chip chip-id">SEO-05</span>
+        </div>
+        <h3>A TRAILING-WHITESPACE BUG HAS LEAKED INTO SLUGS AND TITLES SITE-WIDE</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, live in the index</div>
+          <div class="urls">
+            <span>classes/Kids-Muay-Thai-Kickboxing<strong>-</strong></span>
+            <span>classes/Kids-Brazilian-Jiu-Jitsu<strong>-</strong>/Hermitage</span>
+            <span>Instructors/Ronnie-Lawrence<strong>-</strong> &nbsp;&rarr; titled "Ronnie Lawrence<strong> ,</strong> Fitness and Martial Arts Instructor"</span>
+            <span>blog/113132/Facility-Walkthrough<strong>-</strong></span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>Someone typed a trailing space into the CMS name field and it flowed into both
+          the slug and the title tag. It looks unmaintained in the results page, and it means
+          the obvious version of each URL is a near-miss that anyone linking to you will get
+          wrong.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Trim on migration. These specific URLs go in the redirect map, since they are
+          indexed and may hold links.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Moderate</span><span class="chip chip-id">SEO-06</span>
+        </div>
+        <h3>TITLE TAGS BURN THEIR BEST 60 CHARACTERS SAYING NASHVILLE THREE TIMES</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, live in the index</div>
+          <div class="urls">
+            <span>"Nashville Mixed Martial Arts - Nashville MMA - Nashville, Tennessee"</span>
+            <span>"Nashville Kids Martial Arts - Nashville MMA Training Camp - Nashville, Tennessee"</span>
+          </div>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>The template repeats the city up to three times, pushes the differentiating word
+          to the front and then truncates. It reads as stuffing to a person scanning results
+          and to a model summarising them.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>One pattern, one city mention: <code>{Program} in Nashville | Nashville MMA Training Camp</code>.
+          Write the meta description as a reason to click, not a keyword list.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">03</span> &nbsp;/&nbsp; Local</span>
+    <h2>The review profile is the best asset here. One listing is actively hurting it.</h2>
+  </div>
+  <div class="stack">
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">LOC-01</span>
+        </div>
+        <h3>A DUPLICATE YELP LISTING AT YOUR ADDRESS IS MARKED CLOSED</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p>Yelp carries two records at 1504 Elm Hill Pike: the live "Nashville MMA Training
+          Camp" with 22 reviews, and a second one titled "<strong>TRAINING CAMP - CLOSED</strong>"
+          with 11 reviews stranded on it.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>A listing that says CLOSED at your street address is the worst citation you can
+          own. It contradicts your NAP, it buries 11 reviews, and answer engines that read
+          Yelp will repeat the word closed to someone asking whether you are open.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Claim both records and file a merge with Yelp support this week. Then run a full
+          citation sweep for the same duplicate on Apple Maps, Bing Places, Tripadvisor and the
+          niche directories.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Moderate</span><span class="chip chip-id">LOC-02</span>
+        </div>
+        <h3>HOURS AND CLASS COUNT DISAGREE DEPENDING ON WHERE YOU LOOK</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p>Sources split on the weekend: one shows Saturday and Sunday 8am to 2pm, another
+          shows Saturday only. Program pages state "80+ weekly classes" while the approved
+          brand figure on our side is "90+ classes".</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>Local ranking and AI answers both lean on agreement across sources. Conflicting
+          hours is a direct negative signal, and two different class counts makes the whole
+          site look stale.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Confirm one set of hours and one figure with the front desk, then push it to the
+          site, the Business Profile, Yelp, Facebook, Instagram, Apple Maps and Bing on the
+          same day. Put hours in <code>openingHoursSpecification</code> schema so it is machine
+          readable.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="good">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Protect</span><span class="chip chip-id">LOC-03</span>
+        </div>
+        <h3>483 REVIEWS AT 4.9 IS THE MOAT. IT IS ALSO NOT ON THE WEBSITE.</h3>
+        <div class="blk">
+          <div class="rowlabel">Why it matters</div>
+          <p>No competitor in Nashville is catching that review profile quickly, and it is the
+          single strongest thing driving your local pack position. But reviews are sitting in
+          Google while the program pages carry none of them.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Pull real reviews onto the matching program page, with the reviewer's first name
+          and the class they mention. Do not put <code>AggregateRating</code> schema on pages
+          without genuine on-page reviews, that is the self-serving markup Google strips
+          rich results for. Through the migration, keep the NAP byte identical and update the
+          Business Profile website link on launch day.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">04</span> &nbsp;/&nbsp; AEO and GEO</span>
+    <h2>You are already in the AI answer set. You are not the one shaping it.</h2>
+  </div>
+  <div class="stack">
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">GEO-01</span>
+        </div>
+        <h3>AGGREGATORS ARE ANSWERING "BEST MMA GYM IN NASHVILLE" FOR YOU</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p>For that query the pages that surface are Yelp category pages,
+          <span class="mono">statspros.com/best-mma-gyms-in-nashville-tn</span>,
+          <span class="mono">westrive.com/gym/nashville-mma</span>,
+          <span class="mono">boxinggyms.net</span>, <span class="mono">bjjmetrics.com</span>
+          and Tapology gym 1244. Your own pages rank, but the list-shaped answer gets
+          assembled from theirs.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>When someone asks an assistant for the best gym in Nashville, it retrieves the
+          pages that are already shaped like that answer: listicles, directories and Reddit.
+          Your competitors Bonafyde, SwiftKick, Phoenix and Pedigo appear inside those same
+          lists. And one of your own profiles currently says a version of the business is
+          closed.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Treat those eight profiles as owned properties. Claim each one, correct the NAP,
+          add the coach roster and the real class count, link to the new site. Getting your
+          entry on the listicles that already rank moves more AI answers than another blog
+          post ever will.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Critical</span><span class="chip chip-id">GEO-02</span>
+        </div>
+        <h3>THE COACH ROSTER IS YOUR HARDEST-TO-COPY ASSET AND IT IS UNSTRUCTURED</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p>Instructor pages exist at <code>/Instructors/{Name}</code> for Kevin Patterson,
+          Rashad Lockhart, Ronnie Lawrence, Sammy Shires and Monty Burks, and the fight team
+          lists Dustin Ortiz as head coach, Brian Tidwell on grappling, Tim Semisch on
+          strength. Real credentials, real records, verifiable elsewhere.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>Language models cite pages that tie named people to credentials they can verify
+          against another source. A former UFC flyweight as head coach is exactly that kind of
+          fact. Right now those pages carry no <code>Person</code> markup, no
+          <code>sameAs</code> links to Tapology or Sherdog or Instagram, and no link from the
+          coach to the program they teach. Nothing connects the entity.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p><code>Person</code> schema per coach with <code>sameAs</code> pointing at Tapology,
+          Sherdog and their Instagram. Rank, belt, record and years coaching as visible on-page
+          text, not just prose. Cross-link each coach to the classes they run and each class
+          back to its coaches. This is how you get named when someone asks who the best BJJ
+          coaches in Nashville are.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Moderate</span><span class="chip chip-id">AEO-01</span>
+        </div>
+        <h3>ALL THE ANSWERS LIVE ON ONE FAQ PAGE INSTEAD OF WHERE THE QUESTIONS GET ASKED</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p><code>/FAQ</code> exists and it is decent. It covers the trial, the month-to-month
+          terms, the 28 day cancellation, the recovery room, rental gear and the military and
+          first responder discounts. All of that is centralised on one URL.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>Answer engines lift the answer sitting next to the relevant content. A single FAQ
+          page can win "nashville mma faq" and almost nothing else. The kids BJJ page should be
+          the thing that answers what age can my kid start.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix</div>
+          <p>Move three to five real questions onto every program page with
+          <code>FAQPage</code> markup on each. Keep the hub as an index. Answer in the first
+          40 words, then expand, because that first block is what gets quoted.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Moderate</span><span class="chip chip-id">AEO-02</span>
+          <span class="chip">Verify</span>
+        </div>
+        <h3>NO SIGN OF STRUCTURED DATA BEYOND THE PLATFORM DEFAULT</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence, and its limits</div>
+          <p>I could not read the markup, so this needs a crawl to confirm. What I can say:
+          none of these URLs surface a rich result in the index, and the 97Display Ultimate
+          theme does not ship program-level, instructor-level or per-page FAQ markup.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix, the full set for the new build</div>
+          <ul class="tight">
+            <li><code>SportsActivityLocation</code> on the location page. It is the correct
+            type and it is more specific than <code>LocalBusiness</code>, including
+            <code>openingHoursSpecification</code>, <code>geo</code> and
+            <code>hasMap</code>.</li>
+            <li><code>Course</code> plus <code>Offer</code> on every program page, with the
+            real age range and skill level.</li>
+            <li><code>Person</code> on every coach page, with <code>sameAs</code>.</li>
+            <li><code>FAQPage</code> per page, not just on the hub.</li>
+            <li><code>BreadcrumbList</code> site-wide, and <code>Organization</code> with
+            <code>sameAs</code> to the eight real profiles.</li>
+            <li><code>VideoObject</code> if the hero video and the facility walkthrough stay.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head">
+          <span class="chip chip-sev">Moderate</span><span class="chip chip-id">AEO-03</span>
+        </div>
+        <h3>EVERY AI ANSWER ABOUT YOUR PRICING SAYS "CONTACT THEM"</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p>Pricing is published nowhere. The answer that comes back is that memberships
+          depend on how often you train and you should call the front desk.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why it costs you</div>
+          <p>Not publishing pricing is a legitimate sales call and I am not going to argue you
+          out of it. But understand the trade: cost is the first thing people ask, and the gym
+          that publishes a range gets cited in the answer while you get skipped. You are
+          buying phone-call control with retrieval visibility.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Fix, if you want the middle path</div>
+          <p>Publish a starting-from figure and what is included, keep the exact tiers behind
+          the conversation. It gets you into the answer set without giving up the close. Your
+          call, it is a business decision, not an SEO one.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">05</span> &nbsp;/&nbsp; The blog question</span>
+    <h2>Drop the content. Never drop the URLs.</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p>Three things get bundled together as "the blog" and they carry completely different
+      risk. Separate them and the decision gets easy.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>What it is</th><th>Risk if you drop it</th><th>Call</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>The content.</strong> The words in the posts.</td>
+            <td>Low. Local rankings run on the Business Profile, reviews, proximity and program pages. Stale posts contribute close to nothing here.</td>
+            <td class="tgt">Drop it</td>
+          </tr>
+          <tr>
+            <td><strong>The URLs.</strong> The addresses other sites point at.</td>
+            <td>High, and entirely avoidable. A 404 throws away every link pointing at it. A 301 to a relevant live page keeps essentially all of it.</td>
+            <td class="tgt">Keep as 301s</td>
+          </tr>
+          <tr>
+            <td><strong>The rankings.</strong> Terms a few posts hold today.</td>
+            <td>Moderate on two posts specifically. Both have commercial intent and may be holding terms you actually want.</td>
+            <td class="tgt">Fold in, then 301</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col stack-sm" style="margin-top:8px">
+      <p>So the direct answer to your question: <strong>yes, those backlinks matter, and no,
+      you do not lose them.</strong> You lose link equity by letting a URL 404, not by
+      unpublishing the article behind it. Redirect it and the equity moves to whatever you
+      point it at.</p>
+      <p style="margin-top:11px">The one thing that genuinely does damage sites in a
+      replatform is the lazy version of this: bulk-redirecting every old URL to the homepage.
+      Google reads an irrelevant blanket redirect as a soft 404 and drops the equity anyway.
+      Relevance of the target is the whole game. Which is why the map below is hand-picked
+      rather than a wildcard.</p>
+    </div>
+
+    <div class="stack-sm" style="margin-top:8px">
+      <div class="rowlabel">Starting redirect map, built from the posts I could surface</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Old URL</th><th>301 target</th><th>Reasoning</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="m">/blog/59198/Brazilian-Jiu-Jitsu-and-Muay-Thai-Classes-in-Nashville</td>
+              <td class="tgt">/classes</td>
+              <td>Commercial intent, spans two programs. Highest priority to check for links. Fold the substance into the hub.</td>
+            </tr>
+            <tr>
+              <td class="m">/blog/83721/Women-s-Only-Classes</td>
+              <td class="tgt">/classes/womens-program</td>
+              <td>Direct program match. This one becomes a real page in the new build, so the redirect is an upgrade.</td>
+            </tr>
+            <tr>
+              <td class="m">/blog/110798/How-Martial-Arts-Benefits-Kids-Beyond-Traditional-Sports</td>
+              <td class="tgt">/classes/kids-martial-arts</td>
+              <td>Direct match. Parent-intent content, worth keeping the argument on the program page itself.</td>
+            </tr>
+            <tr>
+              <td class="m">/blog/113132/Facility-Walkthrough-</td>
+              <td class="tgt">/facility</td>
+              <td>Direct match. Note the trailing hyphen, redirect both spellings.</td>
+            </tr>
+            <tr>
+              <td class="m">/blog/150948/Beginning-your-championship-journey-in-Jiu-Jitsu</td>
+              <td class="tgt">/classes/brazilian-jiu-jitsu</td>
+              <td>Closest program. Competition angle could point at /classes/fight-team instead if the post leans that way.</td>
+            </tr>
+            <tr>
+              <td class="m">/blog, /Blog, /Blog/?p=*</td>
+              <td class="tgt">/classes</td>
+              <td>Index and pagination. Point at /resources instead if you keep the evergreen set.</td>
+            </tr>
+            <tr>
+              <td class="m">/blog/* (unmapped, zero links, zero traffic)</td>
+              <td class="tgt">/classes</td>
+              <td>Last resort only. Any post with even one referring domain gets a hand-picked target instead.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:6px">
+      <span class="eyebrow">Two rules for finishing this map</span>
+      <p>Post IDs run from 59198 to at least 150948, so there are more posts than the five I
+      could surface. The Ahrefs referring-pages export filtered to <code>/blog/</code> is what
+      completes it. <strong>Every post with a referring domain gets a target chosen by hand.</strong>
+      Never bulk-redirect a linked post.</p>
+      <p>Then keep five to eight evergreen answers as permanent pages under
+      <code>/resources</code>, or fold them into the program FAQs. That keeps the answer-engine
+      value the blog was theoretically providing, with none of the maintenance. You are
+      retiring a format, not the content strategy.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">06</span> &nbsp;/&nbsp; Target architecture</span>
+    <h2>84 URLs collapse into 18 real pages</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p>Fourteen programs, confirmed against the program artwork in the design set. One page
+      each, lowercase, no city suffix, no second prefix. This is the spine the redirect map
+      points into, so it gets signed off before anything gets built.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>New URL</th><th>Replaces</th><th>Job</th></tr></thead>
+        <tbody>
+          <tr><td class="m">/</td><td>/ and /?p=*</td><td>Position, proof, trial CTA</td></tr>
+          <tr><td class="m">/classes</td><td>/classes, /services</td><td>Hub, links all 14</td></tr>
+          <tr><td class="m">/classes/mixed-martial-arts</td><td>4 URLs across both prefixes and 3 cities</td><td>Program</td></tr>
+          <tr><td class="m">/classes/brazilian-jiu-jitsu</td><td>4+ URLs</td><td>Program, highest volume term</td></tr>
+          <tr><td class="m">/classes/muay-thai</td><td>/services/Muay-Thai and city variants</td><td>Program</td></tr>
+          <tr><td class="m">/classes/boxing</td><td>city variants</td><td>Program</td></tr>
+          <tr><td class="m">/classes/wrestling</td><td>city variants</td><td>Program</td></tr>
+          <tr><td class="m">/classes/self-defense</td><td>city variants</td><td>Program</td></tr>
+          <tr><td class="m">/classes/womens-program</td><td>/blog/83721</td><td>Program, new page</td></tr>
+          <tr><td class="m">/classes/fitness</td><td>/classes/Fitness-Classes/</td><td>Program</td></tr>
+          <tr><td class="m">/classes/sports-performance</td><td>new</td><td>Program</td></tr>
+          <tr><td class="m">/classes/personal-training</td><td>new</td><td>Program</td></tr>
+          <tr><td class="m">/classes/kids-martial-arts</td><td>/classes/Kids-Martial-Arts + variants</td><td>Program, parent intent</td></tr>
+          <tr><td class="m">/classes/kids-brazilian-jiu-jitsu</td><td>/classes/Kids-Brazilian-Jiu-Jitsu-/*</td><td>Program</td></tr>
+          <tr><td class="m">/classes/kids-kickboxing</td><td>/classes/Kids-Kickboxing, /Kids-Muay-Thai-Kickboxing-</td><td>Program, merges two</td></tr>
+          <tr><td class="m">/classes/fight-team</td><td>/classes/ and /services/Mixed-Martial-Arts-Competition-Team</td><td>Program, GEO anchor</td></tr>
+          <tr><td class="m">/schedule</td><td>/Home/Schedule</td><td>90+ classes, filterable</td></tr>
+          <tr><td class="m">/instructors, /instructors/{name}</td><td>/Instructors/*</td><td>Person schema, GEO anchor</td></tr>
+          <tr><td class="m">/facility</td><td>/blog/113132</td><td>30K sqft proof</td></tr>
+          <tr><td class="m">/reviews</td><td>/reviews, /Home/Reviews</td><td>483 reviews surfaced</td></tr>
+          <tr><td class="m">/faq</td><td>/FAQ</td><td>Index, answers live on programs</td></tr>
+          <tr><td class="m">/contact</td><td>/Contact</td><td>NAP, map, hours schema</td></tr>
+          <tr><td class="m">/free-trial</td><td>new</td><td>Single conversion target</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col stack-sm">
+      <p><code>/Event</code> stays or goes depending on whether events are actually being
+      maintained. An empty events page is worse than none.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">07</span> &nbsp;/&nbsp; Launch strategy</span>
+    <h2>Seven phases. The order is the whole point.</h2>
+  </div>
+
+  <div class="stack" style="gap:0">
+
+    <div class="phase">
+      <div class="pnum">0</div>
+      <div>
+        <h3>BASELINE AND INVENTORY</h3>
+        <div class="when">Before a single page gets built</div>
+        <ul class="tight">
+          <li>Pull the five exports in section 01 and dedupe them into one master URL list. That list is the spine of the migration.</li>
+          <li>Snapshot current rankings for the 30 terms you care about, so the post-launch conversation runs on data instead of nerves.</li>
+          <li>Archive the old site's HTML. When you find in month two that a paragraph got dropped, you will want the original.</li>
+          <li>Screenshot the Business Profile insights and the current review count.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="pnum">1</div>
+      <div>
+        <h3>SIGN OFF THE ARCHITECTURE</h3>
+        <div class="when">Before design goes to build</div>
+        <ul class="tight">
+          <li>Approve the 18-page spine in section 06. Changing a URL after the redirect map is written means writing it twice.</li>
+          <li>Confirm one set of hours and one class figure. The site says 80+, the approved figure is 90+. Pick.</li>
+          <li>Decide the pricing question in AEO-03 now, because it changes whether /free-trial or /pricing is the conversion target.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="pnum">2</div>
+      <div>
+        <h3>WRITE THE REDIRECT MAP</h3>
+        <div class="when">In parallel with the build, not after it</div>
+        <ul class="tight">
+          <li>One row per old URL: old, new, reason. Every URL with a link, a session or a ranking gets a hand-picked 1:1 target.</li>
+          <li>Rule-level redirects for the patterns, explicit rows for the legacy capitalised paths and the trailing-hyphen slugs.</li>
+          <li>301 permanent, never 302, never a meta refresh, never JavaScript. Server level, in <code>.htaccess</code>, since Hostinger's LiteSpeed reads it.</li>
+          <li>No redirect chains. Old URL to final URL in one hop. Chains leak equity and burn crawl budget.</li>
+        </ul>
+        <div style="margin-top:14px">
+          <pre><span class="c"># Collapse the duplicate prefix</span>
+<span class="k">RewriteRule</span> ^services/?$            /classes [R=301,L]
+<span class="k">RewriteRule</span> ^services/(.*)$         /classes/$1 [R=301,L]
+
+<span class="c"># Strip the city doorway suffix</span>
+<span class="k">RewriteRule</span> ^classes/([^/]+)/(Nashville|Antioch|Hermitage)/?$ /classes/$1 [R=301,L,NC]
+
+<span class="c"># Legacy MVC paths</span>
+<span class="k">RewriteRule</span> ^Home/Reviews/?$        /reviews  [R=301,L,NC]
+<span class="k">RewriteRule</span> ^Home/Schedule/?$       /schedule [R=301,L,NC]
+
+<span class="c"># Kill parameter routing on the root</span>
+<span class="k">RewriteCond</span> %{QUERY_STRING} ^p=\d+$
+<span class="k">RewriteRule</span> ^$                      /? [R=301,L]
+
+<span class="c"># Per-post, one line each, from the Ahrefs export</span>
+<span class="k">Redirect</span> 301 /blog/83721/Women-s-Only-Classes /classes/womens-program</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="pnum">3</div>
+      <div>
+        <h3>BUILD AND STAGE</h3>
+        <div class="when">Build window</div>
+        <ul class="tight">
+          <li>Staging goes behind HTTP auth <em>and</em> <code>noindex</code>. Staging sites leaking into the index is the most common own-goal in this whole process.</li>
+          <li>Schema in as you build, not bolted on later. The full set is in AEO-02.</li>
+          <li>Copy stays frozen at 99% per the standing client instruction. Anything you want reworded gets listed at handover instead of changed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="pnum">4</div>
+      <div>
+        <h3>PRE-LAUNCH QA</h3>
+        <div class="when">The week before cutover</div>
+        <ul class="tight">
+          <li>Crawl staging. Zero 404s, zero chains, one canonical per page, no stray <code>noindex</code>.</li>
+          <li>Validate every schema block. Rich Results Test plus the Schema.org validator.</li>
+          <li>Core Web Vitals on mobile, on a real throttled connection, not a desktop lab score.</li>
+          <li>Test the redirect map against the master list. A spreadsheet of 300 rows is worth nothing until you have actually resolved them.</li>
+          <li>Confirm the popup lead form fires from every request CTA, per the standing instruction, and that submissions land somewhere a human checks.</li>
+          <li>Remove the staging <code>noindex</code>. Write it on a sticky note. This is the single most common launch-day failure.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="pnum">5</div>
+      <div>
+        <h3>CUTOVER</h3>
+        <div class="when">Tuesday or Wednesday morning. Never a Friday.</div>
+        <ul class="tight">
+          <li>Same domain, so no change of address in Search Console and no domain authority reset. Do not change the domain and the platform in the same month.</li>
+          <li>Redirects go live in the same deploy as the new site, not an hour later.</li>
+          <li>Update the Business Profile website link, then Yelp, Facebook, Instagram, Tapology, BJJMetrics, Tripadvisor, boxinggyms.net and westrive.
+          </li>
+          <li>Submit the new sitemap, request indexing on the top 20 pages by hand.</li>
+          <li>Do not cut over inside a promo push or two weeks before a seasonal enrolment spike.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="pnum">6</div>
+      <div>
+        <h3>FIRST 48 HOURS, THEN 8 WEEKS</h3>
+        <div class="when">Post-launch</div>
+        <ul class="tight">
+          <li>Hour one: crawl the live site. Check the redirects resolve, the forms submit, analytics fires, and nothing is <code>noindex</code>.</li>
+          <li>Day one and two: watch Search Console crawl errors and server logs for 404s from real referrers. Patch as they appear.</li>
+          <li>Weeks one to six: expect a wobble. Rankings move around while Google recrawls and reconsolidates. <strong>Change nothing in week one based on rank noise.</strong></li>
+          <li>Week two: confirm the old URLs are dropping out of the index and the new ones are entering. That is the signal the consolidation is landing.</li>
+          <li>Week four: pull the Links report again and confirm the redirected equity is showing up against the new URLs.</li>
+          <li>Week eight: compare against the section-0 baseline. Consolidating 84 near-duplicates into 18 real pages should read as a gain by then, not a recovery.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">08</span> &nbsp;/&nbsp; Honest expectations</span>
+    <h2>What this does and does not do</h2>
+  </div>
+  <div class="col stack-sm">
+    <p>A short dip in the first two to six weeks is normal on any replatform and is not
+    evidence of a mistake. The thing that protects you is the redirect map, and the map is
+    only as good as the Ahrefs and Search Console exports feeding it. That is the one place
+    not to cut corners.</p>
+    <p>What actually moves the needle here, in order: fixing the duplicate URL architecture,
+    merging the closed Yelp listing, getting the coach roster structured, and putting answers
+    on the pages where the questions get asked. The blog is not on that list, which is why
+    dropping it is the easy call.</p>
+    <p>Under-promise, over-deliver: I am not going to tell you the rebuild alone wins the
+    local pack. You already hold the review moat that decides that. The rebuild stops the
+    site from wasting it.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Growth Factor AI &nbsp;/&nbsp; Automate Everything</p>
+  <p>Nashville MMA Training Camp &nbsp;/&nbsp; Rev A &nbsp;/&nbsp; 3 Sep 2026</p>
+</footer>
+
+</div>

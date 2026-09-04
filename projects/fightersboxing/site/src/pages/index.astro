@@ -1,0 +1,585 @@
+---
+import Base from '../layouts/Base.astro';
+import { classes } from '../data/classes.js';
+
+// Meta description reuses the hero's own subline; copy is frozen at 99%.
+const pageTitle = 'Fighters Boxing Gym | Nashville’s Boxing at Its Best';
+const description =
+  'Nashville’s best boxing gym. Group classes, youth classes, private sessions, open gym, and sparring. All levels welcome, no experience needed.';
+
+const tickerRepeats = 3;
+
+// Real reviews only, quoted verbatim. The first is a public Google review;
+// the other two are the member testimonials the gym's own production site
+// (fightersnashville.com) publishes, names not shown there. Swap or add
+// as Ben supplies more from the Google listing.
+const reviews = [
+  {
+    quote:
+      'As a former competitive boxer bringing my 12 year old daughter, this place is amazing for both of our skills and knowledge levels. The coaching staff are highly involved in teaching both of us techniques and also phenomenal motivators to push through their circuit training. If you have aspirations to become the next Olympic Champion or just want to get in shape in a fun and creative way this is the place for you.',
+    name: 'five star review - Dustin Austin',
+    source: 'Google review',
+  },
+  {
+    quote:
+      'I believe that anyone showing any past, present or possible inclination towards boxing should give this gym a shot. I spent months inside of this gym and the level of commitment I saw from the boxers was inspiring. Speed, strength, coordination and most importantly dedication is a clear trait that this gym’s members and staff exude during the training.',
+    name: 'member testimonial',
+    source: 'fightersnashville.com',
+  },
+  {
+    quote:
+      'Being apart of Fighters Nashville, has brought me to terms with who I am... they not only showed me what it means to be a fighter but also what it means to be fighting for something and stand behind it with excellence. I recommend you come and give Fighters Nashville a chance to show you what it means to be a fighter, I guarantee you won’t regret it!!!!',
+    name: 'member testimonial',
+    source: 'fightersnashville.com',
+  },
+];
+---
+
+<Base title={pageTitle} description={description}>
+  <!-- ============ HERO: reserved for fbg-header.mp4 ============
+       Drop the media guy's resized file at public/video/fbg-header.mp4 and
+       it plays; until then the dark ground stands in. -->
+  <section class="hero grain">
+    <video class="hero-video" autoplay muted loop playsinline aria-hidden="true">
+      <source src="/video/fbg-header.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <h1 class="reveal"><span class="h1-line">NASHVILLE BOXING</span> <span class="h1-line">AT ITS BEST</span></h1>
+      <p class="sub reveal">
+        {classes.map((c, i) => (
+          <>
+            <span class="sub-item">{c.name}</span>
+            {i < classes.length - 1 && <span class="sub-sep" aria-hidden="true" />}
+          </>
+        ))}
+      </p>
+      <span class="btn-ring reveal">
+        <button class="btn js-open-lead" type="button">GET STARTED</button>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 1 ============ -->
+  <section class="split grain fluid-host">
+    <div class="wrap split-grid">
+      <div class="split-copy">
+        <h2 class="reveal">WE ARE ALL FIGHTERS: WHAT ARE YOU FIGHTING FOR?</h2>
+        <div class="reveal">
+          <p>Everyone’s fighting for something.</p>
+          <p>
+            For some, it’s fitness. For others, it’s focus, confidence, or just a little peace of
+            mind. Whatever your fight looks like, you’ll find your place here.
+          </p>
+          <p>
+            At <b>Fighters Boxing Gym</b>, we’ve built more than a gym we’ve built a community. A
+            place where people push limits, support each other, and keep showing up no matter what
+            life throws their way. Whether you’re stepping into the ring for the first time or
+            training for your next bout, you’ll get real coaching, real results, and people who’ve
+            got your back.
+          </p>
+          <p>No egos. No gimmicks. Just hard work, respect, and progress.</p>
+          <p>
+            You’ll leave every class stronger not just in body, but in mindset. When you train
+            here, you learn more than combinations and footwork. You learn to stay calm under
+            pressure, to show up when it’s hard, and to keep fighting in and out of the ring.
+          </p>
+        </div>
+        <p class="slogan reveal">Join Nashville’s Best Boxing Gym and Find Something Worth Fighting For.</p>
+        <span class="btn-ring reveal">
+          <button class="btn js-open-lead" type="button">GET STARTED</button>
+        </span>
+      </div>
+      <figure class="split-media mat mat-warm reveal">
+        <img
+          src="/img/ring-facing-off.jpg"
+          alt="Two Fighters members squared up and ready to work in the ring"
+          loading="lazy"
+          width="1040"
+          height="640"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ OUR CLASSES ticker (red line, white text) ============ -->
+  <a class="ticker" href="#classes" aria-label="Our Classes">
+    <div class="ticker-track">
+      {
+        [0, 1].map(() => (
+          <span class="ticker-seg" aria-hidden="true">
+            {Array.from({ length: tickerRepeats }).map(() => (
+              <>
+                                {classes.map((c) => (
+                  <>
+                    <span class="ticker-item">{c.name}</span><span class="ticker-sep" aria-hidden="true" />
+                  </>
+                ))}
+              </>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </a>
+
+  <!-- ============ SECTION 2 (mirrored, warm ground) ============ -->
+  <section class="split grain alt fluid-host">
+    <div class="wrap split-grid flip">
+      <figure class="split-media mat mat-white reveal">
+        <img
+          src="/img/sparring-1600.webp"
+          alt="Two boxers sparring in headgear while a Fighters coach watches from the ropes"
+          loading="lazy"
+          width="1600"
+          height="1069"
+        />
+      </figure>
+      <div class="split-copy">
+        <h2 class="reveal">WHAT ARE YOU FIGHTING FOR?</h2>
+        <div class="reveal">
+          <p>Welcome to <b>Fighters Boxing Gym</b>, Nashville’s best boxing facility.</p>
+          <p>
+            We’re not just another fitness club with a few heavy bags in the corner. This is a
+            real boxing gym built for real boxers.
+          </p>
+          <p>
+            Our programs are designed for <b>all levels</b>, from total beginners to seasoned
+            fighters, with options for
+            <b>group classes, youth classes, private sessions, open gym, and sparring</b>. We’ve
+            created an environment where everyone’s welcome to learn the classic art of boxing, get
+            fit, and have fun doing it.
+          </p>
+          <p>
+            We believe boxing isn’t just a workout. It’s therapy, it’s discipline, it’s
+            empowerment. It teaches you how to breathe under pressure, stay sharp when tired, and
+            fight back when life hits hard. That’s why we’ve dropped every barrier to entry. No
+            experience needed, no ego allowed. Just show up, put in the work, and discover what
+            you’re capable of.
+          </p>
+          <p>So, what are you fighting for?</p>
+          <p>
+            Come find out inside Nashville’s best boxing gym, <b>Fighters Boxing Gym</b>, where
+            every round counts and everyone has a reason to fight.
+          </p>
+        </div>
+        <span class="btn-ring reveal">
+          <button class="btn js-open-lead" type="button">GET STARTED</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLASSES: self-advancing card stack ============ -->
+  <section class="classes grain" id="classes">
+    <div class="wrap">
+      <h2 class="classes-title reveal">Boxing Classes</h2>
+    </div>
+    <div class="stack reveal" data-interval="2800">
+      <div class="stack-stage">
+        {
+          classes.map((c, i) => (
+            <a class={`stack-card${i === 0 ? ' is-active' : ''}`} href={c.href} data-i={i} draggable="false">
+              <span class="card-media">
+                <img src={c.image} alt={`${c.name} at Fighters Boxing Gym`} loading="lazy" width="1040" height="640" />
+              </span>
+              <span class="card-shade" aria-hidden="true"></span>
+              <span class="card-title">{c.name}</span>
+            </a>
+          ))
+        }
+      </div>
+      <div class="stack-dots" role="tablist" aria-label="Boxing Classes slides">
+        {classes.map((c, i) => (
+          <button class={`dot${i === 0 ? ' on' : ''}`} type="button" data-i={i} aria-label={c.name} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS (placeholders, real reviews pending) ============ -->
+  <section class="testimonials grain fluid-host">
+    <div class="wrap">
+      <p class="reviews-eyebrow reveal">Google Reviews</p>
+      <h2 class="reveal">5 Star Gym</h2>
+      <div class="quote-grid">
+        {
+          reviews.map((r) => (
+            <figure class="quote-card reveal">
+              <span class="stars" aria-hidden="true">
+                {[0, 1, 2, 3, 4].map(() => (
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9L12 2.6Z" fill="#CC0000" />
+                  </svg>
+                ))}
+              </span>
+              <blockquote>{r.quote}</blockquote>
+              <figcaption class="quote-name">{r.name}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- hero: dark stage for the background video ---------- */
+  .hero {
+    position: relative;
+    background: var(--ground-band);
+    overflow: clip;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: calc(92vh - 88px);
+    padding: clamp(72px, 10vw, 140px) 0;
+  }
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* lightened from the WP build's 0.7 per Ben; a touch more weight is
+     kept behind the centered copy so the white type still reads */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      rgba(9, 9, 9, 0.5),
+      rgba(9, 9, 9, 0.32)
+    );
+  }
+  .hero-inner { position: relative; max-width: 900px; }
+  .hero h1 {
+    font-weight: 900;
+    font-size: min(88px, 7.9vw);
+    color: var(--on-dark);
+  }
+  .h1-line { display: block; white-space: nowrap; }
+  .hero .sub {
+    font-size: clamp(9px, 2.7vw, 26px);
+    line-height: 1.25;
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--on-dark);
+    margin: 24px auto 38px;
+    max-width: none;
+    white-space: nowrap;
+  }
+  .sub-item { text-transform: capitalize; white-space: nowrap; }
+  .sub-sep {
+    display: inline-block;
+    width: clamp(5px, 1.1vw, 9px);
+    height: clamp(5px, 1.1vw, 9px);
+    background: var(--accent);
+    transform: rotate(45deg);
+    margin: 0 clamp(5px, 1.4vw, 14px) 2px;
+    vertical-align: middle;
+  }
+  .hero .btn-ring { --ring-gap: var(--ground-band); }
+  .hero :global(.btn) { border-color: var(--ground-band); }
+
+
+  /* split sections, mat frames and .fluid-host now live in global.css so
+     the homepage and the inner pages share one definition */
+  .slogan {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(18px, 1.9vw, 24px);
+    line-height: 1.3;
+    margin-top: clamp(18px, 2.5vw, 30px);
+    max-width: 30ch;
+  }
+
+  /* ---------- OUR CLASSES ticker: the red line ---------- */
+  .ticker {
+    display: block;
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+    text-decoration: none;
+  }
+  .ticker:hover, .ticker:focus-visible { background: var(--accent-hover); }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 30s linear infinite;
+  }
+  .ticker-seg { display: flex; align-items: center; }
+  .ticker-sep {
+    display: inline-block;
+    width: clamp(8px, 1vw, 12px);
+    height: clamp(8px, 1vw, 12px);
+    background: rgba(255, 255, 255, 0.75);
+    transform: rotate(45deg);
+    margin: 0 0.5em;
+    flex: none;
+    align-self: center;
+  }
+  .ticker-item {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(20px, 2.6vw, 34px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: var(--on-dark);
+    white-space: nowrap;
+    padding: 0 0.55em;
+  }
+  @keyframes ticker-scroll {
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- classes: fanned card stack, moves on its own ---------- */
+  .classes {
+    background: var(--ground-band);
+    padding: var(--section-pad) 0;
+    overflow: clip;
+  }
+  .classes-title {
+    color: var(--on-dark);
+    font-size: clamp(28px, 3.6vw, 46px);
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+  .stack { --card-w: min(520px, 78vw); --card-h: min(320px, 48vw); }
+  .stack-stage {
+    position: relative;
+    height: calc(var(--card-h) + 90px);
+    perspective: 1100px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .stack-card {
+    position: absolute;
+    bottom: 0;
+    width: var(--card-w);
+    height: var(--card-h);
+    border-radius: var(--radius-panel);
+    border: 4px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    background: #181817;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.65s ease;
+    will-change: transform;
+    user-select: none;
+    cursor: pointer;
+  }
+  .stack-card.is-active { cursor: grab; }
+  .stack-card:active { cursor: grabbing; }
+  .card-media {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background: #181817;
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.62), transparent 55%);
+  }
+  .card-title {
+    position: absolute;
+    left: 22px;
+    bottom: 18px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(20px, 2.2vw, 28px);
+    text-transform: uppercase;
+    color: var(--on-dark);
+    letter-spacing: 0.01em;
+  }
+  .stack-dots {
+    margin-top: 26px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 0;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .dot:hover { background: rgba(255, 255, 255, 0.55); }
+  .dot.on { background: var(--accent); transform: scale(1.25); }
+
+  /* ---------- testimonials ---------- */
+  .testimonials { background: var(--ground); padding: var(--section-pad) 0; }
+  .reviews-eyebrow {
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .testimonials h2 { font-size: clamp(28px, 3.6vw, 46px); margin-bottom: clamp(24px, 3.5vw, 44px); }
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2vw, 28px);
+  }
+  .quote-card {
+    margin: 0;
+    background: var(--ground-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-panel);
+    padding: clamp(22px, 2.4vw, 32px);
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .stars { display: flex; gap: 3px; }
+  .quote-card blockquote {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .quote-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { animation: none; }
+    .stack-card { transition: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .hero { min-height: 0; }
+    .quote-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  // Card-stack slideshow: the fanned deck Ben shared, rebuilt as portable
+  // vanilla JS for the static stack. Auto-advances, pauses on hover, dots,
+  // click-to-focus, swipe on the active card, arrow keys.
+  const stack = document.querySelector('.stack');
+  if (stack) {
+    const cards = Array.from(stack.querySelectorAll('.stack-card'));
+    const dots = Array.from(stack.querySelectorAll('.dot'));
+    const n = cards.length;
+    const interval = Number(stack.getAttribute('data-interval')) || 2800;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let active = 0;
+    let hovering = false;
+    let timer;
+
+    const SPREAD = 16; // deg per step
+    const LIFT = 22;
+    const DEPTH = 140;
+
+    function offsetOf(i) {
+      let off = i - active;
+      if (off > n / 2) off -= n;
+      if (off < -n / 2) off += n;
+      return off;
+    }
+
+    function layout() {
+      const w = cards[0].offsetWidth;
+      const spacing = Math.max(10, Math.round(w * 0.52));
+      cards.forEach((card, i) => {
+        const off = offsetOf(i);
+        const abs = Math.abs(off);
+        const isActive = off === 0;
+        const x = off * spacing;
+        const y = abs * 10 + (isActive ? -LIFT : 0);
+        const z = -abs * DEPTH;
+        const scale = isActive ? 1.03 : 0.94;
+        const rotZ = off * SPREAD;
+        const rotX = isActive ? 0 : 12;
+        card.style.transform =
+          `translateX(${x}px) translateY(${y}px) translateZ(${z}px) rotateZ(${rotZ}deg) rotateX(${rotX}deg) scale(${scale})`;
+        card.style.zIndex = String(100 - abs);
+        card.style.opacity = abs > 3 ? '0' : '1';
+        card.classList.toggle('is-active', isActive);
+        card.setAttribute('tabindex', isActive ? '0' : '-1');
+      });
+      dots.forEach((d, i) => d.classList.toggle('on', i === active));
+    }
+
+    function go(i) {
+      active = ((i % n) + n) % n;
+      layout();
+    }
+
+    function startAuto() {
+      if (reduced) return;
+      stopAuto();
+      timer = window.setInterval(() => {
+        if (!hovering) go(active + 1);
+      }, Math.max(700, interval));
+    }
+    function stopAuto() {
+      if (timer) window.clearInterval(timer);
+    }
+
+    cards.forEach((card, i) => {
+      card.addEventListener('click', (e) => {
+        if (i !== active) {
+          e.preventDefault();
+          go(i);
+        }
+        // active card click follows its link
+      });
+    });
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+
+    stack.addEventListener('mouseenter', () => (hovering = true));
+    stack.addEventListener('mouseleave', () => (hovering = false));
+    stack.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(active - 1);
+      if (e.key === 'ArrowRight') go(active + 1);
+    });
+
+    // swipe on the stage
+    let startX = null;
+    stack.addEventListener('pointerdown', (e) => (startX = e.clientX));
+    stack.addEventListener('pointerup', (e) => {
+      if (startX === null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      if (Math.abs(dx) > 60) go(active + (dx < 0 ? 1 : -1));
+    });
+
+    window.addEventListener('resize', layout);
+    layout();
+    startAuto();
+  }
+
+</script>
+
+<script>
+  // Ambient fluid gradient (Ben's pick), ported vanilla in scripts/fluid-bg.js.
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => mountFluidBg(host));
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

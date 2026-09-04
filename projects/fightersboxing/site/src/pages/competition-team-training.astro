@@ -1,0 +1,53 @@
+---
+// Copy verbatim from the client's WordPress export (Tools > Export,
+// 2026-08-26), minus em dashes per Ben's standing rule (two on this page,
+// both logged in source/inner-pages.md). One addition that is a link, not
+// copy: "Boxing Basics Class" in the entry requirements now links to the
+// beginners page it names, since the client's own text sends readers there.
+import ClassPage from '../layouts/ClassPage.astro';
+
+const lead = {
+  heading: 'Train Like a Fighter, Compete Like a Champion',
+  body: `<p>Our <b>Competition Team Training</b> is the real deal: a program designed for serious
+    athletes who want to test their limits. Led by <b>USA Certified coaches</b> with years of
+    amateur and professional fight experience. This advanced class focuses on sparring,
+    conditioning, technical refinement, and ring IQ. You’ll train alongside active competitors
+    who push you to bring your best every round.</p>`,
+  readMore: { href: '/our-gyms/', label: 'Read More' },
+  image: {
+    src: '/img/classes/competition-team.jpg',
+    alt: 'Two boxers trading punches in the ring while the team watches from the ropes',
+    width: 1040,
+    height: 640,
+  },
+};
+
+const pair = [
+  {
+    heading: 'Built for Competitors and the Committed',
+    body: `<p>While many members of our competition team actively fight in sanctioned bouts, not
+      everyone chooses to compete, and that’s perfectly fine. Plenty of athletes train with the
+      team for the challenge, discipline, and skill development that comes with high-level
+      boxing. The atmosphere is focused, respectful, and intense exactly what you’d expect from a
+      real fight gym.</p>`,
+  },
+  {
+    heading: 'Entry Requirements',
+    body: `<p>Because this program is built for experienced boxers, we don’t allow first-time
+      visitors to jump straight into the competition class unless they know or have been invited
+      by one of our coaches. If you’re new, we recommend taking a
+      <a href="/beginners-boxing-class/">Boxing Basics Class</a> first to be evaluated, stopping
+      by for a gym tour, or simply coming in to meet the coaching staff. Once you’re ready, we’ll
+      help you earn your spot and start training with Nashville’s best.</p>`,
+  },
+];
+---
+
+<ClassPage
+  pageTitle="Competition Team Training | Fighters Boxing Gym"
+  description="Competition Team Training is the real deal: an advanced program for serious athletes, focused on sparring, conditioning, technical refinement, and ring IQ."
+  h1Lines={['COMPETITION', 'TEAM TRAINING']}
+  lead={lead}
+  pair={pair}
+  currentHref="/competition-team-training/"
+/>

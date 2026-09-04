@@ -1,0 +1,70 @@
+---
+// Copy verbatim from the client's WordPress export (Tools > Export,
+// 2026-08-26). Shared boilerplate covering both Fighters Boxing Gym and
+// Nashville MMA Training Camp, the client's own choice, kept as published.
+import LegalPage from '../layouts/LegalPage.astro';
+
+const sections = [
+  {
+    heading: '1. Use of Website',
+    body: `<p>By accessing this website, you agree to:</p>
+      <ul><li>Use it only for lawful purposes</li><li>Not misuse or attempt to disrupt the website</li>
+      <li>Provide accurate information when required</li></ul>`,
+  },
+  {
+    heading: '2. Membership &amp; Services',
+    body: `<ul><li>Memberships, classes, and services are subject to availability</li>
+      <li>We reserve the right to modify schedules, pricing, or offerings at any time</li>
+      <li>Participation in training is at your own risk</li></ul>`,
+  },
+  {
+    heading: '3. Health &amp; Responsibility',
+    body: `<p>By participating in any training:</p>
+      <ul><li>You confirm you are physically able to participate</li>
+      <li>You understand the risks involved in combat sports and fitness training</li>
+      <li>You agree that Fighters Boxing Gym and Nashville MMA Training Camp are not liable for injuries</li></ul>`,
+  },
+  {
+    heading: '4. Payments &amp; Refunds',
+    body: `<ul><li>All payments must be made as agreed at the time of purchase</li>
+      <li>Refund policies (if applicable) will be communicated separately</li>
+      <li>Late or failed payments may result in suspension of services</li></ul>`,
+  },
+  {
+    heading: '5. Intellectual Property',
+    body: `<p>All content on this website (text, images, branding) is owned by us and may not be
+      copied, reproduced, or distributed without permission.</p>`,
+  },
+  {
+    heading: '6. Limitation of Liability',
+    body: `<p>We are not responsible for:</p>
+      <ul><li>Injuries sustained during training</li><li>Loss of personal belongings</li>
+      <li>Website downtime or technical issues</li></ul>`,
+  },
+  {
+    heading: '7. Termination',
+    body: `<p>We reserve the right to:</p>
+      <ul><li>Suspend or terminate access to our services for violations of these terms</li>
+      <li>Refuse service at our discretion</li></ul>`,
+  },
+  {
+    heading: '8. Changes to Terms',
+    body: `<p>We may update these Terms &amp; Conditions at any time. Continued use of the
+      website means you accept the updated terms.</p>`,
+  },
+  {
+    heading: '9. Contact Information',
+    body: `<p>For any questions regarding these terms, please contact
+      <a href="mailto:support@fightersnashville.com">support@fightersnashville.com</a>.</p>`,
+  },
+];
+---
+
+<LegalPage
+  pageTitle="Terms &amp; Conditions | Fighters Boxing Gym"
+  description="The terms that apply to using the Fighters Boxing Gym website and training with us."
+  h1Lines={['TERMS &', 'CONDITIONS']}
+  effectiveDate="April 2, 2026"
+  intro="Welcome to Fighters Boxing Gym and Nashville MMA Training Camp. By using our website and services, you agree to the following terms."
+  sections={sections}
+/>

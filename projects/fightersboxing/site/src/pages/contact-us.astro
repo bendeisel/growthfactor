@@ -1,0 +1,145 @@
+---
+// CONTACT US
+//
+// The client's WordPress export for this page was mostly a page-builder
+// demo contact form and an "01. New York / 02. Boston / 03. Los Angeles /
+// 04. Austin" office block, none of which is real (this is a single
+// Nashville gym). Real content kept: the phone, the email, and the map,
+// all of which already sit in Header.astro and Footer.astro too. This page
+// exists so "Contact Us" has a real destination in the footer nav rather
+// than the popup form being the only way to reach out.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+
+const mapsEmbed =
+  'https://maps.google.com/maps?q=405+42nd+Ave+N,+Nashville,+TN+37209&z=15&output=embed';
+const mapsUrl =
+  'https://www.google.com/maps/place/Fighters+Boxing+Gym/@36.152765,-86.837447,15z/data=!4m6!3m5!1s0x886461ed4d74f3c3:0xa3a537fa882902b1!8m2!3d36.1527649!4d-86.8374466!16s%2Fg%2F11j138pfhd?hl=en&entry=ttu';
+---
+
+<Base
+  title="Contact Us | Fighters Boxing Gym Nashville"
+  description="Reach Fighters Boxing Gym: phone, email, and the gym's location at 405 42nd Ave N, Nashville, TN 37209."
+>
+  <PageHeader lines={['GET IN', 'TOUCH']} sub="Call, email, or come by the gym" />
+
+  <section class="contact grain fluid-host">
+    <div class="wrap contact-grid">
+      <div class="contact-copy reveal">
+        <h2>Fighters Boxing Gym</h2>
+        <dl class="nap">
+          <div>
+            <dt>Phone</dt>
+            <dd><a href="tel:6292892988">629-289-2988</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:support@fightersnashville.com">support@fightersnashville.com</a></dd>
+          </div>
+          <div>
+            <dt>Address</dt>
+            <dd><a href={mapsUrl} rel="noopener" target="_blank">405 42nd Ave N, Nashville, TN 37209</a></dd>
+          </div>
+        </dl>
+        <span class="btn-ring">
+          <button class="btn js-open-lead" type="button">REQUEST MORE INFO</button>
+        </span>
+      </div>
+
+      <div class="map-frame reveal">
+        <iframe
+          src={mapsEmbed}
+          title="Map to Fighters Boxing Gym, 405 42nd Ave N, Nashville"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .contact {
+    background: var(--ground);
+    padding: var(--section-pad) 0;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+  .contact-copy h2 { font-size: clamp(30px, 3.8vw, 48px); margin-bottom: clamp(24px, 3vw, 34px); }
+  .nap {
+    display: grid;
+    gap: clamp(16px, 2vw, 22px);
+    margin: 0 0 clamp(26px, 3.4vw, 38px);
+  }
+  .nap dt {
+    font-family: var(--font-action);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 2px;
+  }
+  .nap dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(18px, 2vw, 22px);
+    color: var(--text-dark);
+  }
+  .nap dd a:hover, .nap dd a:focus-visible { color: var(--accent); }
+
+  .map-frame {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: calc(var(--radius-panel) + 10px);
+    overflow: hidden;
+    box-shadow: var(--shadow-popup);
+  }
+  .map-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  const reducedFluid = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reducedFluid) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

@@ -1,0 +1,67 @@
+---
+// CLASS TIMES, SYNCED
+//
+// The same schedule as /schedule/, filtered to the one class this page is
+// about, in the exact same grid component every other schedule on the site
+// uses. Give the strip the page's own href and it finds the program, so a
+// schedule edit updates the schedule page and every class page together. A
+// page whose class has no sessions renders nothing.
+import ScheduleGrid from './ScheduleGrid.astro';
+import { activeDays, programForHref } from '../data/schedule.js';
+import { getSessions } from '../lib/schedule-source.js';
+
+interface Props {
+  currentHref: string;
+}
+const { currentHref } = Astro.props as Props;
+
+const program = programForHref(currentHref);
+const sessions = await getSessions();
+const hasSessions = program ? activeDays(sessions, { program: program.slug }).length > 0 : false;
+---
+
+{
+  hasSessions && program && (
+    <section class="times grain fluid-host">
+      <div class="wrap">
+        <div class="times-head reveal">
+          <h2>Class times</h2>
+          <p class="times-links">
+            <a href="/schedule/">See the full week</a>
+          </p>
+        </div>
+
+        <div class="reveal">
+          <ScheduleGrid program={program.slug} />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .times {
+    background: var(--ground);
+    padding: var(--section-pad) 0;
+  }
+  .times-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: clamp(24px, 3.2vw, 38px);
+  }
+  .times-head h2 { font-size: clamp(28px, 3.6vw, 46px); }
+  .times-links {
+    display: flex;
+    gap: clamp(16px, 2vw, 28px);
+    flex-wrap: wrap;
+    margin: 0;
+  }
+  .times-links a {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+// Lead-capture popup: house rule: every request CTA opens this modal.
+// Same LeadConnector form the WP build uses ("New Trial Form").
+const FORM_URL = 'https://link.growth-factor.ai/widget/form/0maCMu9uqM7cqIfqR9Mb';
+const EMBED_JS = 'https://link.growth-factor.ai/js/form_embed.js';
+---
+
+<div class="lead-overlay" id="lead-popup" hidden>
+  <div class="lead-dialog" role="dialog" aria-modal="true" aria-label="New Trial Form">
+    <button class="lead-close" type="button" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <iframe
+      data-src={FORM_URL}
+      data-embed={EMBED_JS}
+      id="inline-0maCMu9uqM7cqIfqR9Mb"
+      data-layout="{'id':'INLINE'}"
+      data-form-name="New Trial Form"
+      data-form-id="0maCMu9uqM7cqIfqR9Mb"
+      title="New Trial Form"
+    ></iframe>
+  </div>
+</div>
+
+<style>
+  /* Measured popup spec: 640px, 20px radius, 0.8 black overlay, 1px border,
+     the popup shadow. */
+  .lead-overlay[hidden] { display: none; }
+  .lead-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+  }
+  .lead-dialog {
+    position: relative;
+    width: min(640px, 100%);
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-popup);
+    overflow: hidden;
+  }
+  .lead-dialog iframe {
+    display: block;
+    width: 100%;
+    height: min(640px, 78vh);
+    border: none;
+  }
+  .lead-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--ground);
+    color: var(--text-dark);
+    cursor: pointer;
+  }
+  .lead-close:hover { color: var(--accent); }
+</style>
+
+<script>
+  const overlay = document.getElementById('lead-popup');
+  const iframe = overlay?.querySelector('iframe');
+  const closeBtn = overlay?.querySelector('.lead-close');
+  let embedLoaded = false;
+  let lastFocus = null;
+
+  function openLead() {
+    if (!overlay || !iframe) return;
+    if (!iframe.src) iframe.src = iframe.dataset.src || '';
+    if (!embedLoaded && iframe.dataset.embed) {
+      const s = document.createElement('script');
+      s.src = iframe.dataset.embed;
+      document.body.appendChild(s);
+      embedLoaded = true;
+    }
+    lastFocus = document.activeElement;
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus();
+  }
+
+  function closeLead() {
+    if (!overlay) return;
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocus instanceof HTMLElement) lastFocus.focus();
+  }
+
+  document.querySelectorAll('.js-open-lead').forEach((el) => {
+    el.addEventListener('click', openLead);
+  });
+  closeBtn?.addEventListener('click', closeLead);
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) closeLead();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay && !overlay.hidden) closeLead();
+  });
+</script>

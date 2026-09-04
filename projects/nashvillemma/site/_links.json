@@ -1,0 +1,27 @@
+{
+  "built": [
+    "index.html",
+    "schedule.html",
+    "programs/boxing.html",
+    "programs/jiu-jitsu.html",
+    "programs/kids-brazilian-jiu-jitsu.html",
+    "programs/kids-fitness.html",
+    "programs/kids-martial-arts.html",
+    "programs/mixed-martial-arts.html",
+    "programs/mma-fight-team.html",
+    "programs/muay-thai.html",
+    "programs/open-gym.html",
+    "programs/personal-training.html",
+    "programs/self-defense.html",
+    "programs/sports-performance.html",
+    "programs/womens-classes.html",
+    "programs/wrestling.html"
+  ],
+  "missing_targets": [
+    "about.html",
+    "contact.html",
+    "events.html",
+    "programs/index.html",
+    "recovery.html"
+  ]
+}

@@ -1,0 +1,282 @@
+---
+// FAQs
+//
+// The page that answers what people in Nashville actually ask before they
+// walk into a boxing gym: cost, first class, gear, whether they will have to
+// spar, what age kids can start, how to get on the competition team, where
+// the place is. Written to be quotable by an answer engine and useful to a
+// nervous beginner, which turn out to be the same job.
+//
+// Questions live in Sanity so the gym can add one the day somebody asks it
+// twice, with the committed copy in src/data/faqs.js as the fallback. The
+// FAQPage structured data is generated from the same list, so it can never
+// describe questions the page does not show.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+import { faqSections } from '../data/faqs.js';
+import { getFaqs } from '../lib/faq-source.js';
+
+const faqs = await getFaqs();
+const sections = faqSections
+  .map((s) => ({ ...s, items: faqs.filter((f) => f.section === s.slug) }))
+  .filter((s) => s.items.length > 0);
+
+const stripTags = (html) => html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) },
+  })),
+};
+---
+
+<Base
+  title="Boxing FAQs | Fighters Boxing Gym Nashville"
+  description="Straight answers about boxing in Nashville: what a first class is like, what to bring, what it costs, what age kids can start, whether you have to spar, and how to get on the competition team."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} slot="head" />
+
+  <PageHeader lines={['BOXING', 'QUESTIONS']} sub="Answered straight, by the coaches who get asked" />
+
+  <section class="faq grain fluid-host">
+    <div class="wrap">
+      <div class="faq-top reveal">
+        <label class="faq-search">
+          <span class="sr-only">Search the questions</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <input type="search" id="faq-q" placeholder="Search: gloves, cost, kids, sparring" autocomplete="off" />
+        </label>
+        <nav class="faq-jump" aria-label="Jump to a section">
+          {sections.map((s) => <a href={`#${s.slug}`}>{s.title}</a>)}
+        </nav>
+      </div>
+
+      <p class="faq-count" id="faq-count" role="status" hidden></p>
+
+      {
+        sections.map((s) => (
+          <section class="faq-group" id={s.slug} data-group>
+            <h2 class="faq-group-title reveal">{s.title}</h2>
+            <div class="faq-items">
+              {s.items.map((f) => (
+                <details class="qa" data-q={`${f.q} ${stripTags(f.a)}`.toLowerCase()}>
+                  <summary>
+                    <span class="qa-q">{f.q}</span>
+                    <span class="qa-mark" aria-hidden="true"></span>
+                  </summary>
+                  <div class="qa-a" set:html={f.a} />
+                </details>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+
+      <p class="faq-none" id="faq-none" hidden>
+        Nothing matches that. Call <a href="tel:6292892988">629-289-2988</a> and ask us
+        directly, and the answer will end up on this page.
+      </p>
+    </div>
+  </section>
+
+  <section class="close grain fluid-host">
+    <div class="wrap close-inner">
+      <h2 class="reveal">Still deciding?</h2>
+      <p class="reveal">
+        Come see the place. Watch a round, meet the coaching staff, and ask the rest of
+        your questions in person.
+      </p>
+      <span class="btn-ring reveal">
+        <button class="btn js-open-lead" type="button">GET MORE INFO</button>
+      </span>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .faq {
+    background: var(--ground);
+    padding: clamp(38px, 5vw, 68px) 0 var(--section-pad);
+  }
+
+  /* ---------- search and jump links ---------- */
+  .faq-top {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 40px);
+    flex-wrap: wrap;
+    padding-bottom: clamp(18px, 2.4vw, 28px);
+    border-bottom: 1px solid var(--border);
+  }
+  .faq-search {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 280px;
+    max-width: 380px;
+    background: var(--ground-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 0 18px;
+    color: var(--accent);
+  }
+  .faq-search input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: 0;
+    outline-offset: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-dark);
+    padding: 14px 0;
+  }
+  .faq-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px clamp(14px, 1.8vw, 22px);
+  }
+  .faq-jump a {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .faq-count {
+    margin: clamp(16px, 2vw, 22px) 0 0;
+    font-size: 14px;
+    color: var(--text-light);
+  }
+  .faq-none {
+    margin: clamp(24px, 3vw, 36px) 0 0;
+    font-size: 16px;
+  }
+
+  /* ---------- the questions ---------- */
+  .faq-group { padding-top: clamp(30px, 4vw, 52px); scroll-margin-top: 110px; }
+  .faq-group-title {
+    font-size: clamp(22px, 2.7vw, 34px);
+    margin-bottom: clamp(14px, 1.8vw, 22px);
+  }
+  .faq-items { border-top: 1px solid var(--border); }
+  .qa { border-bottom: 1px solid var(--border); }
+  .qa summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: clamp(15px, 1.8vw, 20px) 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa-q {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(16px, 1.7vw, 19px);
+    line-height: 1.3;
+  }
+  .qa[open] .qa-q, .qa summary:hover .qa-q { color: var(--accent); }
+  /* plus that becomes a minus, drawn in CSS so there is no icon to load */
+  .qa-mark {
+    position: relative;
+    flex: none;
+    width: 15px;
+    height: 15px;
+    margin-top: 4px;
+  }
+  .qa-mark::before, .qa-mark::after {
+    content: '';
+    position: absolute;
+    background: var(--accent);
+    transition: transform 0.25s, opacity 0.25s;
+  }
+  .qa-mark::before { inset: 6px 0 auto; height: 3px; }
+  .qa-mark::after { inset: 0 6px auto; width: 3px; height: 15px; }
+  .qa[open] .qa-mark::after { transform: scaleY(0); opacity: 0; }
+  .qa-a {
+    padding: 0 clamp(28px, 4vw, 56px) clamp(18px, 2.2vw, 26px) 0;
+    max-width: 68ch;
+  }
+  .qa-a :global(p) { margin-bottom: 0.8em; }
+
+  /* ---------- close ---------- */
+  .close {
+    background: var(--ground-alt);
+    padding: clamp(44px, 6vw, 82px) 0;
+  }
+  .close-inner { text-align: center; }
+  .close-inner h2 { font-size: clamp(26px, 3.2vw, 40px); margin-bottom: 14px; }
+  .close-inner p { max-width: 52ch; margin-inline: auto; margin-bottom: clamp(22px, 3vw, 32px); }
+  .close-inner .btn-ring { --ring-gap: var(--ground-alt); }
+  .close-inner .btn { border-color: var(--ground-alt); }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>
+
+<script>
+  // Search filters what is on the page, which is every answer already. No
+  // JavaScript means no filtering and every question still readable.
+  const input = document.getElementById('faq-q');
+  const count = document.getElementById('faq-count');
+  const none = document.getElementById('faq-none');
+  const items = [...document.querySelectorAll('.qa')];
+  const groups = [...document.querySelectorAll('[data-group]')];
+
+  input?.addEventListener('input', () => {
+    const term = input.value.trim().toLowerCase();
+    let shown = 0;
+
+    items.forEach((item) => {
+      const match = !term || (item.dataset.q || '').includes(term);
+      item.hidden = !match;
+      // Open a match while searching so the answer is right there, and
+      // close it again when the search is cleared.
+      item.open = Boolean(term) && match;
+      if (match) shown += 1;
+    });
+
+    groups.forEach((group) => {
+      group.hidden = ![...group.querySelectorAll('.qa')].some((q) => !q.hidden);
+    });
+
+    if (count) {
+      count.hidden = !term;
+      count.textContent = shown === 1 ? '1 question matches' : `${shown} questions match`;
+    }
+    if (none) none.hidden = shown > 0;
+  });
+
+  // A question linked directly, /faqs/#kids for instance, opens itself.
+  const openFromHash = () => {
+    const id = location.hash.slice(1);
+    if (!id) return;
+    document.getElementById(id)?.querySelectorAll('.qa').forEach((qa, i) => {
+      if (i === 0) qa.open = true;
+    });
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+</script>

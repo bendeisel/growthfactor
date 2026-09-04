@@ -1,0 +1,171 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Schedule"
+    },
+    {
+      "id": "page-2",
+      "name": "Programs"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Schedule.dc.html",
+      "title": "Schedule \u2014 all 86 classes",
+      "page": "page-1",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 3485
+    },
+    {
+      "file": "Program-jiu-jitsu.dc.html",
+      "title": "Brazilian Jiu Jitsu in Nashville",
+      "page": "page-2",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 5712
+    },
+    {
+      "file": "Program-boxing.dc.html",
+      "title": "Boxing Classes In Nashville",
+      "page": "page-2",
+      "x": 1600,
+      "y": 0,
+      "w": 1440,
+      "h": 4648
+    },
+    {
+      "file": "Program-muay-thai.dc.html",
+      "title": "Muay Thai Classes in Nashville",
+      "page": "page-2",
+      "x": 3200,
+      "y": 0,
+      "w": 1440,
+      "h": 5756
+    },
+    {
+      "file": "Program-mixed-martial-arts.dc.html",
+      "title": "Mixed Martial Arts In Nashville",
+      "page": "page-2",
+      "x": 4800,
+      "y": 0,
+      "w": 1440,
+      "h": 4923
+    },
+    {
+      "file": "Program-wrestling.dc.html",
+      "title": "Wrestling in Nashville",
+      "page": "page-2",
+      "x": 6400,
+      "y": 0,
+      "w": 1440,
+      "h": 4982
+    },
+    {
+      "file": "Program-self-defense.dc.html",
+      "title": "Self-Defense Classes & Seminars In Nashville",
+      "page": "page-2",
+      "x": 0,
+      "y": 5986,
+      "w": 1440,
+      "h": 6968
+    },
+    {
+      "file": "Program-sports-performance.dc.html",
+      "title": "Sports Performance Classes In Nashville",
+      "page": "page-2",
+      "x": 1600,
+      "y": 5986,
+      "w": 1440,
+      "h": 5617
+    },
+    {
+      "file": "Program-open-gym.dc.html",
+      "title": "Open Gym in Nashville",
+      "page": "page-2",
+      "x": 3200,
+      "y": 5986,
+      "w": 1440,
+      "h": 3868
+    },
+    {
+      "file": "Program-womens-classes.dc.html",
+      "title": "Women\u2019s Muay Thai & Brazilian Jiu-Jitsu Classes in Nashv",
+      "page": "page-2",
+      "x": 4800,
+      "y": 5986,
+      "w": 1440,
+      "h": 4606
+    },
+    {
+      "file": "Program-mma-fight-team.dc.html",
+      "title": "MMA Fight Team In Nashville",
+      "page": "page-2",
+      "x": 6400,
+      "y": 5986,
+      "w": 1440,
+      "h": 4905
+    },
+    {
+      "file": "Program-personal-training.dc.html",
+      "title": "Personal Training in Nashville",
+      "page": "page-2",
+      "x": 0,
+      "y": 13184,
+      "w": 1440,
+      "h": 4238
+    },
+    {
+      "file": "Program-kids-martial-arts.dc.html",
+      "title": "Kids Martial Arts in Nashville",
+      "page": "page-2",
+      "x": 1600,
+      "y": 13184,
+      "w": 1440,
+      "h": 3969
+    },
+    {
+      "file": "Program-kids-brazilian-jiu-jitsu.dc.html",
+      "title": "Kids BJJ Classes In Nashville",
+      "page": "page-2",
+      "x": 3200,
+      "y": 13184,
+      "w": 1440,
+      "h": 4605
+    },
+    {
+      "file": "Program-kids-fitness.dc.html",
+      "title": "Kids Fitness Classes in Nashville",
+      "page": "page-2",
+      "x": 4800,
+      "y": 13184,
+      "w": 1440,
+      "h": 4535
+    }
+  ],
+  "annotations": [
+    {
+      "id": "prog-note",
+      "page": "page-2",
+      "x": 0,
+      "y": -470,
+      "w": 980,
+      "text": "14 PROGRAM PAGES \u2014 every word is the client's own, verbatim from their live site.\n\nFIXED THIS ROUND:\n\u00b7 The gold wash really is there now. A generated section wrapper was never closing, so each\n  wash layer stretched over the whole page and its glow fell outside the visible area.\n\u00b7 Brazilian Jiu Jitsu is now generated like every other page, so it has the framed hero,\n  the centred title and the same spacing. It also carries Bryan Tidwell's real photo and bio.\n\u00b7 SCHEDULE rebuilt as ONE grid, so every column and time row lines up by construction.\n  Class names break at their own colon, with the level in gold underneath.\n\u00b7 Cards restyled: thin gold outline and a small gold accent instead of the heavy left bar.\n\nCLASS TIMES ARE SHARED \u2014 no page has a schedule typed into it; all read data/classes.json."
+    },
+    {
+      "id": "sched-note",
+      "page": "page-1",
+      "x": 0,
+      "y": -300,
+      "w": 680,
+      "text": "MASTER SCHEDULE \u2014 all 86 classes, times aligned across the week. Filter chips work: Adults (69), Kids (12), Fitness (5).\n\nThis grid and every program page read the same file, so a class edited once moves everywhere."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-2"
+  }
+}

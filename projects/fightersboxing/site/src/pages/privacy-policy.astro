@@ -1,0 +1,76 @@
+---
+// Copy verbatim from the client's WordPress export (Tools > Export,
+// 2026-08-26). Shared boilerplate covering both Fighters Boxing Gym and
+// Nashville MMA Training Camp, the client's own choice, kept as published.
+import LegalPage from '../layouts/LegalPage.astro';
+
+const sections = [
+  {
+    heading: '1. Information We Collect',
+    body: `<p>We may collect the following types of information:</p>
+      <h3>Personal Information</h3>
+      <ul><li>Name</li><li>Email address</li><li>Phone number</li><li>Billing information (if applicable)</li></ul>
+      <h3>Non-Personal Information</h3>
+      <ul><li>Browser type</li><li>IP address</li><li>Pages visited</li><li>Time spent on the site</li></ul>`,
+  },
+  {
+    heading: '2. How We Use Your Information',
+    body: `<p>We use your information to:</p>
+      <ul>
+        <li>Provide and manage memberships and services</li>
+        <li>Respond to inquiries and customer support requests</li>
+        <li>Send updates, promotions, or important notifications</li>
+        <li>Improve our website and user experience</li>
+      </ul>`,
+  },
+  {
+    heading: '3. Sharing Your Information',
+    body: `<p>We do <b>not sell or rent your personal information</b>. We may share information
+      only with:</p>
+      <ul><li>Trusted service providers (for payment processing, email systems, etc.)</li>
+      <li>Legal authorities if required by law</li></ul>`,
+  },
+  {
+    heading: '4. Cookies &amp; Tracking',
+    body: `<p>Our website may use cookies to:</p>
+      <ul><li>Enhance user experience</li><li>Analyze website traffic</li><li>Improve performance</li></ul>
+      <p>You can disable cookies through your browser settings.</p>`,
+  },
+  {
+    heading: '5. Data Security',
+    body: `<p>We take reasonable steps to protect your personal information. However, no method
+      of transmission over the internet is 100% secure.</p>`,
+  },
+  {
+    heading: '6. Your Rights',
+    body: `<p>You have the right to:</p>
+      <ul><li>Access your personal data</li><li>Request corrections</li><li>Request deletion of your data</li></ul>
+      <p>To exercise these rights, contact us at
+      <a href="mailto:support@fightersnashville.com">support@fightersnashville.com</a>.</p>`,
+  },
+  {
+    heading: '7. Third-Party Links',
+    body: `<p>Our website may contain links to external sites. We are not responsible for their
+      privacy practices.</p>`,
+  },
+  {
+    heading: '8. Updates to This Policy',
+    body: `<p>We may update this Privacy Policy at any time. Changes will be posted on this page
+      with an updated effective date.</p>`,
+  },
+  {
+    heading: '9. Contact Us',
+    body: `<p>If you have any questions about this Privacy Policy, contact us at
+      <a href="mailto:support@fightersnashville.com">support@fightersnashville.com</a>.</p>`,
+  },
+];
+---
+
+<LegalPage
+  pageTitle="Privacy Policy | Fighters Boxing Gym"
+  description="How Fighters Boxing Gym collects, uses, and protects your information."
+  h1Lines={['PRIVACY', 'POLICY']}
+  effectiveDate="April 2, 2026"
+  intro={`At <b>Fighters Boxing Gym</b> and Nashville MMA Training Camp (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;), your privacy matters. This Privacy Policy explains how we collect, use, and protect your information when you visit our website or engage with our services.`}
+  sections={sections}
+/>

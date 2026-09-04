@@ -1,0 +1,64 @@
+---
+// POSTER HEADER
+//
+// The two-line page lockup: black line, then the second line knocked out
+// white on a full-bleed red slab, with the ambient red fluid moving behind
+// it at higher intensity because inner pages carry no video. Lifted out of
+// ClassPage so the schedule page and every future page share one header
+// instead of three copies drifting apart.
+interface Props {
+  /** [black line, red slab line] */
+  lines: [string, string];
+  /** optional line under the slab, in the client's own sentence case */
+  sub?: string;
+}
+const { lines, sub } = Astro.props as Props;
+---
+
+<section class="page-head grain fluid-host" data-fluid-opacity="0.7" data-fluid-pixel="12">
+  <div class="wrap head-inner">
+    <h1 class="page-title reveal">
+      <span class="t-line">{lines[0]}</span>
+      <span class="t-line t-slab"><span class="t-slab-inner">{lines[1]}</span></span>
+    </h1>
+    {sub && <p class="head-sub reveal">{sub}</p>}
+  </div>
+</section>
+
+<style>
+  .page-head {
+    background: var(--ground);
+    padding: clamp(34px, 5vw, 68px) 0 clamp(30px, 4vw, 54px);
+  }
+  .head-inner { position: relative; z-index: 1; }
+  .page-title {
+    font-weight: 900;
+    font-size: clamp(40px, 8.4vw, 104px);
+    line-height: 0.94;
+    letter-spacing: -0.02em;
+  }
+  .t-line { display: block; }
+  /* the red slab bleeds the full width of the screen; the section clips it */
+  .t-slab {
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: clamp(6px, 0.8vw, 12px);
+    padding-block: clamp(6px, 0.8vw, 14px);
+    background: var(--accent);
+    color: var(--on-dark);
+  }
+  .t-slab-inner {
+    display: block;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: clamp(20px, 4vw, 40px);
+  }
+  .head-sub {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(16px, 2vw, 24px);
+    color: var(--text-dark);
+    margin: clamp(14px, 1.8vw, 22px) 0 0;
+  }
+</style>
