@@ -13,7 +13,7 @@ shell needs to catch up.
 
 Requires the Astro build in site/dist/ (not committed; see site/.gitignore).
 """
-import re, os, glob
+import re, os, glob, json
 
 DIST = 'site/dist'
 SLUG = 'fightersboxing'
@@ -27,7 +27,16 @@ ROUTES = [
     '/competition-team-training/', '/youth-boxing-class/', '/boxing-classes/',
     '/coaches/', '/schedule/', '/faqs/', '/what-to-expect/', '/our-gyms/',
     '/contact-us/', '/privacy-policy/', '/terms-conditions/',
+    '/boxing-blog/',
 ]
+
+# The blog posts come off posts.js rather than being listed here, so adding
+# a post to the site adds it to the shell without anyone remembering to
+# edit this file. Their root-level slugs are the client's original
+# WordPress URLs, kept so existing backlinks still resolve.
+_posts_js = open('site/src/data/posts.js', encoding='utf-8').read()
+_posts = json.loads(_posts_js[_posts_js.index('['):_posts_js.rindex(']') + 1])
+ROUTES += ['/%s/' % p['slug'] for p in _posts]
 
 
 def file_of(route):

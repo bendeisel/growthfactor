@@ -679,3 +679,56 @@ One bug caught in review: the page's "Who It's For" heading used the
 literally, showing `&rsquo;` on the page instead of an apostrophe).
 Replaced with a literal curly apostrophe character. Worth remembering for
 any future heading string with a contraction.
+
+## Round 18: the blog (2026-09-05)
+
+Ben's ask: a blog page with no link in the top nav, linked from the footer
+only, to keep the backlinks and carry more keywords.
+
+**URLs, which is the whole point.** The export has two blog-ish pages:
+`/blog/`, which is empty, and `/boxing-blog/`, the real Elementor archive
+listing all 10 posts. We use `/boxing-blog/`, so their existing index URL
+still resolves (and it is the keyword-richer of the two). The posts sit at
+**root level** exactly as WordPress served them (`/mindset-matters/`, not
+`/blog/mindset-matters/`), so every backlink anyone has built keeps
+working after the migration.
+
+**Files**
+- `source/build_posts.py`: the conversion, kept in the repo so the blog's
+  copy is auditable back to their export the way every other page is.
+  Turns Gutenberg block soup into the plain HTML this site uses, drops the
+  theme's empty galleries, and refuses to run if an em dash survives.
+- `data/posts.js`: generated, not hand-edited. Re-run the script instead.
+- `pages/boxing-blog.astro`: the index.
+- `pages/[post].astro`: a dynamic route that builds only the 10 slugs in
+  `posts.js`, so it cannot swallow a URL belonging to a real page.
+- `components/Footer.astro`: the one link, in the Links column.
+
+**Why the index is not a card grid.** Every one of these posts is
+text-only (the media did not survive the export). A grid of identical
+bordered cards, each with a title and two lines of grey text, is the most
+generated-looking pattern available and would advertise the missing art on
+every row. So: a lead item at full headline size, then ruled rows with a
+date rail. It gives the page a top instead of ten equal blocks, and it
+reads as deliberate rather than as a grid with the pictures missing.
+
+**Two bugs worth remembering, both caught by looking at the rendered page
+rather than the markup:**
+1. The post header was centred while the body was left-aligned. Cause:
+   `class="wrap head-inner"` on one element. `.wrap` centres with auto
+   margins, so narrowing it to a reading measure centred the whole header.
+   Fix: the measure goes on a child of `.wrap`, never on `.wrap` itself.
+2. The index standfirsts were run-on and mis-sourced. Several of these
+   posts open with the list itself, so "the first `<p>`" grabbed the
+   post's closing line as its teaser ("There are plenty of additional ways
+   to protect yourself, also." under a headline promising ten of them).
+   And `<br />` was being stripped without a space, welding lines together
+   ("The LegendThe Problem Child"). The standfirst now takes the first
+   block of text in document order, `<br />` becomes a space (or a colon
+   after a bold label, where that is the job it was doing), and entities
+   are unescaped before whitespace is collapsed.
+
+The shell picks the posts up automatically: `build_shell.py` reads the
+slugs out of `posts.js` rather than listing them, so a new post reaches
+the one-artifact preview without anyone editing the build script. The
+artifact is 25 pages now, was 14.

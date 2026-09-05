@@ -269,3 +269,40 @@ Pending for schema: opening hours from the client.
    homepage card-stack, and the CMS schema. Page copy is mine (no client
    source exists for this class); schedule days/times are a flagged
    placeholder (Tue/Fri 5:45 PM) pending Ben's real answer.
+
+## Ben's revisions, round 18 (2026-09-05)
+1. Blog ported from the client's WordPress export. Their 35 `post` items
+   split cleanly in two:
+   - **10 published posts, kept verbatim.** Real writing by the gym, all
+     in their "Boxing" category, dated January 2025.
+   - **25 drafts, dropped.** Every one is Ring-theme demo content: lorem
+     ipsum bodies ("Qroin faucibus nec mauris...", only 4 unique bodies
+     across all 25) under titles about samurai katanas, muay Thai, MMA,
+     wrestling and CrossFit, none of which is this gym's sport. Never
+     published, so they carry no backlinks and no SEO value. Same call
+     already made for the demo content on Contact Us and Our Gyms.
+2. Nine em dashes replaced across the 10 posts, per the standing rule:
+   seven became colons where the dash introduced an explanation, and two
+   paired-dash asides became parentheses because their own contents are
+   comma-separated ("in boxing (dynamic warmup, shadow boxing, hitting
+   bags) is done in rounds") and commas there would have buried the aside
+   inside the list. Enforced by a guard in `source/build_posts.py`: the
+   script refuses to write the data file if a dash survives.
+3. One image dropped. The only `<img>` that survived the export points at
+   the old Hostinger staging domain
+   (floralwhite-woodcock-644453.hostingersite.com), which stops resolving
+   the moment the site migrates, so it is not hotlinked to a URL about to
+   404. Every other post image is an empty `<figure>`: the media did not
+   come across with the posts at all. **Art to re-supply at handover if
+   the client wants images on these posts.**
+4. Original copy on the blog, flagged as mine, not theirs: the index
+   header sub ("Technique, training, and news from the gym"), the
+   "Read the post" / "All posts" / "Newer" / "Older" affordances, and the
+   closing CTA line on each post ("Reading about it is one thing. Come do
+   it."). Every headline, standfirst and body paragraph is the client's.
+
+**Flag for Ben:** the Billy Falco post (2025-01-16) announces him as
+interim head coach of the competition team. He is not on the Coaches page,
+which was built from the client's current live site. Either the post is
+stale or the Coaches page is incomplete. Worth confirming before launch,
+since it is a live claim about a real person either way.
