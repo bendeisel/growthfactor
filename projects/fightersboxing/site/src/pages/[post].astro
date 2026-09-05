@@ -1,0 +1,300 @@
+---
+// BLOG POST pages.
+//
+// These render at root level (/mindset-matters/, not /blog/mindset-matters/)
+// because that is exactly where WordPress served them. Any backlink anyone
+// has ever built to these posts keeps resolving after the migration, which
+// is the point of porting them at all.
+//
+// This is a dynamic route, but it only ever builds the 10 slugs in
+// posts.js, so it cannot swallow a URL that belongs to a real page: Astro
+// prefers a matching static page file over a dynamic route anyway, and
+// nothing in posts.js collides with an existing page slug.
+//
+// Body copy is the client's, verbatim from their WordPress export, minus
+// em dashes per Ben's standing rule. See source/build_posts.py for the
+// conversion and source/copy.md for what was dropped and flagged.
+import Base from '../layouts/Base.astro';
+import { posts } from '../data/posts.js';
+
+export function getStaticPaths() {
+  return posts.map((post, i) => ({
+    params: { post: post.slug },
+    props: {
+      post,
+      // newest-first order, so "next" walks toward older posts
+      prev: posts[i - 1] ?? null,
+      next: posts[i + 1] ?? null,
+    },
+  }));
+}
+
+const { post, prev, next } = Astro.props;
+
+const fmt = (iso: string) =>
+  new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+// Trimmed to a clean sentence so the meta description does not end mid-word.
+const metaDesc = post.dek.length > 155 ? `${post.dek.slice(0, 152).trim()}...` : post.dek;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  datePublished: post.date,
+  articleSection: 'Boxing',
+  mainEntityOfPage: new URL(`/${post.slug}/`, Astro.site).toString(),
+  publisher: {
+    '@type': 'Organization',
+    name: 'Fighters Boxing Gym',
+    url: Astro.site?.toString(),
+  },
+};
+---
+
+<Base title={`${post.title} | Fighters Boxing Gym Nashville`} description={metaDesc}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+
+  <article class="post">
+    <header class="post-head grain fluid-host" data-fluid-opacity="0.55" data-fluid-pixel="12">
+      <div class="wrap">
+        <!-- the measure sits on an inner element, not on .wrap itself:
+             .wrap centres with auto margins, so narrowing it centres the
+             whole header away from the body copy below it -->
+        <div class="head-inner">
+          <p class="meta reveal">
+            <span class="tag">Boxing</span>
+            <time datetime={post.date}>{fmt(post.date)}</time>
+          </p>
+          <h1 class="post-title reveal">{post.title}</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap body-wrap">
+      <div class="post-body reveal" set:html={post.body} />
+
+      <div class="close-actions">
+        <p class="close-line">Reading about it is one thing. Come do it.</p>
+        <span class="btn-ring">
+          <button class="btn js-open-lead" type="button">GET STARTED</button>
+        </span>
+      </div>
+    </div>
+
+    <nav class="post-nav" aria-label="More posts">
+      <div class="wrap nav-grid">
+        {
+          prev ? (
+            <a class="pn pn-prev" href={`/${prev.slug}/`}>
+              <span class="pn-label">Newer</span>
+              <span class="pn-title">{prev.title}</span>
+            </a>
+          ) : (
+            <span class="pn pn-empty" />
+          )
+        }
+        {
+          next ? (
+            <a class="pn pn-next" href={`/${next.slug}/`}>
+              <span class="pn-label">Older</span>
+              <span class="pn-title">{next.title}</span>
+            </a>
+          ) : (
+            <span class="pn pn-empty" />
+          )
+        }
+      </div>
+      <div class="wrap all-wrap">
+        <a class="all-link" href="/boxing-blog/">All posts</a>
+      </div>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .post-head {
+    background: var(--ground);
+    padding: clamp(34px, 5vw, 68px) 0 clamp(24px, 3vw, 40px);
+  }
+  .head-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 74ch;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: clamp(14px, 1.8vw, 22px);
+  }
+  .tag {
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    background: var(--accent);
+    padding: 5px 11px 4px;
+  }
+  .meta time {
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+  }
+  .post-title {
+    font-size: clamp(32px, 5.6vw, 64px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .body-wrap { padding-bottom: clamp(30px, 4vw, 52px); }
+
+  /* Article measure: long-form copy wants a reading column, not the full
+     content width the marketing sections use. */
+  .post-body {
+    max-width: 68ch;
+    font-size: clamp(17px, 1.4vw, 19px);
+    line-height: 1.68;
+  }
+  .post-body :global(p) { margin-bottom: 1.15em; }
+  .post-body :global(h5),
+  .post-body :global(h4),
+  .post-body :global(h3) {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(21px, 2.2vw, 27px);
+    line-height: 1.2;
+    margin: 1.7em 0 0.6em;
+  }
+  .post-body :global(ol),
+  .post-body :global(ul) {
+    margin: 0 0 1.3em;
+    padding-left: 1.3em;
+  }
+  .post-body :global(li) { margin-bottom: 0.7em; }
+  .post-body :global(li::marker) {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .post-body :global(a) {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+  .post-body :global(blockquote) {
+    margin: 1.6em 0;
+    padding: clamp(16px, 2vw, 24px) clamp(18px, 2.2vw, 28px);
+    background: var(--ground-alt);
+    border-left: 4px solid var(--accent);
+  }
+  .post-body :global(blockquote p:last-child) { margin-bottom: 0; }
+  .post-body :global(strong) { font-weight: 700; }
+
+  .close-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(12px, 1.6vw, 18px);
+    max-width: 68ch;
+    margin-top: clamp(28px, 3.6vw, 46px);
+    padding-top: clamp(24px, 3vw, 36px);
+    border-top: 2px solid var(--text-dark);
+  }
+  .close-line {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.2;
+  }
+
+  /* Post to post, so a reader who lands from search has somewhere to go
+     and the posts link to each other rather than sitting as dead ends. */
+  .post-nav {
+    background: var(--ground-band);
+    color: var(--on-dark);
+    padding: clamp(30px, 4vw, 52px) 0 clamp(22px, 3vw, 34px);
+  }
+  .nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 3vw, 40px);
+  }
+  .pn {
+    display: block;
+    text-decoration: none;
+    color: var(--on-dark);
+    padding: clamp(16px, 2vw, 22px);
+    background: #131313;
+  }
+  .pn-empty { background: none; }
+  .pn-next { text-align: right; }
+  .pn-label {
+    display: block;
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .pn-title {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(16px, 1.7vw, 21px);
+    line-height: 1.18;
+    text-wrap: balance;
+  }
+  a.pn:hover .pn-title { color: var(--accent); }
+
+  .all-wrap {
+    margin-top: clamp(18px, 2.2vw, 26px);
+    text-align: center;
+  }
+  .all-link {
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 3px;
+  }
+  .all-link:hover { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .nav-grid { grid-template-columns: 1fr; }
+    .pn-next { text-align: left; }
+    .pn-empty { display: none; }
+  }
+</style>
+
+<script>
+  import { mountFluidBg } from '../scripts/fluid-bg.js';
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const start = () => {
+      document.querySelectorAll('.fluid-host').forEach((host) => {
+        const opts = {};
+        const o = Number(host.dataset.fluidOpacity);
+        const p = Number(host.dataset.fluidPixel);
+        if (o) opts.opacity = o;
+        if (p) opts.pixelSize = p;
+        mountFluidBg(host, opts);
+      });
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 2500 });
+    else setTimeout(start, 800);
+  }
+</script>

@@ -634,3 +634,101 @@ This closes every planned page. The only remaining dead link anywhere on
 the site was `/our-gyms/` itself; it now resolves. Nothing else is
 pending except real coach photos, real pricing, and whatever Ben decides
 about the Sanity CMS setup for the schedule and FAQs.
+
+## Intermediate Boxing added (2026-09-03, Ben round 9)
+Ben: "we need to add in the intermediate boxing. it has 2 classes per
+week."
+
+Checked the WordPress export for any real Intermediate content first: one
+unrelated stray hit for the word, nothing describing a class. Unlike every
+other class page on the site, there is no client copy to draw from here,
+so this page's pitch (`intermediate-boxing-class.astro`) is mine, written
+to make only claims the site's own structure already supports, a step
+between Boxing Basics and Competition Team Training, no invented
+instructor names or specific curriculum promises. **Ben: send real copy
+whenever you have it, and it replaces this directly.**
+
+Two things placed as flagged guesses, both easy to correct in one file:
+1. **Days and times.** Ben gave a frequency (two a week) but not which
+   days or times. Placed in the only fully open weekday evening slot on
+   the board, Tuesday and Friday 5:45 PM, where Competition Team Training
+   does not run. Flagged with `verify: true` on both sessions in
+   schedule.js. **CONFIRM WITH BEN the real schedule.**
+2. **Photo.** No fresh photo exists (every real photo on the site was
+   already placed on another page). Reuses `training-mitts-800.jpg`, its
+   third placement now (also the Schedule page's Open Gym section and the
+   homepage card-stack). A fresh photo for this class would be welcome.
+
+Wired everywhere a class needs to exist, matching the pattern the other
+three follow:
+- `data/classes.js`: added between Boxing Basics and Competition Team
+  (the natural progression order), which the homepage card-stack and
+  every ticker read from automatically.
+- `data/schedule.js`: new `intermediate` program, two sessions.
+- `components/Header.astro`: added to the Boxing Classes dropdown.
+- `pages/boxing-classes.astro`: added its pitch to the hub.
+- `cms/schemaTypes/classSession.ts` and `cms/seed.ndjson`: the CMS now
+  offers Intermediate Boxing as a program option (35 seed documents, was
+  33) and the schedule/class-times grid on every page (main board,
+  Beginners, Competition, this new page) automatically includes it since
+  they all read the one shared dataset.
+
+One bug caught in review: the page's "Who It's For" heading used the
+`&rsquo;` HTML entity, correct for the `body` fields (rendered via
+`set:html`) but wrong for a plain-text `heading` field (Astro escapes it
+literally, showing `&rsquo;` on the page instead of an apostrophe).
+Replaced with a literal curly apostrophe character. Worth remembering for
+any future heading string with a contraction.
+
+## Round 18: the blog (2026-09-05)
+
+Ben's ask: a blog page with no link in the top nav, linked from the footer
+only, to keep the backlinks and carry more keywords.
+
+**URLs, which is the whole point.** The export has two blog-ish pages:
+`/blog/`, which is empty, and `/boxing-blog/`, the real Elementor archive
+listing all 10 posts. We use `/boxing-blog/`, so their existing index URL
+still resolves (and it is the keyword-richer of the two). The posts sit at
+**root level** exactly as WordPress served them (`/mindset-matters/`, not
+`/blog/mindset-matters/`), so every backlink anyone has built keeps
+working after the migration.
+
+**Files**
+- `source/build_posts.py`: the conversion, kept in the repo so the blog's
+  copy is auditable back to their export the way every other page is.
+  Turns Gutenberg block soup into the plain HTML this site uses, drops the
+  theme's empty galleries, and refuses to run if an em dash survives.
+- `data/posts.js`: generated, not hand-edited. Re-run the script instead.
+- `pages/boxing-blog.astro`: the index.
+- `pages/[post].astro`: a dynamic route that builds only the 10 slugs in
+  `posts.js`, so it cannot swallow a URL belonging to a real page.
+- `components/Footer.astro`: the one link, in the Links column.
+
+**Why the index is not a card grid.** Every one of these posts is
+text-only (the media did not survive the export). A grid of identical
+bordered cards, each with a title and two lines of grey text, is the most
+generated-looking pattern available and would advertise the missing art on
+every row. So: a lead item at full headline size, then ruled rows with a
+date rail. It gives the page a top instead of ten equal blocks, and it
+reads as deliberate rather than as a grid with the pictures missing.
+
+**Two bugs worth remembering, both caught by looking at the rendered page
+rather than the markup:**
+1. The post header was centred while the body was left-aligned. Cause:
+   `class="wrap head-inner"` on one element. `.wrap` centres with auto
+   margins, so narrowing it to a reading measure centred the whole header.
+   Fix: the measure goes on a child of `.wrap`, never on `.wrap` itself.
+2. The index standfirsts were run-on and mis-sourced. Several of these
+   posts open with the list itself, so "the first `<p>`" grabbed the
+   post's closing line as its teaser ("There are plenty of additional ways
+   to protect yourself, also." under a headline promising ten of them).
+   And `<br />` was being stripped without a space, welding lines together
+   ("The LegendThe Problem Child"). The standfirst now takes the first
+   block of text in document order, `<br />` becomes a space (or a colon
+   after a bold label, where that is the job it was doing), and entities
+   are unescaped before whitespace is collapsed.
+
+The shell picks the posts up automatically: `build_shell.py` reads the
+slugs out of `posts.js` rather than listing them, so a new post reaches
+the one-artifact preview without anyone editing the build script. The
+artifact is 25 pages now, was 14.

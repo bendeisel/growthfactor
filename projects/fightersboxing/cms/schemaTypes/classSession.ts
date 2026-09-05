@@ -82,6 +82,7 @@ export const classSession = defineType({
       options: {
         list: [
           {title: 'Beginners boxing class', value: 'boxing-basics'},
+          {title: 'Intermediate boxing class', value: 'intermediate'},
           {title: 'Competition team training', value: 'competition'},
           {title: 'Youth boxing class', value: 'youth'},
           {title: 'Open gym', value: 'open-gym'},

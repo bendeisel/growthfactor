@@ -1,0 +1,212 @@
+---
+// BOXING BLOG index.
+//
+// URL is /boxing-blog/ because that is where the client's blog actually
+// lived (the export has both a /blog/ page, which is empty, and
+// /boxing-blog/, an Elementor archive listing all 10 posts). Keeping their
+// URL keeps their backlinks, which is the whole reason this page exists.
+// It is deliberately NOT in the header nav, per Ben: footer link only.
+//
+// Form: an editorial index, not a card grid. Every post in the export is
+// text-only (the media did not survive the export, see source/copy.md), and
+// a grid of identical bordered cards with a title and two lines of grey
+// text under it is the single most "generated"-looking pattern there is.
+// A lead item plus ruled rows gives the page hierarchy and lets the
+// headlines carry it at the size they deserve.
+//
+// Copy in the rows is the client's own: their headlines, and the first
+// sentence of each post as the standfirst. The only original copy on this
+// page is the header sub and the "Read the post" affordance, both logged
+// in source/copy.md.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ClassTicker from '../components/ClassTicker.astro';
+import { posts } from '../data/posts.js';
+
+const fmt = (iso: string) =>
+  new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+const [lead, ...rest] = posts;
+
+const site = Astro.site?.toString() ?? '';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Boxing Blog',
+  url: new URL('/boxing-blog/', Astro.site).toString(),
+  publisher: { '@type': 'Organization', name: 'Fighters Boxing Gym', url: site },
+  blogPost: posts.map((p) => ({
+    '@type': 'BlogPosting',
+    headline: p.title,
+    datePublished: p.date,
+    url: new URL(`/${p.slug}/`, Astro.site).toString(),
+  })),
+};
+---
+
+<Base
+  title="Boxing Blog | Fighters Boxing Gym Nashville"
+  description="Boxing training, technique, hand protection, mindset, and gym news from the coaches at Fighters Boxing Gym in Nashville."
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+
+  <PageHeader lines={['BOXING', 'BLOG']} sub="Technique, training, and news from the gym" />
+
+  <section class="idx">
+    <div class="wrap">
+      <a class="lead reveal" href={`/${lead.slug}/`}>
+        <p class="meta">
+          <span class="tag">Boxing</span>
+          <time datetime={lead.date}>{fmt(lead.date)}</time>
+        </p>
+        <h2 class="lead-title">{lead.title}</h2>
+        <p class="dek">{lead.dek}</p>
+        <span class="more">Read the post</span>
+      </a>
+
+      <ol class="rows">
+        {
+          rest.map((p) => (
+            <li class="row reveal">
+              <a href={`/${p.slug}/`}>
+                <time class="row-date" datetime={p.date}>
+                  {fmt(p.date)}
+                </time>
+                <span class="row-body">
+                  <span class="row-title">{p.title}</span>
+                  <span class="dek">{p.dek}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <ClassTicker />
+  </div>
+</Base>
+
+<style>
+  .idx {
+    background: var(--ground);
+    padding: clamp(40px, 5.5vw, 78px) 0 clamp(46px, 6vw, 88px);
+  }
+
+  /* Lead post: the one item that gets to be loud, so the page has a top
+     rather than ten equal rows. */
+  .lead {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding-bottom: clamp(26px, 3.4vw, 44px);
+    border-bottom: 2px solid var(--text-dark);
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: clamp(12px, 1.6vw, 20px);
+  }
+  .tag {
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    background: var(--accent);
+    padding: 5px 11px 4px;
+  }
+  .meta time,
+  .row-date {
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+  }
+  .lead-title {
+    font-size: clamp(32px, 5.4vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin-bottom: clamp(12px, 1.5vw, 18px);
+  }
+  .dek {
+    font-size: clamp(17px, 1.5vw, 19px);
+    line-height: 1.6;
+    color: var(--text-dark);
+    max-width: 62ch;
+  }
+  .more {
+    display: inline-block;
+    margin-top: clamp(16px, 2vw, 24px);
+    font-family: var(--font-action);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 3px;
+  }
+  .lead:hover .lead-title { color: var(--accent); }
+
+  /* The rest: ruled rows, date rail on the left at desktop width. */
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .row + .row { border-top: 1px solid var(--border); }
+  .row a {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: clamp(16px, 3vw, 40px);
+    align-items: start;
+    padding: clamp(22px, 2.8vw, 34px) 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  .row-date { padding-top: 6px; }
+  .row-body { display: block; }
+  .row-title {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(22px, 2.7vw, 34px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin-bottom: 8px;
+    transition: color 0.18s ease;
+  }
+  .row .dek {
+    font-size: clamp(16px, 1.3vw, 17px);
+    color: var(--text-dark);
+    opacity: 0.82;
+  }
+  .row a:hover .row-title { color: var(--accent); }
+
+  @media (max-width: 720px) {
+    .row a {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .row-date { padding-top: 0; }
+  }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--accent);
+    padding: clamp(14px, 1.8vw, 22px) 0;
+  }
+</style>
