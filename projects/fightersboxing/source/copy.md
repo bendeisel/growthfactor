@@ -262,3 +262,10 @@ Pending for schema: opening hours from the client.
    (black, gold #D7AD56) as the "opposite" pairing this page exists to
    express, since their own site isn't built yet to mirror against
    directly.
+
+## Ben's revisions, round 17 (2026-09-03)
+1. Intermediate Boxing class added: new page, new schedule program (two
+   sessions/week), wired into the nav, the Boxing Classes hub, the
+   homepage card-stack, and the CMS schema. Page copy is mine (no client
+   source exists for this class); schedule days/times are a flagged
+   placeholder (Tue/Fri 5:45 PM) pending Ben's real answer.

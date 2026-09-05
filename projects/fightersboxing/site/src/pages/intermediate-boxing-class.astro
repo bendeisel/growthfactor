@@ -1,0 +1,56 @@
+---
+// Copy on this page is mine, not the client's: unlike the other three
+// class pages, nothing in the WordPress export describes an Intermediate
+// class (checked: a single stray, unrelated hit for the word
+// "intermediate" in the whole export). Ben asked for this page directly
+// ("we need to add in the intermediate boxing, it has 2 classes per
+// week"), so the pitch below sticks to what that sentence and the site's
+// own structure already support, stance-as-a-progression between Boxing
+// Basics and Competition Team Training, and makes no specific claim about
+// curriculum, instructors, or format that hasn't been confirmed. Ben:
+// send real copy for this page whenever you have it, and it replaces this
+// directly. See source/inner-pages.md for the fuller flag, including the
+// two schedule times, which are also a placeholder pending your confirm.
+import ClassPage from '../layouts/ClassPage.astro';
+
+const lead = {
+  heading: 'The Next Step After Basics',
+  body: `<p>Our <b>Intermediate Boxing</b> class is built for boxers who have the
+    fundamentals down and are ready to sharpen them. It sits between
+    <b>Boxing Basics</b> and <b>Competition Team Training</b>: more combinations, more
+    pad and bag work under pace, and the kind of repetition that turns a beginner's
+    stance into a fighter's habit.</p>`,
+  readMore: { href: '/what-to-expect/', label: 'Read More' },
+  image: {
+    src: '/img/training-mitts-800.jpg',
+    alt: 'Coach holding mitts for a boxer at Fighters Boxing Gym',
+    width: 800,
+    height: 534,
+  },
+};
+
+const pair = [
+  {
+    heading: 'Who It’s For',
+    body: `<p>Boxers who have been through Boxing Basics, or who already move
+      comfortably through stance, footwork, and the core punches, and want more before
+      committing to the Competition Team. If you are not sure which class fits you yet,
+      ask a coach; that is exactly what they are there for.</p>`,
+  },
+  {
+    heading: 'What It Builds',
+    body: `<p>Combinations under pace, defense against a moving partner, and the
+      conditioning that holds up past the first round. It is the bridge between learning
+      the sport and testing yourself in it.</p>`,
+  },
+];
+---
+
+<ClassPage
+  pageTitle="Intermediate Boxing Class | Fighters Boxing Gym"
+  description="Intermediate Boxing at Fighters Boxing Gym: the step between Boxing Basics and Competition Team Training, two classes a week."
+  h1Lines={['INTERMEDIATE', 'BOXING']}
+  lead={lead}
+  pair={pair}
+  currentHref="/intermediate-boxing-class/"
+/>

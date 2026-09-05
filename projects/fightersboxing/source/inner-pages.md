@@ -634,3 +634,48 @@ This closes every planned page. The only remaining dead link anywhere on
 the site was `/our-gyms/` itself; it now resolves. Nothing else is
 pending except real coach photos, real pricing, and whatever Ben decides
 about the Sanity CMS setup for the schedule and FAQs.
+
+## Intermediate Boxing added (2026-09-03, Ben round 9)
+Ben: "we need to add in the intermediate boxing. it has 2 classes per
+week."
+
+Checked the WordPress export for any real Intermediate content first: one
+unrelated stray hit for the word, nothing describing a class. Unlike every
+other class page on the site, there is no client copy to draw from here,
+so this page's pitch (`intermediate-boxing-class.astro`) is mine, written
+to make only claims the site's own structure already supports, a step
+between Boxing Basics and Competition Team Training, no invented
+instructor names or specific curriculum promises. **Ben: send real copy
+whenever you have it, and it replaces this directly.**
+
+Two things placed as flagged guesses, both easy to correct in one file:
+1. **Days and times.** Ben gave a frequency (two a week) but not which
+   days or times. Placed in the only fully open weekday evening slot on
+   the board, Tuesday and Friday 5:45 PM, where Competition Team Training
+   does not run. Flagged with `verify: true` on both sessions in
+   schedule.js. **CONFIRM WITH BEN the real schedule.**
+2. **Photo.** No fresh photo exists (every real photo on the site was
+   already placed on another page). Reuses `training-mitts-800.jpg`, its
+   third placement now (also the Schedule page's Open Gym section and the
+   homepage card-stack). A fresh photo for this class would be welcome.
+
+Wired everywhere a class needs to exist, matching the pattern the other
+three follow:
+- `data/classes.js`: added between Boxing Basics and Competition Team
+  (the natural progression order), which the homepage card-stack and
+  every ticker read from automatically.
+- `data/schedule.js`: new `intermediate` program, two sessions.
+- `components/Header.astro`: added to the Boxing Classes dropdown.
+- `pages/boxing-classes.astro`: added its pitch to the hub.
+- `cms/schemaTypes/classSession.ts` and `cms/seed.ndjson`: the CMS now
+  offers Intermediate Boxing as a program option (35 seed documents, was
+  33) and the schedule/class-times grid on every page (main board,
+  Beginners, Competition, this new page) automatically includes it since
+  they all read the one shared dataset.
+
+One bug caught in review: the page's "Who It's For" heading used the
+`&rsquo;` HTML entity, correct for the `body` fields (rendered via
+`set:html`) but wrong for a plain-text `heading` field (Astro escapes it
+literally, showing `&rsquo;` on the page instead of an apostrophe).
+Replaced with a literal curly apostrophe character. Worth remembering for
+any future heading string with a contraction.

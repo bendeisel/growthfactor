@@ -36,6 +36,7 @@ export const audiences = ['adult', 'youth'];
  */
 export const programs = [
   { slug: 'boxing-basics', label: 'Boxing basics', href: '/beginners-boxing-class/', audience: 'adult' },
+  { slug: 'intermediate', label: 'Intermediate boxing', href: '/intermediate-boxing-class/', audience: 'adult' },
   { slug: 'competition', label: 'Competition team', href: '/competition-team-training/', audience: 'adult' },
   { slug: 'open-gym', label: 'Open gym', href: null, audience: 'adult' },
   { slug: 'youth', label: 'Youth boxing', href: '/youth-boxing-class/', audience: 'youth' },
@@ -66,6 +67,14 @@ export const programSlugs = programs.map((p) => p.slug);
 //
 // start/end are 24 hour "HH:MM". end omitted means the client published a
 // start time only.
+//
+// Intermediate Boxing added 2026-09-03 per Ben: "the intermediate boxing,
+// it has 2 classes per week." No days or times were given, and neither the
+// live site nor a newer export is reachable, so these two sessions are
+// placed in the only fully open weekday evening slot on the board
+// (Tuesday and Friday 5:45 PM, where Competition Team Training does not
+// run). CONFIRM WITH BEN the real two days/times; moving them is a two-
+// line edit here.
 export const fallbackSessions = [
   // ---- Monday ----
   { day: 'mon', name: 'Open Gym', start: '07:00', end: '10:00', audience: 'adult', programs: ['open-gym'] },
@@ -81,6 +90,7 @@ export const fallbackSessions = [
   { day: 'tue', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'tue', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'tue', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
+  { day: 'tue', name: 'Intermediate Boxing', start: '17:45', audience: 'adult', programs: ['intermediate'], verify: true },
   { day: 'tue', name: 'Boxing Basics', start: '18:00', audience: 'adult', programs: ['boxing-basics'] },
 
   // ---- Wednesday ----
@@ -105,6 +115,7 @@ export const fallbackSessions = [
   { day: 'fri', name: 'Boxing Basics', start: '06:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'fri', name: 'Boxing Basics', start: '07:00', audience: 'adult', programs: ['boxing-basics'] },
   { day: 'fri', name: 'Open Gym', start: '16:30', end: '19:30', audience: 'adult', programs: ['open-gym'] },
+  { day: 'fri', name: 'Intermediate Boxing', start: '17:45', audience: 'adult', programs: ['intermediate'], verify: true },
   { day: 'fri', name: 'Boxing Basics', start: '18:00', audience: 'adult', programs: ['boxing-basics'] },
 
   // ---- Saturday ----

@@ -3,3 +3,8 @@ __pycache__/
 .DS_Store
 config.env
 .claude/skills/site-factory/config.env
+
+# Preview-only copies with images/video inlined as base64 for artifact
+# publishing. Regenerate with each project's build_preview.py; the
+# artifact-worthy source of truth is site.html, real relative paths.
+site.preview.html
