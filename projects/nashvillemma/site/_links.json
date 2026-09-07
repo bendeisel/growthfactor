@@ -21,7 +21,9 @@
     "about.html",
     "contact.html",
     "events.html",
+    "privacy.html",
     "programs/index.html",
-    "recovery.html"
+    "recovery.html",
+    "terms.html"
   ]
 }

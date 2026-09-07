@@ -53,6 +53,29 @@
           text-transform: uppercase; letter-spacing: 0.18em; color: #D7AD56; padding: 8px 4px 4px 4px;
           white-space: normal; }
     .ph { color: #C59543; font-style: italic; }
+
+    /* Programs dropdown — square panel, gold hairline, per the radius rule */
+    .dd-wrap { position: relative; }
+    .dd-trigger { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+    .dd-caret { transition: transform .18s ease; }
+    .dd-wrap[data-open="1"] .dd-caret { transform: rotate(180deg); }
+    .dd-panel { position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%);
+                width: 860px; background: #0C0C0D; border-top: 3px solid #D7AD56;
+                box-shadow: 0 30px 70px rgba(0,0,0,.72), inset 0 0 0 1px rgba(255,255,255,.08);
+                z-index: 80; padding: 26px 26px 0; }
+    .dd-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 26px; }
+    .dd-col + .dd-col { border-left: 1px solid rgba(255,255,255,.08); padding-left: 26px; }
+    .dd-head { font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+               color: #D7AD56; margin-bottom: 12px; }
+    .dd-item { display: block; padding: 9px 10px; margin: 0 -10px; color: #FFFFFF; }
+    .dd-item:hover, .dd-item:focus-visible { background: rgba(215,173,86,.10); color: #FFFFFF; outline: none; }
+    .dd-item:focus-visible { box-shadow: inset 0 0 0 1px #D7AD56; }
+    .dd-name { display: block; font-family: 'Bebas Neue','Oswald',sans-serif; font-size: 21px; line-height: 1.1; }
+    .dd-blurb { display: block; font-size: 12px; color: rgba(255,255,255,.52); margin-top: 1px; }
+    .dd-foot { display: block; margin: 22px -26px 0; padding: 15px 26px;
+               border-top: 1px solid rgba(255,255,255,.10); background: rgba(215,173,86,.06);
+               font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #D7AD56; }
+    .dd-foot:hover { background: rgba(215,173,86,.13); color: #FFFFFF; }
     .shim { color: #D7AD56;
            background-image: linear-gradient(100deg, #D7AD56 0%, #D7AD56 36%, #F7E3B4 46%,
                              #FFF8E4 50%, #F7E3B4 54%, #D7AD56 64%, #D7AD56 100%);
@@ -100,7 +123,7 @@
         <div style="display: flex; align-items: center; gap: 20px">
           <a href="#" class="nav">About</a>
           <a href="#" class="nav">Fitness</a>
-          <a href="#" class="nav">Programs</a>
+          <div class="dd-wrap"><span class="nav dd-trigger" role="button" aria-haspopup="true">Programs<svg class="dd-caret" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span><div class="dd-panel" id="ddPanel" hidden><div class="dd-grid"><div class="dd-col"><div class="dd-head">Adults Martial Arts</div><a href="programs/jiu-jitsu.html" class="dd-item"><span class="dd-name">Brazilian Jiu Jitsu</span><span class="dd-blurb">Gi and No-Gi, all levels</span></a><a href="programs/boxing.html" class="dd-item"><span class="dd-name">Boxing</span><span class="dd-blurb">Fundamentals through intermediate</span></a><a href="programs/muay-thai.html" class="dd-item"><span class="dd-name">Muay Thai</span><span class="dd-blurb">Fundamentals to advanced</span></a><a href="programs/mixed-martial-arts.html" class="dd-item"><span class="dd-name">Mixed Martial Arts</span><span class="dd-blurb">Striking and grappling together</span></a><a href="programs/wrestling.html" class="dd-item"><span class="dd-name">Wrestling</span><span class="dd-blurb">All levels</span></a><a href="programs/self-defense.html" class="dd-item"><span class="dd-name">Self-Defense</span><span class="dd-blurb">Classes and seminars</span></a><a href="programs/mma-fight-team.html" class="dd-item"><span class="dd-name">MMA Fight Team</span><span class="dd-blurb">Competition team, tryouts</span></a><a href="programs/womens-classes.html" class="dd-item"><span class="dd-name">Women's Classes</span><span class="dd-blurb">Women-only Muay Thai and BJJ</span></a></div><div class="dd-col"><div class="dd-head">Kids Programs</div><a href="programs/kids-martial-arts.html" class="dd-item"><span class="dd-name">Kids Martial Arts</span><span class="dd-blurb">Ages 6–14, every discipline</span></a><a href="programs/kids-brazilian-jiu-jitsu.html" class="dd-item"><span class="dd-name">Kids BJJ</span><span class="dd-blurb">Gi and No-Gi for kids</span></a><a href="programs/kids-fitness.html" class="dd-item"><span class="dd-name">Kids Fitness</span><span class="dd-blurb">Ages 9–14</span></a></div><div class="dd-col"><div class="dd-head">Fitness & Facility</div><a href="programs/sports-performance.html" class="dd-item"><span class="dd-name">Sports Performance</span><span class="dd-blurb">Train like an athlete</span></a><a href="programs/personal-training.html" class="dd-item"><span class="dd-name">Personal Training</span><span class="dd-blurb">One on one, by appointment</span></a><a href="programs/open-gym.html" class="dd-item"><span class="dd-name">Open Gym</span><span class="dd-blurb">40,000 sqft and recovery room</span></a></div></div><a href="schedule.html" class="dd-foot">See all 86 classes on the schedule &rarr;</a></div></div>
           <a href="#" class="nav">Kids Programs</a>
           <a href="#" class="nav">Schedule</a>
           <a href="#" class="nav">Recovery</a>
@@ -271,7 +294,7 @@
     </div>
 
     <div style="padding: 24px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
-      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 - Martial Arts Websites Developed by 97Display Websites / Privacy Policy</span>
+      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 <span style="white-space: nowrap">Nashville MMA Training Camp</span> &nbsp;·&nbsp; <a href="privacy.html" style="color: rgba(255,255,255,0.45)">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html" style="color: rgba(255,255,255,0.45)">Terms</a></span>
     </div>
   </div>
 
@@ -310,6 +333,23 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+
+    var ddw = document.querySelector('.dd-wrap');
+    var ddp = document.getElementById('ddPanel');
+    if (ddw && ddp) {
+      var openDD = function () { ddp.hidden = false; ddw.setAttribute('data-open', '1'); };
+      var shutDD = function () { ddp.hidden = true; ddw.removeAttribute('data-open'); };
+      var trg = ddw.querySelector('.dd-trigger');
+      ddw.addEventListener('mouseenter', openDD);
+      ddw.addEventListener('mouseleave', shutDD);
+      trg.addEventListener('click', function (e) { e.preventDefault(); ddp.hidden ? openDD() : shutDD(); });
+      trg.setAttribute('tabindex', '0');
+      trg.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDD(); ddp.querySelector('.dd-item').focus(); }
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { shutDD(); } });
+      document.addEventListener('click', function (e) { if (!ddw.contains(e.target)) { shutDD(); } });
+    }
     var shim = document.querySelectorAll('.shim');
     var ring = document.querySelectorAll('.spark-ring');
     if ((shim.length || ring.length) && typeof requestAnimationFrame === 'function') {

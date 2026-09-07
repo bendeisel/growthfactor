@@ -35,7 +35,7 @@
         <div style="display: flex; align-items: center; gap: 20px">
           <a href="../about.html" class="nav">About</a>
           <a href="../programs/sports-performance.html" class="nav">Fitness</a>
-          <a href="../programs/index.html" class="nav">Programs</a>
+          <div class="dd-wrap"><span class="nav dd-trigger" role="button" aria-haspopup="true">Programs<svg class="dd-caret" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span><div class="dd-panel" id="ddPanel" hidden><div class="dd-grid"><div class="dd-col"><div class="dd-head">Adults Martial Arts</div><a href="../programs/jiu-jitsu.html" class="dd-item"><span class="dd-name">Brazilian Jiu Jitsu</span><span class="dd-blurb">Gi and No-Gi, all levels</span></a><a href="../programs/boxing.html" class="dd-item"><span class="dd-name">Boxing</span><span class="dd-blurb">Fundamentals through intermediate</span></a><a href="../programs/muay-thai.html" class="dd-item"><span class="dd-name">Muay Thai</span><span class="dd-blurb">Fundamentals to advanced</span></a><a href="../programs/mixed-martial-arts.html" class="dd-item"><span class="dd-name">Mixed Martial Arts</span><span class="dd-blurb">Striking and grappling together</span></a><a href="../programs/wrestling.html" class="dd-item"><span class="dd-name">Wrestling</span><span class="dd-blurb">All levels</span></a><a href="../programs/self-defense.html" class="dd-item"><span class="dd-name">Self-Defense</span><span class="dd-blurb">Classes and seminars</span></a><a href="../programs/mma-fight-team.html" class="dd-item"><span class="dd-name">MMA Fight Team</span><span class="dd-blurb">Competition team, tryouts</span></a><a href="../programs/womens-classes.html" class="dd-item"><span class="dd-name">Women's Classes</span><span class="dd-blurb">Women-only Muay Thai and BJJ</span></a></div><div class="dd-col"><div class="dd-head">Kids Programs</div><a href="../programs/kids-martial-arts.html" class="dd-item"><span class="dd-name">Kids Martial Arts</span><span class="dd-blurb">Ages 6–14, every discipline</span></a><a href="../programs/kids-brazilian-jiu-jitsu.html" class="dd-item"><span class="dd-name">Kids BJJ</span><span class="dd-blurb">Gi and No-Gi for kids</span></a><a href="../programs/kids-fitness.html" class="dd-item"><span class="dd-name">Kids Fitness</span><span class="dd-blurb">Ages 9–14</span></a></div><div class="dd-col"><div class="dd-head">Fitness & Facility</div><a href="../programs/sports-performance.html" class="dd-item"><span class="dd-name">Sports Performance</span><span class="dd-blurb">Train like an athlete</span></a><a href="../programs/personal-training.html" class="dd-item"><span class="dd-name">Personal Training</span><span class="dd-blurb">One on one, by appointment</span></a><a href="../programs/open-gym.html" class="dd-item"><span class="dd-name">Open Gym</span><span class="dd-blurb">40,000 sqft and recovery room</span></a></div></div><a href="../schedule.html" class="dd-foot">See all 86 classes on the schedule &rarr;</a></div></div>
           <a href="../programs/kids-martial-arts.html" class="nav">Kids Programs</a>
           <a href="../schedule.html" class="nav">Schedule</a>
           <a href="../recovery.html" class="nav">Recovery</a>
@@ -178,7 +178,7 @@
     </div>
 
     <div style="padding: 24px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
-      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 - Martial Arts Websites Developed by 97Display Websites / Privacy Policy</span>
+      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 <span style="white-space: nowrap">Nashville MMA Training Camp</span> &nbsp;·&nbsp; <a href="../privacy.html" style="color: rgba(255,255,255,0.45)">Privacy Policy</a> &nbsp;·&nbsp; <a href="../terms.html" style="color: rgba(255,255,255,0.45)">Terms</a></span>
     </div>
   </div>
 
@@ -215,6 +215,23 @@
     this.state = { formOpen: false };
   }
   componentDidMount() {
+
+    var ddw = document.querySelector('.dd-wrap');
+    var ddp = document.getElementById('ddPanel');
+    if (ddw && ddp) {
+      var openDD = function () { ddp.hidden = false; ddw.setAttribute('data-open', '1'); };
+      var shutDD = function () { ddp.hidden = true; ddw.removeAttribute('data-open'); };
+      var trg = ddw.querySelector('.dd-trigger');
+      ddw.addEventListener('mouseenter', openDD);
+      ddw.addEventListener('mouseleave', shutDD);
+      trg.addEventListener('click', function (e) { e.preventDefault(); ddp.hidden ? openDD() : shutDD(); });
+      trg.setAttribute('tabindex', '0');
+      trg.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDD(); ddp.querySelector('.dd-item').focus(); }
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { shutDD(); } });
+      document.addEventListener('click', function (e) { if (!ddw.contains(e.target)) { shutDD(); } });
+    }
     var shim = document.querySelectorAll('.shim');
     var ring = document.querySelectorAll('.spark-ring');
     if ((shim.length || ring.length) && typeof requestAnimationFrame === 'function') {

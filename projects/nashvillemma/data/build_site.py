@@ -77,6 +77,10 @@ def wire_nav(body, url, active):
     body = body.replace('<img src="%sassets/logo.png"' % p,
                         '</a><a href="%sindex.html"><img src="%sassets/logo.png"' % (p, p), 1)
     body = body.replace("</a><a href", "<a href", 1)
+    # dropdown / footer links are authored root-relative — add the depth prefix
+    if p:
+        body = re.sub(r'href="(programs/[a-z0-9-]+\.html|schedule\.html|about\.html|contact\.html|events\.html|recovery\.html|privacy\.html|terms\.html)"',
+                      lambda m: 'href="%s%s"' % (p, m.group(1)), body)
     # in-page buttons that name a destination
     body = body.replace('<a href="#" class="btn-line"', '<a href="%sschedule.html" class="btn-line"' % p)
     body = re.sub(r'<a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>',
