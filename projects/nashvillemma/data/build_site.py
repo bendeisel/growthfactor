@@ -27,12 +27,27 @@ for f in sorted(os.listdir(PAGES)):
         slug = f[len("Program-"):-len(".dc.html")]
         ROUTES.append((f, "programs/%s.html" % slug, slug.replace("-", " ").title(), PAGES))
 
+SPECIAL = {"programs": "programs/index.html"}
+for f in sorted(os.listdir(PAGES)):
+    if not (f.startswith("Page-") and f.endswith(".dc.html")):
+        continue
+    slug = f[len("Page-"):-len(".dc.html")]
+    if slug.startswith("coach-"):
+        url = "coaches/%s.html" % slug[len("coach-"):]
+    else:
+        url = SPECIAL.get(slug, "%s.html" % slug)
+    ROUTES.append((f, url, slug.replace("coach-", "").replace("-", " ").title(), PAGES))
+
 # nav label -> destination. Pages we have not designed yet still get their real
 # URL so the gap shows up as a broken link instead of silently vanishing.
 NAV = [("About", "about.html"), ("Fitness", "programs/sports-performance.html"),
        ("Programs", "programs/index.html"), ("Kids Programs", "programs/kids-martial-arts.html"),
        ("Schedule", "schedule.html"), ("Recovery", "recovery.html"),
        ("Events &amp; Sponsorships", "events.html")]
+# extra destinations added to the footer so every page is reachable
+FOOT_EXTRA = [("Coaches & Trainers", "coaches.html"), ("FAQ", "faq.html"),
+              ("Reviews", "reviews.html"), ("Contact", "contact.html"),
+              ("Sponsors", "sponsors.html"), ("Blog", "blog.html")]
 
 def depth_prefix(url):
     return "../" * url.count("/")
@@ -73,13 +88,19 @@ def wire_nav(body, url, active):
                             '<a href="%s" class="nav"%s>%s</a>' % (href, cur, label))
         body = body.replace('<li><a href="#" class="nav">%s</a></li>' % label,
                             '<li><a href="%s" class="nav">%s</a></li>' % (href, label))
+    # widen the footer so coaches, FAQ, reviews, contact, sponsors and blog are reachable
+    anchor = '<li><a href="%sevents.html" class="nav">Events &amp; Sponsorships</a></li>' % p
+    if anchor in body:
+        body = body.replace(anchor, anchor + "\n" + "\n".join(
+            '              <li><a href="%s%s" class="nav">%s</a></li>' % (p, d, l)
+            for l, d in FOOT_EXTRA))
     # logo goes home
     body = body.replace('<img src="%sassets/logo.png"' % p,
                         '</a><a href="%sindex.html"><img src="%sassets/logo.png"' % (p, p), 1)
     body = body.replace("</a><a href", "<a href", 1)
     # dropdown / footer links are authored root-relative — add the depth prefix
     if p:
-        body = re.sub(r'href="(programs/[a-z0-9-]+\.html|schedule\.html|about\.html|contact\.html|events\.html|recovery\.html|privacy\.html|terms\.html)"',
+        body = re.sub(r'href="((?:programs|coaches)/[a-z0-9-]+\.html|(?:schedule|about|contact|events|recovery|privacy|terms|coaches|faq|reviews|sponsors|blog)\.html)"',
                       lambda m: 'href="%s%s"' % (p, m.group(1)), body)
     # in-page buttons that name a destination
     body = body.replace('<a href="#" class="btn-line"', '<a href="%sschedule.html" class="btn-line"' % p)
@@ -116,6 +137,14 @@ class DCLogic {
     if ('formOpen' in patch) { patch.formOpen ? openForm() : closeForm(); }
   }
 }
+document.addEventListener('click', function (e) {
+  var q = e.target.closest ? e.target.closest('.faq-q') : null;
+  if (!q) { return; }
+  var a = q.parentNode.querySelector('.faq-a');
+  var plus = q.querySelector('.faq-plus');
+  a.hidden = !a.hidden;
+  if (plus) { plus.textContent = a.hidden ? '+' : '\u2013'; }
+});
 function openForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=false;}}
 function closeForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=true;}}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm();}});

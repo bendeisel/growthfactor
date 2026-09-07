@@ -8,6 +8,14 @@ class DCLogic {
     if ('formOpen' in patch) { patch.formOpen ? openForm() : closeForm(); }
   }
 }
+document.addEventListener('click', function (e) {
+  var q = e.target.closest ? e.target.closest('.faq-q') : null;
+  if (!q) { return; }
+  var a = q.parentNode.querySelector('.faq-a');
+  var plus = q.querySelector('.faq-plus');
+  a.hidden = !a.hidden;
+  if (plus) { plus.textContent = a.hidden ? '+' : '–'; }
+});
 function openForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=false;}}
 function closeForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=true;}}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm();}});

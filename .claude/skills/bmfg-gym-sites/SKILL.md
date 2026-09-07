@@ -93,6 +93,34 @@ right" — actually load it and probe. See `references/verification.md`; the
 checks there have caught a silently-broken layout, a video that never looped,
 and a publish that shipped a stale file.
 
+## Build the whole site, attached, from the start
+
+This is a hard process rule, given verbatim: *"We don't build the two pages
+here, three pages there, and then try to piece them together later... You should
+have the map before you start and then we can always reroute the map."*
+
+So:
+
+**Write the page map before designing anything.** List every page the site will
+have — programmes, schedule, coaches, FAQ, contact, events, legal, all of it.
+The map can be rerouted later; starting without one cannot be fixed later.
+
+**Every new page ships attached.** Nav entry, internal links in, links out.
+A page nobody can reach is not done, and "it exists but isn't linked yet" is not
+a status worth reporting — it's an unfinished page.
+
+**Prove reachability by crawling, not by reading.** Start at the homepage,
+follow every link, and assert three zeros: pages unreachable, dead links, broken
+images. On the Nashville MMA build this caught 11 of 14 programme pages sitting
+orphaned — the pages that earn the search traffic — after the markup had looked
+perfectly fine.
+
+**Do not hand back a gap list where the work was expected.** Finding that eight
+pages are missing is the start of building them, not a deliverable. Ask only
+when something genuinely cannot be written without the client — real legal text,
+a booking-platform embed snippet, a named person's credentials. Everything else,
+build it.
+
 ## Building the thing
 
 **Start from the client's own kernel.** Exact typefaces, exact hexes, exact
