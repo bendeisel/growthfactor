@@ -18,8 +18,16 @@ function classChip(session) {
   const until = session.end
     ? `<span class="chip-until">to ${escapeHtml(clock(session.end))}</span>`
     : '';
+  // The client's own schedule graphic carries a legend, and two of its
+  // entries change whether someone can just turn up: the advanced classes
+  // need a coach's permission, and the youth classes are ages 8 to 13.
+  // Someone reading the times needs that in the same glance, so it rides
+  // on the chip rather than sitting in a footnote nobody reaches.
+  const note = session.note
+    ? `<span class="chip-note">${escapeHtml(session.note)}</span>`
+    : '';
   return `<span class="class-chip" data-programs="${escapeHtml((session.programs || []).join(' '))}">
-      <span class="chip-name">${escapeHtml(session.name)}</span>${until}
+      <span class="chip-name">${escapeHtml(session.name)}</span>${until}${note}
     </span>`;
 }
 
@@ -29,6 +37,16 @@ function classChip(session) {
  * the week. Emitted as a flat run of cells because the whole thing is a
  * single CSS grid, which is what keeps the rows aligned.
  */
+/**
+ * How many day columns a set of rows needs. The grid template has to match
+ * the number of days actually rendered, and closed days are dropped, so
+ * the count is data rather than a constant. Exported so the build and the
+ * in-browser re-render set it the same way from the same source.
+ */
+export function columnCount(rows) {
+  return rows.length ? rows[0].cells.length : 0;
+}
+
 export function renderMatrix(rows) {
   const head = rows.length
     ? `<div class="m-corner"></div>` +

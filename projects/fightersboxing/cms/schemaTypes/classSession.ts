@@ -57,6 +57,15 @@ export const classSession = defineType({
       validation: (Rule) => Rule.regex(TIME, {name: '24 hour time, like 19:00'}),
     }),
     defineField({
+      name: 'note',
+      title: 'Note',
+      type: 'string',
+      description:
+        'Optional short qualifier, shown under the class on the schedule. This is where the legend from the printed schedule lives: "Coach permission required" on the advanced classes, "Ages 8 to 13" on the youth classes.',
+      placeholder: 'Coach permission required',
+      validation: (Rule) => Rule.max(40),
+    }),
+    defineField({
       name: 'audience',
       title: 'Who it is for',
       type: 'string',

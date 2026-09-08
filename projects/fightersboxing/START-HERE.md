@@ -7,20 +7,34 @@ ignore until you need it.
 
 ## 1. Is the website ready to move?
 
-**Technically yes.** The finished website is packed and ready:
+**Yes.** The finished website is packed and ready:
 `fighters-website.zip`.
 
-But there is **one thing I would not launch with:**
+### The schedule blocker is closed
 
-### The blocker
+Your screenshot of the schedule graphic settled it. **Every class time on
+the site now matches your real schedule**, and nothing on it is a guess
+any more.
 
-🔴 **The Intermediate Boxing class times are a guess.**
+Six things were wrong before, all now fixed:
 
-You told me "2 classes per week" but never gave days or times. I put
-**Tuesday and Friday, 5:45pm** in as a placeholder. If that is wrong, the
-live site is telling people to show up when there is no class.
+| | Was | Now |
+| --- | --- | --- |
+| Boxing Basics 6AM | Every weekday | Monday and Wednesday only |
+| Boxing Basics 7AM | Every weekday | Tuesday and Thursday only |
+| Intermediate Boxing | Tue and Fri (my guess) | Tuesday and Thursday, 5:45pm |
+| Youth Boxing 4:30pm | Unconfirmed | Monday and Wednesday, confirmed, ages 8 to 13 |
+| Saturday Open Gym | 2AM (a typo on your old site) | 9AM to 12PM |
+| Competition Team | Mon and Wed | Monday, Wednesday **and Thursday** |
 
-**All I need from you: the real days and times.**
+Two classes were also removed because they are no longer on your
+schedule: **Competition Sparring** and **Foundational Sparring**. And
+Friday correctly has no morning class now.
+
+I also picked up the legend from your graphic, so the site shows **"Coach
+permission required"** on Competition Team and Intermediate, and **"Ages 8
+to 13"** on the youth classes. Someone reading the times sees that in the
+same glance.
 
 ### Not blockers, but they make it look unfinished
 
@@ -28,7 +42,6 @@ live site is telling people to show up when there is no class.
 | --- | --- |
 | **Coach photos** | The Coaches page shows initials instead of faces. The 9 photo files exist on your live site. Filenames are listed in `SEO-PLAN.md` Part 8. Send them and they go straight in. |
 | **Billy Falco** | A blog post announces him as interim head coach, but he is not on the Coaches page. One of the two is out of date. |
-| **6am and 7am Boxing Basics** | I added these because you told me they exist. Never confirmed against the real schedule. Worth a second look. |
 
 ### Genuinely optional, can follow later
 
@@ -113,11 +126,12 @@ launch.
 
 ## What I need from you, in priority order
 
-1. **Intermediate Boxing days and times.** The only real blocker.
-2. **The 9 coach photos.**
-3. **Is Billy Falco a coach or not.**
-4. **Confirm the domain** is `fightersnashville.com`.
-5. **Google Business Profile access**, when you are ready for that stage.
+1. **The 9 coach photos.** Now the biggest visible gap.
+2. **Is Billy Falco a coach or not.**
+3. **Confirm the domain** is `fightersnashville.com`.
+4. **Google Business Profile access**, when you are ready for that stage.
+
+Nothing on this list blocks launch. The site can go up today.
 
 ## Files in this folder
 

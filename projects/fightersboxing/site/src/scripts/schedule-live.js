@@ -10,7 +10,7 @@
 // keeps the times it was built with.
 import { sessionQueryUrl, normalizeSessions } from '../lib/schedule-source.js';
 import { matrix, activeDays } from '../data/schedule.js';
-import { renderMatrix, renderList } from '../lib/render-schedule.js';
+import { renderMatrix, renderList, columnCount } from '../lib/render-schedule.js';
 
 /** Read a filter off the container: absent attribute means no filter. */
 function filterFor(el) {
@@ -21,7 +21,11 @@ function filterFor(el) {
 }
 
 function updateMatrix(el, sessions) {
-  el.innerHTML = renderMatrix(matrix(sessions, filterFor(el)));
+  const rows = matrix(sessions, filterFor(el));
+  el.innerHTML = renderMatrix(rows);
+  // A live edit can open or close a whole day, so the column count has to
+  // move with the markup or the grid and its contents disagree.
+  el.style.setProperty('--cols', String(columnCount(rows)));
 }
 
 function updateList(el, sessions) {
