@@ -8,3 +8,7 @@ config.env
 # publishing. Regenerate with each project's build_preview.py; the
 # artifact-worthy source of truth is site.html, real relative paths.
 site.preview.html
+
+# Built deploy bundles. Regenerate from the Astro build; no reason to
+# carry 8MB of duplicated HTML and video in git.
+fighters-website.zip
