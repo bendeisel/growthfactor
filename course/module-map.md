@@ -1,8 +1,8 @@
 # Gym Coaching Course: Module Map
 
-Status: **draft for Ben's approval.** Nothing below is written yet. This is the
-list of modules, the lessons inside each, and what each one ships with. Once
-this is signed off, the SOPs and lesson scripts get written against it.
+Status: **approved, in build.** Ben signed off on 2026-09-10. Decisions taken
+at sign-off are recorded at the bottom of this file. Lesson content lives in
+`modules/`, shared assets in `assets/`.
 
 Host: GoHighLevel Communities plus Courses (Memberships tab), same sub-account.
 Every lesson ships **written first, video second**, so the written version is
@@ -189,7 +189,7 @@ The core module. Longest one, and the reason the course exists.
 | 09.5 | **Agent 3: Follow-up.** Fires on the follow-up tag or workflow. Nudges until they reply or book |
 | 09.6 | **Agent 4: Reactivation.** Fires on the reactivation tag. Works lapsed members and dead leads |
 | 09.7 | **Agent 5: Review.** Fires on the review tag. Routes happy members to Google, unhappy ones to you privately |
-| 09.8 | **Agent 6: TBD.** See open questions. Proposed: Voice AI receptionist for missed and inbound calls |
+| 09.8 | **Agent 6: Voice receptionist.** Picks up inbound calls the gym does not answer within a set number of rings |
 | 09.9 | Editing an agent without breaking it: the prompt, the goal, the tools it can use |
 | 09.10 | Testing: the test panel, and the 12 messages every gym agent must survive |
 | 09.11 | Publishing, channel control, pausing, and the human takeover rule |
@@ -315,22 +315,24 @@ trust with a paying member.
 
 ---
 
-## Open questions
+## Decisions taken at sign-off
 
-1. **Four agents or six?** You said "about 4 super agents" then listed six:
-   navigator, appointment, follow-up, reactivation, "the AI agent", review.
-   The map above builds for six. Say the word and I collapse it.
-2. **What is "the AI agent"?** Your list has it with no description. Proposed:
-   the Voice AI receptionist that answers inbound calls and works missed calls,
-   since that is the obvious hole and gyms bleed money on unanswered phones.
-   Your call.
-3. **Community, Courses, or both?** Communities gives discussion and accountability.
-   Courses gives structure and progress tracking. They link to each other.
-   Recommendation is both: course for the modules, community for the room.
-4. **Is the Events module the one going on the public site,** or did you mean
-   something else in that message? Assumed Events.
-5. **Do members get a sub-account under the Growth Factor agency,** or do they
-   bring their own HighLevel? Changes module 00 and 01 substantially, and
-   changes whether we can hand over snapshots directly.
-6. **Where does the 100 site library sit in the price ladder?** Currently placed
-   as a written-only lesson at 13.6 so it never appears in a video.
+1. **Six agents.** Navigator, appointment, follow-up, reactivation, review,
+   voice receptionist.
+2. **Agent 6 is the voice receptionist.** It answers inbound calls that the gym
+   does not pick up within a set number of rings. Built as Voice AI in backup
+   mode on the Call Forwarding tab, where it sits at third priority behind the
+   staff ring. The setting that makes or breaks it is Inbound Call Timeout: set
+   it shorter than the cell carrier's voicemail pickup, or the call gets marked
+   completed and the agent never answers.
+3. **Members get a sub-account under the Growth Factor agency.** So the agency
+   controls Labs, snapshots, rebilling and the AI plan. Module 00 and 01 are
+   written for a member who is handed a working sub-account, not one building
+   from an empty account.
+4. **Community and Courses, both.** Courses carries the modules, Community
+   carries the room. They link.
+5. **Events is the public module.** Module 12 gets posted on the Growth Factor
+   site as a lead magnet, since it is new enough that nobody has written it up
+   properly.
+6. **The 100 site library sits at 13.6,** written lesson only, out of the video
+   track.
