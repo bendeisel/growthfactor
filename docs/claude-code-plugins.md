@@ -1,10 +1,18 @@
-# Claude Code plugins: the five from the video, checked
+<!-- banned-words: off -->
 
-Source: a YouTube video recommending five Claude Code plugins. Transcript is
-at the bottom. Each one below was looked up before anything was installed,
-because two of the five are not what the video says they are.
+# Claude Code plugins, checked
 
-Status as of 2026-09-09.
+Two YouTube videos, five plugins each. Every one was looked up before
+anything was installed, because four of the ten are not what the videos say
+they are.
+
+Round one transcript and round two transcript are both at the bottom.
+
+Last updated 2026-09-10.
+
+---
+
+# Round one
 
 ---
 
@@ -153,82 +161,267 @@ They pay the platforms, so nothing of ours gets banned. They cost money.
 
 ---
 
-## What is installed now
-
-```
-claude-code-setup@claude-plugins-official     1.0.0   enabled
-claude-security@claude-plugins-official       0.11.0  enabled
-firecrawl@claude-community                    1.0.9   enabled
-```
-
-Marketplaces configured: `claude-plugins-official`, `claude-community`.
+# Round two
 
 ---
 
-## Automations built from the Claude Code Setup pass
+## 6. Ponytail
 
-`claude-code-setup` only recommends. These were built from its output.
+**The claim:** cuts your usage by over 50% without losing any accuracy at all.
+
+**Reality:** real, and its own README says the video's number is wrong. It is
+a decision ladder run before any code is written: does this need to exist, is
+it already in the codebase, does the stdlib do it, is it one line.
+
+The project's own agentic benchmark, 12 tasks on a FastAPI and React repo:
+
+| Measure | Change |
+|---|---|
+| Lines of code | 54% fewer |
+| Tokens | 22% fewer |
+| Cost | 20% lower |
+| Wall clock | 27% faster |
+
+The 54% is lines of code. The video quoted it as token usage. Actual token
+saving is 22%, and an independent 80 task benchmark put the cost saving
+nearer 10%. The README also warns that a reasoning model can end up
+**costing more**, because it spends thinking tokens deliberating over whether
+to write the code at all.
+
+**Verdict:** installed, but turned down. It defaults to `full` and injects
+itself on SessionStart, SubagentStart and every prompt, which puts it in
+direct conflict with `house-style` and `polish`. Those two exist to add craft
+that a minimalism rule reads as unnecessary. A hero animation is exactly the
+kind of thing "no unrequested abstractions" argues away.
+
+`.claude/settings.json` now pins it:
+
+```json
+"env": { "PONYTAIL_DEFAULT_MODE": "lite" }
+```
+
+At `lite` it makes a suggestion after the fact instead of silently choosing
+the smaller thing. Four levels exist: `off`, `lite`, `full`, `ultra`.
+
+- Building or polishing a site: leave it at `lite`, or `/ponytail off`.
+- Working on the Python and shell tooling under `.claude/skills/*/scripts/`:
+  `/ponytail full` is genuinely useful there.
+
+Global config, if you want a different default on your own machine, is
+`%APPDATA%\ponytail\config.json`.
+
+---
+
+## 7. Code Review
+
+**The claim:** five AI agents scan your code in parallel and catch bugs before
+you ship.
+
+**Reality:** accurate, and it is an Anthropic plugin sitting in the official
+marketplace, which the video did not mention.
+
+**Verdict:** installed.
+
+```
+claude plugin install code-review@claude-plugins-official
+```
+
+The part that matters is not the parallel agents, it is the confidence
+scoring that filters false positives before they reach you. A reviewer that
+cries wolf gets ignored inside a week.
+
+Run `/code-review` on a diff or a PR number.
+
+---
+
+## 8. Claude Mem
+
+**The claim:** memory across every session, so you never re-explain your
+project or files again.
+
+**Reality:** real and very popular. Captures what Claude does, compresses it,
+injects it back into later sessions. Local SQLite plus a vector index.
+
+**Verdict:** not installed. Two reasons, both about how you actually work:
+
+1. **It cannot persist here.** It stores in `~/.claude-mem/`, outside the
+   repo. Claude Code web sessions run in a container that gets reclaimed when
+   the session ends, so on the web it would start empty every time. It only
+   pays off on your Windows machine.
+2. **Check the observer setting before trusting it with client work.** It
+   offers hosted sync through cmem.ai and can be pointed at OpenRouter or
+   Gemini keys. The docs are vague about what the default observer does, and
+   the thing it is capturing is every session you run against client sites.
+
+**What was installed instead:** `claude-md-management`, Anthropic's own.
+
+```
+claude plugin install claude-md-management@claude-plugins-official
+```
+
+It audits `CLAUDE.md` and folds session learnings back into it. That is
+memory that lives in git, survives a reclaimed container, works on the web
+and on Windows, and can be read and corrected by a human. This repo already
+half does this: `kernel.json`, `sites.csv` and `shipped-log.csv` are project
+memory. This makes the habit deliberate.
+
+If you want claude-mem on Windows anyway, install it there and check the
+observer setting first.
+
+---
+
+## 9. The Obsidian skill
+
+**The claim:** turns Claude Code into a second brain, linking every file and
+function across your codebase.
+
+**Reality:** the second half of that sentence is wrong. Obsidian skills
+manage a **notes vault**. They do not index your functions or link your code.
+The video has described a code intelligence tool and named a note taking one.
+
+There are also at least fifteen competing Obsidian plugins in the community
+directory, all doing roughly the same thing at different quality.
+
+**Verdict:** not installed, because it needs a vault and I do not know
+whether you have one.
+
+If you do have an Obsidian vault, say so and I will wire up
+`obsidian-vault-for-claude-code`, which archives sessions into an
+inspectable, git versioned wiki. That is the one whose value survives
+contact with an agency workflow: client decisions and the reasons behind
+them, searchable a year later.
+
+If you want the thing the video actually described, code intelligence across
+your files and functions, that is a language server. The official marketplace
+has them per language (`typescript-lsp`, `pyright-lsp` and so on). Your repo
+is mostly HTML and CSS, so there is not much for one to do yet.
+
+---
+
+## 10. The official Anthropic pack
+
+**The claim:** a curated set of the most useful skills, coding, front end and
+quality of life.
+
+**Reality:** you already have most of it. The `anthropics/skills` bundle,
+docx, pptx, xlsx, pdf, canvas-design, skill-creator, theme-factory,
+web-artifacts-builder, is loaded into your sessions already. Nothing to
+install.
+
+What the video missed is that Anthropic publishes **40** plugins in the
+official marketplace, not one pack. Three of them earn their place here.
+
+**Verdict:** installed three.
+
+```
+claude plugin install frontend-design@claude-plugins-official
+claude plugin install hookify@claude-plugins-official
+claude plugin install claude-md-management@claude-plugins-official
+```
+
+- **`frontend-design`** builds interfaces that avoid generic AI aesthetics.
+  That is the same fight `house-style` picks, from the other direction, and
+  it is the single most relevant thing in the whole marketplace to what we
+  sell.
+- **`hookify`** writes hooks from plain rules. Every "always do X" that
+  currently lives in `CLAUDE.md` as a sentence can become one. The banned
+  words hook below is the first.
+- **`claude-md-management`** covers the memory problem, per item 8.
+
+---
+
+## What is installed now
+
+```
+claude-code-setup@claude-plugins-official        recommends automations
+claude-security@claude-plugins-official          vulnerability scanning
+claude-md-management@claude-plugins-official     project memory in git
+code-review@claude-plugins-official              multi agent PR review
+frontend-design@claude-plugins-official          non generic interfaces
+hookify@claude-plugins-official                  rules into hooks
+firecrawl@claude-community                       scraping, needs a key
+ponytail@claude-community                        code minimalism, at lite
+```
+
+Marketplaces: `claude-plugins-official` (292), `claude-community` (2,282).
+
+Plugins install per machine. The hooks and settings below are committed, so
+they follow the repo. Anyone else cloning it runs the eight commands above.
+
+---
+
+## Automations built here
 
 ### `.claude/hooks/no_em_dash.py`
 
-The house rule says no em dashes, ever. It was a rule Claude had to remember.
-Now it is enforced.
+The house rule was a sentence Claude had to remember. Now it is enforced on
+every Write and Edit to a text file, and on `git commit` messages, which were
+the gap. Reports line numbers so they get fixed on the spot.
 
-- After any Write or Edit to a text file, the file is scanned. An em dash, or
-  an en dash with spaces around it, sends the line numbers back so they get
-  fixed on the spot.
-- Before any Bash command containing `git commit`, the message is scanned too,
-  because commit messages were the gap.
-- Skips `.claude/hooks/`, binaries and images.
+### `.claude/hooks/banned_words.py` and `banned-words.txt`
+
+Built with `hookify` in mind, after round one flagged it as the obvious next
+one. Catches tired marketing language in copy: your list (premier, elite,
+unleash, step into, start your journey) plus the phrases that mark a page as
+machine written.
+
+Three things make it safe to leave on:
+
+- **It skips the harvest.** `projects/<slug>/content/` and `source/` hold the
+  client's own words under the 99% copy lock. Flagging those would be arguing
+  with a decision already made. It only checks `site/`, `design/`,
+  `design-pages/` and `cms/`, where the words are ours.
+- **It reads copy, not markup.** `class="elite-card"` does not trip it.
+- **Any file can opt out** with the marker `banned-words: off`, which is how
+  a client genuinely called Elite Something gets through.
+
+The word list is a plain text file. Add and remove freely, it is the whole
+configuration.
+
+An audit across the repo found 175 lines carrying these words. Every one is
+in the harvest, so the hook stays quiet on all of them. Most common: world
+class (111), elite (28), premier (11), unleash (11).
 
 ### `.claude/hooks/guard_secrets.py`
 
-`config.env` holds `HOSTINGER_API_TOKEN`, and that token can delete live
-client websites.
-
-- Blocks Read, Edit and Write against `config.env` and any `.env` file.
-- Blocks Bash commands that would print one into the transcript, so the token
-  never lands in a conversation log.
-- Blocks `rm`, `mv` and `truncate` against them.
-- Running `hostinger.sh` still works. It sources the file itself, and that
-  never crosses into the transcript.
-
-### `.claude/settings.json`
-
-Wires up both hooks, denies reads of every `.env`, and pre approves the
-read only git commands and the four skill scripts so they stop asking
-permission mid build.
+`config.env` holds `HOSTINGER_API_TOKEN`, which can delete live client sites.
+Blocks Read, Edit and Write against it and any `.env`, blocks Bash commands
+that would print one into the transcript, blocks `rm`, `mv` and `truncate`.
+Running `hostinger.sh` is unaffected, it sources the file itself.
 
 ### `.claude/hooks/py.sh`
 
-Finds `python3`, `python` or `py`, whichever exists. Windows Git Bash and
-Linux both work. If no Python is found it exits quietly rather than blocking
-the session.
+Finds `python3`, `python` or `py`, whichever exists, so the hooks run on
+Windows Git Bash and on Linux. Exits quietly if none is found, so a missing
+interpreter never stalls a session.
+
+### `.claude/settings.json`
+
+Wires all three hooks, pins ponytail to `lite`, denies reads of every `.env`,
+and pre approves the read only git commands and the four skill scripts so
+they stop asking permission mid build.
 
 ---
 
 ## How to get more out of this
 
-- **Run the recommender again after the next big change.** Just ask for
-  Claude Code automation recommendations. It reads whatever the repo looks
-  like at that moment, so its answer changes as the repo does.
+- **Hooks beat instructions.** Two rules from `CLAUDE.md` are now code that
+  cannot be forgotten. `hookify` turns the rest into more. Candidates: no
+  build ships without a meta description, no page ships with a placeholder
+  image path, every kernel change gets logged.
 - **Security scan before handover, not after.** `/claude-security` on the
-  built site directory, as a step in `site-ship`, catches exposed keys in
-  inline JS and form endpoints posting somewhere unintended.
-- **Hooks beat instructions.** Every rule currently living in `CLAUDE.md` as
-  a sentence is a candidate. Anything checkable by a script belongs in a
-  hook, where it cannot be forgotten. Obvious next ones: banned marketing
-  words (premier, elite, unleash, step into, start your journey) checked on
-  write, and a check that no build ships without a meta description.
-- **Search before building.** 2,574 plugins across the two directories. Ask
-  before writing a skill from scratch.
-- **Plugins are per machine, not in the repo.** The three above are installed
-  for this user. The hooks and settings are committed, so they follow the
-  repo. Anyone else cloning it needs the three install commands above.
+  built site directory, as a step inside `site-ship`.
+- **Feed `claude-md-management` after a hard session.** It writes what was
+  learned back into `CLAUDE.md`, which is memory that survives everything.
+- **Ponytail off during design work.** It is a code minimalism rule and
+  design is where you deliberately spend.
+- **Run the recommender again after the next big change.** It reads the repo
+  as it is that day, so its answer moves as the repo moves.
+- **Search the 2,574 plugins before writing a skill from scratch.** Ask in
+  chat, or `/plugin` and use Discover.
 
 ---
-
-## Transcript
+## Round one transcript
 
 > If you're using Claude Code, then you need to install these five AI plugins
 > and skills right now. The first is Claude Code setup. It's an official
@@ -246,3 +439,21 @@ the session.
 > finally, Agent Reach, which lets you scrape anything off the internet, even
 > gated platforms like LinkedIn, Instagram, X, and Reddit without paying for a
 > single API key. It's free down below, just check the pinned comment.
+
+## Round two transcript
+
+> If you're new to Claude Code, then here are the top five plugins you'll need
+> in order to crush it. The first is Ponytail, which optimizes your Claude Code
+> output, cutting down your usage by over 50% without losing any accuracy at
+> all. The second is Code Review, where five AI agents will scan your code in
+> parallel and catch the bugs and errors before any of your app actually goes
+> out. The third is Claude Mem. It gives Claude memory across every session, so
+> it'll remember your project and files so that you haven't to re-explain a
+> thing ever. The fourth is the Obsidian skill, that basically turns your
+> Claude Code into a second brain, linking every file and function across your
+> codebase, so nothing will ever slip through the cracks. And the fifth is the
+> official pack from Anthropic themselves, which is a great starting point as a
+> curated set of the most useful skills that you can plug into Claude Code at
+> any time, covering coding, front end, and other general quality of life
+> improvements. So, if you want to try all these, just comment Claude down
+> below and I'll send them to you directly.
