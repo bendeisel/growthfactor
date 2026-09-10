@@ -25,6 +25,9 @@ SKIPPED_PARTS = (
     os.path.join(".claude", "hooks"),
     os.path.join("node_modules", ""),
     os.path.join(".git", ""),
+    # Vendored spec-kit. Not our words to rewrite.
+    os.path.join(".claude", "skills", "speckit-"),
+    os.path.join(".specify", ""),
     # The harvest. projects/<slug>/source and /content hold the client's own
     # words, and the 99% copy lock says they stay as they are. Flagging them
     # would be arguing with a decision that has already been made.

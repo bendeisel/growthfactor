@@ -25,11 +25,14 @@ CHECKED_SUFFIXES = {
     ".xml", ".svg", ".csv",
 }
 
-# The hook's own source has to name the characters it hunts for.
+# The hook's own source has to name the characters it hunts for, and the
+# vendored spec-kit files are not ours to rewrite.
 SKIPPED_PARTS = (
     os.path.join(".claude", "hooks"),
     os.path.join("node_modules", ""),
     os.path.join(".git", ""),
+    os.path.join(".claude", "skills", "speckit-"),
+    os.path.join(".specify", ""),
 )
 
 REPLACEMENT_HINT = (

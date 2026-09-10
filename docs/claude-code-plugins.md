@@ -2,11 +2,11 @@
 
 # Claude Code plugins, checked
 
-Two YouTube videos, five plugins each. Every one was looked up before
-anything was installed, because four of the ten are not what the videos say
+Three YouTube videos, eleven plugins. Every one was looked up before
+anything was installed, because four of the eleven are not what the videos say
 they are.
 
-Round one transcript and round two transcript are both at the bottom.
+All three transcripts are at the bottom.
 
 Last updated 2026-09-10.
 
@@ -330,6 +330,81 @@ claude plugin install claude-md-management@claude-plugins-official
 
 ---
 
+# Round three
+
+---
+
+## 11. Spec Kit
+
+**The claim:** GitHub built a free tool that stops Claude building the wrong
+thing. Past 100,000 stars. You describe what you want in English, it turns
+that into a spec before any code is written, then Claude builds in stages you
+can check and cannot skip ahead.
+
+**Reality:** all of it holds up, and the star count is the first number across
+three videos that was **understated**. It is at 134.7k, with 12.1k forks.
+
+Everything else checks out too. `github/spec-kit` is a real toolkit, the
+staged chain is real, and the stages genuinely read each other's output rather
+than being decoration.
+
+**Verdict:** installed, and gated.
+
+```
+uvx --from git+https://github.com/github/spec-kit.git specify init \
+  --here --integration claude --script sh --force --non-interactive
+```
+
+It writes 30 files: ten `speckit-*` skills under `.claude/skills/` and a
+`.specify/` directory of templates and scripts. Checked before running it in
+a throwaway repo: it does not touch `settings.json`, the hooks, or any of the
+nine existing skills.
+
+**The one change made after install.** All ten shipped with
+`disable-model-invocation: false`, meaning Claude could fire them on its own.
+Descriptions like "Execute the implementation planning workflow" would win
+routing against `site-factory` on any planning shaped request, which is a real
+collision in a repo whose whole job is a build pipeline. All ten are now
+`disable-model-invocation: true`, so they only run when typed.
+
+Re-running `specify init` would undo that gate.
+
+### Why it does not go near a site build
+
+Spec Kit sells a staged pipeline: spec, plan, tasks, build, each stage checked
+before the next. `site-factory` already is one, tuned to websites:
+
+| Spec Kit | This repo |
+|---|---|
+| constitution | `house-style`, the design law |
+| spec | `intake.md` plus the locked `kernel.json` |
+| plan | the `site-factory` build pipeline |
+| tasks | the sitemap and page list |
+| implement | the three build routines |
+| review gate | `site-preview`, client approves |
+| ship | `site-ship` |
+
+The kernel is the spec. The 99% copy lock is a spec constraint. The preview
+step is the check you cannot skip. Running Spec Kit alongside that is two
+pipelines competing for one job.
+
+### Where it does earn its place
+
+The work that is actually software: GHL automations, AI agent builds, new
+skills for this repo, any script that has to be right. The chain is in
+`docs/SOP.md`.
+
+The step worth the effort is `/speckit-clarify`, which asks up to five
+targeted questions before planning. That is the one that catches "I assumed
+you meant X" before it costs a rebuild, and it is the closest thing here to
+what the video was actually describing.
+
+### Hooks adjusted
+
+The vendored files carry 41 em dashes, and they are not ours to rewrite. Both
+copy hooks now skip `.claude/skills/speckit-` and `.specify/`.
+
+---
 ## What is installed now
 
 ```
@@ -343,10 +418,15 @@ firecrawl@claude-community                       scraping, needs a key
 ponytail@claude-community                        code minimalism, at lite
 ```
 
+Plus spec-kit, which is not a plugin. It vendors ten `speckit-*` skills into
+`.claude/skills/` and a `.specify/` directory, all committed, all gated to
+manual invocation.
+
 Marketplaces: `claude-plugins-official` (292), `claude-community` (2,282).
 
-Plugins install per machine. The hooks and settings below are committed, so
-they follow the repo. Anyone else cloning it runs the eight commands above.
+Plugins install per machine. The hooks, settings and vendored spec-kit files
+are committed, so they follow the repo. Anyone else cloning it runs the eight
+commands above. The full setup routine is in `docs/SOP.md`.
 
 ---
 
@@ -395,6 +475,10 @@ Finds `python3`, `python` or `py`, whichever exists, so the hooks run on
 Windows Git Bash and on Linux. Exits quietly if none is found, so a missing
 interpreter never stalls a session.
 
+Both copy hooks skip `.claude/skills/speckit-` and `.specify/`. Those files
+are vendored and carry 41 em dashes between them, which are not ours to
+rewrite.
+
 ### `.claude/settings.json`
 
 Wires all three hooks, pins ponytail to `lite`, denies reads of every `.env`,
@@ -419,6 +503,11 @@ they stop asking permission mid build.
   as it is that day, so its answer moves as the repo moves.
 - **Search the 2,574 plugins before writing a skill from scratch.** Ask in
   chat, or `/plugin` and use Discover.
+- **Spec Kit for software, never for a site build.** `site-factory` is
+  already the same idea tuned to websites, and two pipelines competing for
+  one job is worse than one good one.
+- **`docs/SOP.md` is the day to day version of this file.** This one is the
+  reasoning, that one is what to type.
 
 ---
 ## Round one transcript
@@ -457,3 +546,16 @@ they stop asking permission mid build.
 > any time, covering coding, front end, and other general quality of life
 > improvements. So, if you want to try all these, just comment Claude down
 > below and I'll send them to you directly.
+
+## Round three transcript
+
+> GitHub built a free tool that stops Claude from building the wrong thing.
+> It's called Spec Kit, and it's already passed 100,000 stars on GitHub. It
+> fixes the biggest problem with AI coding. You ask it for something, it sounds
+> confident, and half of it comes back wrong. Here's how it works. You describe
+> what you want in English, and it turns that into a spec before any code even
+> gets written. Then Claude builds in stages you can actually check. First, the
+> plan, then the pieces, then the code, and it can't skip ahead. GitHub built
+> this because AI doesn't fail from being dumb. It fails from guessing what you
+> meant. Fix the guessing, and what comes back is the thing that you actually
+> asked for. So, comment spec, and I'll send you the link.
