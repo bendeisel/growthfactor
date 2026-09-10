@@ -1,25 +1,26 @@
 # Nashville MMA Training Camp
 
-## Two canvases — keep them separate
+## One artifact, the whole site
 
-Homepage work and inner-page work live in **different artifacts** so that version
-history stays readable. A version bump on one never means "the other changed".
+https://claude.ai/code/artifact/c17104b0-28ad-4c03-bcec-f06c74440859
 
-| Canvas | Artifact | Working files |
-| --- | --- | --- |
-| Homepage (desktop + mobile, brand reference, hero explorations) | https://claude.ai/code/artifact/3e08f59d-8410-4071-a4e5-5c57c1dcd37c | `design/` |
-| Inner pages (schedule, program detail, and the rest as they land) | https://claude.ai/code/artifact/ca0d293b-96fd-43a5-ab2e-be808652dfac | `design-pages/` |
+Every page of the site lives in that one artifact, switched by the nav: 44
+pages, the hero video and all photography embedded, nothing loaded from a
+path that only resolves on our machines. It replaced the two design canvases
+(a homepage canvas and an inner-page canvas), which were separate artifacts
+per stage of the work and could not be reviewed as a site.
 
-Never add an inner-page artboard to the homepage canvas, and never repoint the
-homepage canvas's `launch` page at anything but the homepage.
+The rule is in `site-factory`: one artifact per site, redeployed to the same
+URL, never one artifact per page. Working files stay split by stage in
+`design/` and `design-pages/`, and that is fine. The artifact is not.
 
 ## Contents
 
 - `kernel.json` — the locked brand kernel, extracted from the client's 97Display site.
-- `design/` — homepage canvas working files. Any Claude session can re-seed the
-  canvas from these (or `--extract` fresh copies from the artifact URL if someone
-  has edited it in the GUI since).
-- `design-pages/` — inner-page canvas working files. Same re-seed workflow.
+- `design/` — homepage artboards: desktop, mobile, brand reference, hero
+  explorations. The source the homepage was built from.
+- `design-pages/` — inner-page artboards: schedule, program detail, and the
+  stamp every program page was cut from.
 - `content/` + `source/` — the full-site harvest (56 pages, 115 images). Every
   word placed on an inner page comes from here, so the 99% copy lock holds by
   construction.
@@ -29,11 +30,11 @@ homepage canvas's `launch` page at anything but the homepage.
 
 ## Status
 
-- Homepage design in review with leadership.
-- Inner pages: schedule and Brazilian Jiu Jitsu built with real content. The
-  program-detail layout is the stamp for all 13 program pages. Still to design:
-  coaches index, FAQ, about, contact, reviews — content for all of them is
-  already harvested.
+- All 44 pages built and in the artifact: homepage, schedule, 14 program pages,
+  coaches index plus 16 coach pages, about, contact, reviews, FAQ, events,
+  recovery, sponsors, blog, privacy, terms.
+- Copy on every page comes from `content/`, so the 99% copy lock holds by
+  construction.
 - Nav labels and URLs are wired once the approved sitemap lands. Pages may be
   renamed, moved or added; none will be removed.
 - Build target: static site on Hostinger per

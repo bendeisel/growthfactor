@@ -61,16 +61,16 @@ greenfield there is no site to inventory, so the motif vocabulary comes from
 the logo and print material and is written down explicitly, because from that
 moment it is frozen exactly as an extracted one would be.
 
-**Step 5 — Build, as one multi-page artifact.** Not one artifact per page.
-See `references/multipage-artifact.md` and start from
-`templates/site-shell.html`. This is not a preference — a site split across
-artifacts cannot be reviewed, cannot be page-switched by the client, and
-cannot be split into production HTML by script.
+**Step 5 — Build the site as code.** Real code in `projects/<slug>/site/` is
+the source of truth: components, data files, CMS wiring. Design artboards, if
+the job earned any, are inputs to that code and not the deliverable. See
+`references/multipage-artifact.md` for the standard and for the one case that
+still authors a single shell HTML by hand.
 
-**Step 6 — Publish the artifact. Without being asked.**
-The artifact is published the moment the build starts, not when the build is
-finished and someone remembers to ask. Publish the shell with its pages
-stubbed, then redeploy to the same file path as sections land. Rationale in
+**Step 6 — Publish one artifact of the whole site. Without being asked.**
+Generate it with `scripts/bundle_artifact.py --root <built dir>` and publish
+the moment the build starts, not when it is finished and someone remembers to
+ask. Regenerate and redeploy to the same URL as pages land. Rationale in
 `references/multipage-artifact.md` under "Publish early".
 
 **Step 7 — Register it.** `scripts/registry.py` writes the row: client, slug,
@@ -93,8 +93,10 @@ breaks divergence for every future client.
 These are the four things that went wrong often enough to be worth stating as
 rules rather than advice.
 
-1. **One artifact per site, never one per page.** Pages are sections inside a
-   single artifact, switched by the chrome nav.
+1. **One artifact per site, never one per page** — and never one per stage of
+   the work either. Pages are sections inside a single artifact, switched by
+   the nav. The artifact is *generated* from the build by
+   `scripts/bundle_artifact.py`, so it cannot drift from the code.
 2. **The artifact is published automatically**, at build start, and redeployed
    to the same path — so the URL in the registry never goes stale.
 3. **Previews never live inside a client's production website.** The Hostinger
@@ -122,7 +124,10 @@ guessing at a domain or silently deploying to the wrong account.
 - `references/hostinger-api.md` — endpoints verified against Hostinger's
   OpenAPI spec, with working curl for the TUS upload flow.
 - `templates/site-shell.html` — the multi-page artifact starting point.
-- `scripts/split_pages.py` — artifact → per-page production HTML.
+- `scripts/bundle_artifact.py` — built site → the one review artifact. This is
+  how every site's artifact gets made.
+- `scripts/split_pages.py` — hand-authored shell → per-page production HTML,
+  for the small-site path only.
 - `scripts/registry.py` — the site registry.
 - `scripts/hostinger.sh` — API wrapper (upload, deploy, subdomains, list).
 - `scripts/deploy_preview.sh` — built dir → `preview.<domain>/<slug>/`.

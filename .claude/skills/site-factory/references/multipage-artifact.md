@@ -12,6 +12,82 @@ script, because the pages do not know they belong together.
 
 A site is one thing. It gets one artifact.
 
+## The strict system: code is the site, the artifact is a view of it
+
+Both real builds landed here the same way, and this is now the rule rather
+than a coincidence:
+
+```
+projects/<slug>/site/       real code — Astro components, data, CMS wiring
+        │                   THIS is the site. It is the only source of truth.
+        ├── build ────────> dist/          real pages, real assets
+        │                     ├── bundle_artifact.py ──> ONE artifact, one URL
+        │                     │                          how anyone reviews it
+        │                     └── deploy ─────────────> preview, then production
+        └── design/         artboards, when a design pass earns one
+                            an INPUT to the code, never the deliverable
+```
+
+Three rules, and they are the whole standard:
+
+1. **The code is the site.** Not the artifact, not the artboard. Copy, class
+   times, coach lists and FAQs live in data files or the CMS, so changing a
+   class time once changes it everywhere it appears.
+2. **One artifact per site, generated, never hand-maintained.** Run
+   `scripts/bundle_artifact.py` against the built output and publish the result
+   to the site's existing artifact URL. Because it is generated, it can never
+   drift from the code, and regenerating is cheaper than patching it.
+3. **Design artboards are inputs.** A canvas is worth making when a look needs
+   deciding. The moment it is decided, it becomes code, and the canvas stops
+   being a thing anyone reviews. It never gets its own published artifact per
+   stage of the work.
+
+### What this replaced, and why
+
+Fighters Boxing was built as eight separate page artifacts. Nobody could
+review it: reviewing meant opening eight tabs and holding the site in your
+head, the client could not click from the homepage to the classes page, and no
+script could assemble the pieces because the pages did not know they belonged
+together. Nashville MMA drifted the other way, into two artifacts split by
+stage of work — homepage canvas and inner-page canvas — which is the same
+problem wearing a tidier coat.
+
+Both are now one artifact each, generated from a build.
+
+### Bundling
+
+```bash
+python3 scripts/bundle_artifact.py --root projects/<slug>/site/dist \
+  --out /tmp/<slug>.html --title "<Client> | Full Site" \
+  --order "/,/classes/,/schedule/,/contact-us/" \
+  --fonts "Archivo:wght@500;700;800;900" --fonts "Didact+Gothic"
+```
+
+It hoists the shared header and footer out of the pages so they are written
+once, inlines every stylesheet, image and video, swaps local `@font-face` for
+the Google Fonts stylesheet (the artifact host allows `fonts.googleapis.com`
+and blocks `/_astro/*.woff2`), points the site's own links at hash routes, and
+runs each page's scripts once. It reports any asset it could not find rather
+than shipping a silent gap, and prints the finished size against the 16MB
+ceiling.
+
+Publish the output to the URL already in the registry. `--order` puts the home
+page first; it is the route that shows when someone opens the link cold.
+
+### The hand-authored path
+
+Everything below is the older pattern: author one HTML file with `.gf-page`
+sections and split it for production. It is still what `split_pages.py`,
+`deploy_preview.sh` and `deploy_production.sh` expect as input, so a build that
+uses it keeps working. Use it only for something genuinely small, a one or two
+page site with no data behind it. Anything with a schedule, a coach roster or a
+CMS goes the code-first route above.
+
+Seam worth knowing before you wire a code-first build to Hostinger: the deploy
+scripts take a shell HTML and split it, while a code-first build already has a
+`dist/` directory of real pages. Point the deploy at the built directory rather
+than round-tripping it through an artifact.
+
 ## The contract
 
 `templates/site-shell.html` is the starting point. Four conventions carry the

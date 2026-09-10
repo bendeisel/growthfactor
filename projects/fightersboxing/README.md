@@ -16,8 +16,28 @@ Sister project to Nashville MMA: that one is the **dark** site, this is the
   `.claude/skills/house-style/references/hostinger-delivery.md`).
   `npm install && npm run build` in `site/`; deploy `site/dist/`.
 
-Status: homepage revised per Ben's first feedback round. Remaining pages
-pending.
+## One artifact, the whole site
+
+https://claude.ai/code/artifact/d598735d-1010-42f4-8a53-34c358755630
+
+All 13 pages live in that one artifact, switched by the nav, with the hero
+video and every photo embedded. Build it from `site/` and bundle it:
+
+```bash
+cd site && npm install && npx astro build
+python3 ../../../.claude/skills/site-factory/scripts/bundle_artifact.py \
+  --root dist --out /tmp/fightersboxing.html \
+  --title "Fighters Boxing Gym | Full Site" \
+  --fonts "Archivo:wght@500;700;800;900" --fonts "Didact+Gothic" \
+  --fonts "Josefin+Sans:wght@700"
+```
+
+Then republish that file to the artifact URL above. Never publish a page as
+its own artifact: this build spent a round as eight loose page artifacts and
+nobody could review it.
+
+Status: all 13 pages built. The eight single-page artifacts from the first
+round are superseded and slated for deletion.
 
 Standing client instructions (Ben):
 - NEVER use an em dash. Anywhere. See root CLAUDE.md.
