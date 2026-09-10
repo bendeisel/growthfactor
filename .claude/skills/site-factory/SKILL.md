@@ -90,7 +90,7 @@ breaks divergence for every future client.
 
 ## Non-negotiables
 
-These are the four things that went wrong often enough to be worth stating as
+These are the five things that went wrong often enough to be worth stating as
 rules rather than advice.
 
 1. **One artifact per site, never one per page** — and never one per stage of
@@ -103,7 +103,26 @@ rules rather than advice.
    static-deploy endpoint overwrites an entire website. See
    `references/preview-hosting.md` — this one has actually destructive failure
    modes, so read it before touching deploy.
-4. **Previews are `noindex`.** A preview of a client's site is duplicate
+4. **The artifact is named `<client> Site`.** The client name exactly as it
+   appears in `data/sites.csv`, then the word Site. No dash, no hyphen, no
+   colon, no stage word, no version, no date:
+
+   ```
+   Fighters Boxing Gym Site
+   Nashville MMA Training Camp Site
+   ```
+
+   The name does not change for the life of the project. It is not "Preview"
+   at one stage and "Full Site" at another, because the artifact is the site
+   the whole way through, and a renamed artifact reads as a different one to
+   anyone holding the link. Same for the favicon. `bundle_artifact.py` builds
+   the name from `--client` and refuses a value carrying punctuation or a
+   stage word, so this holds by construction rather than by memory.
+
+   The gallery subtitle is one sentence in the same shape every time: `Every
+   page of the <client> build in one artifact: N pages.` The bundler prints it.
+
+5. **Previews are `noindex`.** A preview of a client's site is duplicate
    content against their real domain, and Google is happy to index a preview
    subdomain nobody linked to. `deploy_preview.sh` writes the header and the
    robots file; do not "clean up" either.

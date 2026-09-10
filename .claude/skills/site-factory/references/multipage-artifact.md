@@ -58,7 +58,7 @@ Both are now one artifact each, generated from a build.
 
 ```bash
 python3 scripts/bundle_artifact.py --root projects/<slug>/site/dist \
-  --out /tmp/<slug>.html --title "<Client> | Full Site" \
+  --out /tmp/<slug>.html --client "<Client name from sites.csv>" \
   --order "/,/classes/,/schedule/,/contact-us/" \
   --fonts "Archivo:wght@500;700;800;900" --fonts "Didact+Gothic"
 ```
@@ -73,6 +73,10 @@ ceiling.
 
 Publish the output to the URL already in the registry. `--order` puts the home
 page first; it is the route that shows when someone opens the link cold.
+
+There is no `--title`. The artifact is named `<client> Site` and the script
+builds that from `--client`, so every site's artifact is named the same way and
+none of them drift into a stage word. See non-negotiable 4 in the skill.
 
 ### The hand-authored path
 

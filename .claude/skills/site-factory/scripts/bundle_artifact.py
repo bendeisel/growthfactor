@@ -16,8 +16,12 @@ Run it after the site build, then publish the output to the project's artifact
 URL. Nothing here edits the build, so the artifact can always be regenerated.
 
   python3 bundle_artifact.py --root projects/<slug>/site/dist \
-      --title "Client | Full Site" --out /tmp/<slug>.html \
+      --client "Fighters Boxing Gym" --out /tmp/<slug>.html \
       --fonts "Archivo:wght@500;700;800;900" --fonts "Didact+Gothic"
+
+The artifact's name is not a free text field. It is the client name and the
+word Site, and this script builds it that way so it cannot drift into
+"Preview", "Full Site Preview", "v2" or a dated variant again.
 """
 import argparse, base64, hashlib, os, posixpath, re, sys
 
@@ -203,12 +207,22 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", required=True, help="built site directory")
     ap.add_argument("--out", required=True)
-    ap.add_argument("--title", required=True)
+    ap.add_argument("--client", required=True,
+                    help="client name exactly as in sites.csv; the artifact is "
+                         "named '<client> Site'")
     ap.add_argument("--fonts", action="append", default=[],
                     help="Google Fonts family spec, repeatable")
     ap.add_argument("--order", default="",
                     help="comma-separated routes to put first, home first")
     args = ap.parse_args()
+
+    # One name shape for every site, enforced here rather than remembered.
+    client = " ".join(args.client.split())
+    if re.search(r"[-:|—]|\b(preview|full site|final|v\d)\b", client, re.I):
+        sys.exit("--client is the client name only: %r. The artifact is named\n"
+                 "'<client> Site', with no dash, colon, stage word or version."
+                 % args.client)
+    artifact_title = "%s Site" % client
 
     root = os.path.abspath(args.root)
     assets = Assets(root)
@@ -330,7 +344,7 @@ def main():
         % (route, route, title.split("|")[0].strip())
         for route, title, _ in sections)
 
-    parts = ["<title>%s</title>" % args.title]
+    parts = ["<title>%s</title>" % artifact_title]
     if args.fonts:
         parts.append('<link rel="stylesheet" href="https://fonts.googleapis.com/'
                      'css2?%s&display=swap">'
@@ -363,6 +377,9 @@ def main():
     with open(args.out, "w", encoding="utf-8") as fh:
         fh.write(out)
 
+    print("artifact name : %s" % artifact_title)
+    print("gallery text  : Every page of the %s build in one artifact: "
+          "%d pages." % (client, len(sections)))
     print("pages bundled : %d" % len(sections))
     print("shared chrome : %s" % (", ".join(k for k, v in shared.items() if v)
                                   or "none hoisted"))
