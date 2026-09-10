@@ -8,6 +8,9 @@ routines, and the pipeline that gets a site from intake to live.
 ```
 house-style      the design law — what may not drift, and why
     │
+design-to-code   canvas in, coded site out, canvas retired. Also decides
+    │            whether a job should start in Design at all
+    │
 site-factory     the shared spine — build pipeline, registry, artifact shell,
     │            Hostinger delivery
     ├── site-redesign    client has a live site to upgrade

@@ -67,6 +67,11 @@ the job earned any, are inputs to that code and not the deliverable. See
 `references/multipage-artifact.md` for the standard and for the one case that
 still authors a single shell HTML by hand.
 
+If the look was decided on a Claude Design canvas, run the `design-to-code`
+routine to convert it. That routine also answers whether a job should start in
+Design at all: a greenfield build with the look undecided should, a redesign or
+a match should not, and anything data driven never should.
+
 **Step 6 — Publish one artifact of the whole site. Without being asked.**
 Generate it with `scripts/bundle_artifact.py --root <built dir>` and publish
 the moment the build starts, not when it is finished and someone remembers to
