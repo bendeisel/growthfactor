@@ -152,6 +152,9 @@ guessing at a domain or silently deploying to the wrong account.
   how every site's artifact gets made.
 - `scripts/split_pages.py` — hand-authored shell → per-page production HTML,
   for the small-site path only.
+- `scripts/redirect_map.py` — old URL list plus rules → `htaccess`,
+  `redirects.json` and a decisions table. Run it before a cutover that changes
+  paths; it fails loudly on an unrouted URL or a 301 into a 404.
 - `scripts/registry.py` — the site registry.
 - `scripts/hostinger.sh` — API wrapper (upload, deploy, subdomains, list).
 - `scripts/deploy_preview.sh` — built dir → `preview.<domain>/<slug>/`.

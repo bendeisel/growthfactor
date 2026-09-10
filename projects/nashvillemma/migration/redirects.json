@@ -1,0 +1,277 @@
+[
+  {
+    "from": "/Contact",
+    "to": "/contact.html",
+    "type": 301
+  },
+  {
+    "from": "/FAQ",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/Home/Schedule",
+    "to": "/schedule.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors",
+    "to": "/coaches.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Anne-Smith",
+    "to": "/coaches/anne-smith.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Bryan-Tidwell",
+    "to": "/coaches/bryan-tidwell.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/David-Sacks",
+    "to": "/coaches/david-sacks.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Dedrek-Sanders",
+    "to": "/coaches/dedrek-sanders.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Dustin-Ortiz",
+    "to": "/coaches/dustin-ortiz.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Jim-Casey",
+    "to": "/coaches/jim-casey.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Justin-Weber",
+    "to": "/coaches/justin-weber.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Kevin-Patterson",
+    "to": "/coaches/kevin-patterson.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Monty-Burks",
+    "to": "/coaches/monty-burks.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Paul-Hunter",
+    "to": "/coaches/paul-hunter.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Rashad-Lockhart",
+    "to": "/coaches/rashad-lockhart.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Ronnie-Lawrence-",
+    "to": "/coaches/ronnie-lawrence.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Sammy-Shires",
+    "to": "/coaches/sammy-shires.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Shannon-Goughary",
+    "to": "/coaches/shannon-goughary.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Shawn-Allen",
+    "to": "/coaches/shawn-allen.html",
+    "type": 301
+  },
+  {
+    "from": "/Instructors/Zack-Hicks",
+    "to": "/coaches/zack-hicks.html",
+    "type": 301
+  },
+  {
+    "from": "/blog",
+    "to": "/blog.html",
+    "type": 301
+  },
+  {
+    "from": "/blog/155719/Gear-Recommendations",
+    "to": "/gear.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Boxing",
+    "to": "/programs/boxing.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Facilities",
+    "to": "/programs/open-gym.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Fitness-Classes",
+    "to": "/programs/sports-performance.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Jiu-Jitsu",
+    "to": "/programs/jiu-jitsu.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Kids-Brazilian-Jiu-Jitsu",
+    "to": "/programs/kids-brazilian-jiu-jitsu.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Kids-Fitness-Classes",
+    "to": "/programs/kids-fitness.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Kids-Martial-Arts",
+    "to": "/programs/kids-martial-arts.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Mixed-Martial-Arts",
+    "to": "/programs/mixed-martial-arts.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Mixed-Martial-Arts-Competition-Team",
+    "to": "/programs/mma-fight-team.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Muay-Thai",
+    "to": "/programs/muay-thai.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Personal-Training",
+    "to": "/programs/personal-training.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Self-Defense-Classes-and-Seminars",
+    "to": "/programs/self-defense.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Sponsors",
+    "to": "/sponsors.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Weightlifting-Classes",
+    "to": "/programs/sports-performance.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Women's-Classes",
+    "to": "/programs/womens-classes.html",
+    "type": 301
+  },
+  {
+    "from": "/classes/Wrestling",
+    "to": "/programs/wrestling.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1659/What-martial-arts-disciplines-do-you-offer-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1660/What-should-you-expect-on-your-first-day-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1661/Who-are-your-head-coaches-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1662/What-should-I-wear-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1663/Do-I-need-to-bring-my-own-gear-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1664/Can-I-try-out-the-gym-before-committing-to-a-membership-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1665/What-are-your-membership-options-cancellation-policy-discounts-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1666/Is-personal-training-available-and-what-are-the-costs-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1667/What-is-the-schedule-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1668/What-types-of-equipment-and-facilities-do-you-offer-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1669/Do-you-have-classes-for-all-skill-levels-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1670/Is-sparring-or-contact-training-involved-in-the-martial-arts-classes-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1671/Is-there-a-shower-facility-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1672/Is-there-parking-available-at-the-gym-",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/faq/1673/Gym-Hours",
+    "to": "/faq.html",
+    "type": 301
+  },
+  {
+    "from": "/reviews",
+    "to": "/reviews.html",
+    "type": 301
+  },
+  {
+    "from": "/services",
+    "to": "/programs/",
+    "type": 301
+  }
+]
