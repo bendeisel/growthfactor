@@ -1,0 +1,54 @@
+# Marketing words that do not go in Growth Factor copy.
+#
+# One entry per line. Case insensitive. A multi word entry is matched as a
+# phrase. Lines starting with # are comments. Edit this file freely, it is
+# the whole configuration for the banned words hook.
+#
+# To let one file through, put this marker anywhere in it:
+#   banned-words: off
+
+# Ben's list
+premier
+elite
+unleash
+step into
+start your journey
+
+# The same move under different words
+embark
+embark on
+unlock the power
+unlock the potential
+take it to the next level
+elevate your
+transform your
+begin your journey
+your journey starts
+dive into
+usher in
+
+# Tells that a machine wrote it
+world-class
+world class
+best-in-class
+best in class
+cutting-edge
+cutting edge
+state-of-the-art
+state of the art
+unparalleled
+game-changer
+game changer
+revolutionize
+revolutionise
+seamlessly integrate
+in today's fast-paced
+in today's fast paced
+look no further
+nestled
+a testament to
+tapestry
+delve into
+supercharge
+turbocharge
+harness the power
