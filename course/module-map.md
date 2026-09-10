@@ -1,8 +1,19 @@
 # Gym Coaching Course: Module Map
 
-Status: **approved, in build.** Ben signed off on 2026-09-10. Decisions taken
-at sign-off are recorded at the bottom of this file. Lesson content lives in
-`modules/`, shared assets in `assets/`.
+Status: **built.** Ben signed off on 2026-09-10 and the full course is
+written. Decisions taken at sign-off are recorded at the bottom of this file.
+
+**90 lessons across 15 modules. 319 screenshots to capture. About 630 minutes
+of video to record. 193 UI labels to confirm on a live screen** (`ui-verify.md`).
+
+Lesson content lives in `modules/`, shared assets in `assets/`.
+
+**One deviation from this map, in module 13.** The map had separate lessons
+for wiring and for publishing, and no lesson on how the site should look.
+Those merged into 13.5, and 13.4 "Making it not look generated" is new, built
+on the Growth Factor gym site standard. Same lesson count. Reason: an AI-built
+gym site that looks AI-built is the failure mode of that whole module, and it
+needed its own lesson rather than a paragraph.
 
 Host: GoHighLevel Communities plus Courses (Memberships tab), same sub-account.
 Every lesson ships **written first, video second**, so the written version is
@@ -258,8 +269,8 @@ The one module that is not HighLevel.
 | 13.1 | Why the site is the highest leverage thing they own |
 | 13.2 | Build mode in AI Studio: the exact prompt that produces a gym site |
 | 13.3 | The gym page set: home, programs, schedule, coaches, pricing, contact |
-| 13.4 | Wiring it to HighLevel: forms, chat widget, booking, tracking |
-| 13.5 | Publishing and pointing the domain |
+| 13.4 | **Making it not look generated.** The named AI tells, and the fixes |
+| 13.5 | Wiring it to HighLevel, and publishing |
 | 13.6 | **The shortcut: the 100 site library.** Upsell. Written lesson only, kept out of the video track |
 
 Outcome: a live site they built, or a decision to buy the shortcut.
