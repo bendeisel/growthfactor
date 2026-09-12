@@ -42,6 +42,13 @@ URL, never one artifact per page. Working files stay split by stage in
 
 ## Standing client instructions
 
+- **BT is Bryan Tidwell, the head coach.** Matrix Jiu-Jitsu is his own brand
+  and association, and he teaches it at Nashville MMA Training Camp. So his
+  coach page is the strongest one on the site and it names the association:
+  a head coach who runs his own association is a credential, and "Matrix Jiu
+  Jitsu" is a search term in its own right. Link out to Matrix for
+  credibility, in the body of his bio. Do not replace his page with a link to
+  it, which would hand the ranking signal to another domain.
 - Popup lead forms on all request CTAs.
 - Copy is frozen at 99%.
 - Hero stays full-height (background video).
