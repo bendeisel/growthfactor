@@ -161,6 +161,37 @@ which is the same lock as Step 4.
 **Step 6 — Log it.** Append a row to `data/shipped-log.csv`. A skipped row
 makes the next project's divergence check silently useless.
 
+## Nav is what you sell, footer is what exists
+
+The main nav is a claim about what the business is for, read by visitors and
+by Google. So it carries what the client sells and nothing else. On a gym that
+is roughly: Programs, Schedule, Coaches, the trial or pricing, Contact. Five or
+six items, and a seventh has to displace one rather than join them.
+
+Everything else that needs to exist and be findable goes in the footer:
+
+- news or blog, gear and affiliate pages, sponsors
+- FAQ, what to expect, policies, privacy, terms
+- location and area pages, sister-gym links
+- the full program list, when the nav only carries a hub link
+
+This is not hiding anything. Google reaches a page through any internal link,
+so a footer link keeps it fully crawlable and indexable. What changes is
+weight: sitewide footer links are discounted next to prominent nav links,
+which is exactly right for content that must exist without claiming to be the
+point of the business. It also means the footer can carry a lot without
+costing the nav its clarity, which is the usual reason people cram the nav.
+
+Two things this rule does not do, and both get assumed:
+
+- **It does not rescue a weak page.** Being findable and being rankable are
+  different. A thin page ranks nowhere from the footer, the nav, or a
+  billboard. Placement is not a content fix.
+- **It does not keep deep pages crawlable on its own.** A footer link reaches
+  the *index*. If that index is a ten-item feed with pagination, post sixty is
+  five clicks deep and effectively orphaned. So the index carries a real
+  archive list, and every page stays in `sitemap.xml`.
+
 ## Banned defaults
 
 These are the specific tropes that generic output converges on. They are

@@ -1,0 +1,57 @@
+old_path,decision,target,links,sessions,rule,target_resolves
+/,UNCHANGED,/,,,"homepage, unchanged",yes
+/Contact,REDIRECT,/contact.html,,,contact,NO
+/FAQ,REDIRECT,/faq.html,,,FAQ index,NO
+/Home/Schedule,REDIRECT,/schedule.html,,,legacy /Home/Schedule onto the real schedule,yes
+/Instructors,REDIRECT,/coaches.html,,,coach index,NO
+/Instructors/Anne-Smith,REDIRECT,/coaches/anne-smith.html,,,coach: anne-smith,NO
+/Instructors/Bryan-Tidwell,REDIRECT,/coaches/bryan-tidwell.html,,,coach: bryan-tidwell,NO
+/Instructors/David-Sacks,REDIRECT,/coaches/david-sacks.html,,,coach: david-sacks,NO
+/Instructors/Dedrek-Sanders,REDIRECT,/coaches/dedrek-sanders.html,,,coach: dedrek-sanders,NO
+/Instructors/Dustin-Ortiz,REDIRECT,/coaches/dustin-ortiz.html,,,coach: dustin-ortiz,NO
+/Instructors/Jim-Casey,REDIRECT,/coaches/jim-casey.html,,,coach: jim-casey,NO
+/Instructors/Justin-Weber,REDIRECT,/coaches/justin-weber.html,,,coach: justin-weber,NO
+/Instructors/Kevin-Patterson,REDIRECT,/coaches/kevin-patterson.html,,,coach: kevin-patterson,NO
+/Instructors/Monty-Burks,REDIRECT,/coaches/monty-burks.html,,,coach: monty-burks,NO
+/Instructors/Paul-Hunter,REDIRECT,/coaches/paul-hunter.html,,,coach: paul-hunter,NO
+/Instructors/Rashad-Lockhart,REDIRECT,/coaches/rashad-lockhart.html,,,coach: rashad-lockhart,NO
+/Instructors/Ronnie-Lawrence-,REDIRECT,/coaches/ronnie-lawrence.html,,,coach: ronnie-lawrence,NO
+/Instructors/Sammy-Shires,REDIRECT,/coaches/sammy-shires.html,,,coach: sammy-shires,NO
+/Instructors/Shannon-Goughary,REDIRECT,/coaches/shannon-goughary.html,,,coach: shannon-goughary,NO
+/Instructors/Shawn-Allen,REDIRECT,/coaches/shawn-allen.html,,,coach: shawn-allen,NO
+/Instructors/Zack-Hicks,REDIRECT,/coaches/zack-hicks.html,,,coach: zack-hicks,NO
+/blog,REDIRECT,/blog.html,,,blog index,NO
+/blog/155719/Gear-Recommendations,REDIRECT,/gear.html,,,"affiliate gear page, out of the blog and into the nav",NO
+/classes/Boxing,REDIRECT,/programs/boxing.html,,,class: Boxing,yes
+/classes/Facilities,REDIRECT,/programs/open-gym.html,,,"class: Facilities (judgment call, no exact match on the new site)",yes
+/classes/Fitness-Classes,REDIRECT,/programs/sports-performance.html,,,"class: Fitness-Classes (judgment call, no exact match on the new site)",yes
+/classes/Jiu-Jitsu,REDIRECT,/programs/jiu-jitsu.html,,,class: Jiu-Jitsu,yes
+/classes/Kids-Brazilian-Jiu-Jitsu,REDIRECT,/programs/kids-brazilian-jiu-jitsu.html,,,class: Kids-Brazilian-Jiu-Jitsu,yes
+/classes/Kids-Fitness-Classes,REDIRECT,/programs/kids-fitness.html,,,class: Kids-Fitness-Classes,yes
+/classes/Kids-Martial-Arts,REDIRECT,/programs/kids-martial-arts.html,,,class: Kids-Martial-Arts,yes
+/classes/Mixed-Martial-Arts,REDIRECT,/programs/mixed-martial-arts.html,,,class: Mixed-Martial-Arts,yes
+/classes/Mixed-Martial-Arts-Competition-Team,REDIRECT,/programs/mma-fight-team.html,,,class: Mixed-Martial-Arts-Competition-Team,yes
+/classes/Muay-Thai,REDIRECT,/programs/muay-thai.html,,,class: Muay-Thai,yes
+/classes/Personal-Training,REDIRECT,/programs/personal-training.html,,,class: Personal-Training,yes
+/classes/Self-Defense-Classes-and-Seminars,REDIRECT,/programs/self-defense.html,,,class: Self-Defense-Classes-and-Seminars,yes
+/classes/Sponsors,REDIRECT,/sponsors.html,,,class: Sponsors,NO
+/classes/Weightlifting-Classes,REDIRECT,/programs/sports-performance.html,,,"class: Weightlifting-Classes (judgment call, no exact match on the new site)",yes
+/classes/Women's-Classes,REDIRECT,/programs/womens-classes.html,,,class: Women's-Classes,yes
+/classes/Wrestling,REDIRECT,/programs/wrestling.html,,,class: Wrestling,yes
+/faq/1659/What-martial-arts-disciplines-do-you-offer-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1660/What-should-you-expect-on-your-first-day-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1661/Who-are-your-head-coaches-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1662/What-should-I-wear-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1663/Do-I-need-to-bring-my-own-gear-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1664/Can-I-try-out-the-gym-before-committing-to-a-membership-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1665/What-are-your-membership-options-cancellation-policy-discounts-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1666/Is-personal-training-available-and-what-are-the-costs-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1667/What-is-the-schedule-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1668/What-types-of-equipment-and-facilities-do-you-offer-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1669/Do-you-have-classes-for-all-skill-levels-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1670/Is-sparring-or-contact-training-involved-in-the-martial-arts-classes-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1671/Is-there-a-shower-facility-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1672/Is-there-parking-available-at-the-gym-,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/faq/1673/Gym-Hours,REDIRECT,/faq.html,,,the 15 auto-generated one-question pages onto the consolidated FAQ,NO
+/reviews,REDIRECT,/reviews.html,,,reviews,NO
+/services,REDIRECT,/programs/,,,"services tree onto programs, per SEO-01",NO

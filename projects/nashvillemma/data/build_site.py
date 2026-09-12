@@ -58,9 +58,12 @@ def to_plain(body, url):
     body = body.replace('onClick="{{ openForm }}"', 'onclick="openForm()"')
     body = body.replace('onClick="{{ closeForm }}"', 'onclick="closeForm()"')
     body = re.sub(r'onClick="\{\{[^}]*\}\}"', '', body)
-    # asset paths
+    # asset paths, in src="" and in CSS url() alike. The artboards write both,
+    # and a url() left alone is a background that only loads on the canvas.
     body = re.sub(r'(src=")(?:\./)?([^":/][^"]*\.(?:jpg|jpeg|png|webm|mp4))"',
                   lambda m: m.group(1) + p + "assets/" + os.path.basename(m.group(2)) + '"', body)
+    body = re.sub(r'url\((?:\./)?([^)"\']*\.(?:jpg|jpeg|png|webm|mp4))\)',
+                  lambda m: "url(" + p + "assets/" + os.path.basename(m.group(1)) + ")", body)
     return body
 
 def wire_nav(body, url, active):

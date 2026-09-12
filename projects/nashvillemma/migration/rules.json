@@ -1,0 +1,227 @@
+[
+  {
+    "match": "(?i)^/classes/Jiu\\-Jitsu$",
+    "target": "/programs/jiu-jitsu.html",
+    "note": "class: Jiu-Jitsu"
+  },
+  {
+    "match": "(?i)^/classes/Muay\\-Thai$",
+    "target": "/programs/muay-thai.html",
+    "note": "class: Muay-Thai"
+  },
+  {
+    "match": "(?i)^/classes/Boxing$",
+    "target": "/programs/boxing.html",
+    "note": "class: Boxing"
+  },
+  {
+    "match": "(?i)^/classes/Mixed\\-Martial\\-Arts$",
+    "target": "/programs/mixed-martial-arts.html",
+    "note": "class: Mixed-Martial-Arts"
+  },
+  {
+    "match": "(?i)^/classes/Mixed\\-Martial\\-Arts\\-Competition\\-Team$",
+    "target": "/programs/mma-fight-team.html",
+    "note": "class: Mixed-Martial-Arts-Competition-Team"
+  },
+  {
+    "match": "(?i)^/classes/Women's\\-Classes$",
+    "target": "/programs/womens-classes.html",
+    "note": "class: Women's-Classes"
+  },
+  {
+    "match": "(?i)^/classes/Wrestling$",
+    "target": "/programs/wrestling.html",
+    "note": "class: Wrestling"
+  },
+  {
+    "match": "(?i)^/classes/Self\\-Defense\\-Classes\\-and\\-Seminars$",
+    "target": "/programs/self-defense.html",
+    "note": "class: Self-Defense-Classes-and-Seminars"
+  },
+  {
+    "match": "(?i)^/classes/Personal\\-Training$",
+    "target": "/programs/personal-training.html",
+    "note": "class: Personal-Training"
+  },
+  {
+    "match": "(?i)^/classes/Kids\\-Martial\\-Arts$",
+    "target": "/programs/kids-martial-arts.html",
+    "note": "class: Kids-Martial-Arts"
+  },
+  {
+    "match": "(?i)^/classes/Kids\\-Fitness\\-Classes$",
+    "target": "/programs/kids-fitness.html",
+    "note": "class: Kids-Fitness-Classes"
+  },
+  {
+    "match": "(?i)^/classes/Kids\\-Brazilian\\-Jiu\\-Jitsu$",
+    "target": "/programs/kids-brazilian-jiu-jitsu.html",
+    "note": "class: Kids-Brazilian-Jiu-Jitsu"
+  },
+  {
+    "match": "(?i)^/classes/Weightlifting\\-Classes$",
+    "target": "/programs/sports-performance.html",
+    "note": "class: Weightlifting-Classes (judgment call, no exact match on the new site)"
+  },
+  {
+    "match": "(?i)^/classes/Fitness\\-Classes$",
+    "target": "/programs/sports-performance.html",
+    "note": "class: Fitness-Classes (judgment call, no exact match on the new site)"
+  },
+  {
+    "match": "(?i)^/classes/Facilities$",
+    "target": "/programs/open-gym.html",
+    "note": "class: Facilities (judgment call, no exact match on the new site)"
+  },
+  {
+    "match": "(?i)^/classes/Sponsors$",
+    "target": "/sponsors.html",
+    "note": "class: Sponsors"
+  },
+  {
+    "match": "(?i)^/instructors/anne[- ]?smith-?$",
+    "target": "/coaches/anne-smith.html",
+    "note": "coach: anne-smith"
+  },
+  {
+    "match": "(?i)^/instructors/bryan[- ]?tidwell-?$",
+    "target": "/coaches/bryan-tidwell.html",
+    "note": "coach: bryan-tidwell"
+  },
+  {
+    "match": "(?i)^/instructors/david[- ]?sacks-?$",
+    "target": "/coaches/david-sacks.html",
+    "note": "coach: david-sacks"
+  },
+  {
+    "match": "(?i)^/instructors/dedrek[- ]?sanders-?$",
+    "target": "/coaches/dedrek-sanders.html",
+    "note": "coach: dedrek-sanders"
+  },
+  {
+    "match": "(?i)^/instructors/dustin[- ]?ortiz-?$",
+    "target": "/coaches/dustin-ortiz.html",
+    "note": "coach: dustin-ortiz"
+  },
+  {
+    "match": "(?i)^/instructors/jim[- ]?casey-?$",
+    "target": "/coaches/jim-casey.html",
+    "note": "coach: jim-casey"
+  },
+  {
+    "match": "(?i)^/instructors/justin[- ]?weber-?$",
+    "target": "/coaches/justin-weber.html",
+    "note": "coach: justin-weber"
+  },
+  {
+    "match": "(?i)^/instructors/kevin[- ]?patterson-?$",
+    "target": "/coaches/kevin-patterson.html",
+    "note": "coach: kevin-patterson"
+  },
+  {
+    "match": "(?i)^/instructors/monty[- ]?burks-?$",
+    "target": "/coaches/monty-burks.html",
+    "note": "coach: monty-burks"
+  },
+  {
+    "match": "(?i)^/instructors/paul[- ]?hunter-?$",
+    "target": "/coaches/paul-hunter.html",
+    "note": "coach: paul-hunter"
+  },
+  {
+    "match": "(?i)^/instructors/rashad[- ]?lockhart-?$",
+    "target": "/coaches/rashad-lockhart.html",
+    "note": "coach: rashad-lockhart"
+  },
+  {
+    "match": "(?i)^/instructors/ronnie[- ]?lawrence-?$",
+    "target": "/coaches/ronnie-lawrence.html",
+    "note": "coach: ronnie-lawrence"
+  },
+  {
+    "match": "(?i)^/instructors/sammy[- ]?shires-?$",
+    "target": "/coaches/sammy-shires.html",
+    "note": "coach: sammy-shires"
+  },
+  {
+    "match": "(?i)^/instructors/shannon[- ]?goughary-?$",
+    "target": "/coaches/shannon-goughary.html",
+    "note": "coach: shannon-goughary"
+  },
+  {
+    "match": "(?i)^/instructors/shawn[- ]?allen-?$",
+    "target": "/coaches/shawn-allen.html",
+    "note": "coach: shawn-allen"
+  },
+  {
+    "match": "(?i)^/instructors/zack[- ]?hicks-?$",
+    "target": "/coaches/zack-hicks.html",
+    "note": "coach: zack-hicks"
+  },
+  {
+    "match": "(?i)^/instructors$",
+    "target": "/coaches.html",
+    "note": "coach index"
+  },
+  {
+    "match": "(?i)^/services$",
+    "target": "/programs/",
+    "note": "services tree onto programs, per SEO-01"
+  },
+  {
+    "match": "(?i)^/classes$",
+    "target": "/programs/",
+    "note": "classes hub onto programs"
+  },
+  {
+    "match": "(?i)^/faq/[0-9]+/.+$",
+    "target": "/faq.html",
+    "note": "the 15 auto-generated one-question pages onto the consolidated FAQ"
+  },
+  {
+    "match": "(?i)^/faq$",
+    "target": "/faq.html",
+    "note": "FAQ index"
+  },
+  {
+    "match": "(?i)^/blog/[0-9]+/Gear-Recommendations$",
+    "target": "/gear.html",
+    "note": "affiliate gear page, out of the blog and into the nav"
+  },
+  {
+    "match": "(?i)^/blog/.+$",
+    "target": "/blog.html",
+    "note": "every blog post, one wildcard. Carve-outs go ABOVE this line"
+  },
+  {
+    "match": "(?i)^/blog$",
+    "target": "/blog.html",
+    "note": "blog index"
+  },
+  {
+    "match": "(?i)^/reviews$",
+    "target": "/reviews.html",
+    "note": "reviews"
+  },
+  {
+    "match": "(?i)^/contact$",
+    "target": "/contact.html",
+    "note": "contact"
+  },
+  {
+    "match": "(?i)^/home/schedule$",
+    "target": "/schedule.html",
+    "note": "legacy /Home/Schedule onto the real schedule"
+  },
+  {
+    "match": "(?i)^/home$",
+    "target": "/",
+    "note": "duplicate homepage"
+  },
+  {
+    "match": "^/$",
+    "target": "/",
+    "note": "homepage, unchanged"
+  }
+]

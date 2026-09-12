@@ -67,8 +67,26 @@ can have.
 
 ## Step 4 — After launch
 
-- **Redirects**, if any path changed from their old site. `hostinger.sh` has
-  the redirects endpoint. Skipping this discards rankings they already had.
+- **Redirects**, if any path changed from their old site. Build the map
+  *before* launch, not after, with
+  `../site-factory/scripts/redirect_map.py`:
+
+  ```bash
+  python3 ../site-factory/scripts/redirect_map.py \
+    --urls projects/<slug>/migration/old-urls.txt \
+    --rules projects/<slug>/migration/rules.json \
+    --built projects/<slug>/site --out projects/<slug>/migration
+  ```
+
+  It writes an `htaccess`, a `redirects.json` for the Hostinger endpoint, and
+  a `decisions.csv` to argue with. It exits non-zero when an old URL has no
+  rule, or when a rule points at a page the new build does not serve, because
+  a 301 into a 404 loses the link exactly as a 404 does. Both of those are
+  launch blockers. Skipping this discards rankings they already had.
+
+  A wildcard rule at the bottom of the rules file covers URLs nobody
+  enumerated, which is the normal case for an old CMS blog with a broken
+  sitemap. Carve-outs go above it.
 - **Cache**, if a change does not appear: `./hostinger.sh cache-clear <domain>`.
 - **The preview URL still works.** Production is a separate website, so
   launching touched nothing under `previews/`. The registry row keeps both
