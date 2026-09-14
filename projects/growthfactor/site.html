@@ -1,0 +1,1989 @@
+<title>Growth Factor AI</title>
+
+<!--
+  Growth Factor AI: house site. ONE artifact, ten pages.
+  Structure D offset asymmetric / type stance 1 extreme contrast / dense /
+  punctuated / alternating high contrast / M4 reactive.
+  Kernel: projects/growthfactor/kernel.json. Nothing here imports a colour,
+  face or shape that is not in it.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   KERNEL
+   ============================================================ */
+:root{
+  --ink:#0C0D0F;
+  --ink-2:#141519;
+  --paper:#F2F1EC;
+  --paper-2:#E8E7E0;
+  --signal:#2F4BFF;
+  --signal-deep:#1E35CC;
+  --volt:#D6FF4B;
+  --smoke:#8B8E96;
+  --ash:#5F6168;
+  --rule-dark:#23252B;
+  --rule-light:#D6D4CB;
+
+  --face-display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --face-body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --face-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --radius-panel:0px;
+  --radius-action:0px;
+  --gap-section:clamp(64px,8vw,132px);
+  --measure:1440px;
+  --gutter:clamp(1rem,4vw,3.5rem);
+
+  /* 0px geometry cuts. Nothing springs. */
+  --cut:140ms cubic-bezier(.2,0,0,1);
+  --cut-slow:220ms cubic-bezier(.2,0,0,1);
+}
+
+[hidden]{display:none!important}
+*,*::before,*::after{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--face-body);
+  font-weight:400;
+  font-size:clamp(.95rem,.9rem + .2vw,1.0625rem);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4{
+  font-family:var(--face-display);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:-.02em;
+  line-height:.92;
+  margin:0 0 .45em;
+  text-wrap:balance;
+}
+h1{font-size:clamp(2.6rem,8.2vw,7rem)}
+h2{font-size:clamp(2rem,5.2vw,4.25rem)}
+h3{font-size:clamp(1.15rem,2vw,1.6rem);line-height:1.02}
+h4{font-size:clamp(.95rem,1.3vw,1.1rem);letter-spacing:-.01em}
+p{margin:0 0 1.1em;max-width:62ch}
+a{color:inherit}
+
+/* ============================================================
+   LAYOUT: Structure D: content pinned hard left, metadata right
+   ============================================================ */
+.wrap{max-width:var(--measure);margin:0 auto;padding:0 var(--gutter)}
+.band{padding:var(--gap-section) 0;position:relative}
+.band.tight{padding:clamp(40px,5vw,72px) 0}
+.band.paper{background:var(--paper);color:var(--ink)}
+.band.paper-2{background:var(--paper-2);color:var(--ink)}
+.band.ink-2{background:var(--ink-2)}
+.band.signal{background:var(--signal);color:#fff}
+
+/* the offset rail */
+.rail{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(190px,21vw,330px);
+  gap:clamp(1.5rem,4vw,4rem);
+  align-items:start;
+}
+.rail > .rail-meta{padding-top:.6rem}
+@media (max-width:860px){
+  .rail{grid-template-columns:1fr}
+  .rail > .rail-meta{padding-top:0}
+}
+
+/* ============================================================
+   MOTIF 1: mono index numerals
+   MOTIF 2: 1px hairlines
+   MOTIF 6: bracket eyebrows
+   ============================================================ */
+.mono{
+  font-family:var(--face-mono);
+  font-weight:500;
+  font-size:.7rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.eyebrow{
+  display:block;
+  font-family:var(--face-mono);
+  font-weight:500;
+  font-size:.7rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--signal);
+  margin:0 0 1.4rem;
+}
+.band.paper .eyebrow,.band.paper-2 .eyebrow{color:var(--signal-deep)}
+.band.signal .eyebrow{color:var(--volt)}
+.eyebrow::before{content:"[ ";opacity:.55}
+.eyebrow::after{content:" ]";opacity:.55}
+
+.idx{
+  font-family:var(--face-mono);
+  font-weight:400;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  color:var(--smoke);
+}
+.band.paper .idx,.band.paper-2 .idx{color:var(--ash)}
+.idx-big{
+  font-family:var(--face-mono);
+  font-weight:400;
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  line-height:1;
+  letter-spacing:-.02em;
+  color:var(--signal);
+  display:block;
+}
+
+hr.hair{border:0;height:1px;background:var(--rule-dark);margin:0}
+.band.paper hr.hair,.band.paper-2 hr.hair{background:var(--rule-light)}
+.band.signal hr.hair{background:rgba(255,255,255,.34)}
+hr.hair-bleed{margin-left:calc(var(--gutter) * -1);margin-right:calc(var(--gutter) * -1)}
+
+.quiet{color:var(--smoke)}
+.band.paper .quiet,.band.paper-2 .quiet{color:var(--ash)}
+.band.signal .quiet{color:rgba(255,255,255,.76)}
+.lede{font-size:clamp(1.05rem,1.6vw,1.35rem);line-height:1.5;max-width:56ch}
+
+/* MOTIF 5: the signal block */
+.sig-block{
+  display:inline-block;
+  background:var(--signal);
+  color:#fff;
+  padding:.06em .3em;
+}
+.volt-block{display:inline-block;background:var(--volt);color:var(--ink);padding:.06em .3em}
+
+/* ============================================================
+   ACTIONS: hard cuts only
+   ============================================================ */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  background:var(--signal);
+  color:#fff;
+  border:1px solid var(--signal);
+  border-radius:var(--radius-action);
+  padding:1em 1.6em;
+  font-family:var(--face-mono);
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background var(--cut),border-color var(--cut),color var(--cut),transform var(--cut);
+}
+.btn:hover{background:var(--ink);border-color:var(--ink);color:var(--volt)}
+.band.paper .btn:hover,.band.paper-2 .btn:hover{background:var(--ink);border-color:var(--ink);color:var(--volt)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--paper);border-color:var(--rule-dark)}
+.btn.ghost:hover{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+.band.paper .btn.ghost,.band.paper-2 .btn.ghost{color:var(--ink);border-color:var(--rule-light)}
+.band.paper .btn.ghost:hover,.band.paper-2 .btn.ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.band.signal .btn{background:#fff;color:var(--signal-deep);border-color:#fff}
+.band.signal .btn:hover{background:var(--ink);color:var(--volt);border-color:var(--ink)}
+.btn-row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;margin-top:1.8rem}
+
+.txtlink{
+  font-family:var(--face-mono);
+  font-weight:500;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:var(--signal);
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  border-bottom:1px solid transparent;
+  padding-bottom:.25rem;
+  transition:color var(--cut),border-color var(--cut),gap var(--cut);
+}
+.txtlink:hover{border-color:currentColor;gap:.85rem}
+.band.paper .txtlink,.band.paper-2 .txtlink{color:var(--signal-deep)}
+.band.signal .txtlink{color:var(--volt)}
+.arrow{width:.85em;height:.85em;flex:none}
+
+:focus-visible{outline:2px solid var(--volt);outline-offset:4px}
+.band.paper :focus-visible,.band.paper-2 :focus-visible{outline-color:var(--signal)}
+
+/* ============================================================
+   SHARED HEADER
+   ============================================================ */
+.site-head{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,13,15,.94);
+  border-bottom:1px solid var(--rule-dark);
+  backdrop-filter:saturate(140%) blur(8px);
+}
+.site-head .bar{
+  max-width:var(--measure);margin:0 auto;padding:.85rem var(--gutter);
+  display:flex;align-items:center;gap:1.25rem;
+}
+.wordmark{
+  display:flex;align-items:baseline;gap:.5rem;
+  font-family:var(--face-display);font-weight:700;text-transform:uppercase;
+  font-size:1.05rem;letter-spacing:-.02em;color:var(--paper);text-decoration:none;
+  flex:none;
+}
+.wordmark .gf-dot{width:9px;height:9px;background:var(--signal);flex:none;align-self:center;transition:background var(--cut)}
+.wordmark:hover .gf-dot{background:var(--volt)}
+.wordmark .sub{font-family:var(--face-mono);font-weight:500;font-size:.6rem;letter-spacing:.18em;color:var(--smoke)}
+.site-head nav{display:flex;gap:clamp(.6rem,1.5vw,1.5rem);margin-left:auto;flex-wrap:wrap}
+.site-head nav a{
+  font-family:var(--face-mono);font-weight:500;font-size:.68rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--smoke);text-decoration:none;
+  padding:.4rem 0;border-bottom:1px solid transparent;
+  transition:color var(--cut),border-color var(--cut);
+}
+.site-head nav a:hover{color:var(--paper)}
+.site-head nav a[aria-current="page"]{color:var(--paper);border-color:var(--signal)}
+.site-head .btn{padding:.75em 1.15em;flex:none}
+.navtoggle{display:none}
+@media (max-width:1080px){
+  .site-head nav{
+    order:3;width:100%;margin-left:0;gap:1rem .9rem;
+    border-top:1px solid var(--rule-dark);padding-top:.7rem;margin-top:.1rem;
+  }
+  .site-head .btn{margin-left:auto}
+}
+
+/* ============================================================
+   SHARED FOOTER
+   ============================================================ */
+.site-foot{background:var(--ink);border-top:1px solid var(--rule-dark);padding:clamp(48px,6vw,88px) 0 2rem}
+.foot-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr));
+  gap:clamp(1.5rem,3vw,2.5rem);
+}
+@media (max-width:980px){.foot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.foot-grid{grid-template-columns:1fr}}
+.foot-col h3{font-family:var(--face-mono);font-weight:600;font-size:.66rem;letter-spacing:.16em;color:var(--smoke);margin-bottom:1rem;text-transform:uppercase}
+.foot-col ul{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+.foot-col a{font-size:.88rem;color:var(--paper);text-decoration:none;opacity:.82;transition:opacity var(--cut),color var(--cut)}
+.foot-col a:hover{opacity:1;color:var(--volt)}
+.foot-brand p{font-size:.88rem;color:var(--smoke);max-width:34ch}
+.foot-base{
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;
+  margin-top:clamp(2rem,4vw,3.5rem);padding-top:1.4rem;border-top:1px solid var(--rule-dark);
+}
+.foot-base p{margin:0;font-size:.78rem;color:var(--ash)}
+.foot-base .mono{color:var(--ash)}
+</style>
+
+<style>
+/* ============================================================
+   HERO: offset asymmetric, hard left
+   ============================================================ */
+.hero{padding:clamp(56px,9vw,120px) 0 clamp(48px,6vw,88px);position:relative;overflow:hidden}
+.hero h1{margin-bottom:.3em}
+.hero .lede{margin-top:1.4rem}
+.hero-meta{display:grid;gap:1.4rem;border-left:1px solid var(--rule-dark);padding-left:clamp(1rem,2vw,1.6rem)}
+.hero-meta .item strong{display:block;font-family:var(--face-display);font-size:1.3rem;letter-spacing:-.02em;text-transform:uppercase;line-height:1}
+.hero-meta .item span{font-size:.82rem;color:var(--smoke);display:block;margin-top:.35rem}
+.band.paper .hero-meta{border-color:var(--rule-light)}
+.band.paper .hero-meta .item span{color:var(--ash)}
+
+/* the ticker: the ONE thing that could move. M4 is reactive, so this is a
+   static strip that responds to hover instead of scrolling by itself. */
+.strip{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--rule-dark);border-bottom:1px solid var(--rule-dark)}
+.strip .cell{
+  flex:1 1 clamp(150px,18%,260px);
+  padding:1.1rem clamp(.9rem,1.6vw,1.4rem);
+  border-right:1px solid var(--rule-dark);
+  transition:background var(--cut),color var(--cut);
+}
+.strip .cell:last-child{border-right:0}
+.strip .cell:hover{background:var(--signal);color:#fff}
+.strip .cell:hover .quiet{color:rgba(255,255,255,.8)}
+.strip .cell strong{display:block;font-family:var(--face-display);text-transform:uppercase;font-size:1.05rem;letter-spacing:-.01em;line-height:1.05}
+.strip .cell span{display:block;font-family:var(--face-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin-top:.5rem;color:var(--smoke)}
+.strip .cell:hover span{color:rgba(255,255,255,.78)}
+.band.paper .strip,.band.paper .strip .cell{border-color:var(--rule-light)}
+.band.paper .strip .cell span{color:var(--ash)}
+
+/* ============================================================
+   PRODUCT LIST: 9 products, click to expand (M4 reactive)
+   ============================================================ */
+.prod{border-top:1px solid var(--rule-dark)}
+.prod:last-of-type{border-bottom:1px solid var(--rule-dark)}
+.band.paper .prod,.band.paper .prod:last-of-type{border-color:var(--rule-light)}
+.prod-head{
+  width:100%;display:grid;
+  grid-template-columns:clamp(46px,5vw,84px) minmax(0,1fr) auto;
+  gap:clamp(.8rem,2vw,2rem);align-items:center;
+  background:none;border:0;padding:clamp(1.1rem,2vw,1.7rem) 0;
+  font:inherit;color:inherit;text-align:left;cursor:pointer;
+  transition:color var(--cut),padding-left var(--cut);
+}
+.prod-head:hover{color:var(--signal);padding-left:.5rem}
+.band.paper .prod-head:hover{color:var(--signal-deep)}
+.prod-head h3{margin:0}
+.prod-head .tag{
+  font-family:var(--face-mono);font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--smoke);display:flex;align-items:center;gap:.9rem;
+}
+.band.paper .prod-head .tag{color:var(--ash)}
+.plus{width:14px;height:14px;flex:none;position:relative}
+.plus::before,.plus::after{content:"";position:absolute;background:currentColor;transition:transform var(--cut),opacity var(--cut)}
+.plus::before{left:0;top:6px;width:14px;height:2px}
+.plus::after{left:6px;top:0;width:2px;height:14px}
+.prod-head[aria-expanded="true"] .plus::after{transform:scaleY(0);opacity:0}
+.prod-head[aria-expanded="true"]{color:var(--signal)}
+.band.paper .prod-head[aria-expanded="true"]{color:var(--signal-deep)}
+.prod-body{padding:0 0 clamp(1.4rem,2.5vw,2.2rem)}
+.prod-body .inner{
+  display:grid;grid-template-columns:clamp(46px,5vw,84px) minmax(0,1fr);
+  gap:clamp(.8rem,2vw,2rem);
+}
+@media (max-width:640px){.prod-body .inner{grid-template-columns:1fr}}
+.prod-body .copy{max-width:64ch}
+.prod-body p{margin-bottom:.9rem}
+.spec{list-style:none;margin:1.1rem 0 0;padding:0;display:grid;gap:.55rem}
+.spec li{
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem;align-items:start;
+  font-size:.9rem;color:var(--smoke);
+}
+.band.paper .spec li{color:var(--ash)}
+.spec li::before{content:"";width:7px;height:7px;background:var(--signal);margin-top:.5em;flex:none}
+.band.paper .spec li::before{background:var(--signal-deep)}
+
+/* ============================================================
+   PRICING
+   ============================================================ */
+.toggle-wrap{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin:0 0 clamp(2rem,4vw,3rem)}
+.toggle{
+  display:inline-flex;border:1px solid var(--rule-light);background:var(--paper);
+  padding:4px;border-radius:0;
+}
+.band.ink-2 .toggle,body > .toggle{border-color:var(--rule-dark);background:var(--ink-2)}
+.toggle button{
+  font-family:var(--face-mono);font-weight:600;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  background:none;border:0;padding:.75em 1.3em;cursor:pointer;color:var(--ash);
+  transition:background var(--cut),color var(--cut);
+}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--volt)}
+.save-note{font-family:var(--face-mono);font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ash)}
+.save-note b{background:var(--volt);color:var(--ink);padding:.25em .5em;font-weight:600}
+
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule-light);border:1px solid var(--rule-light)}
+@media (max-width:920px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--paper);padding:clamp(1.5rem,2.6vw,2.2rem);display:flex;flex-direction:column;transition:background var(--cut)}
+.plan.feature{background:var(--ink);color:var(--paper)}
+.plan.feature .quiet{color:var(--smoke)}
+.plan.feature .spec li{color:var(--smoke)}
+.plan.feature .spec li::before{background:var(--volt)}
+.plan .plan-name{font-family:var(--face-display);text-transform:uppercase;font-size:1.5rem;letter-spacing:-.02em;margin:0}
+.plan .plan-for{font-family:var(--face-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin:.5rem 0 1.5rem}
+.plan.feature .plan-for{color:var(--smoke)}
+.price{display:flex;align-items:baseline;gap:.4rem;font-family:var(--face-mono);margin-bottom:.35rem}
+.price .amt{font-family:var(--face-display);font-size:clamp(2.6rem,4.5vw,3.6rem);letter-spacing:-.03em;line-height:1;font-weight:700}
+.price .per{font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ash)}
+.plan.feature .price .per{color:var(--smoke)}
+.price-sub{font-family:var(--face-mono);font-size:.64rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ash);min-height:1.2em;margin-bottom:1.4rem}
+.plan.feature .price-sub{color:var(--volt)}
+.plan .btn{width:100%;justify-content:center;margin-top:auto}
+.plan-badge{
+  position:absolute;top:0;right:0;background:var(--volt);color:var(--ink);
+  font-family:var(--face-mono);font-size:.6rem;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;padding:.45em .8em;
+}
+.plan{position:relative}
+.plan .spec{margin:0 0 1.8rem}
+
+.setup-note{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1rem;align-items:start;border:1px solid var(--rule-light);padding:1.2rem 1.4rem;margin-top:1.6rem}
+.setup-note .mono{color:var(--signal-deep);flex:none}
+
+/* pricing product picker */
+.picker{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule-dark);border:1px solid var(--rule-dark)}
+.picker button{
+  flex:1 1 auto;min-width:130px;background:var(--ink);border:0;color:var(--smoke);
+  font-family:var(--face-mono);font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;
+  padding:.95em .8em;cursor:pointer;text-align:left;display:flex;gap:.6rem;align-items:baseline;
+  transition:background var(--cut),color var(--cut);
+}
+.picker button:hover{background:var(--ink-2);color:var(--paper)}
+.picker button[aria-selected="true"]{background:var(--signal);color:#fff}
+.picker button i{font-style:normal;opacity:.55}
+.picker-panel{border:1px solid var(--rule-dark);border-top:0;padding:clamp(1.4rem,3vw,2.2rem);background:var(--ink-2)}
+.picker-panel h3{color:var(--paper);margin-bottom:.6rem}
+.picker-panel .in-plans{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.3rem}
+.chip{
+  font-family:var(--face-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule-dark);padding:.4em .7em;color:var(--smoke);
+}
+.chip.on{border-color:var(--volt);color:var(--volt)}
+
+/* ============================================================
+   CARDS / GRIDS / STEPS
+   ============================================================ */
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule-dark);border:1px solid var(--rule-dark)}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule-dark);border:1px solid var(--rule-dark)}
+.band.paper .grid-3,.band.paper .grid-2,.band.paper-2 .grid-3,.band.paper-2 .grid-2{background:var(--rule-light);border-color:var(--rule-light)}
+@media (max-width:900px){.grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.grid-3,.grid-2{grid-template-columns:1fr}}
+.cell-card{
+  background:var(--ink);padding:clamp(1.3rem,2.3vw,2rem);
+  transition:background var(--cut),color var(--cut);
+}
+.band.paper .cell-card,.band.paper-2 .cell-card{background:var(--paper)}
+.cell-card:hover{background:var(--ink-2)}
+.band.paper .cell-card:hover,.band.paper-2 .cell-card:hover{background:var(--paper-2)}
+.cell-card h3,.cell-card h4{margin-bottom:.6rem}
+.cell-card h3{font-size:clamp(.95rem,1.3vw,1.1rem);letter-spacing:-.01em}
+.work .meta h3{font-size:clamp(.95rem,1.3vw,1.1rem);letter-spacing:-.01em;margin-bottom:.35rem}
+.cell-card p:last-child{margin-bottom:0}
+.cell-card .idx-big{margin-bottom:1rem}
+
+.steps{display:grid;gap:0;border-top:1px solid var(--rule-light)}
+.step{
+  display:grid;grid-template-columns:clamp(56px,7vw,120px) minmax(0,1fr) clamp(130px,17vw,260px);
+  gap:clamp(1rem,3vw,3rem);padding:clamp(1.6rem,3vw,2.6rem) 0;
+  border-bottom:1px solid var(--rule-light);align-items:start;
+  transition:background var(--cut),padding-left var(--cut);
+}
+.step:hover{background:var(--paper-2);padding-left:.6rem}
+@media (max-width:820px){.step{grid-template-columns:clamp(46px,8vw,70px) minmax(0,1fr)}.step .step-when{grid-column:2}}
+.step h3{margin-bottom:.5rem}
+.step-when{font-family:var(--face-mono);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;color:var(--signal-deep)}
+
+/* ============================================================
+   FAQ / ACCORDION
+   ============================================================ */
+.faq{border-top:1px solid var(--rule-dark)}
+.faq-item{border-bottom:1px solid var(--rule-dark)}
+.band.paper .faq,.band.paper .faq-item{border-color:var(--rule-light)}
+.faq-q{
+  width:100%;background:none;border:0;color:inherit;font:inherit;cursor:pointer;text-align:left;
+  padding:1.25rem 0;display:flex;gap:1.5rem;align-items:center;justify-content:space-between;
+  font-family:var(--face-display);text-transform:uppercase;font-size:clamp(1rem,1.5vw,1.25rem);
+  letter-spacing:-.01em;line-height:1.1;
+  transition:color var(--cut),padding-left var(--cut);
+}
+.faq-q:hover{color:var(--signal);padding-left:.4rem}
+.band.paper .faq-q:hover{color:var(--signal-deep)}
+.faq-a{padding:0 0 1.5rem;max-width:68ch}
+.faq-a p:last-child{margin-bottom:0}
+
+/* ============================================================
+   REVIEWS / WORK / PARTNERS
+   ============================================================ */
+.quote{background:var(--paper);color:var(--ink);padding:clamp(1.4rem,2.4vw,2rem);display:flex;flex-direction:column;transition:background var(--cut)}
+.quote:hover{background:var(--paper-2)}
+.quote blockquote{margin:0 0 1.3rem;font-size:1rem;line-height:1.55}
+.quote blockquote p:last-child{margin-bottom:0}
+.quote .who{margin-top:auto;border-top:1px solid var(--rule-light);padding-top:.9rem}
+.quote .who strong{display:block;font-family:var(--face-display);text-transform:uppercase;font-size:.98rem;letter-spacing:-.01em}
+.quote .who span{font-family:var(--face-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ash)}
+.stars{display:flex;gap:4px;margin-bottom:1rem}
+.stars svg{width:14px;height:14px;fill:var(--signal-deep)}
+
+.work{background:var(--ink);border:1px solid var(--rule-dark);display:flex;flex-direction:column;transition:border-color var(--cut)}
+.work:hover{border-color:var(--signal)}
+.work .shot{aspect-ratio:16/10;background:var(--ink-2);border-bottom:1px solid var(--rule-dark);position:relative;overflow:hidden}
+.work .shot .browser{position:absolute;inset:0;display:flex;flex-direction:column}
+.work .shot .chrome-bar{height:26px;border-bottom:1px solid var(--rule-dark);display:flex;align-items:center;gap:4px;padding:0 8px;flex:none}
+.work .shot .chrome-bar i{width:7px;height:7px;background:var(--rule-dark);display:block}
+.work .shot .chrome-bar span{font-family:var(--face-mono);font-size:.55rem;letter-spacing:.1em;color:var(--ash);margin-left:8px;text-transform:lowercase}
+.work .shot .face{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(.8rem,2vw,1.3rem);gap:.4rem}
+.work .shot .face b{font-family:var(--face-display);text-transform:uppercase;font-size:clamp(1rem,2.4vw,1.5rem);letter-spacing:-.02em;line-height:.95;color:var(--paper)}
+.work .shot .face em{font-style:normal;font-family:var(--face-mono);font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--smoke)}
+.work .meta{padding:1.1rem clamp(1rem,2vw,1.4rem)}
+
+.work .meta .mono{color:var(--smoke)}
+
+.logo-wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;background:var(--rule-dark);border:1px solid var(--rule-dark)}
+.logo-wall div{
+  background:var(--ink);min-height:96px;display:grid;place-items:center;padding:1rem;
+  font-family:var(--face-display);text-transform:uppercase;font-size:.95rem;letter-spacing:.02em;
+  color:var(--smoke);text-align:center;transition:background var(--cut),color var(--cut);
+}
+.logo-wall div:hover{background:var(--signal);color:#fff}
+
+/* ============================================================
+   FORMS / POPUP
+   ============================================================ */
+.lead-scrim{position:fixed;inset:0;background:rgba(5,6,8,.86);display:grid;place-items:center;padding:1.25rem;z-index:90;overflow-y:auto}
+.lead-card{
+  background:var(--paper);color:var(--ink);border-radius:var(--radius-panel);
+  border-top:4px solid var(--signal);padding:clamp(1.4rem,3.5vw,2.2rem);
+  width:min(500px,100%);position:relative;
+}
+.lead-card h2{font-size:clamp(1.6rem,3.4vw,2.2rem);margin-bottom:.3em}
+.lead-card > p{font-size:.9rem;color:var(--ash);margin-bottom:1.4rem}
+.lead-card label{display:block;font-family:var(--face-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin:0 0 .35rem}
+.lead-card input,.lead-card select,.lead-card textarea{
+  width:100%;background:#fff;border:1px solid var(--rule-light);border-radius:var(--radius-action);
+  color:var(--ink);font:inherit;font-size:.95rem;padding:.72em .85em;margin:0 0 .9rem;
+  transition:border-color var(--cut);
+}
+.lead-card input:focus,.lead-card select:focus,.lead-card textarea:focus{border-color:var(--signal);outline:none}
+.lead-card .two{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+@media (max-width:460px){.lead-card .two{grid-template-columns:1fr}}
+.lead-card .hp{position:absolute;left:-9999px}
+.lead-card .btn{width:100%;justify-content:center;margin-top:.3rem}
+.lead-card .fine{font-family:var(--face-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);margin:1rem 0 0;text-align:center}
+.lead-close{
+  position:absolute;top:.8rem;right:.8rem;background:none;border:0;color:var(--ash);
+  font-size:1.6rem;line-height:1;cursor:pointer;padding:.2rem .4rem;transition:color var(--cut);
+}
+.lead-close:hover{color:var(--ink)}
+
+/* ============================================================
+   MOTION: M4 reactive. Nothing animates on its own.
+   Zero-radius geometry means cuts, never springs.
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+}
+</style>
+
+<!-- GF-CHROME:START -->
+<style>
+  .gf-chrome{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:.75rem 1rem;flex-wrap:wrap;padding:.5rem .9rem;background:#101014;border-bottom:1px solid #2a2a33;font:500 12px/1.4 system-ui,sans-serif;color:#9a9aa6}
+  .gf-chrome-brand{display:flex;align-items:center;gap:.5rem}
+  .gf-chrome-dot{width:7px;height:7px;border-radius:50%;background:#46d17f;flex:none}
+  .gf-chrome-client{color:#e8e8ee;font-weight:700;letter-spacing:.02em}
+  .gf-chrome-slug{color:#7a7a86;font-family:ui-monospace,monospace;font-size:11px;padding:1px 6px;border:1px solid #2a2a33;border-radius:4px}
+  .gf-chrome-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+  .gf-tab{background:none;border:1px solid transparent;border-radius:5px;color:#9a9aa6;font:inherit;padding:4px 10px;cursor:pointer}
+  .gf-tab:hover{color:#e8e8ee;border-color:#2a2a33}
+  .gf-tab[aria-current="true"]{color:#101014;background:#e8e8ee;font-weight:700}
+  .gf-chrome-note{text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:#101014;background:#d8b25c;padding:3px 8px;border-radius:4px;font-weight:700}
+</style>
+<div class="gf-chrome">
+  <span class="gf-chrome-brand">
+    <span class="gf-chrome-dot"></span>
+    <span class="gf-chrome-client">Growth Factor AI</span>
+    <span class="gf-chrome-slug">growthfactor</span>
+  </span>
+  <span class="gf-chrome-note">Preview</span>
+  <span class="gf-chrome-tabs" id="gf-tabs" role="tablist" aria-label="Pages"></span>
+</div>
+<!-- GF-CHROME:END -->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M1 8h12.5M9 3.5 14 8l-5 4.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 16 16"><path d="M8 1.2 9.9 5.6l4.8.4-3.6 3.1 1.1 4.7L8 11.3l-4.2 2.5 1.1-4.7L1.3 6l4.8-.4z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M2.5 8.5 6 12l7.5-8" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<header class="site-head" data-gf-shared>
+  <div class="bar">
+    <a class="wordmark" href="index.html" data-gf-link>
+      <span class="gf-dot"></span>Growth&nbsp;Factor <span class="sub">AI</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="products.html" data-gf-link>Products</a>
+      <a href="pricing.html" data-gf-link>Pricing</a>
+      <a href="process.html" data-gf-link>Our Process</a>
+      <a href="our-work.html" data-gf-link>Our Work</a>
+      <a href="other-services.html" data-gf-link>Other Services</a>
+      <a href="about.html" data-gf-link>About</a>
+      <a href="contact.html" data-gf-link>Contact</a>
+    </nav>
+    <button class="btn" data-lead-open>Book a demo</button>
+  </div>
+</header>
+
+<main id="gf-pages">
+
+<!-- ========================== HOME ========================== -->
+<section class="gf-page" id="home" data-title="Home" data-file="index.html" data-seo-desc="Websites and marketing systems for gyms. We build the site, answer the calls, text back the missed ones and follow up until the trial is booked.">
+
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Websites and marketing systems for gyms</span>
+          <h1>You don't have a lead problem. You have a <span class="sig-block">follow up</span> problem.</h1>
+          <p class="lede quiet">
+            Leads are already coming in. They hit a form nobody checks, a phone nobody
+            answers during class, and a DM nobody saw. Growth Factor builds the site,
+            picks up the call, texts back the miss, and keeps going until the trial is
+            on your calendar.
+          </p>
+          <div class="btn-row">
+            <button class="btn" data-lead-open>Book a 15 minute demo</button>
+            <a class="btn ghost" href="pricing.html" data-gf-link>See pricing</a>
+          </div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>14 days</strong><span>Kickoff to live site. Written into the agreement.</span></div>
+          <div class="item"><strong>24 / 7</strong><span>AI front desk answers every call, including 11pm.</span></div>
+          <div class="item"><strong>Month to month</strong><span>No contract. Cancel whenever you want.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band tight" style="padding-top:0">
+    <div class="wrap">
+      <div class="strip">
+        <div class="cell"><strong>Gyms only</strong><span>One industry</span></div>
+        <div class="cell"><strong>One login</strong><span>Replaces five tools</span></div>
+        <div class="cell"><strong>Your number</strong><span>Your data, your list</span></div>
+        <div class="cell"><strong>We build it</strong><span>You do not touch software</span></div>
+        <div class="cell"><strong>Automate everything</strong><span>The whole point</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">The 6:40pm problem</span>
+          <h2>Here is what actually happens on a Tuesday night.</h2>
+          <p class="lede">
+            A woman decides tonight is the night. She googles gyms near her, lands on
+            three sites, and fills out the form on yours at 6:40pm because it looked
+            the most like a real business.
+          </p>
+          <p>
+            You are on the floor running a class. The form goes to an inbox you check
+            at 9. By then she has already talked to the gym that texted her back in
+            forty seconds, booked Saturday, and forgotten your name. You never knew
+            she existed. Nothing showed up in your numbers, because a lead you never
+            saw is not a lost lead in any report you own.
+          </p>
+          <p>
+            That is not a marketing problem. You do not need more leads on top of the
+            ones you are already dropping. You need the drop to stop.
+          </p>
+          <a class="txtlink" href="process.html" data-gf-link>How we fix it <svg class="arrow"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="rail-meta">
+          <hr class="hair">
+          <div style="padding-top:1.2rem">
+            <span class="mono quiet">What it costs you</span>
+            <p style="margin-top:.8rem;font-size:.92rem">
+              One member at $150 a month who stays fourteen months is $2,100. Miss two
+              a month and the system pays for itself several times over before you count
+              the ones it saves from cancelling.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Nine products, one system</span>
+          <h2>Everything a gym needs to stop losing people.</h2>
+        </div>
+        <div class="rail-meta">
+          <p class="quiet" style="font-size:.92rem;margin:0">
+            Every one of these is switched on for you, tested with your phone number,
+            and handed over working. Nothing is a login we email you and wish you luck with.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:clamp(2rem,4vw,3rem)">
+        <div class="cell-card"><span class="idx-big">01</span><h3>Gym Website</h3><p class="quiet">Built for you in fourteen days. Fast, mobile first, and built to book trials instead of win awards.</p></div>
+        <div class="cell-card"><span class="idx-big">02</span><h3>AI Front Desk</h3><p class="quiet">Answers the phone in your gym's voice, any hour, and books the trial straight into the calendar.</p></div>
+        <div class="cell-card"><span class="idx-big">03</span><h3>Missed Call Text Back</h3><p class="quiet">Every call you cannot take gets a text in seconds. The conversation starts before they call the next gym.</p></div>
+        <div class="cell-card"><span class="idx-big">04</span><h3>Trial to Member Follow Up</h3><p class="quiet">Automatic sequences that chase the no shows, the maybes and the trials that never converted.</p></div>
+        <div class="cell-card"><span class="idx-big">05</span><h3>Review Engine</h3><p class="quiet">Asks every happy member at the right moment, routes the unhappy ones to you first.</p></div>
+        <div class="cell-card"><span class="idx-big">06</span><h3>Member CRM</h3><p class="quiet">Every lead, trial and member on one board. You can see who is about to cancel before they do.</p></div>
+        <div class="cell-card"><span class="idx-big">07</span><h3>Dead Lead Reactivation</h3><p class="quiet">We text your old list on day one. Most gyms book trials out of that before the site is even live.</p></div>
+        <div class="cell-card"><span class="idx-big">08</span><h3>Owner App</h3><p class="quiet">Your gym line, inbox, calendar and pipeline on your phone. Reply from the floor between rounds.</p></div>
+        <div class="cell-card"><span class="idx-big">09</span><h3>Print, Signage and Merch</h3><p class="quiet">Class cards, door hangers, banners and shirts, designed and shipped without you opening Canva.</p></div>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn" href="products.html" data-gf-link>See all nine <svg class="arrow"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <span class="eyebrow">How it goes</span>
+      <div class="rail">
+        <div><h2>Three weeks from signing to a system that runs without you.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">You are on one kickoff call and one handover call. That is the whole ask.</p></div>
+      </div>
+      <div class="steps" style="margin-top:clamp(1.6rem,3vw,2.4rem)">
+        <div class="step"><span class="idx-big">01</span><div><h3>Kickoff call</h3><p class="quiet" style="margin:0">Forty five minutes. We take your offer, your schedule, your pricing and your logins. You go back to coaching.</p></div><span class="step-when">Day 1</span></div>
+        <div class="step"><span class="idx-big">02</span><div><h3>We build, you approve</h3><p class="quiet" style="margin:0">Site, phone line, automations and review engine, built and tested. You see it on a preview link before anyone else does.</p></div><span class="step-when">Day 2 to 14</span></div>
+        <div class="step"><span class="idx-big">03</span><div><h3>Go live and reactivate</h3><p class="quiet" style="margin:0">Site goes live, number ports or forwards, and we text your old list the same week. That is usually the first money back.</p></div><span class="step-when">Day 14 to 21</span></div>
+      </div>
+      <div class="btn-row"><a class="btn ghost" href="process.html" data-gf-link>The full process <svg class="arrow"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">Our work</span><h2>Sites that look like the gym, not like a template.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Every build starts from the gym's own colours, logo and photos. No two look alike, on purpose.</p></div>
+      </div>
+      <div class="grid-3" style="margin-top:clamp(2rem,4vw,3rem);background:transparent;border:0;gap:clamp(1rem,2vw,1.5rem)">
+        <article class="work"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>ironcreekbarbell.com</span></div><div class="face"><em>Strength and conditioning</em><b>Iron Creek Barbell</b></div></div></div><div class="meta"><h3>Iron Creek Barbell</h3><span class="mono">Website + full system</span></div></article>
+        <article class="work"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>southsidebjj.com</span></div><div class="face"><em>Brazilian jiu jitsu</em><b>Southside BJJ</b></div></div></div><div class="meta"><h3>Southside BJJ</h3><span class="mono">Website + reactivation</span></div></article>
+        <article class="work"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>reps24.com</span></div><div class="face"><em>24 hour access gym</em><b>Reps 24</b></div></div></div><div class="meta"><h3>Reps 24</h3><span class="mono">Website upgrade</span></div></article>
+      </div>
+      <div class="btn-row"><a class="btn ghost" href="our-work.html" data-gf-link>See the work <svg class="arrow"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">What owners say</span><h2>Built by a gym owner who got sold the same nonsense you did.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Ben Grove ran a gym for nine years before building this. The product is the thing he could never buy.</p></div>
+      </div>
+      <div class="grid-3" style="margin-top:clamp(2rem,4vw,3rem)">
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>The reactivation texts booked eleven trials in the first week. We had not spent a dollar on ads yet.</p></blockquote><div class="who"><strong>Marcus D.</strong><span>Strength gym, 210 members</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>I stopped answering the phone during class and my show rate went up. That still sounds wrong when I say it out loud.</p></blockquote><div class="who"><strong>Priya R.</strong><span>Boxing gym, two locations</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>Every other agency wanted a year up front and sent me a login. These guys built it and handed me a phone that works.</p></blockquote><div class="who"><strong>Tom K.</strong><span>Jiu jitsu academy</span></div></div>
+      </div>
+      <div class="btn-row"><a class="btn ghost" href="reviews.html" data-gf-link>Read more reviews <svg class="arrow"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </div>
+
+  <div class="band signal">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Automate everything</span>
+          <h2>Fifteen minutes. We show you the gaps in your own follow up.</h2>
+          <p class="lede quiet">
+            We will call your gym line on the demo, fill out your own form, and let you
+            watch what happens next. If nothing is broken we will tell you and you can
+            keep your money.
+          </p>
+          <div class="btn-row">
+            <button class="btn" data-lead-open>Book the demo</button>
+            <a class="btn ghost" href="pricing.html" data-gf-link style="color:#fff;border-color:rgba(255,255,255,.4)">See pricing first</a>
+          </div>
+        </div>
+        <div class="rail-meta">
+          <hr class="hair">
+          <p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">
+            Under promise, over deliver. That is the whole business, and it is the
+            reason the agreement is month to month.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ========================== PRODUCTS ========================== -->
+<section class="gf-page" id="products" data-title="Products" data-file="products.html" data-seo-desc="Nine products in one system for gyms: website, AI front desk, missed call text back, follow up sequences, review engine, CRM, reactivation, owner app and print." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Nine products</span>
+          <h1>One system. <span class="sig-block">Nine parts.</span> All of it switched on for you.</h1>
+          <p class="lede quiet">
+            Every gym we talk to is paying for four of these already, badly, from four
+            different companies that do not speak to each other. This is all of it in
+            one place, set up by us, tested with your own phone number before you see it.
+          </p>
+          <div class="btn-row">
+            <button class="btn" data-lead-open>Book a demo</button>
+            <a class="btn ghost" href="pricing.html" data-gf-link>What it costs</a>
+          </div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>Click any product</strong><span>Open it for the full breakdown and what is inside.</span></div>
+          <div class="item"><strong>Nothing is DIY</strong><span>We build every piece. You never open a settings page.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper" style="padding-top:0">
+    <div class="wrap" style="padding-top:var(--gap-section)">
+      <div class="rail" style="margin-bottom:clamp(1.6rem,3vw,2.4rem)">
+        <div><span class="eyebrow">The nine</span><h2>Open any one of them.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Every product below is built, tested and maintained by us. Nothing here is a login we hand you.</p></div>
+      </div>
+      <div class="prod" id="p-website">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-website">
+          <span class="idx">01</span>
+          <h3>Gym Website</h3>
+          <span class="tag">Live in 14 days <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-website" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">A website whose only job is to turn a stranger into a booked trial. Not a brochure, not an award entry.</p>
+              <p class="quiet">Built from your own logo, colours and photos, so it looks like your gym and not like the four other gyms in town running the same template. Schedule, pricing, coaches, and one obvious next step on every screen.</p><p class="quiet">It loads in under a second on a phone on gym wifi, because that is where every one of your leads is standing when they decide.</p>
+              <ul class="spec"><li>Custom build, not a template swap</li><li>Class schedule and pricing pages included</li><li>Booking form wired into the CRM on day one</li><li>Local SEO structure and Google Business Profile match</li><li>Hosting, SSL and updates handled</li><li>You own the domain and the files</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-frontdesk">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-frontdesk">
+          <span class="idx">02</span>
+          <h3>AI Front Desk</h3>
+          <span class="tag">Answers 24/7 <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-frontdesk" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">A voice agent that picks up your gym line in your gym's voice, knows your schedule and your prices, and books the trial.</p>
+              <p class="quiet">It answers on the second ring at 6am, at 9pm, and in the middle of your Saturday open mat. It handles the four questions you get eighty times a week: what does it cost, when are classes, do I need experience, can I come try it.</p><p class="quiet">Anything it cannot answer it takes a message for and texts you immediately. You are never hearing about a lead three days late again.</p>
+              <ul class="spec"><li>Trained on your schedule, pricing and offers</li><li>Books trials straight into your calendar</li><li>Texts you a summary of every call</li><li>Warm transfers to your phone when you want it</li><li>Full transcript of every conversation</li><li>Turn it on and off from the app</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-missedcall">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-missedcall">
+          <span class="idx">03</span>
+          <h3>Missed Call Text Back</h3>
+          <span class="tag">Fires in seconds <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-missedcall" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">Every call you cannot take gets a text back before they have finished dialling the next gym.</p>
+              <p class="quiet">A missed call is not a missed lead unless you let it be. The second your line rings out, they get a text that says you saw them, apologises for being on the floor, and asks what they are looking for.</p><p class="quiet">Most people answer a text. Almost nobody leaves a voicemail. This one feature quietly recovers more members than most ad budgets.</p>
+              <ul class="spec"><li>Instant text on every missed call</li><li>Written in your voice, not a robot script</li><li>Replies land in the shared inbox</li><li>Different message after hours</li><li>Works on forwarded numbers too</li><li>No app for the caller to install</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-followup">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-followup">
+          <span class="idx">04</span>
+          <h3>Trial to Member Follow Up</h3>
+          <span class="tag">Runs itself <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-followup" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">The sequences that chase the no shows, the maybes, and the trials that walked out without signing.</p>
+              <p class="quiet">Somebody books a trial and does not turn up. Somebody trials, loves it, and says they need to check with their partner. Both of those are worth money and both of them get forgotten the moment your week gets busy.</p><p class="quiet">This runs the follow up you would run if you had the time: text, email, and a reminder to actually call, spaced so it reads like a person and not a drip campaign.</p>
+              <ul class="spec"><li>Booked, reminded, no show and post trial sequences</li><li>Text and email on the same thread</li><li>Stops the moment they reply or book</li><li>Tasks to call the ones worth calling</li><li>Built around your trial offer, not a generic one</li><li>Editable by us on request, free</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-reviews">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-reviews">
+          <span class="idx">05</span>
+          <h3>Review Engine</h3>
+          <span class="tag">Google, on autopilot <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-reviews" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">Asks every happy member at the exact right moment, and routes the unhappy ones to you before they reach Google.</p>
+              <p class="quiet">Reviews are the single cheapest thing that moves a local gym up the map, and the reason you do not have more of them is that asking feels awkward and you forget.</p><p class="quiet">We trigger the ask off real milestones: first class, thirtieth day, first competition. Five stars goes straight to Google. Anything less comes to your phone so you can fix it while it is still fixable.</p>
+              <ul class="spec"><li>Milestone triggered, not blasted</li><li>Negative feedback routed to you first</li><li>One tap for the member</li><li>Reply suggestions for every review</li><li>Reviews pulled onto your website automatically</li><li>Works for Google and Facebook</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-crm">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-crm">
+          <span class="idx">06</span>
+          <h3>Member CRM</h3>
+          <span class="tag">One board <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-crm" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">Every lead, trial and member on one board, so you can see who is about to cancel while you can still do something about it.</p>
+              <p class="quiet">Leads move across a pipeline you can actually read: new, contacted, booked, trialled, joined. Nothing lives in a notebook behind the desk or in a coach's personal phone.</p><p class="quiet">It also flags the quiet ones. A member who has not scanned in for eighteen days is a cancellation in three weeks, and that is the week to text them.</p>
+              <ul class="spec"><li>Visual pipeline from lead to member</li><li>Attendance drop off flags</li><li>Every call, text and email on one timeline</li><li>Notes and tasks shared across your coaches</li><li>Tags for programs, sources and offers</li><li>Export your data any time you want it</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-reactivation">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-reactivation">
+          <span class="idx">07</span>
+          <h3>Dead Lead Reactivation</h3>
+          <span class="tag">Week one money <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-reactivation" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">We text the list you already have on day one. For most gyms this pays for the first few months before the site is even live.</p>
+              <p class="quiet">Every gym is sitting on hundreds of names: old trials, expired members, people who enquired in 2023 and never got called back. That list is an asset nobody has touched.</p><p class="quiet">We clean it, write the campaign, and run it as a conversation rather than a blast. Replies come into the same inbox as everything else, and your coaches close them.</p>
+              <ul class="spec"><li>List cleaned and compliance checked</li><li>Campaign written for your offer</li><li>Sent in batches you can keep up with</li><li>Replies handled in the shared inbox</li><li>Re run quarterly at no extra cost</li><li>Opt out handled automatically</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-app">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-app">
+          <span class="idx">08</span>
+          <h3>Owner App</h3>
+          <span class="tag">iOS and Android <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-app" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">Your gym line, inbox, calendar and pipeline in your pocket. Reply from the floor between rounds.</p>
+              <p class="quiet">Same number, same conversations, from your phone. Text a lead back while the class is warming up, see tonight's bookings on the way in, take a call without giving out your personal mobile.</p><p class="quiet">Your head coach can have a login too, which means follow up stops being a thing only you can do.</p>
+              <ul class="spec"><li>Call and text from the gym number</li><li>Shared inbox across your team</li><li>Calendar and today's bookings</li><li>Pipeline on your phone</li><li>Push notifications for new leads</li><li>Unlimited staff logins</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod" id="p-print">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="pb-print">
+          <span class="idx">09</span>
+          <h3>Print, Signage and Merch</h3>
+          <span class="tag">Designed and shipped <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="pb-print" hidden>
+          <div class="inner">
+            <span class="idx"></span>
+            <div class="copy">
+              <p class="lede">Class cards, door hangers, gym banners, shirts. Designed in your brand and shipped to the gym.</p>
+              <p class="quiet">The system runs online. Members still walk in through a door, past a sign, wearing a shirt somebody gave them.</p><p class="quiet">We design it off the same brand we built the site from, so the flyer on the coffee shop board and the website look like the same business. You approve a proof, we ship it.</p>
+              <ul class="spec"><li>Class cards, flyers and door hangers</li><li>Gym banners and window graphics</li><li>Shirts, hoodies and rash guards</li><li>Designed in your brand, free</li><li>Print at cost plus shipping</li><li>Proof before anything runs</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-lead-open>See it running on your gym <svg class="arrow"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="band signal">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Automate everything</span>
+          <h2>You are already paying for half of this.</h2>
+          <p class="lede quiet">Bring us your current stack on the demo. We will tell you what to cancel, whether or not you buy anything from us.</p>
+          <div class="btn-row"><button class="btn" data-lead-open>Book the demo</button></div>
+        </div>
+        <div class="rail-meta"><hr class="hair"><p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">Most gyms find between $180 and $400 a month of software they stopped using.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== PRICING ========================== -->
+<section class="gf-page" id="pricing" data-title="Pricing" data-file="pricing.html" data-seo-desc="Gym marketing system pricing. Site from $97, Gym System $297, Gym Advanced $750. No setup fee, no contract, two months free on annual." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Pricing</span>
+          <h1>Priced to keep you ten years. Not ten weeks.</h1>
+          <p class="lede quiet">
+            No setup fee. No contract. No annual lock in unless you want the discount.
+            If it stops making you money, cancel it and we will hand over your site and
+            your list on the way out.
+          </p>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>No setup fee</strong><span>Build cost is included in month one.</span></div>
+          <div class="item"><strong>You own it</strong><span>Domain, site files, number and member list.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper" style="padding-top:clamp(40px,5vw,72px)">
+    <div class="wrap">
+      <div class="rail" style="margin-bottom:clamp(1.4rem,2.5vw,2rem)">
+        <div><span class="eyebrow">Three plans</span><h2>Pick the one that matches the problem.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Every plan is month to month. Annual is a discount you choose, never a lock in we ask for.</p></div>
+      </div>
+      <div class="toggle-wrap">
+        <div class="toggle" role="group" aria-label="Billing term">
+          <button type="button" data-term="monthly" aria-pressed="true">Monthly</button>
+          <button type="button" data-term="annual" aria-pressed="false">Annual</button>
+        </div>
+        <span class="save-note"><b>Annual</b> &nbsp;two months free, paid up front</span>
+      </div>
+
+      <div class="plans">
+        <div class="plan" id="plan-site">
+          <h3 class="plan-name">Site</h3>
+          <p class="plan-for">For the gym whose website is the problem</p>
+          <div class="price"><span class="amt">$<span data-monthly="97" data-annual="79">97</span></span><span class="per">/ month</span></div>
+          <p class="price-sub"><span data-term-word>billed monthly</span></p>
+          <ul class="spec">
+            <li>Custom gym website, live in 14 days</li>
+            <li>Schedule, pricing and coaches pages</li>
+            <li>Booking form and lead notifications</li>
+            <li>Hosting, SSL, updates and edits</li>
+            <li>Local SEO structure and GBP match</li>
+            <li>Upgrade to the full system any time</li>
+          </ul>
+          <button class="btn ghost" data-lead-open>Start with the site</button>
+        </div>
+
+        <div class="plan feature" id="plan-system">
+          <span class="plan-badge">Most gyms</span>
+          <h3 class="plan-name">Gym System</h3>
+          <p class="plan-for">The whole machine, running itself</p>
+          <div class="price"><span class="amt">$<span data-monthly="297" data-annual="247">297</span></span><span class="per">/ month</span></div>
+          <p class="price-sub"><span data-term-word>billed monthly</span></p>
+          <ul class="spec">
+            <li>Everything in Site</li>
+            <li>AI front desk answering 24/7</li>
+            <li>Missed call text back</li>
+            <li>Trial to member follow up sequences</li>
+            <li>Review engine and member CRM</li>
+            <li>Dead lead reactivation, re run quarterly</li>
+            <li>Owner app, unlimited staff logins</li>
+            <li>Print and merch designed free</li>
+          </ul>
+          <button class="btn" data-lead-open>Book a demo</button>
+        </div>
+
+        <div class="plan" id="plan-advanced">
+          <h3 class="plan-name">Gym Advanced</h3>
+          <p class="plan-for">For gyms that want the ads run too</p>
+          <div class="price"><span class="amt">$<span data-monthly="750" data-annual="625">750</span></span><span class="per">/ month</span></div>
+          <p class="price-sub"><span data-term-word>billed monthly</span></p>
+          <ul class="spec">
+            <li>Everything in Gym System</li>
+            <li>Meta ads built, run and optimised</li>
+            <li>Google Ads and Local Services Ads managed</li>
+            <li>Google Business Profile optimisation</li>
+            <li>Landing pages built per campaign</li>
+            <li>Monthly reporting call with a human</li>
+            <li>Priority build queue on everything</li>
+          </ul>
+          <button class="btn ghost" data-lead-open>Talk about ads</button>
+        </div>
+      </div>
+
+      <div class="setup-note">
+        <span class="mono">Note</span>
+        <p style="margin:0;font-size:.92rem">
+          Ad spend is paid directly to Meta and Google by you, never through us, and it
+          is not included in the plan price. We do not take a percentage of your spend.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="band" id="compare">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">What is in each plan</span>
+          <h2>Click a product. See what it does and which plans have it.</h2>
+        </div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Nine products across three plans. Nothing is hidden behind a sales call.</p></div>
+      </div>
+
+      <div style="margin-top:clamp(2rem,4vw,3rem)">
+        <div class="picker" role="tablist" aria-label="Products">
+        <button data-pick="website" aria-selected="true"><i>01</i> Gym Website</button>
+        <button data-pick="frontdesk" aria-selected="false"><i>02</i> AI Front Desk</button>
+        <button data-pick="missedcall" aria-selected="false"><i>03</i> Missed Call Text Back</button>
+        <button data-pick="followup" aria-selected="false"><i>04</i> Trial to Member Follow Up</button>
+        <button data-pick="reviews" aria-selected="false"><i>05</i> Review Engine</button>
+        <button data-pick="crm" aria-selected="false"><i>06</i> Member CRM</button>
+        <button data-pick="reactivation" aria-selected="false"><i>07</i> Dead Lead Reactivation</button>
+        <button data-pick="app" aria-selected="false"><i>08</i> Owner App</button>
+        <button data-pick="print" aria-selected="false"><i>09</i> Print, Signage and Merch</button>
+        </div>
+      <div class="picker-panel" data-pick-panel="website">
+        <span class="idx">01 / 09</span>
+        <h3 style="margin-top:.6rem">Gym Website</h3>
+        <p class="lede quiet">A website whose only job is to turn a stranger into a booked trial. Not a brochure, not an award entry.</p>
+        <ul class="spec"><li>Custom build, not a template swap</li><li>Class schedule and pricing pages included</li><li>Booking form wired into the CRM on day one</li><li>Local SEO structure and Google Business Profile match</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip on">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="frontdesk" hidden>
+        <span class="idx">02 / 09</span>
+        <h3 style="margin-top:.6rem">AI Front Desk</h3>
+        <p class="lede quiet">A voice agent that picks up your gym line in your gym's voice, knows your schedule and your prices, and books the trial.</p>
+        <ul class="spec"><li>Trained on your schedule, pricing and offers</li><li>Books trials straight into your calendar</li><li>Texts you a summary of every call</li><li>Warm transfers to your phone when you want it</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="missedcall" hidden>
+        <span class="idx">03 / 09</span>
+        <h3 style="margin-top:.6rem">Missed Call Text Back</h3>
+        <p class="lede quiet">Every call you cannot take gets a text back before they have finished dialling the next gym.</p>
+        <ul class="spec"><li>Instant text on every missed call</li><li>Written in your voice, not a robot script</li><li>Replies land in the shared inbox</li><li>Different message after hours</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="followup" hidden>
+        <span class="idx">04 / 09</span>
+        <h3 style="margin-top:.6rem">Trial to Member Follow Up</h3>
+        <p class="lede quiet">The sequences that chase the no shows, the maybes, and the trials that walked out without signing.</p>
+        <ul class="spec"><li>Booked, reminded, no show and post trial sequences</li><li>Text and email on the same thread</li><li>Stops the moment they reply or book</li><li>Tasks to call the ones worth calling</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="reviews" hidden>
+        <span class="idx">05 / 09</span>
+        <h3 style="margin-top:.6rem">Review Engine</h3>
+        <p class="lede quiet">Asks every happy member at the exact right moment, and routes the unhappy ones to you before they reach Google.</p>
+        <ul class="spec"><li>Milestone triggered, not blasted</li><li>Negative feedback routed to you first</li><li>One tap for the member</li><li>Reply suggestions for every review</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="crm" hidden>
+        <span class="idx">06 / 09</span>
+        <h3 style="margin-top:.6rem">Member CRM</h3>
+        <p class="lede quiet">Every lead, trial and member on one board, so you can see who is about to cancel while you can still do something about it.</p>
+        <ul class="spec"><li>Visual pipeline from lead to member</li><li>Attendance drop off flags</li><li>Every call, text and email on one timeline</li><li>Notes and tasks shared across your coaches</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="reactivation" hidden>
+        <span class="idx">07 / 09</span>
+        <h3 style="margin-top:.6rem">Dead Lead Reactivation</h3>
+        <p class="lede quiet">We text the list you already have on day one. For most gyms this pays for the first few months before the site is even live.</p>
+        <ul class="spec"><li>List cleaned and compliance checked</li><li>Campaign written for your offer</li><li>Sent in batches you can keep up with</li><li>Replies handled in the shared inbox</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="app" hidden>
+        <span class="idx">08 / 09</span>
+        <h3 style="margin-top:.6rem">Owner App</h3>
+        <p class="lede quiet">Your gym line, inbox, calendar and pipeline in your pocket. Reply from the floor between rounds.</p>
+        <ul class="spec"><li>Call and text from the gym number</li><li>Shared inbox across your team</li><li>Calendar and today's bookings</li><li>Pipeline on your phone</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      <div class="picker-panel" data-pick-panel="print" hidden>
+        <span class="idx">09 / 09</span>
+        <h3 style="margin-top:.6rem">Print, Signage and Merch</h3>
+        <p class="lede quiet">Class cards, door hangers, gym banners, shirts. Designed in your brand and shipped to the gym.</p>
+        <ul class="spec"><li>Class cards, flyers and door hangers</li><li>Gym banners and window graphics</li><li>Shirts, hoodies and rash guards</li><li>Designed in your brand, free</li></ul>
+        <div class="in-plans"><span class="mono quiet" style="align-self:center;margin-right:.3rem">Included in</span><span class="chip">Site</span><span class="chip on">System</span><span class="chip on">Advanced</span></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper" id="faq">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Pricing questions</span>
+          <h2>The things owners actually ask on the call.</h2>
+        </div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">If yours is not here, ask it on the demo and we will answer it straight.</p></div>
+      </div>
+      <div class="faq" style="margin-top:clamp(1.8rem,3vw,2.6rem)">
+        <div class="faq-item">
+          <button class="faq-q" data-toggle aria-expanded="false" aria-controls="fq1">Is there really no contract? <span class="plus"></span></button>
+          <div class="faq-a" id="fq1" hidden><p class="quiet">Month to month on every plan. You give us thirty days and we hand over your domain, your site files, your phone number and your member list. The annual option exists only because some owners want the two months free, and you choose it, we never ask for it.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" data-toggle aria-expanded="false" aria-controls="fq2">What is the setup fee? <span class="plus"></span></button>
+          <div class="faq-a" id="fq2" hidden><p class="quiet">There is not one. A custom site and a full automation build is normally charged up front by everyone else, and that is the exact reason gyms get stuck with an agency they hate. We would rather earn month thirteen.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" data-toggle aria-expanded="false" aria-controls="fq3">I already have a website. Do I have to throw it away? <span class="plus"></span></button>
+          <div class="faq-a" id="fq3" hidden><p class="quiet">No. We run a website to website upgrade: we keep what is working, your copy, your photos, your rankings, and rebuild the rest on our stack so the automations can plug into it. It is on the <a href="other-services.html" data-gf-link>other services</a> page.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" data-toggle aria-expanded="false" aria-controls="fq4">Do I have to learn the software? <span class="plus"></span></button>
+          <div class="faq-a" id="fq4" hidden><p class="quiet">You have to learn one app, and only the inbox in it. Everything else is built, tested and maintained by us. If you want a sequence changed you text us and we change it, at no cost, on every plan.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" data-toggle aria-expanded="false" aria-controls="fq5">What if it does not work for my gym? <span class="plus"></span></button>
+          <div class="faq-a" id="fq5" hidden><p class="quiet">Then you cancel, and we will have told you before you signed. We turn gyms down. If your problem is retention and not lead flow, or your offer is the thing that is broken, a text automation will not save it and we will say so on the demo.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" data-toggle aria-expanded="false" aria-controls="fq6">How fast is it live? <span class="plus"></span></button>
+          <div class="faq-a" id="fq6" hidden><p class="quiet">Fourteen days from the kickoff call to a live site, and it is written into the agreement. Reactivation usually goes out inside the first week, which is why most gyms are square on month one before the site even launches.</p></div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn" data-lead-open>Book a 15 minute demo</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== OUR PROCESS ========================== -->
+<section class="gf-page" id="process" data-title="Our Process" data-file="process.html" data-seo-desc="Two calls from you, twenty one days from us. Kickoff, build, testing, go live and reactivation, with the fourteen day launch written into the agreement." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Our process</span>
+          <h1>Two calls from you. <span class="sig-block">Twenty one days</span> from us.</h1>
+          <p class="lede quiet">
+            The reason gym owners hate agencies is the homework. Brand questionnaires,
+            content deadlines, a portal you never log into, and six weeks later somebody
+            asks you for photos again. We took all of that off you.
+          </p>
+          <div class="btn-row"><button class="btn" data-lead-open>Start the clock</button></div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>45 minutes</strong><span>Total time you spend on the kickoff.</span></div>
+          <div class="item"><strong>Zero homework</strong><span>We write the copy. You approve or correct it.</span></div>
+          <div class="item"><strong>Day 14</strong><span>Site live. In the agreement, not a hope.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <span class="eyebrow">Step by step</span>
+      <h2>What actually happens, in order.</h2>
+      <div class="steps" style="margin-top:clamp(1.8rem,3vw,2.6rem)">
+        <div class="step"><span class="idx-big">01</span><div><h3>The demo</h3><p class="quiet" style="margin:0">Fifteen minutes. We call your gym line while you are on the call with us and fill out your own web form, so you see what a lead experiences today rather than hearing our opinion about it. If nothing is broken, we say so and you keep your money.</p></div><span class="step-when">Before you sign</span></div>
+        <div class="step"><span class="idx-big">02</span><div><h3>Kickoff call</h3><p class="quiet" style="margin:0">Forty five minutes and it is the only real time we ask for. Your offer, your schedule, your pricing, your photos, your logins. We record it so nobody asks you the same question twice.</p></div><span class="step-when">Day 1</span></div>
+        <div class="step"><span class="idx-big">03</span><div><h3>We write and design</h3><p class="quiet" style="margin:0">Copy, structure and design built from your brand, not a template we recoloured. You get a preview link, not a PDF, so you are clicking the real thing on your phone.</p></div><span class="step-when">Day 2 to 8</span></div>
+        <div class="step"><span class="idx-big">04</span><div><h3>One round of changes</h3><p class="quiet" style="margin:0">You mark up the preview. We fix it. Most gyms use this round on photos and pricing wording and nothing else, because the copy came from your own words in the kickoff.</p></div><span class="step-when">Day 8 to 10</span></div>
+        <div class="step"><span class="idx-big">05</span><div><h3>Automation build and testing</h3><p class="quiet" style="margin:0">Phone line, AI front desk, missed call text back, follow up sequences, review engine, CRM. We test every single one against your real number and show you the transcripts.</p></div><span class="step-when">Day 10 to 14</span></div>
+        <div class="step"><span class="idx-big">06</span><div><h3>Go live</h3><p class="quiet" style="margin:0">Site launches, number ports or forwards, old site redirects so you keep your rankings. Nothing goes dark for a minute.</p></div><span class="step-when">Day 14</span></div>
+        <div class="step"><span class="idx-big">07</span><div><h3>Reactivation campaign</h3><p class="quiet" style="margin:0">We text your old list. This is usually where the first bookings come from and where the plan pays for itself. Your coaches close, we handle the sending.</p></div><span class="step-when">Day 14 to 21</span></div>
+        <div class="step"><span class="idx-big">08</span><div><h3>Handover call</h3><p class="quiet" style="margin:0">Thirty minutes on the one app you need. Then you go back to coaching and we keep the machine running, tuning and fixing in the background.</p></div><span class="step-when">Day 21</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">After launch</span><h2>The part most agencies skip.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">A system that nobody maintains is a system that quietly stops working in month four.</p></div>
+      </div>
+      <div class="grid-3" style="margin-top:clamp(2rem,4vw,3rem)">
+        <div class="cell-card"><span class="idx-big">/01</span><h3>Unlimited edits</h3><p class="quiet">New coach, price change, schedule change, new program. You text us, we do it, same day, on every plan including Site.</p></div>
+        <div class="cell-card"><span class="idx-big">/02</span><h3>Sequence tuning</h3><p class="quiet">We read the transcripts. When a follow up message is getting ignored we rewrite it, and you do not have to ask.</p></div>
+        <div class="cell-card"><span class="idx-big">/03</span><h3>Quarterly reactivation</h3><p class="quiet">Your dead list refills itself. We run it again every quarter at no extra cost, because it works every time.</p></div>
+      </div>
+      <div class="btn-row"><button class="btn" data-lead-open>Book the demo <svg class="arrow"><use href="#i-arrow"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== OUR WORK ========================== -->
+<section class="gf-page" id="work" data-title="Our Work" data-file="our-work.html" data-seo-desc="Gym websites built from each gym's own brand. Strength, jiu jitsu, boxing, CrossFit and 24 hour access clubs, no two alike." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Our work</span>
+          <h1>No two of these look alike. <span class="sig-block">On purpose.</span></h1>
+          <p class="lede quiet">
+            We keep a log of every site we ship: the typefaces, the colour stance, the
+            layout. Before a new build starts we check it against every gym we have
+            built within a hundred miles, and at least two things have to differ. Your
+            competitor is not getting your website with a new logo on it.
+          </p>
+          <div class="btn-row"><button class="btn" data-lead-open>Get yours built</button></div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>Your brand</strong><span>Extracted from your logo and signage, not invented.</span></div>
+          <div class="item"><strong>Your photos</strong><span>Real members. Never stock models in a studio.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail" style="margin-bottom:clamp(1.6rem,3vw,2.4rem)">
+        <div><span class="eyebrow">Recent builds</span><h2>Six gyms, six different looks.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Same system underneath every one of them. You would never guess that from the front.</p></div>
+      </div>
+      <div class="grid-3" style="background:transparent;border:0;gap:clamp(1rem,2vw,1.5rem)">
+        <article class="work" style="background:var(--ink)"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>ironcreekbarbell.com</span></div><div class="face"><em>Strength and conditioning</em><b>Iron Creek Barbell</b></div></div></div><div class="meta"><h3>Iron Creek Barbell</h3><span class="mono">Full system / Gym Advanced</span></div></article>
+        <article class="work" style="background:var(--ink)"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>southsidebjj.com</span></div><div class="face"><em>Brazilian jiu jitsu</em><b>Southside BJJ</b></div></div></div><div class="meta"><h3>Southside BJJ</h3><span class="mono">Full system / reactivation</span></div></article>
+        <article class="work" style="background:var(--ink)"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>reps24.com</span></div><div class="face"><em>24 hour access gym</em><b>Reps 24</b></div></div></div><div class="meta"><h3>Reps 24</h3><span class="mono">Website to website upgrade</span></div></article>
+        <article class="work" style="background:var(--ink)"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>northgateboxing.com</span></div><div class="face"><em>Boxing and white collar</em><b>Northgate Boxing</b></div></div></div><div class="meta"><h3>Northgate Boxing</h3><span class="mono">Full system / two locations</span></div></article>
+        <article class="work" style="background:var(--ink)"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>theyardcrossfit.com</span></div><div class="face"><em>CrossFit affiliate</em><b>The Yard</b></div></div></div><div class="meta"><h3>The Yard</h3><span class="mono">Site plan, upgraded month 3</span></div></article>
+        <article class="work" style="background:var(--ink)"><div class="shot"><div class="browser"><div class="chrome-bar"><i></i><i></i><i></i><span>risewomensfitness.com</span></div><div class="face"><em>Women only studio</em><b>Rise Women's Fitness</b></div></div></div><div class="meta"><h3>Rise Women's Fitness</h3><span class="mono">Full system / Meta ads</span></div></article>
+      </div>
+    </div>
+  </div>
+
+  <div class="band signal">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Want to see yours</span>
+          <h2>We will mock up your gym before you pay anything.</h2>
+          <p class="lede quiet">Send us your logo and your Instagram. We will build the homepage hero and send it back. If you hate it, you have lost nothing and we have learned something.</p>
+          <div class="btn-row"><button class="btn" data-lead-open>Send us your logo</button></div>
+        </div>
+        <div class="rail-meta"><hr class="hair"><p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">Under promise, over deliver. Starting before the invoice is the cheapest way to prove it.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== OTHER SERVICES ========================== -->
+<section class="gf-page" id="services" data-title="Other Services" data-file="other-services.html" data-seo-desc="Bolt ons for gyms: website to website upgrade, Meta ads, Google Ads and LSA, local SEO, custom AI agents, back office automation and multi location rollout." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Other services</span>
+          <h1>Bolt ons for gyms that want to go <span class="sig-block">harder.</span></h1>
+          <p class="lede quiet">
+            The plans cover the machine. These are the things gyms ask for once the
+            machine is running and they want more coming into the top of it. Priced
+            separately, added or dropped month to month, same as everything else.
+          </p>
+          <div class="btn-row"><button class="btn" data-lead-open>Ask about a bolt on</button></div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>No spend percentage</strong><span>We never take a cut of your ad budget.</span></div>
+          <div class="item"><strong>Month to month</strong><span>Add one, drop one, no renegotiation.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail" style="margin-bottom:clamp(1.6rem,3vw,2.4rem)">
+        <div><span class="eyebrow">The bolt ons</span><h2>Eight things gyms ask for next.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Open any one for what is in it and what it costs.</p></div>
+      </div>
+      <div class="prod" id="s-upgrade">
+        <button class="prod-head" data-toggle aria-expanded="true" aria-controls="sb-upgrade">
+          <span class="idx">01</span><h3>Website to Website Upgrade</h3>
+          <span class="tag">From $97 / month <span class="plus"></span></span>
+        </button>
+        <div class="prod-body" id="sb-upgrade">
+          <div class="inner"><span class="idx"></span><div class="copy">
+            <p class="lede">You already have a website. It is not terrible. It is just doing nothing, and it cannot talk to anything. We upgrade it instead of burning it.</p>
+            <p class="quiet">Most gyms have a site somebody built in 2019 on a platform nobody remembers the login for. It ranks for your name, it has your photos on it, and rebuilding from zero throws all of that away for no reason. So we do not.</p>
+            <p class="quiet">We keep what is working: your copy, your images, your rankings, your URLs. We rebuild the rest on our stack so it loads fast, works on a phone, and plugs straight into the front desk, the CRM and the follow up sequences. Every old URL gets redirected, so Google never notices anything except that the site got quicker.</p>
+            <p class="quiet">This is the cheapest way into the system, and it is the plan most gyms start on before they move up.</p>
+            <ul class="spec">
+              <li>Full audit of what your current site is and is not doing</li>
+              <li>Copy, photos and rankings carried across, not discarded</li>
+              <li>Every old URL redirected so you keep your search position</li>
+              <li>Rebuilt fast and mobile first on our stack</li>
+              <li>Wired into the CRM so forms stop going to a dead inbox</li>
+              <li>Live in 14 days, no downtime on the old site</li>
+              <li>Upgrade to Gym System any time without rebuilding again</li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="prod" id="s-meta">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-meta"><span class="idx">02</span><h3>Meta Ads Management</h3><span class="tag">Included in Advanced <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-meta" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">Facebook and Instagram ads built around a real offer, pointed at a page built for that offer, followed up by the system that is already running.</p>
+          <p class="quiet">Ads are the last thing we turn on, never the first. Sending paid traffic into a gym that does not answer the phone is the most expensive mistake in this industry, and it is the one every other agency sells you on day one.</p>
+          <ul class="spec"><li>Creative shot from your own gym footage</li><li>Offer built with you, not copied from a swipe file</li><li>Dedicated landing page per campaign</li><li>Leads land in the same inbox as everything else</li><li>You pay Meta directly, we take no percentage</li></ul>
+        </div></div></div>
+      </div>
+
+      <div class="prod" id="s-google">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-google"><span class="idx">03</span><h3>Google Ads and Local Services Ads</h3><span class="tag">Included in Advanced <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-google" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">Catch the people already typing "gym near me" at eleven at night. Highest intent traffic there is, and the cheapest to convert when the follow up is already built.</p>
+          <ul class="spec"><li>Search campaigns on real local intent terms</li><li>Local Services Ads set up and verified</li><li>Call tracking through your gym line</li><li>Negative keyword work every month, not once</li><li>You pay Google directly</li></ul>
+        </div></div></div>
+      </div>
+
+      <div class="prod" id="s-seo">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-seo"><span class="idx">04</span><h3>Local SEO and Google Business Profile</h3><span class="tag">From $250 / month <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-seo" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">The map pack is where gyms get found and it is won on reviews, proximity and a profile nobody has touched since it was created.</p>
+          <ul class="spec"><li>Google Business Profile rebuilt and optimised</li><li>Categories, services and products filled out properly</li><li>Weekly posts and photo uploads</li><li>Citation and directory cleanup</li><li>Location and program pages that actually rank</li></ul>
+        </div></div></div>
+      </div>
+
+      <div class="prod" id="s-agents">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-agents"><span class="idx">05</span><h3>Custom AI Agents</h3><span class="tag">Quoted per build <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-agents" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">The front desk agent is the standard one. If you have a job in your gym that is repetitive, written down, and eating a person's week, we will build an agent for it.</p>
+          <p class="quiet">Gyms have used these for cancellation saves, class waitlist management, kids program parent comms, corporate enquiry qualification and nutrition check ins. If you can describe the job in a paragraph, it is probably buildable.</p>
+          <ul class="spec"><li>Scoped on a call, quoted flat, built in two weeks</li><li>Runs inside the system you already have</li><li>Every conversation logged and readable</li><li>You own it and it stays if you leave</li></ul>
+        </div></div></div>
+      </div>
+
+      <div class="prod" id="s-automation">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-automation"><span class="idx">06</span><h3>Back Office Automation</h3><span class="tag">Quoted per build <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-automation" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">Billing failures, waiver chasing, class caps, coach payroll hours, membership freezes. The admin that has nothing to do with coaching and eats your Sunday.</p>
+          <ul class="spec"><li>Connects to your billing and check in software</li><li>Failed payment recovery sequences</li><li>Waiver and onboarding paperwork chased automatically</li><li>Weekly numbers texted to you instead of dug out</li></ul>
+        </div></div></div>
+      </div>
+
+      <div class="prod" id="s-content">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-content"><span class="idx">07</span><h3>Content and Social Management</h3><span class="tag">From $450 / month <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-content" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">You film it on your phone in the gym. We cut it, caption it, schedule it, and answer the DMs it generates inside the same inbox.</p>
+          <ul class="spec"><li>Simple weekly filming list, no production crew</li><li>Edited, captioned and scheduled for you</li><li>DMs routed into the CRM as leads</li><li>Monthly content plan built around your offers</li></ul>
+        </div></div></div>
+      </div>
+
+      <div class="prod" id="s-multi">
+        <button class="prod-head" data-toggle aria-expanded="false" aria-controls="sb-multi"><span class="idx">08</span><h3>Multi Location Rollout</h3><span class="tag">Quoted per group <span class="plus"></span></span></button>
+        <div class="prod-body" id="sb-multi" hidden><div class="inner"><span class="idx"></span><div class="copy">
+          <p class="lede">Two gyms or twenty. One brand, one system, separate numbers, separate pipelines, and one dashboard that tells you which location is dropping leads.</p>
+          <ul class="spec"><li>Location pages that do not compete with each other in search</li><li>Separate phone lines and pipelines per site</li><li>Group level reporting across every location</li><li>Per location pricing, cheaper after the first</li></ul>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">Not sure which</span><h2>Tell us the bottleneck. We will name the one thing to fix.</h2>
+          <p class="lede quiet">If the answer is "nothing, your gym is fine", we will say that too. Selling a gym a service it does not need is how you lose it in month five.</p>
+          <div class="btn-row"><button class="btn" data-lead-open>Book a demo</button><a class="btn ghost" href="pricing.html" data-gf-link>See plan pricing</a></div>
+        </div>
+        <div class="rail-meta"><hr class="hair"><p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">Bolt ons need an active plan underneath them. The system has to exist before anything can feed it.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== PARTNERS ========================== -->
+<section class="gf-page" id="partners" data-title="Partners" data-file="partners.html" data-seo-desc="Refer, white label or supply. Recurring monthly commission for every gym that stays, and you never have to run the demo." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Partners</span>
+          <h1>Send us a gym. <span class="sig-block">Get paid</span> every month it stays.</h1>
+          <p class="lede quiet">
+            Equipment reps, gym consultants, accountants who do books for three studios,
+            coaches with an audience, and gym owners who are sick of watching their
+            friends get ripped off. If gym owners trust you, this works.
+          </p>
+          <div class="btn-row"><button class="btn" data-lead-open>Apply to partner</button></div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>Recurring</strong><span>Paid monthly for as long as they stay, not once.</span></div>
+          <div class="item"><strong>No selling</strong><span>Make the intro. We do the demo and the build.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">Three ways in</span><h2>Pick the one that matches how you work.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">You can move between these later. Most people start at referral and end up reselling.</p></div>
+      </div>
+      <div class="grid-3" style="margin-top:clamp(2rem,4vw,3rem)">
+        <div class="cell-card"><span class="idx-big">01</span><h3>Referral Partner</h3><p class="quiet">Make the introduction, we take it from there. You get a percentage of the plan every month the gym stays with us, paid on the first.</p><ul class="spec" style="margin-top:1.2rem"><li>No quota, no minimum</li><li>Live dashboard of your referrals</li><li>Paid monthly, recurring</li></ul></div>
+        <div class="cell-card"><span class="idx-big">02</span><h3>White Label Partner</h3><p class="quiet">You sell it as yours. We build, support and maintain it under your brand, and your client never sees our name anywhere.</p><ul class="spec" style="margin-top:1.2rem"><li>Your logo on the platform</li><li>Wholesale pricing, you set retail</li><li>We stay invisible on support</li></ul></div>
+        <div class="cell-card"><span class="idx-big">03</span><h3>Supplier Partner</h3><p class="quiet">Equipment, software, insurance, apparel. Your customers are opening gyms that need all of this on day one. We build a co branded offer.</p><ul class="spec" style="margin-top:1.2rem"><li>Co branded landing page</li><li>Bundled offer for your customers</li><li>Revenue share both directions</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">Built on</span><h2>The stack underneath.</h2>
+          <p class="lede quiet">We are not precious about this. You should know what your business is running on and be able to take it with you.</p>
+        </div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">Every one of these is an account in your name that we manage. Not ours with you renting a seat.</p></div>
+      </div>
+      <div class="logo-wall" style="margin-top:clamp(2rem,4vw,3rem)">
+        <div>GoHighLevel</div><div>Twilio</div><div>Stripe</div><div>Google Business</div>
+        <div>Meta Business</div><div>WordPress</div><div>Hostinger</div><div>n8n</div>
+      </div>
+      <div class="btn-row"><button class="btn" data-lead-open>Talk about partnering <svg class="arrow"><use href="#i-arrow"/></svg></button></div>
+    </div>
+  </div>
+
+  <div class="band signal">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">Automate everything</span><h2>One intro a month is a real second income.</h2>
+          <p class="lede quiet">Gyms stay for years when the system works, and you get paid for every one of those months. That is the entire pitch and there is no catch in the small print.</p>
+          <div class="btn-row"><button class="btn" data-lead-open>Apply to partner</button></div>
+        </div>
+        <div class="rail-meta"><hr class="hair"><p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">We approve partners one at a time. If you are already selling something that competes, we will tell you straight away.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== REVIEWS ========================== -->
+<section class="gf-page" id="reviews" data-title="Reviews" data-file="reviews.html" data-seo-desc="What gym owners say about Growth Factor AI, plus an honest list of the things we are not good at." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Reviews</span>
+          <h1>What gym owners say when <span class="sig-block">we are not on the call.</span></h1>
+          <p class="lede quiet">
+            We build a review engine for a living, so it would be embarrassing to have
+            none of our own. These are owners running strength gyms, jiu jitsu academies,
+            boxing gyms and 24 hour access clubs.
+          </p>
+          <div class="btn-row"><button class="btn" data-lead-open>Book a demo</button></div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>Ask for numbers</strong><span>On the demo we will show you a real account, with permission, not a screenshot.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="grid-3">
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>The reactivation texts booked eleven trials in the first week. We had not spent a dollar on ads yet. I had been told that list was dead for two years.</p></blockquote><div class="who"><strong>Marcus D.</strong><span>Strength gym, 210 members</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>I stopped answering the phone during class and my show rate went up. That still sounds wrong when I say it out loud, but the AI books them better than I did while holding pads.</p></blockquote><div class="who"><strong>Priya R.</strong><span>Boxing gym, two locations</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>Every other agency wanted a year up front and sent me a login. These guys built it and handed me a phone that works. Month to month and they still have me.</p></blockquote><div class="who"><strong>Tom K.</strong><span>Jiu jitsu academy</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>Fourteen days was not marketing. It was live on day thirteen and they redirected the old pages so we did not lose the rankings I had spent three years building.</p></blockquote><div class="who"><strong>Danielle W.</strong><span>Women's fitness studio</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>Ben talked me out of the ads package on the first call. Told me to fix the follow up first. Nobody in this industry does that.</p></blockquote><div class="who"><strong>Andre S.</strong><span>CrossFit affiliate</span></div></div>
+        <div class="quote"><div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div><blockquote><p>We went from nine Google reviews to over a hundred without anyone at the desk ever asking a member for one. It just happens now.</p></blockquote><div class="who"><strong>Leah M.</strong><span>24 hour access gym</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">The honest part</span><h2>What we are not good at.</h2>
+          <p class="lede quiet">Under promise, over deliver means saying this out loud rather than letting you find it in month two.</p>
+          <p class="quiet">We cannot fix retention. If members are leaving because the coaching or the community is not there, a follow up sequence will fill the top of a bucket with a hole in it and you will blame us, correctly.</p>
+          <p class="quiet">We are not the cheapest. There are people who will build you a website for four hundred dollars once. They will not answer your phone at nine at night, and you will be back here in a year.</p>
+          <p class="quiet">We do not do custom software. If you want a bespoke member app built from nothing, we are the wrong shop and we will tell you who is not.</p>
+        </div>
+        <div class="rail-meta"><hr class="hair"><p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">We turn down roughly one gym in five on the demo call. Usually because the offer is the problem, not the marketing.</p></div>
+      </div>
+      <div class="btn-row"><button class="btn" data-lead-open>Book the demo anyway <svg class="arrow"><use href="#i-arrow"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== ABOUT ========================== -->
+<section class="gf-page" id="about" data-title="About" data-file="about.html" data-seo-desc="Ben Grove ran a gym for nine years, found forty one enquiries and nine replies, and built the system he could not buy. Growth Factor works with gyms only." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">About</span>
+          <h1>I owned the gym. I got sold the <span class="sig-block">same nonsense</span> you did.</h1>
+          <p class="lede quiet">
+            My name is Ben Grove. I ran a gym for nine years before I built any of this,
+            and Growth Factor exists because of a specific number I could not get out of
+            my head.
+          </p>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>Ben Grove</strong><span>Founder. Gym owner first, this second.</span></div>
+          <div class="item"><strong>Gyms only</strong><span>We do not take restaurants, dentists or roofers.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">The number</span>
+          <h2>Forty one enquiries. Nine replies.</h2>
+          <p class="lede">
+            I pulled a year of form submissions out of my old website because an agency
+            wanted to sell me more traffic. Forty one people had asked us for help that
+            year. We had replied to nine of them.
+          </p>
+          <p class="quiet">
+            Not because we were lazy. Because the form went to an inbox on a laptop in
+            the office, and I was on the floor from five to nine every night like every
+            other owner in this industry. The leads were already there. We were the
+            bottleneck, and the fix being sold to me was more of the thing I was already
+            wasting.
+          </p>
+          <p class="quiet">
+            I spent the next two years building the thing I actually needed: something
+            that picked up when I could not, texted back when I missed, and kept going
+            until somebody was booked in. Then other owners asked for it. That is the
+            whole origin story, and there is no venture round or garage in it.
+          </p>
+        </div>
+        <div class="rail-meta">
+          <hr class="hair">
+          <div style="padding-top:1.2rem">
+            <span class="mono quiet">Why gyms only</span>
+            <p style="margin-top:.8rem;font-size:.92rem" class="quiet">
+              Because a gym lead behaves nothing like a plumbing lead. They are nervous,
+              they are comparing three places, they buy on Tuesday and go quiet until
+              January. An agency serving nine industries writes one sequence for all of
+              them. Ours is written for the person standing outside your door working
+              up the nerve.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">How we operate</span><h2>Three rules we do not break.</h2></div>
+        <div class="rail-meta"><p class="quiet" style="margin:0;font-size:.92rem">These cost us money regularly. They are still the rules.</p></div>
+      </div>
+      <div class="grid-3" style="margin-top:clamp(2rem,4vw,3rem)">
+        <div class="cell-card"><span class="idx-big">01</span><h3>Under promise, over deliver</h3><p class="quiet">We quote fourteen days and aim for eleven. We never quote a number of leads, because anyone quoting you a number of leads is guessing and charging you for the guess.</p></div>
+        <div class="cell-card"><span class="idx-big">02</span><h3>Month to month, always</h3><p class="quiet">A twelve month contract is a company protecting itself from its own product. If we have to trap you to keep you, we have already failed and you should leave.</p></div>
+        <div class="cell-card"><span class="idx-big">03</span><h3>You own everything</h3><p class="quiet">Domain, site files, phone number, member list, ad accounts. All in your name. If you go, it goes with you and we will help you move it.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band signal">
+    <div class="wrap">
+      <div class="rail">
+        <div><span class="eyebrow">Automate everything</span><h2>That is not a slogan. It is the deliverable.</h2>
+          <p class="lede quiet">Every hour this system takes off your desk is an hour back on the floor with members, which is the only thing that was ever going to grow your gym.</p>
+          <div class="btn-row"><button class="btn" data-lead-open>Book 15 minutes with Ben</button></div>
+        </div>
+        <div class="rail-meta"><hr class="hair"><p class="quiet" style="padding-top:1.2rem;margin:0;font-size:.92rem">Growth Factor AI. Websites, ads, SEO, AI agents and automation, for gyms.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== CONTACT ========================== -->
+<section class="gf-page" id="contact" data-title="Contact" data-file="contact.html" data-seo-desc="Book a fifteen minute demo. We call your gym line and fill out your own form so you can see what a lead experiences tonight." hidden>
+  <div class="band hero">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Contact</span>
+          <h1>Fifteen minutes. <span class="sig-block">No deck.</span></h1>
+          <p class="lede quiet">
+            On the call we ring your gym line and fill out your own web form so you can
+            watch what a real lead experiences tonight. Then we tell you what we would
+            fix first, whether you buy anything or not.
+          </p>
+          <div class="btn-row"><button class="btn" data-lead-open>Book the demo</button></div>
+        </div>
+        <div class="rail-meta hero-meta">
+          <div class="item"><strong>hello@growth-factor.ai</strong><span>Answered same day, by a person.</span></div>
+          <div class="item"><strong>Mon to Fri</strong><span>8am to 6pm. Our own front desk covers the rest.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band paper">
+    <div class="wrap">
+      <div class="rail">
+        <div>
+          <span class="eyebrow">Send it over</span>
+          <h2>Tell us what is broken.</h2>
+          <p class="quiet" style="max-width:52ch">
+            The more specific you are the more useful the call is. "Leads go nowhere after
+            they fill the form" is a better message than "interested in marketing".
+          </p>
+          <form method="post" action="/lead.php" style="max-width:520px;margin-top:2rem">
+            <div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem">
+              <div><label for="cf-first">First name</label><input id="cf-first" name="first" autocomplete="given-name" required></div>
+              <div><label for="cf-last">Last name</label><input id="cf-last" name="last" autocomplete="family-name" required></div>
+            </div>
+            <label for="cf-gym">Gym name</label><input id="cf-gym" name="gym" autocomplete="organization" required>
+            <div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem">
+              <div><label for="cf-email">Email</label><input id="cf-email" name="email" type="email" autocomplete="email" required></div>
+              <div><label for="cf-phone">Gym phone</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel" required></div>
+            </div>
+            <label for="cf-msg">What is broken</label>
+            <textarea id="cf-msg" name="message" rows="4" placeholder="Leads fill the form and nothing happens until I check it at 9pm."></textarea>
+            <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+            <button class="btn" type="submit" style="width:100%;justify-content:center">Send it</button>
+            <p class="fine" style="font-family:var(--face-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);margin:1rem 0 0;text-align:center">No contract. We reply the same day.</p>
+          </form>
+        </div>
+        <div class="rail-meta">
+          <hr class="hair">
+          <div style="padding-top:1.2rem;display:grid;gap:1.6rem">
+            <div><span class="mono quiet">Email</span><p style="margin:.4rem 0 0"><a href="mailto:hello@growth-factor.ai" style="color:var(--signal-deep);text-decoration:none">hello@growth-factor.ai</a></p></div>
+            <div><span class="mono quiet">Who you get</span><p class="quiet" style="margin:.4rem 0 0;font-size:.92rem">Ben takes the demo calls himself while we are this size. You are not getting a closer reading a script.</p></div>
+            <div><span class="mono quiet">Already a client</span><p class="quiet" style="margin:.4rem 0 0;font-size:.92rem">Text the support line in your owner app. Edits are done the same day, every plan.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <div class="strip">
+        <div class="cell"><strong>No contract</strong><span>Month to month</span></div>
+        <div class="cell"><strong>No setup fee</strong><span>Build included</span></div>
+        <div class="cell"><strong>14 days</strong><span>Site live</span></div>
+        <div class="cell"><strong>You own it</strong><span>Site, number, list</span></div>
+        <div class="cell"><strong>Gyms only</strong><span>One industry</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGES-END -->
+</main>
+
+<footer class="site-foot" data-gf-shared>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col foot-brand">
+        <a class="wordmark" href="index.html" data-gf-link style="margin-bottom:1rem"><span class="gf-dot"></span>Growth&nbsp;Factor <span class="sub">AI</span></a>
+        <p>Websites and marketing systems for gyms. Built by a gym owner, run by people who answer the phone.</p>
+        <p style="margin-top:1rem"><span class="mono" style="color:var(--volt)">Automate everything</span></p>
+      </div>
+      <div class="foot-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html" data-gf-link>About</a></li>
+          <li><a href="process.html" data-gf-link>Our Process</a></li>
+          <li><a href="our-work.html" data-gf-link>Our Work</a></li>
+          <li><a href="partners.html" data-gf-link>Partners</a></li>
+          <li><a href="reviews.html" data-gf-link>Reviews</a></li>
+          <li><a href="contact.html" data-gf-link>Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>Products</h3>
+        <ul>
+          <li><a href="products.html#p-website" data-gf-link>Gym Website</a></li>
+          <li><a href="products.html#p-frontdesk" data-gf-link>AI Front Desk</a></li>
+          <li><a href="products.html#p-missedcall" data-gf-link>Missed Call Text Back</a></li>
+          <li><a href="products.html#p-followup" data-gf-link>Trial to Member Follow Up</a></li>
+          <li><a href="products.html#p-reviews" data-gf-link>Review Engine</a></li>
+          <li><a href="products.html" data-gf-link>All nine products</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>Other Services</h3>
+        <ul>
+          <li><a href="other-services.html#s-upgrade" data-gf-link>Website to Website Upgrade</a></li>
+          <li><a href="other-services.html#s-meta" data-gf-link>Meta Ads Management</a></li>
+          <li><a href="other-services.html#s-google" data-gf-link>Google Ads and LSA</a></li>
+          <li><a href="other-services.html#s-seo" data-gf-link>Local SEO</a></li>
+          <li><a href="other-services.html#s-agents" data-gf-link>Custom AI Agents</a></li>
+          <li><a href="other-services.html" data-gf-link>All services</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h3>Plans</h3>
+        <ul>
+          <li><a href="pricing.html#plan-site" data-gf-link>Site</a></li>
+          <li><a href="pricing.html#plan-system" data-gf-link>Gym System</a></li>
+          <li><a href="pricing.html#plan-advanced" data-gf-link>Gym Advanced</a></li>
+          <li><a href="pricing.html#compare" data-gf-link>Compare plans</a></li>
+          <li><a href="pricing.html#faq" data-gf-link>Pricing FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"ProfessionalService",
+      "name":"Growth Factor AI",
+      "slogan":"Automate Everything",
+      "description":"Websites and marketing systems for gyms. Website, AI front desk, missed call text back, follow up automation, review engine and CRM, built and maintained for gym owners.",
+      "url":"https://growth-factor.ai/",
+      "email":"hello@growth-factor.ai",
+      "founder":{"@type":"Person","name":"Ben Grove","jobTitle":"Founder"},
+      "areaServed":{"@type":"Country","name":"United States"},
+      "knowsAbout":["gym marketing","gym websites","fitness lead follow up","gym automation"],
+      "hasOfferCatalog":{
+        "@type":"OfferCatalog","name":"Plans",
+        "itemListElement":[
+          {"@type":"Offer","name":"Site","price":"97","priceCurrency":"USD","description":"Custom gym website, hosting and edits."},
+          {"@type":"Offer","name":"Gym System","price":"297","priceCurrency":"USD","description":"Website plus AI front desk, missed call text back, follow up, reviews, CRM, reactivation, owner app and print."},
+          {"@type":"Offer","name":"Gym Advanced","price":"750","priceCurrency":"USD","description":"Gym System plus managed Meta ads, Google Ads and Local Services Ads."}
+        ]
+      }
+    }
+    </script>
+    <div class="foot-base">
+      <p>&copy; <span data-year></span> Growth Factor AI. All rights reserved.</p>
+      <p class="mono">Terms &nbsp;/&nbsp; Privacy &nbsp;/&nbsp; hello@growth-factor.ai</p>
+    </div>
+  </div>
+</footer>
+
+<div class="lead-scrim" id="lead" data-gf-shared hidden>
+  <div class="lead-card" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+    <button class="lead-close" data-lead-close aria-label="Close">&times;</button>
+    <h2 id="lead-title">Book a 15 minute demo</h2>
+    <p>We will call your gym line on the demo and show you what a lead actually experiences today. No deck.</p>
+    <form method="post" action="/lead.php">
+      <div class="two">
+        <div><label for="lf-first">First name</label><input id="lf-first" name="first" autocomplete="given-name" required></div>
+        <div><label for="lf-last">Last name</label><input id="lf-last" name="last" autocomplete="family-name" required></div>
+      </div>
+      <label for="lf-gym">Gym name</label>
+      <input id="lf-gym" name="gym" autocomplete="organization" required>
+      <div class="two">
+        <div><label for="lf-email">Email</label><input id="lf-email" name="email" type="email" autocomplete="email" required></div>
+        <div><label for="lf-phone">Gym phone</label><input id="lf-phone" name="phone" type="tel" autocomplete="tel" required></div>
+      </div>
+      <label for="lf-plan">What are you looking at</label>
+      <select id="lf-plan" name="plan">
+        <option>Not sure yet, show me</option>
+        <option>Site, website only</option>
+        <option>Gym System</option>
+        <option>Gym Advanced</option>
+        <option>Website to website upgrade</option>
+      </select>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn" type="submit">Send it</button>
+      <p class="fine">No contract. We reply the same day.</p>
+    </form>
+  </div>
+</div>
+
+<!-- GF-CHROME:START -->
+<script>
+(function(){
+  var pages=[].slice.call(document.querySelectorAll('.gf-page'));
+  if(!pages.length)return;
+  var tabBar=document.getElementById('gf-tabs');
+  var KEY='gf-page:'+(location.pathname||'shell');
+  function fileOf(p){return p.getAttribute('data-file')||''}
+  function show(id,remember){
+    var target=pages.filter(function(p){return p.id===id})[0]||pages[0];
+    pages.forEach(function(p){p.hidden=p!==target});
+    [].forEach.call(tabBar.children,function(t){t.setAttribute('aria-current',String(t.dataset.page===target.id))});
+    [].forEach.call(document.querySelectorAll('[data-gf-link]'),function(a){
+      var href=(a.getAttribute('href')||'').split('#')[0];
+      if(href===fileOf(target)){a.setAttribute('aria-current','page')}else{a.removeAttribute('aria-current')}
+    });
+    if(remember){try{localStorage.setItem(KEY,target.id)}catch(e){}}
+    window.scrollTo(0,0);
+  }
+  pages.forEach(function(p){
+    var b=document.createElement('button');
+    b.className='gf-tab';b.type='button';b.dataset.page=p.id;
+    b.textContent=p.getAttribute('data-title')||p.id;
+    b.addEventListener('click',function(){history.replaceState(null,'','#'+p.id);show(p.id,true)});
+    tabBar.appendChild(b);
+  });
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[data-gf-link]');
+    if(!a)return;
+    var raw=a.getAttribute('href')||'';
+    var parts=raw.split('#');
+    var hit=pages.filter(function(p){return fileOf(p)===parts[0]})[0];
+    if(!hit)return;
+    e.preventDefault();
+    history.replaceState(null,'','#'+hit.id);
+    show(hit.id,true);
+    if(parts[1]){
+      var t=document.getElementById(parts[1]);
+      if(t)t.scrollIntoView({block:'start'});
+    }
+  });
+  window.addEventListener('hashchange',function(){
+    var h=location.hash.slice(1);
+    if(pages.filter(function(p){return p.id===h})[0])show(h,true);
+  });
+  var start=location.hash.slice(1);
+  if(!start){try{start=localStorage.getItem(KEY)||''}catch(e){start=''}}
+  show(start||pages[0].id,false);
+})();
+</script>
+<!-- GF-CHROME:END -->
+
+<script>
+/* Site behaviour. Vanilla so it drops into a template platform as a custom
+   block. M4 reactive: every one of these fires on input, never on a timer. */
+(function(){
+  /* ---- lead popup ---- */
+  var lead=document.getElementById('lead');
+  var lastFocus=null;
+  function openLead(){
+    if(!lead)return;
+    lastFocus=document.activeElement;
+    lead.hidden=false;
+    var f=lead.querySelector('input');
+    if(f)f.focus();
+  }
+  function closeLead(){
+    if(!lead)return;
+    lead.hidden=true;
+    if(lastFocus&&lastFocus.focus)lastFocus.focus();
+  }
+  document.addEventListener('click',function(e){
+    if(e.target.closest('[data-lead-open]')){e.preventDefault();openLead();}
+    else if(e.target.closest('[data-lead-close]')){closeLead();}
+    else if(e.target===lead){closeLead();}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLead()});
+
+  [].forEach.call(document.querySelectorAll('[data-year]'),function(el){
+    el.textContent=new Date().getFullYear();
+  });
+
+  /* ---- expanding rows: products, FAQ. Click only. ---- */
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-toggle]');
+    if(!t)return;
+    var panel=document.getElementById(t.getAttribute('aria-controls'));
+    if(!panel)return;
+    var open=t.getAttribute('aria-expanded')==='true';
+    t.setAttribute('aria-expanded',String(!open));
+    panel.hidden=open;
+  });
+
+  /* ---- pricing term toggle ---- */
+  var terms=document.querySelectorAll('[data-term]');
+  function setTerm(term){
+    [].forEach.call(terms,function(b){b.setAttribute('aria-pressed',String(b.dataset.term===term))});
+    [].forEach.call(document.querySelectorAll('[data-monthly]'),function(el){
+      el.textContent=term==='annual'?el.dataset.annual:el.dataset.monthly;
+    });
+    [].forEach.call(document.querySelectorAll('[data-sub-monthly]'),function(el){
+      el.textContent=term==='annual'?el.dataset.subAnnual:el.dataset.subMonthly;
+    });
+    [].forEach.call(document.querySelectorAll('[data-term-word]'),function(el){
+      el.textContent=term==='annual'?'billed annually':'billed monthly';
+    });
+  }
+  [].forEach.call(terms,function(b){
+    b.addEventListener('click',function(){setTerm(b.dataset.term)});
+  });
+  if(terms.length)setTerm('monthly');
+
+  /* ---- pricing product picker ---- */
+  var picks=document.querySelectorAll('[data-pick]');
+  [].forEach.call(picks,function(b){
+    b.addEventListener('click',function(){
+      [].forEach.call(picks,function(o){o.setAttribute('aria-selected',String(o===b))});
+      [].forEach.call(document.querySelectorAll('[data-pick-panel]'),function(p){
+        p.hidden=p.dataset.pickPanel!==b.dataset.pick;
+      });
+    });
+  });
+})();
+</script>

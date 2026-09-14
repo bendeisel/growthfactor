@@ -1,0 +1,71 @@
+{
+  "client": "Growth Factor AI",
+  "slug": "growthfactor",
+  "vertical": "marketing systems for gyms",
+  "source": "DECLARED, not extracted. Growth Factor is the house brand; there was no prior site to mine, so this kernel is stated here and frozen from this point exactly as an extracted one would be.",
+  "token_colors": [
+    "#0C0D0F",
+    "#F2F1EC",
+    "#2F4BFF",
+    "#1E35CC",
+    "#D6FF4B",
+    "#8B8E96",
+    "#5F6168",
+    "#23252B",
+    "#D6D4CB",
+    "#141519",
+    "#E8E7E0"
+  ],
+  "faces": {
+    "display": "Space Grotesk 700, uppercase, -0.02em tracking",
+    "body": "Space Grotesk 400/500",
+    "mono": "IBM Plex Mono 500, uppercase, 0.14em tracking"
+  },
+  "geometry": {
+    "radius_panel": "0px",
+    "radius_action": "0px",
+    "note": "Zero radius everywhere. Per motion.md this forces linear / sharp-cut motion. Nothing on this site may bounce or spring."
+  },
+  "motifs": [
+    "Mono index numerals (01..09) set large in the offset rail",
+    "1px full-bleed hairline rules as the structural divider system",
+    "The offset rail: content pinned hard left, mono metadata in the right margin",
+    "Hard 0px corners on every container and every action",
+    "The signal block: a solid #2F4BFF rectangle used as emphasis, never a gradient",
+    "Bracket marks [ ] in mono wrapping every section eyebrow",
+    "The ground flip: ink section to paper section as a hard cut, no transition band"
+  ],
+  "axes": {
+    "structure": "D offset asymmetric",
+    "type_stance": "1 extreme contrast",
+    "density": "dense",
+    "rhythm": "punctuated",
+    "color_stance": "alternating high contrast",
+    "motion_stance": "M4 reactive"
+  },
+  "color_names": {
+    "ink": "#0C0D0F",
+    "paper": "#F2F1EC",
+    "signal": "#2F4BFF",
+    "signal_deep": "#1E35CC",
+    "volt": "#D6FF4B",
+    "smoke": "#8B8E96",
+    "ash": "#5F6168",
+    "rule_dark": "#23252B",
+    "rule_light": "#D6D4CB",
+    "ink_2": "#141519",
+    "paper_2": "#E8E7E0"
+  },
+  "typefaces": {
+    "webfonts_loaded": [
+      "space grotesk",
+      "ibm plex mono"
+    ],
+    "display": "Space Grotesk",
+    "body": "Space Grotesk",
+    "mono": "IBM Plex Mono"
+  },
+  "extra_allowed_colors": [
+    "#FFFFFF"
+  ]
+}
