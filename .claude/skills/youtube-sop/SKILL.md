@@ -58,10 +58,20 @@ transcript site:
 1. Open the video on desktop.
 2. Expand the description, the `...more` under the title.
 3. Click **Show transcript**. A panel opens on the right.
-4. Click into the panel, select it, Ctrl+C, paste it here.
+4. Click just before the first word, scroll to the bottom of the panel,
+   **Shift+Click** after the last word, Ctrl+C.
+
+Do not tell him Ctrl+A. Inside that panel it selects the entire page, not
+the transcript, and he has to start over.
 
 Timestamps toggle on and off from the three-dot menu in that panel. Ask him
 to leave them on when the output needs step anchors.
+
+Prompts, commands, code and settings shown on screen are never in the
+transcript, it only carries what was spoken. When the video looks like it
+demonstrates any of those, ask for the description text, the pinned comment,
+and screenshots alongside the transcript. Reproduce anything he sends
+verbatim in a code block, never paraphrased.
 
 Never send Ben to a paid transcript site. YouTube's own panel does the same
 job with no cap.
