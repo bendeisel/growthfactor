@@ -80,3 +80,41 @@ real personality.
   oversized file.
 - **Mixing concerns in one artifact.** Homepage and inner pages now live in
   separate artifacts so version history stays readable.
+
+## "The voice you are using is too ai"
+
+**What it was:** a rewrite of the vendor-authored sections of a programme page.
+The layout was right, the facts were right, and the voice was completely wrong.
+
+**Why it failed.** It was written like a copywriter rather than like the client.
+Every paragraph carried a turn — a punchy reframe, a small aphorism, a closing
+line that sounded profound. "Thai pads are cardio you cannot fake your way
+through." "That gap is the thing the sport actually trains." Nobody talks like
+that. Constructed cleverness at that density is the clearest tell in prose, the
+same way a uniform grid of rounded cards is the clearest tell in layout.
+
+It was also cold. The copy reached for tough and detached when the client's own
+writing is warm and enthusiastic — the exact opposite register.
+
+**The fix: do not invent a voice, match the one already on the site.** The
+client had written most of their own copy, and the samples were sitting in the
+harvest the whole time. Read several pieces of their unmistakably-own writing
+first — FAQ answers are usually the plainest, least vendor-touched source — and
+note the concrete habits before typing a word:
+
+- Do they use exclamation points? (This client does, freely.)
+- Do they address the reader directly and give instructions, or describe?
+- Warm and welcoming, or cool and hard? Gyms split both ways and guessing is a
+  coin flip.
+- Sentence length, comma splices, parenthetical asides, how they punctuate a
+  phone number.
+- Do they ever use a metaphor? (This client: never.)
+
+Then write to those habits. The result was 25% shorter than the version written
+from instinct, which is usually the sign it is closer.
+
+**The general rule.** Prose has the same failure mode as layout: filling a
+vacuum with defaults. For layout, the default is the component-library grid. For
+copy, it is the confident-brand-voice register that every AI reaches for. Both
+are avoided the same way — by finding what the client already has and amplifying
+it, rather than supplying something more polished from outside.
