@@ -25,6 +25,35 @@ UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like 
 ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
 
 
+BLOCKED = """This machine cannot reach youtube.com.
+
+Almost always this is a sandboxed session (Claude Code on the web, a CI
+runner, a locked-down proxy), not a broken script. Nothing installed here
+will fix it, the egress is blocked before the request leaves.
+
+Two ways forward:
+  1. Run this same command from Claude Code on your own machine.
+  2. Paste the transcript instead. On the video page, expand the
+     description, click "Show transcript", select the panel, Ctrl+C.
+     Free, no daily limit, no third-party site.
+"""
+
+
+def reachable(timeout=8):
+    """Quick egress check so a blocked sandbox fails in seconds, not minutes."""
+    try:
+        urllib.request.urlopen(
+            urllib.request.Request("https://www.youtube.com/favicon.ico",
+                                   headers={"User-Agent": UA}),
+            timeout=timeout,
+        )
+        return True
+    except urllib.error.HTTPError:
+        return True  # YouTube answered, that is all we needed to know
+    except Exception:
+        return False
+
+
 def video_id(raw):
     raw = raw.strip().strip('"').strip("'")
     if ID_RE.match(raw):
@@ -200,6 +229,11 @@ def main():
     a = ap.parse_args()
 
     vid = video_id(a.video)
+
+    if not reachable():
+        sys.stderr.write(BLOCKED)
+        sys.exit(3)
+
     errors = []
     result = None
     for fn in (from_ytdlp_module, from_ytdlp_cli, from_innertube):

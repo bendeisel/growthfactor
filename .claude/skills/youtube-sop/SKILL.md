@@ -24,18 +24,47 @@ Multiple videos: run it once per link, then write one combined document.
 The script tries yt-dlp (module, then CLI), then YouTube's own player
 endpoint. Read the transcript file before writing anything.
 
+### Where this runs matters
+
+The script fetches over the network, so it only works where YouTube is
+reachable:
+
+- **Claude Code on Ben's own machine, or openclaw:** works. This is the
+  path the script is built for.
+- **Claude Code on the web, a sandbox, a CI runner:** blocked at the egress
+  proxy. The script detects this in about a second and exits 3. Do not try
+  to install anything, do not retry, the request never leaves the box.
+
+Check the exit code and route accordingly instead of guessing.
+
 ### If it fails
 
-- **Exit 3, cannot reach YouTube.** Install the stronger fetcher first:
-  `pip install -U yt-dlp`. YouTube changes its internals often and yt-dlp
-  tracks those changes; the built-in fallback does not. On a sandboxed or
-  proxied box YouTube may be blocked outright, in which case use a fallback
-  below and say so plainly rather than retrying.
-- **Exit 2, no captions.** The video genuinely has none. Say so, then offer:
-  youtube-transcript.com (3 free per day), or Ben pastes the transcript.
-- **Ben pastes a transcript.** Skip this whole step and go to step 2.
+- **Exit 3, blocked egress.** Say so in one line, then ask Ben to paste the
+  transcript using the YouTube method below. Do not offer to install
+  packages, nothing installed locally can open a blocked proxy.
+- **Exit 3, but YouTube is reachable.** Different problem, a stale fetcher.
+  `pip install -U yt-dlp` and run again. YouTube changes its internals
+  often and yt-dlp tracks those changes.
+- **Exit 2, no captions.** The video genuinely has none. Say so, then offer
+  to transcribe the audio, or let Ben find a different video.
+- **Ben pastes a transcript.** Skip this whole step and go to step 2. This
+  is a normal path, not a failure, treat it as such.
 
-Do not send Ben to a paid site while the script still has an untried option.
+### The paste method, when asking is the right move
+
+Tell Ben this, in short form. It is free, unlimited, and beats every
+transcript site:
+
+1. Open the video on desktop.
+2. Expand the description, the `...more` under the title.
+3. Click **Show transcript**. A panel opens on the right.
+4. Click into the panel, select it, Ctrl+C, paste it here.
+
+Timestamps toggle on and off from the three-dot menu in that panel. Ask him
+to leave them on when the output needs step anchors.
+
+Never send Ben to a paid transcript site. YouTube's own panel does the same
+job with no cap.
 
 ## 2. Pick the output
 
