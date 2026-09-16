@@ -5,11 +5,20 @@ pick up the same conversation.
 
 ## The three
 
-| Agent | Owns | Colour |
-|---|---|---|
-| **Bob** | The gyms: Nashville MMA Training Camp and Fighters Boxing Gym | Green |
-| **Kevin** | Growth Factor agency work | Orange |
-| **Stewart** | Personal and side hustles | Purple |
+| Agent | Owns | Mailbox | Colour |
+|---|---|---|---|
+| **Bob** | The gyms: Nashville MMA Training Camp and Fighters Boxing Gym | ben@nashvillemma.com | Green |
+| **Kevin** | Growth Factor agency work | ben@growth-factor.ai | Orange |
+| **Stewart** | Personal and side hustles, Grove Investing | grove.investing@gmail.com | Purple |
+
+The addresses come from the linked Google Calendar list, which shows all three
+identities. Bob's and Kevin's are certain. **Stewart owning
+grove.investing@gmail.com is an assumption**, made because Grove Investing reads
+as a side hustle rather than agency or gym work. Correct it in his brief if it
+is wrong.
+
+Each agent's brief names its own address and tells it to read and write from
+that one only, so mail is scoped the same way everything else is.
 
 Each keeps its own threads, its own memory and its own instructions. They are
 created automatically the first time you sign in, then they are ordinary rows
@@ -174,12 +183,20 @@ fires an n8n workflow, moves a GHL pipeline, attaches as a tool behind the same
 function. Each tool can be scoped per agent, so Bob gets Glofox and Kevin gets
 GHL without either reaching into the other's systems.
 
-**Gmail, GHL and Glofox.** Not built. Superhuman is dropped: it has no public
-write API and sits on Gmail underneath, so Gmail directly is fewer moving parts
-and one less subscription. Each integration needs its credentials and a decision
-about what the agent may do unattended versus what it drafts for review. Email
-is the one worth being careful with: reading is low risk, sending on your behalf
-is not.
+**Email.** Not built, and the access is not there yet either. Superhuman does
+have a working MCP with full read, draft and send, which reverses an earlier
+call in this repo that it had no usable write API. But mail access currently
+reaches one mailbox, ben@growth-factor.ai, through the Gmail connector. Calendar
+reaches all three identities, because calendars share across Google accounts and
+mailboxes do not.
+
+So before any agent touches email, two of the three mailboxes need connecting,
+either by linking the other accounts to Superhuman's MCP or by connecting them
+another way. Then the decision about what an agent may send unattended versus
+what it drafts for review. Reading is low risk. Sending on your behalf is not.
+
+**GHL and Glofox.** Not built. Each needs its credentials and the same
+unattended versus draft decision.
 
 **Kevin on Wingman.** Kevin currently runs on the home machine. Two ways to join
 them, and the right one depends on what Kevin exposes. If Kevin is config,
