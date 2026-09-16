@@ -5,20 +5,16 @@ pick up the same conversation.
 
 ## The three
 
-| Agent | Owns | Mailbox | Colour |
-|---|---|---|---|
-| **Bob** | The gyms: Nashville MMA Training Camp and Fighters Boxing Gym | ben@nashvillemma.com | Green |
-| **Kevin** | Growth Factor agency work | ben@growth-factor.ai | Orange |
-| **Stewart** | Personal and side hustles, Grove Investing | grove.investing@gmail.com | Purple |
+| Agent | Owns | Colour |
+|---|---|---|
+| **Bob** | The gyms: Nashville MMA Training Camp and Fighters Boxing Gym | Green |
+| **Kevin** | Growth Factor agency work | Orange |
+| **Stewart** | Personal and side hustles | Purple |
 
-The addresses come from the linked Google Calendar list, which shows all three
-identities. Bob's and Kevin's are certain. **Stewart owning
-grove.investing@gmail.com is an assumption**, made because Grove Investing reads
-as a side hustle rather than agency or gym work. Correct it in his brief if it
-is wrong.
-
-Each agent's brief names its own address and tells it to read and write from
-that one only, so mail is scoped the same way everything else is.
+**Mail is not split between them.** Every agent reads every linked account. The
+splitting happens in the Mail tab, by account, which is how it actually gets
+read. An agent is told to name which account a message is on rather than
+assume.
 
 Each keeps its own threads, its own memory and its own instructions. They are
 created automatically the first time you sign in, then they are ordinary rows
@@ -63,6 +59,38 @@ Three things sit on the server, and all three have to:
 
 The page holds nothing but a session token.
 
+## Mail
+
+One list across every linked account, with chips to filter down to one when you
+want it split. Threads open in place, because the list is the point and opening
+one should not navigate away from the rest.
+
+Each open thread offers three handoffs: draft a reply, add to calendar,
+summarise. All three push the thread to whichever agent you have open, in Chat,
+rather than doing it behind a button. That is deliberate. A reply you have not
+read should never leave, and a conversation is where you approve one.
+
+The agents are told: never send or delete without being asked in the
+conversation first, but creating and updating calendar events is fine
+unprompted, because those are easy to undo and you wanted them quick.
+
+**How it connects.** Superhuman is reached through the Claude API's MCP
+connector rather than by calling their endpoints directly, so their tool names
+and schemas are discovered at run time. When they change something, this keeps
+working. The `mail` function reads. The `chat` function gets the same connection
+so agents can act on what you send them.
+
+Set both in the Supabase function secrets:
+
+```
+SUPERHUMAN_MCP_URL      the Superhuman MCP server URL
+SUPERHUMAN_MCP_TOKEN    its authorization token
+```
+
+With `SUPERHUMAN_MCP_URL` unset, the Mail tab says it is not connected rather
+than showing an empty inbox that looks like you have no mail, and the agents
+simply have no mail tools.
+
 ## Mobile
 
 There is no separate mobile version and there does not need to be one. It is the
@@ -78,15 +106,17 @@ that.
 ## What is here
 
 ```
-dashboard.html              the whole front end, one file, four views
+dashboard.html              the whole front end, one file, five views
 config.example.js           project URL and anon key, copied to config.js
 supabase/schema.sql         six tables, row level security, triggers
 supabase/functions/chat/    the model proxy: auth, assemble, stream, persist
+supabase/functions/mail/    reads mail across every account, read only
 ```
 
-Four views. **Chat** is the work. **Memory** is what the agent carries between
-threads, filed to one agent or to all three. **Instructions** is that agent's own
-brief plus the shared ones. **Connections** is what it can reach.
+Five views. **Chat** is the work. **Mail** is every account in one list.
+**Memory** is what the agent carries between threads, filed to one agent or to
+all three. **Instructions** is that agent's own brief plus the shared ones.
+**Connections** is what it can reach.
 
 ## Model setup
 
@@ -183,17 +213,14 @@ fires an n8n workflow, moves a GHL pipeline, attaches as a tool behind the same
 function. Each tool can be scoped per agent, so Bob gets Glofox and Kevin gets
 GHL without either reaching into the other's systems.
 
-**Email.** Not built, and the access is not there yet either. Superhuman does
-have a working MCP with full read, draft and send, which reverses an earlier
-call in this repo that it had no usable write API. But mail access currently
-reaches one mailbox, ben@growth-factor.ai, through the Gmail connector. Calendar
-reaches all three identities, because calendars share across Google accounts and
-mailboxes do not.
+**Email access.** The Mail tab is built. What it needs is the connection: two of
+the three mailboxes are not reachable yet. Calendar reaches all three identities
+because calendars share across Google accounts; mailboxes do not. Link the other
+two accounts to Superhuman's MCP, set the two secrets above, and the tab fills.
 
-So before any agent touches email, two of the three mailboxes need connecting,
-either by linking the other accounts to Superhuman's MCP or by connecting them
-another way. Then the decision about what an agent may send unattended versus
-what it drafts for review. Reading is low risk. Sending on your behalf is not.
+An earlier note in this repo said Superhuman had no usable write API. That was
+wrong. Its MCP covers read, draft, send, calendar and a natural language query
+across both.
 
 **GHL and Glofox.** Not built. Each needs its credentials and the same
 unattended versus draft decision.

@@ -359,6 +359,54 @@
   .gate h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px; }
   .hidden { display: none !important; }
 
+  /* -------------------------------------------------------- mail ---------- */
+  .pad.wide { max-width: 860px; }
+  .head-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .chip-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--pill); padding: 8px 12px;
+    font-size: 12px; color: var(--ink-mid); cursor: pointer;
+  }
+  .chip-btn:hover { border-color: var(--ink-quiet); }
+  .chip-btn[aria-pressed="true"] {
+    border-color: var(--agent); color: var(--agent);
+    background: var(--agent-wash); font-weight: 600;
+  }
+
+  .mail-row {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line-soft);
+    border-radius: var(--r); box-shadow: var(--sh-sm);
+    padding: 12px 16px; margin-bottom: 8px;
+  }
+  .mail-row:hover { border-color: var(--line); }
+  .mail-row[aria-expanded="true"] { border-color: var(--agent); }
+  .mail-top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  }
+  .mail-from { font-size: 14px; font-weight: 600; }
+  .mail-row.unread .mail-from::before {
+    content: ""; display: inline-block; width: 8px; height: 8px;
+    border-radius: var(--pill); background: var(--agent); margin-right: 8px;
+  }
+  .mail-when { font-size: 12px; color: var(--ink-quiet); white-space: nowrap; }
+  .mail-subject { font-size: 14px; margin-top: 4px; }
+  .mail-sub2 {
+    font-size: 12px; color: var(--ink-quiet); margin-top: 4px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .msg { border-top: 1px solid var(--line-soft); padding-top: 12px; margin-top: 12px; }
+  .msg-meta { font-size: 12px; color: var(--ink-quiet); margin-bottom: 4px; }
+  .msg-body {
+    font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .mail-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
   /* ------------------------------------------------------- popup --------- */
   /* A popped out agent is a chat window and nothing else: no tabs, no rail in
      flow, no wordmark. Same file, same code, just stripped down. */
@@ -411,9 +459,9 @@
     .btn { padding: 8px 12px; }
     .btn.icon { padding: 8px 8px; }
 
-    /* Four tabs, 390px, no scrolling and no clipping. */
-    .tabs { padding: 8px 12px; gap: 4px; }
-    .tab { white-space: nowrap; padding: 8px 12px; font-size: 12px; }
+    /* Five tabs, 360px and up, no scrolling and no clipping. */
+    .tabs { padding: 8px 8px; gap: 4px; }
+    .tab { white-space: nowrap; padding: 8px 8px; font-size: 12px; }
 
     .chat-grid { grid-template-columns: 1fr; }
     .rail { display: none; }
@@ -428,10 +476,15 @@
     .hide-narrow { display: none; }
   }
 
-  /* Very small phones: the four tabs are the only thing that still does not
-     fit, so they tighten again rather than scroll. */
+  /* Below 360px five tabs genuinely will not fit at a comfortable tap size, so
+     the strip scrolls and the selected tab is scrolled into view. Nothing is
+     hidden, it is just off screen until you reach for it. */
   @media (max-width: 359px) {
-    .tabs { padding: 8px 8px; gap: 4px; }
+    .tabs {
+      padding: 8px 8px; gap: 4px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
     .tab { padding: 8px 8px; font-size: 12px; }
     .top { padding: 12px 12px; gap: 8px; }
   }
@@ -474,6 +527,7 @@
 
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-view="chat" aria-selected="true">Chat</button>
+    <button class="tab" role="tab" data-view="mail" aria-selected="false">Mail</button>
     <button class="tab" role="tab" data-view="memory" aria-selected="false">Memory</button>
     <button class="tab" role="tab" data-view="rules" aria-selected="false">Instructions</button>
     <button class="tab" role="tab" data-view="links" aria-selected="false">Connections</button>
@@ -511,6 +565,20 @@
           <p class="readout" id="chat-note"></p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------- mail -->
+  <section class="view" id="view-mail">
+    <div class="pad wide">
+      <div class="head-row">
+        <h2 class="sec">Mail</h2>
+        <button class="btn" id="mail-refresh">Refresh</button>
+      </div>
+      <p class="lede">Every linked account in one list. Filter to one when you want it split out. Replies and calendar events go through whichever agent you have open, so you see the draft before anything leaves.</p>
+      <div class="chips" id="mail-accounts"></div>
+      <p class="note" id="mail-note"></p>
+      <div id="mail-list"></div>
     </div>
   </section>
 
@@ -595,13 +663,13 @@ let pendingThread = null;
 const SEED = [
   { slug: "bob", name: "Bob", position: 0, accent: "#2F8A5B",
     role: "The gyms: Nashville MMA Training Camp and Fighters Boxing Gym",
-    brief: "You own the two gyms and nothing else. Nashville MMA Training Camp and Fighters Boxing Gym: their sites, their content, their classes, their members, their local search. Agency operations, other clients and anything personal belong to Kevin or Stewart.\n\nYour email address is ben@nashvillemma.com. Read and write from that one only." },
+    brief: "You own the two gyms and nothing else. Nashville MMA Training Camp and Fighters Boxing Gym: their sites, their content, their classes, their members, their local search. Agency operations, other clients and anything personal belong to Kevin or Stewart." },
   { slug: "kevin", name: "Kevin", position: 1, accent: "#C2521A",
     role: "Growth Factor agency work",
-    brief: "You own the agency. Client work, proposals, pricing, builds, SEO, ads, GHL automation, the pipeline, the process. The two gyms are Bob's. Anything personal is Stewart's.\n\nYour email address is ben@growth-factor.ai. Read and write from that one only." },
+    brief: "You own the agency. Client work, proposals, pricing, builds, SEO, ads, GHL automation, the pipeline, the process. The two gyms are Bob's. Anything personal is Stewart's." },
   { slug: "stewart", name: "Stewart", position: 2, accent: "#5B58C4",
     role: "Personal and side hustles",
-    brief: "You own everything outside the agency. Personal projects, side hustles, money, admin, whatever Ben is building that is not client work, Grove Investing included. Agency work is Kevin's. The gyms are Bob's.\n\nYour email address is grove.investing@gmail.com. Read and write from that one only." },
+    brief: "You own everything outside the agency. Personal projects, side hustles, money, admin, whatever Ben is building that is not client work. Agency work is Kevin's. The gyms are Bob's." },
 ];
 
 function device() {
@@ -833,6 +901,8 @@ document.querySelectorAll(".tab").forEach((tab) => {
     document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
     document.querySelectorAll(".view").forEach((v) => v.classList.remove("on"));
     $("view-" + tab.dataset.view).classList.add("on");
+    tab.scrollIntoView({ block: "nearest", inline: "nearest" });
+    if (tab.dataset.view === "mail") loadMail();
   });
 });
 
@@ -1220,6 +1290,160 @@ async function loadLinks() {
     list.appendChild(card);
   }
 }
+
+/* ------------------------------------------------------------------ mail */
+/* Mail is not scoped per agent: every agent reads every account. The filter
+   here is by account, which is how Ben actually reads it. */
+let mailAccounts = [], mailFilter = [], mailThreads = [], mailLoaded = false;
+
+async function callMail(payload) {
+  const res = await fetch(cfg.supabaseUrl + "/functions/v1/mail", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: "Bearer " + session.access_token,
+    },
+    body: JSON.stringify(payload),
+  });
+  let data = {};
+  try { data = await res.json(); } catch {}
+  if (!res.ok) throw new Error(data.message || data.error || "Server said " + res.status);
+  return data;
+}
+
+async function loadMail(force = false) {
+  if (mailLoaded && !force) return;
+  note($("mail-note"), "Reading...");
+  $("mail-list").textContent = "";
+  try {
+    if (!mailAccounts.length) {
+      const got = await callMail({ action: "accounts" });
+      mailAccounts = got.accounts || [];
+      renderMailAccounts();
+    }
+    const got = await callMail({ action: "list", accounts: mailFilter });
+    mailThreads = got.threads || [];
+    mailLoaded = true;
+    renderMail();
+    const n = mailThreads.length;
+    note($("mail-note"), n
+      ? n + (n === 1 ? " thread" : " threads") +
+        (mailFilter.length ? " in " + mailFilter.join(", ") : " across every account")
+      : "Nothing in the inbox.");
+  } catch (err) {
+    note($("mail-note"), err.message, true);
+  }
+}
+
+function renderMailAccounts() {
+  const row = $("mail-accounts");
+  row.textContent = "";
+  const make = (label, emails) => {
+    const b = document.createElement("button");
+    b.className = "chip-btn";
+    b.textContent = label;
+    const on = emails.length
+      ? emails.every((e) => mailFilter.includes(e)) && mailFilter.length === emails.length
+      : mailFilter.length === 0;
+    b.setAttribute("aria-pressed", String(on));
+    b.addEventListener("click", () => {
+      mailFilter = emails;
+      renderMailAccounts();
+      loadMail(true);
+    });
+    row.appendChild(b);
+  };
+  make("All accounts", []);
+  for (const a of mailAccounts) make(a.email, [a.email]);
+}
+
+function renderMail() {
+  const list = $("mail-list");
+  list.textContent = "";
+  for (const t of mailThreads) {
+    const row = document.createElement("button");
+    row.className = "mail-row" + (t.unread ? " unread" : "");
+    row.setAttribute("aria-expanded", "false");
+
+    const top = document.createElement("div");
+    top.className = "mail-top";
+    const from = document.createElement("span");
+    from.className = "mail-from"; from.textContent = t.from;
+    const when = document.createElement("span");
+    when.className = "mail-when"; when.textContent = ago(t.date);
+    top.append(from, when);
+
+    const subject = document.createElement("div");
+    subject.className = "mail-subject"; subject.textContent = t.subject;
+
+    const sub2 = document.createElement("div");
+    sub2.className = "mail-sub2";
+    sub2.textContent = [t.account, t.needsReply ? "waiting on you" : null, t.snippet]
+      .filter(Boolean).join("  ·  ");
+
+    row.append(top, subject, sub2);
+    row.addEventListener("click", () => openMail(row, t));
+    list.appendChild(row);
+  }
+}
+
+/* Expand in place. The list is the point, so opening one does not navigate
+   away from the rest of it. */
+async function openMail(row, t) {
+  if (row.getAttribute("aria-expanded") === "true") {
+    row.setAttribute("aria-expanded", "false");
+    row.querySelectorAll(".msg, .mail-actions").forEach((n) => n.remove());
+    return;
+  }
+  row.setAttribute("aria-expanded", "true");
+  const loading = document.createElement("div");
+  loading.className = "msg"; loading.textContent = "Opening...";
+  row.appendChild(loading);
+
+  try {
+    const full = await callMail({ action: "thread", threadId: t.id });
+    loading.remove();
+    for (const m of full.messages || []) {
+      const msg = document.createElement("div");
+      msg.className = "msg";
+      const meta = document.createElement("div");
+      meta.className = "msg-meta";
+      meta.textContent = m.from + "  to  " + m.to + "  ·  " + ago(m.date);
+      const body = document.createElement("div");
+      body.className = "msg-body"; body.textContent = m.body;
+      msg.append(meta, body);
+      row.appendChild(msg);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "mail-actions";
+    const act = (label, prompt) => {
+      const b = document.createElement("button");
+      b.className = "btn"; b.textContent = label;
+      b.addEventListener("click", (e) => { e.stopPropagation(); handOff(prompt); });
+      actions.appendChild(b);
+    };
+    const ref = `the thread "${t.subject}" from ${t.from} on ${t.account} (id ${t.id})`;
+    act("Draft a reply", `Read ${ref} and draft a reply. Show me the draft, do not send it.`);
+    act("Add to calendar", `Read ${ref} and create the calendar event it is asking for. Tell me what you booked.`);
+    act("Summarise", `Read ${ref} and tell me what it needs from me, in two lines.`);
+    row.appendChild(actions);
+  } catch (err) {
+    loading.textContent = err.message;
+  }
+}
+
+/* Anything that writes goes to the agent, where there is a conversation to
+   approve it in rather than a button that silently sends mail. */
+function handOff(text) {
+  document.querySelector('.tab[data-view="chat"]').click();
+  const box = $("say");
+  box.value = text;
+  box.dispatchEvent(new Event("input"));
+  box.focus();
+}
+
+$("mail-refresh").addEventListener("click", () => loadMail(true));
 
 /* The rail is an overlay on a phone, so its controls only exist there. */
 const narrow = window.matchMedia("(max-width: 860px)");

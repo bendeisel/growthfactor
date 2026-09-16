@@ -20,6 +20,12 @@ const MODEL = "claude-opus-5";
 // no model list to maintain.
 const FALLBACK_BETA = "server-side-fallback-2026-07-01";
 
+// Mail and calendar reach the agents through the MCP connector, so tool names
+// and schemas are discovered at run time rather than hardcoded. Optional: with
+// no URL set the agents simply have no mail tools.
+const MCP_BETA = "mcp-client-2025-11-20";
+const MCP_SERVER = "superhuman";
+
 const CORS = {
   "Access-Control-Allow-Origin": Deno.env.get("DASHBOARD_ORIGIN") ?? "*",
   "Access-Control-Allow-Headers": "authorization, content-type",
@@ -42,6 +48,14 @@ const HOUSE_RULES = [
   "You are one of three agents with separate jobs. Stay inside yours. If Ben",
   "raises something that clearly belongs to one of the others, answer what you",
   "usefully can and tell him which one it belongs to.",
+  "",
+  "Mail is not split between you. Every agent reads every linked account, so",
+  "say which account a message is on rather than assuming it is yours.",
+  "",
+  "Never send an email or delete anything without Ben saying so in this",
+  "conversation first. Draft it, show him the draft, and wait. Creating and",
+  "updating calendar events is fine without asking, because those are easy to",
+  "undo and he asked for them to be quick.",
 ].join("\n");
 
 type Turn = { role: "user" | "assistant"; content: string };
@@ -147,6 +161,21 @@ Deno.serve(async (req: Request) => {
 
   const anthropic = new Anthropic({ apiKey: Deno.env.get("ANTHROPIC_API_KEY")! });
 
+  // Both halves or neither: a server in mcp_servers with no toolset referencing
+  // it is rejected as a validation error.
+  const mcpUrl = Deno.env.get("SUPERHUMAN_MCP_URL");
+  const mcpToken = Deno.env.get("SUPERHUMAN_MCP_TOKEN");
+  const mail = mcpUrl
+    ? {
+        betas: [FALLBACK_BETA, MCP_BETA],
+        mcp_servers: [{
+          type: "url" as const, url: mcpUrl, name: MCP_SERVER,
+          ...(mcpToken ? { authorization_token: mcpToken } : {}),
+        }],
+        tools: [{ type: "mcp_toolset" as const, mcp_server_name: MCP_SERVER }],
+      }
+    : { betas: [FALLBACK_BETA] };
+
   const stream = new ReadableStream({
     async start(controller) {
       let answer = "";
@@ -165,7 +194,7 @@ Deno.serve(async (req: Request) => {
         const run = anthropic.beta.messages.stream({
           model: MODEL,
           max_tokens: 64000,
-          betas: [FALLBACK_BETA],
+          ...mail,
           fallbacks: "default",
           // Adaptive thinking lets Claude decide how hard to think per message.
           // Summarized display means the dashboard can show that it is working
