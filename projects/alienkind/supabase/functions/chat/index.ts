@@ -1,10 +1,13 @@
 // Alien Kind: the model proxy.
 //
 // The dashboard is a static page. It never sees the Anthropic key, because the
-// key lives here, in Supabase's function secrets. The page sends a thread id
-// and a message; this function loads the shared state, calls Claude, streams
-// the answer back, and writes both turns to Postgres. That write is what makes
-// it one AI: the next device to open the thread reads the same rows.
+// key lives here, in Supabase's function secrets. The page sends an agent, a
+// thread and a message; this function assembles that agent's view of the world,
+// calls Claude, streams the answer back, and writes both turns to Postgres.
+//
+// Three agents share this one function. What separates them is what gets
+// assembled below: shared rules and shared memory for all of them, then the
+// agent's own brief and its own memory on top.
 
 import Anthropic from "npm:@anthropic-ai/sdk@^0.71.0";
 import { createClient } from "npm:@supabase/supabase-js@^2.49.0";
@@ -23,10 +26,10 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const BASE_RULES = [
-  "You are Alien Kind, the in-house AI for Growth Factor AI, an agency that",
-  "grows businesses with WordPress, SEO, ads, AI agents and GHL automation.",
-  "The slogan is Automate Everything. The mission is under promise, over deliver.",
+const HOUSE_RULES = [
+  "You work for Growth Factor AI, Ben's agency. It grows businesses with",
+  "WordPress, SEO, ads, AI agents and GHL automation. The slogan is Automate",
+  "Everything. The mission is under promise, over deliver.",
   "",
   "Writing rules that are not negotiable:",
   "- Never use an em dash. Rewrite with a comma, a period, or a colon.",
@@ -35,6 +38,10 @@ const BASE_RULES = [
   "- Short, concise, attention grabbing. Change the reader's perspective.",
   "",
   "Ben works on Windows. Give Windows paths and shortcuts, never Mac ones.",
+  "",
+  "You are one of three agents with separate jobs. Stay inside yours. If Ben",
+  "raises something that clearly belongs to one of the others, answer what you",
+  "usefully can and tell him which one it belongs to.",
 ].join("\n");
 
 type Turn = { role: "user" | "assistant"; content: string };
@@ -69,7 +76,7 @@ Deno.serve(async (req: Request) => {
   if (authError || !auth?.user) return fail("Not signed in", 401);
   const userId = auth.user.id;
 
-  let body: { threadId?: string; message?: string; device?: string };
+  let body: { agentId?: string; threadId?: string; message?: string; device?: string };
   try {
     body = await req.json();
   } catch {
@@ -79,27 +86,33 @@ Deno.serve(async (req: Request) => {
   const message = (body.message ?? "").trim();
   const device = (body.device ?? "unknown").slice(0, 60);
   if (!message) return fail("Empty message", 400);
+  if (!body.agentId) return fail("No agent chosen", 400);
 
-  // A missing thread id means this is a new conversation. Title it from the
-  // opening line so the thread list is readable without opening anything.
+  const { data: agent, error: agentError } = await db
+    .from("agents").select("id, name, role, brief").eq("id", body.agentId).single();
+  if (agentError || !agent) return fail("That agent does not exist", 404);
+
+  // A missing thread id means this is a new conversation with this agent. Title
+  // it from the opening line so the list is readable without opening anything.
   let threadId = body.threadId;
   if (!threadId) {
     const title = message.length > 60 ? `${message.slice(0, 57)}...` : message;
     const { data, error } = await db
       .from("threads")
-      .insert({ user_id: userId, title })
+      .insert({ user_id: userId, agent_id: agent.id, title })
       .select("id")
       .single();
     if (error || !data) return fail(`Could not open a thread: ${error?.message}`, 500);
     threadId = data.id;
   }
 
-  // Shared state: the rules, the memory, and this thread's history. All three
-  // are read fresh on every call, so an edit made on one device is in force on
-  // the next message sent from any other.
-  const [instructionsRes, memoryRes, historyRes] = await Promise.all([
+  // This agent's view: the shared rules, the memory it can see, and this
+  // thread's history. Read fresh on every call, so an edit made on one device
+  // is in force on the next message sent from any other.
+  const [sharedRes, memoryRes, historyRes] = await Promise.all([
     db.from("instructions").select("body").eq("user_id", userId).maybeSingle(),
-    db.from("memory").select("label, body").eq("user_id", userId).eq("pinned", true)
+    db.from("memory").select("label, body, agent_id").eq("pinned", true)
+      .or(`agent_id.is.null,agent_id.eq.${agent.id}`)
       .order("updated_at", { ascending: true }),
     db.from("messages").select("role, content").eq("thread_id", threadId)
       .order("created_at", { ascending: true }).limit(200),
@@ -107,15 +120,26 @@ Deno.serve(async (req: Request) => {
 
   if (historyRes.error) return fail(`Could not read the thread: ${historyRes.error.message}`, 500);
 
-  const operatorRules = (instructionsRes.data?.body ?? "").trim();
-  const memoryBlock = (memoryRes.data ?? [])
-    .map((row) => `- ${row.label}: ${row.body}`)
-    .join("\n");
+  const rows = memoryRes.data ?? [];
+  const shared = rows.filter((r) => !r.agent_id);
+  const mine = rows.filter((r) => r.agent_id);
+  const list = (rs: typeof rows) => rs.map((r) => `- ${r.label}: ${r.body}`).join("\n");
+
+  const identity = [
+    `You are ${agent.name}.`,
+    agent.role && `Your job: ${agent.role}.`,
+    "Everything outside that belongs to one of the other agents.",
+  ].filter(Boolean).join(" ");
 
   const systemText = [
-    BASE_RULES,
-    operatorRules && `\nOperating instructions set from the dashboard:\n${operatorRules}`,
-    memoryBlock && `\nWhat you already know:\n${memoryBlock}`,
+    identity,
+    "",
+    HOUSE_RULES,
+    (sharedRes.data?.body ?? "").trim() &&
+      `\nInstructions that apply to all three agents:\n${(sharedRes.data!.body).trim()}`,
+    agent.brief.trim() && `\nYour own instructions:\n${agent.brief.trim()}`,
+    shared.length && `\nWhat every agent knows:\n${list(shared)}`,
+    mine.length && `\nWhat you know that the others do not:\n${list(mine)}`,
   ].filter(Boolean).join("\n");
 
   const history: Turn[] = (historyRes.data ?? []) as Turn[];
@@ -147,8 +171,8 @@ Deno.serve(async (req: Request) => {
           // Summarized display means the dashboard can show that it is working
           // instead of sitting silent on anything that takes a while.
           thinking: { type: "adaptive", display: "summarized" },
-          // The rules and memory are stable across a conversation, so they sit
-          // behind a cache breakpoint. The turns after it are the volatile part.
+          // The identity, rules and memory are stable across a conversation, so
+          // they sit behind a cache breakpoint. The turns after it are volatile.
           system: [{ type: "text", text: systemText, cache_control: { type: "ephemeral" } }],
           messages: turns,
         });

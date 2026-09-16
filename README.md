@@ -67,7 +67,10 @@ projects/alienkind/   not a client: the in-house AI dashboard
 
 ## Alien Kind
 
-`projects/alienkind/` is the internal AI dashboard, built on the same kernel as
-the build console. It is one AI reachable from every machine rather than one per
-browser, which it manages by keeping the key, the threads, the memory and the
-instructions on the server instead of in the page. Setup is in its own README.
+`projects/alienkind/` is the internal AI dashboard. Three agents, Bob for the
+gyms, Kevin for the agency and Stewart for personal work, each with their own
+threads, memory and instructions, switched by a dropdown or run side by side in
+separate windows. Each one is reachable from every machine rather than being a
+different assistant per browser, which it manages by keeping the key, the
+threads, the memory and the instructions on the server instead of in the page.
+Setup is in its own README.
