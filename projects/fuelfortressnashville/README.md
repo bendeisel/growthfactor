@@ -82,6 +82,14 @@ The fix is the environment's network policy, chosen when the environment was
 created. See https://code.claude.com/docs/en/claude-code-on-the-web. With outbound
 access allowed, the assets can be pulled straight off the live site.
 
+**Google Drive is a working delivery route.** An MCP download whose result is too
+large for context is spilled to a tool-results file on disk instead, so the bytes
+never pass through the conversation and size stops being the constraint. Verified
+end to end: a 94 KB PNG and a 3.9 MB zip both came back byte-for-byte intact.
+`site/drive_unpack.py` decodes that spilled file and unzips it, then hands the
+folder to `prep_assets.py`. Chat attachment still works and is simpler for anything
+under the 30 MB upload cap.
+
 `site/prep_assets.py` handles media once it arrives: `python3 prep_assets.py <folder
 or zip>`. It matches each drone shot to its gallery slot by the timestamp in the
 filename, downsamples to 1600px, writes progressive JPEG plus WebP, and transcodes
