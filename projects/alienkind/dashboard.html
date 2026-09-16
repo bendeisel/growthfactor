@@ -38,6 +38,7 @@
     /* Per-agent tint. Set on #app when the agent changes. */
     --agent:      var(--accent);
     --agent-wash: var(--accent-wash);
+    --agent-veil: #C2521A0A;
 
     --r-xs:  6px;
     --r-sm:  10px;
@@ -194,6 +195,11 @@
   #app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
   .view { display: none; }
   .view.on { display: block; }
+  /* The tint sits behind content and fades out by 260px, so it reads as warmth
+     rather than as a coloured panel with an edge. */
+  #view-chat.on, #view-mail.on, #view-memory.on, #view-rules.on, #view-links.on {
+    background-image: linear-gradient(180deg, var(--agent-veil) 0, transparent 260px);
+  }
   #view-chat.on { display: flex; flex: 1; min-height: 0; }
   #view-memory.on, #view-rules.on, #view-links.on { flex: 1; overflow-y: auto; }
 
@@ -224,8 +230,10 @@
   .thread:hover { background: var(--surface-2); color: var(--ink); }
   .thread[aria-current="true"] {
     background: var(--surface); color: var(--ink);
-    box-shadow: var(--sh-sm); border: 1px solid var(--line-soft);
-    padding: 8px 12px;
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--line-soft);
+    border-left: 4px solid var(--agent);
+    padding: 8px 12px 8px 8px;
   }
   .thread b {
     display: block; font-weight: 500; font-size: 14px;
@@ -245,7 +253,9 @@
   /* Ben's turns sit in a card. The agent answers in plain text, so the reply
      reads as prose rather than as a chat bubble. */
   .turn.me .wrap-in {
-    background: var(--surface); border: 1px solid var(--line-soft);
+    background-color: var(--surface);
+    background-image: linear-gradient(135deg, var(--agent-veil) 0, transparent 70%);
+    border: 1px solid var(--line-soft);
     border-radius: var(--r); box-shadow: var(--sh-sm);
     padding: 12px 16px; margin-left: auto; max-width: 92%;
   }
@@ -277,7 +287,10 @@
     border-radius: var(--r-lg); padding: 8px 8px 8px 16px;
     box-shadow: var(--sh);
   }
-  .composer-in:focus-within { border-color: var(--agent); }
+  .composer-in:focus-within {
+    border-color: var(--agent);
+    box-shadow: var(--sh), 0 0 0 4px var(--agent-veil);
+  }
   textarea#say {
     flex: 1; resize: none; min-height: 28px; max-height: 200px;
     background: transparent; border: 0; outline: none;
@@ -383,6 +396,11 @@
     background: var(--surface); border: 1px solid var(--line-soft);
     border-radius: var(--r); box-shadow: var(--sh-sm);
     padding: 12px 16px; margin-bottom: 8px;
+  }
+  .mail-row.unread {
+    border-left: 4px solid var(--agent);
+    padding-left: 12px;
+    background-image: linear-gradient(90deg, var(--agent-veil) 0, transparent 160px);
   }
   .mail-row:hover { border-color: var(--line); }
   .mail-row[aria-expanded="true"] { border-color: var(--agent); }
@@ -793,6 +811,7 @@ function pick(next, push = true) {
   if (push) location.hash = agent.slug;
   document.documentElement.style.setProperty("--agent", agent.accent);
   document.documentElement.style.setProperty("--agent-wash", agent.accent + "1A");
+  document.documentElement.style.setProperty("--agent-veil", agent.accent + "14");
 
   const av = $("cur-av");
   av.style.background = agent.accent;

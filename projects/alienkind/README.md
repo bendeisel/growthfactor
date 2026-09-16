@@ -111,7 +111,38 @@ config.example.js           project URL and anon key, copied to config.js
 supabase/schema.sql         six tables, row level security, triggers
 supabase/functions/chat/    the model proxy: auth, assemble, stream, persist
 supabase/functions/mail/    reads mail across every account, read only
+supabase/migrations/        against the existing Alien Kind AI project
 ```
+
+## The existing database
+
+There is already an **Alien Kind AI** Supabase project (`bzenkskiplgfqxfycdwv`)
+with a working schema: `conversations`, `learning_ledger`,
+`consciousness_entries`, `terminal_state`. Wingman writes to it, and terminals
+register themselves in `terminal_state` with their pid and repo context.
+
+That schema is the better spine. Its `conversations` table carries a `channel`
+column covering terminal, telegram, heartbeat, nightly and web, which means a
+terminal conversation and a dashboard conversation can live in one table. The
+threads and messages tables in `schema.sql` would split exactly what that
+unifies, so they are not the plan of record.
+
+`supabase/migrations/0001_lockdown_and_agents.sql` adapts to it: it shuts the
+open grants, adds the three agents, and hangs `conversations` off an agent.
+**It has not been applied.**
+
+### Security note, worth reading before shipping anything
+
+Every one of those four tables has RLS enabled with a policy of `USING (true)`
+for role `public`, and the `anon` role holds SELECT, INSERT, UPDATE, DELETE and
+TRUNCATE on all of them. Enabled RLS with an always-true policy is a switch that
+is on and doing nothing.
+
+The anon key is meant to be public and ships in any browser client. Nothing
+reads these tables from a browser yet, so this is a door left open rather than a
+break-in, but it has to be shut before the dashboard goes up. Part 1 of the
+migration does that, and it is worth applying on its own whether or not the rest
+lands.
 
 Five views. **Chat** is the work. **Mail** is every account in one list.
 **Memory** is what the agent carries between threads, filed to one agent or to
