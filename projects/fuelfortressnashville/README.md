@@ -82,6 +82,12 @@ The fix is the environment's network policy, chosen when the environment was
 created. See https://code.claude.com/docs/en/claude-code-on-the-web. With outbound
 access allowed, the assets can be pulled straight off the live site.
 
+Drop-off folder for this client:
+**My Drive / Client Assets / Fuel Fortress Nashville**
+(`1ObA608bFa2rxSDP5XBfcgvzCbHrvlhOe`). Search by title works regardless of where a
+file sits, so the folder is a convention for humans rather than a technical
+requirement.
+
 **Google Drive is a working delivery route.** An MCP download whose result is too
 large for context is spilled to a tool-results file on disk instead, so the bytes
 never pass through the conversation and size stops being the constraint. Verified
