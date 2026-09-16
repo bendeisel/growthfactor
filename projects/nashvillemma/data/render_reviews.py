@@ -65,6 +65,33 @@ PROGRAM_TAGS = {
 }
 
 
+
+# How hard each topic pushes to the front of a mixed lane (homepage, reviews
+# page).  Boxing and kids jiu jitsu lead; Muay Thai and MMA are still present,
+# just not first.  Applies to any review added later, without touching a page.
+FEATURE_WEIGHT = {
+    "boxing": 6,
+    "kids": 4,
+    "jiu-jitsu": 3,
+    "muay-thai": 2,
+    "mma": 1,
+    "self-defense": 1,
+}
+
+
+def score(r):
+    w = sum(FEATURE_WEIGHT.get(t, 0) for t in r["tags"])
+    if "kids" in r["tags"] and "jiu-jitsu" in r["tags"]:
+        w += 5          # the exact combination we want most of
+    return w
+
+
+def featured(limit=None, min_words=8):
+    """Mixed pool, ordered by topic priority first and length second."""
+    rows = load(min_words=min_words)
+    rows.sort(key=lambda r: (-score(r), -r["words"]))
+    return rows[:limit] if limit else rows
+
 def initials(name):
     parts = [p for p in name.replace('"', " ").replace("“", " ").split() if p[:1].isalpha()]
     if not parts:

@@ -318,11 +318,11 @@ def simple(slug, source, title, eyebrow, hero_img=None, height=2200):
 # engine or an AI answer engine.  As plain text, grouped under topic headings,
 # it is.  Each review appears in exactly one bucket: no duplicated copy.
 REVIEW_BUCKETS = [
-    (["kids", "jiu-jitsu"], "Kids Jiu Jitsu"),
-    (["muay-thai"],         "Muay Thai"),
     (["boxing"],            "Boxing"),
+    (["kids", "jiu-jitsu"], "Kids Jiu Jitsu"),
     (["jiu-jitsu"],         "Brazilian Jiu Jitsu"),
     (["kids"],              "Kids Martial Arts"),
+    (["muay-thai"],         "Muay Thai"),
     (["mma"],               "Mixed Martial Arts"),
     (["wrestling"],         "Wrestling"),
     (["self-defense"],      "Self-Defense"),
@@ -339,7 +339,7 @@ def review_card(r):
             '</figcaption></figure>') % (RV.esc(r["text"]), RV.initials(r["name"]), RV.esc(r["name"]))
 
 def reviews_page():
-    allr = RV.load(min_words=4)
+    allr = RV.featured(min_words=4)
     b = [hero("Reviews", None, "What Members Say")]
 
     # moving lane up top
