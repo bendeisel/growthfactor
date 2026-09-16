@@ -62,4 +62,12 @@ cp .claude/skills/site-factory/config.example.env \
 ```
 .claude/skills/       the routines and the design law
 projects/<slug>/      one directory per client: kernel.json, intake.md, site.html
+projects/alienkind/   not a client: the in-house AI dashboard
 ```
+
+## Alien Kind
+
+`projects/alienkind/` is the internal AI dashboard, built on the same kernel as
+the build console. It is one AI reachable from every machine rather than one per
+browser, which it manages by keeping the key, the threads, the memory and the
+instructions on the server instead of in the page. Setup is in its own README.
