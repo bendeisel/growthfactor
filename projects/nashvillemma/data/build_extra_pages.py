@@ -207,11 +207,11 @@ LABEL = {"jiu-jitsu":"Brazilian Jiu Jitsu","boxing":"Boxing","muay-thai":"Muay T
   "mixed-martial-arts":"Mixed Martial Arts","wrestling":"Wrestling","self-defense":"Self-Defense",
   "mma-fight-team":"MMA Fight Team","womens-classes":"Women's Classes",
   "kids-martial-arts":"Kids Martial Arts","kids-brazilian-jiu-jitsu":"Kids BJJ",
-  "kids-fitness":"Kids Fitness","sports-performance":"Sports Performance",
+  "kids-fitness":"Kids Fitness","strength-training":"Strength Training",
   "personal-training":"Personal Training","open-gym":"Open Gym"}
 GRP = [("Adults Martial Arts", ["jiu-jitsu","boxing","muay-thai","mixed-martial-arts","wrestling","self-defense","mma-fight-team","womens-classes"]),
        ("Kids Programs", ["kids-martial-arts","kids-brazilian-jiu-jitsu","kids-fitness"]),
-       ("Fitness & Facility", ["sports-performance","personal-training","open-gym"])]
+       ("Strength Training", ["strength-training","personal-training","open-gym"])]
 t2, secs2 = blocks_to_sections(parse("services"))
 body = [hero("Martial Arts and Fitness Programs Available In Nashville", "prog-jiu-jitsu-hero.jpg", "Programs")]
 if secs2 and secs2[0]["paras"]:
@@ -379,17 +379,63 @@ def reviews_page():
 
 built.append(reviews_page())
 built.append(simple("contact", "contact", "Contact Us Today!", "Get In Touch"))
-built.append(simple("sponsors", "classes-sponsors", "Sponsorships", "Partners"))
+# ── Sponsors — split cleanly from Events.  Only the sponsor half of the
+# vendor page; the events half now lives on events.html behind the GHL portal.
+sp_paras = [t for k, t in parse("classes-sponsors")
+            if k == "p" and ("sponsor" in t.lower() or "partnership" in t.lower())]
+SPONSORS = ["Black Dog Holdings", "Fuel Nutrition", "Compass Human Performance"]
+cards = "".join(
+    '<div style="%s; padding: 40px 30px; text-align: center">'
+    '<div style="font-family: %s; font-size: 34px; line-height: 1.05; color: #FFFFFF">%s</div>'
+    '</div>' % (PANEL, BEBAS, n) for n in SPONSORS)
+b = [hero("Sponsors", None, "Thank You To Our Partners")]
+if sp_paras:
+    b.append(section("Thank You To Our Wonderful Sponsors", sp_paras[:2], gold=True, n=0))
+b.append('<div class="rv" style="background: #000000; padding: 70px 48px">'
+         '\n  <div class="micro" style="margin-bottom: 12px">Current Sponsors</div>'
+         '\n  <h2 style="font-size: 54px; line-height: 1; margin-bottom: 32px">Who Backs This Gym</h2>'
+         '\n  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px">'
+         + cards + '</div>\n</div>')
+b.append(section("How To Become A Sponsor",
+                 ["Sponsoring Nashville MMA Training Camp puts your business in front of hundreds of "
+                  "members every week, on the mats, on the gym side and at our events. If you would like "
+                  "to talk about a partnership, call us at ( 615-297-4430 ) or use the form below and we "
+                  "will get straight back to you."], gold=False, n=1))
+b.append(cta())
+built.append(write("sponsors", "Sponsors", "\n\n".join(b), 2300))
 built.append(simple("blog", "blog", "Blog", "News & Notes"))
 
-# recovery: the Recovery Room paragraph from the facilities copy
-rec = [p for k, p in parse("classes-facilities") if k == "p" and "Recovery Room" in p]
+# recovery: written out properly in the gym's voice (content/overrides/recovery.md)
 img = find_img(r"DSC09321|DSC09331")
 if img: prep(img, os.path.join(IMGOUT, "page-recovery-hero.jpg"), 1200)
-b = [hero("Recovery Room", "page-recovery-hero.jpg" if img else None, "Included With Adult Memberships")]
-if rec: b.append(section("Recover Like a Pro", rec, gold=True, n=0))
-b.append(cta())
-built.append(write("recovery", "Recovery Room", "\n\n".join(b), 1900))
+built.append(simple("recovery", "overrides/recovery", "Recovery Room",
+                    "Included With Adult Memberships",
+                    "page-recovery-hero.jpg" if img else None, 3000))
+
+# ── Recovery Partners — second item under the Recovery menu.  We have no source
+# copy for this and inventing partner businesses is not an option, so the page
+# ships as a real frame with the gap marked.
+b = [hero("Recovery Partners", None, "Who We Work With"),
+     section("Our Recovery Partners",
+             ["Nashville MMA Training Camp works with local recovery and health partners to look "
+              "after our members outside the gym."], gold=True, n=0),
+     '<div class="rv" style="background: #000000; padding: 70px 48px">'
+     '\n  <p class="ph" style="font-size: 19px; line-height: 1.7; max-width: 70ch">[Recovery partner '
+     'list goes here \u2014 business name, what they do for our members, the discount or arrangement, '
+     'and a link. Not written yet: the current site lists this page in the menu but we have no copy '
+     'for it on file, so nothing has been invented.]</p>\n</div>',
+     cta()]
+built.append(write("recovery-partners", "Recovery Partners", "\n\n".join(b), 1700))
+
+# ── Facilities — the tour page, lifted from the gym's own copy
+img = find_img(r"DSC05515|DSC09116")
+if img: prep(img, os.path.join(IMGOUT, "page-facilities-hero.jpg"), 1200)
+built.append(simple("facilities", "classes-facilities", "Facilities", "Take A Look Inside",
+                    "page-facilities-hero.jpg" if img else None, 3000))
+
+# ── Gear Recommendations — lives under About on the current site
+built.append(simple("gear", "blog-155719-gear-recommendations", "Gear Recommendations",
+                    "What To Buy, What To Skip", None, 2400))
 
 # ══ EVENTS — GoHighLevel embed ═════════════════════════════════════════════
 ev = [p for k, p in parse("classes-sponsors") if k == "p"][:2]

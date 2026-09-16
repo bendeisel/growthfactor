@@ -1,4 +1,67 @@
 
+  /* Nav dropdowns. Hover opens on a device that can hover, and the trigger
+     stays a real link so clicking Martial Arts goes to the programs index.
+     On touch, where there is no hover, the first tap opens the panel. */
+  function initNavDropdowns(root){
+    var wraps = (root || document).querySelectorAll('.dd-wrap');
+    var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;
+    var open = null;
+
+    function show(w){
+      if (open && open !== w) hide(open);
+      var p = w.querySelector('.dd-panel'), t = w.querySelector('.dd-trigger');
+      if (!p) return;
+      p.hidden = false; w.setAttribute('data-open','1');
+      if (t) t.setAttribute('aria-expanded','true');
+      open = w;
+    }
+    function hide(w){
+      var p = w.querySelector('.dd-panel'), t = w.querySelector('.dd-trigger');
+      if (!p) return;
+      p.hidden = true; w.removeAttribute('data-open');
+      if (t) t.setAttribute('aria-expanded','false');
+      if (open === w) open = null;
+    }
+
+    for (var i = 0; i < wraps.length; i++) (function(w){
+      var trg = w.querySelector('.dd-trigger');
+      var shutTimer = null;
+
+      if (canHover) {
+        w.addEventListener('mouseenter', function(){
+          if (shutTimer) { clearTimeout(shutTimer); shutTimer = null; }
+          show(w);
+        });
+        w.addEventListener('mouseleave', function(){
+          shutTimer = setTimeout(function(){ hide(w); }, 120);
+        });
+        /* click is NOT bound here: the trigger is an anchor, so the click
+           navigates. Binding a toggle as well is what closed the panel
+           immediately after hover opened it. */
+      } else {
+        trg.addEventListener('click', function(e){
+          if (w.getAttribute('data-open') !== '1') { e.preventDefault(); show(w); }
+        });
+      }
+
+      trg.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault(); show(w);
+          var first = w.querySelector('.dd-item'); if (first) first.focus();
+        }
+      });
+    })(wraps[i]);
+
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && open) hide(open); });
+    document.addEventListener('click', function(e){
+      if (open && !open.contains(e.target)) hide(open);
+    });
+    document.addEventListener('focusin', function(e){
+      if (open && !open.contains(e.target)) hide(open);
+    });
+  }
+  initNavDropdowns(document);
+
   /* Review marquee — rAF so it keeps moving in low-power mode, where the
      browser silently pauses CSS animations. Hovering a lane pauses it. */
   function initReviewMarquees(root){

@@ -59,7 +59,7 @@ PROGRAM_TAGS = {
     "womens-classes":           ["self-defense"],
     "kids-martial-arts":        ["kids"],
     "kids-fitness":             ["kids"],
-    "sports-performance":       ["fitness"],
+    "strength-training":        ["fitness"],
     "open-gym":                 ["fitness"],
     "personal-training":        ["coaches"],
 }

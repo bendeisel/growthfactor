@@ -40,7 +40,7 @@ for f in sorted(os.listdir(PAGES)):
 
 # nav label -> destination. Pages we have not designed yet still get their real
 # URL so the gap shows up as a broken link instead of silently vanishing.
-NAV = [("About", "about.html"), ("Fitness", "programs/sports-performance.html"),
+NAV = [("About", "about.html"), ("Fitness", "programs/strength-training.html"),
        ("Programs", "programs/index.html"), ("Kids Programs", "programs/kids-martial-arts.html"),
        ("Schedule", "schedule.html"), ("Recovery", "recovery.html"),
        ("Events &amp; Sponsorships", "events.html")]
@@ -100,8 +100,12 @@ def wire_nav(body, url, active):
     body = body.replace("</a><a href", "<a href", 1)
     # dropdown / footer links are authored root-relative — add the depth prefix
     if p:
-        body = re.sub(r'href="((?:programs|coaches)/[a-z0-9-]+\.html|(?:schedule|about|contact|events|recovery|privacy|terms|coaches|faq|reviews|sponsors|blog)\.html)"',
-                      lambda m: 'href="%s%s"' % (p, m.group(1)), body)
+        # Any root-relative .html link gets the depth prefix.  This used to be a
+        # hardcoded list of page names, so every page added later (facilities,
+        # gear, recovery-partners) broke on nested URLs until it was listed.
+        body = re.sub(
+            r'href="(?!https?:|//|/|#|\.\./|mailto:|tel:|sms:)([A-Za-z0-9._/-]+\.html)"',
+            lambda m: 'href="%s%s"' % (p, m.group(1)), body)
     # in-page buttons that name a destination
     body = body.replace('<a href="#" class="btn-line"', '<a href="%sschedule.html" class="btn-line"' % p)
     body = re.sub(r'<a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>',
@@ -128,6 +132,69 @@ catch (e) { console.error('page init', e); }</script>
 """
 
 SITE_JS = """
+  /* Nav dropdowns. Hover opens on a device that can hover, and the trigger
+     stays a real link so clicking Martial Arts goes to the programs index.
+     On touch, where there is no hover, the first tap opens the panel. */
+  function initNavDropdowns(root){
+    var wraps = (root || document).querySelectorAll('.dd-wrap');
+    var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;
+    var open = null;
+
+    function show(w){
+      if (open && open !== w) hide(open);
+      var p = w.querySelector('.dd-panel'), t = w.querySelector('.dd-trigger');
+      if (!p) return;
+      p.hidden = false; w.setAttribute('data-open','1');
+      if (t) t.setAttribute('aria-expanded','true');
+      open = w;
+    }
+    function hide(w){
+      var p = w.querySelector('.dd-panel'), t = w.querySelector('.dd-trigger');
+      if (!p) return;
+      p.hidden = true; w.removeAttribute('data-open');
+      if (t) t.setAttribute('aria-expanded','false');
+      if (open === w) open = null;
+    }
+
+    for (var i = 0; i < wraps.length; i++) (function(w){
+      var trg = w.querySelector('.dd-trigger');
+      var shutTimer = null;
+
+      if (canHover) {
+        w.addEventListener('mouseenter', function(){
+          if (shutTimer) { clearTimeout(shutTimer); shutTimer = null; }
+          show(w);
+        });
+        w.addEventListener('mouseleave', function(){
+          shutTimer = setTimeout(function(){ hide(w); }, 120);
+        });
+        /* click is NOT bound here: the trigger is an anchor, so the click
+           navigates. Binding a toggle as well is what closed the panel
+           immediately after hover opened it. */
+      } else {
+        trg.addEventListener('click', function(e){
+          if (w.getAttribute('data-open') !== '1') { e.preventDefault(); show(w); }
+        });
+      }
+
+      trg.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault(); show(w);
+          var first = w.querySelector('.dd-item'); if (first) first.focus();
+        }
+      });
+    })(wraps[i]);
+
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && open) hide(open); });
+    document.addEventListener('click', function(e){
+      if (open && !open.contains(e.target)) hide(open);
+    });
+    document.addEventListener('focusin', function(e){
+      if (open && !open.contains(e.target)) hide(open);
+    });
+  }
+  initNavDropdowns(document);
+
   /* Review marquee — rAF so it keeps moving in low-power mode, where the
      browser silently pauses CSS animations. Hovering a lane pauses it. */
   function initReviewMarquees(root){

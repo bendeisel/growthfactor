@@ -51,7 +51,7 @@ REVIEW_HEADS = {
     "womens-classes":           "What women say about training here",
     "kids-martial-arts":        "What parents say about Kids Martial Arts",
     "kids-fitness":             "What parents say about Kids Fitness",
-    "sports-performance":       "What members say about Sports Performance",
+    "strength-training":        "What members say about the 6am class",
     "open-gym":                 "What members say about the open gym",
     "personal-training":        "What members say about our coaches",
 }
