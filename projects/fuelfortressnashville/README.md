@@ -88,7 +88,20 @@ Drop-off folder for this client:
 file sits, so the folder is a convention for humans rather than a technical
 requirement.
 
-**Google Drive is a working delivery route.** An MCP download whose result is too
+**Transfer ceilings, measured not assumed.** The Drive connector refuses any
+download over **10 MB**. Chat attachment allows **30 MB** and writes to disk. So chat
+is the widest pipe available, and a 768 MB Hostinger backup fits through neither.
+
+It does not need to. Every photo in the client's library totals **22.4 MB** across 35
+unique files; the 768 MB is videos (174 MB) plus the six resized copies WordPress
+generates per image. A zip of originals alone clears the chat limit comfortably.
+
+`site/drive_tar_extract.py` streams a tar.gz straight out of a spilled tool-result,
+decoding base64 in chunks and piping through gzip and tar so nothing intermediate is
+written, extracting only media under a path filter. Unused so far because of the
+10 MB cap, but correct and self-tested, and ready if that cap ever lifts.
+
+**Google Drive is a working delivery route below 10 MB.** An MCP download whose result is too
 large for context is spilled to a tool-results file on disk instead, so the bytes
 never pass through the conversation and size stops being the constraint. Verified
 end to end: a 94 KB PNG and a 3.9 MB zip both came back byte-for-byte intact.
