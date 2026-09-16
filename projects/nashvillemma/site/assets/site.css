@@ -43,6 +43,12 @@
     .lp-lab { display: block; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
           text-transform: uppercase; letter-spacing: 0.18em; color: #D7AD56; padding: 8px 4px 4px 4px;
           white-space: normal; }
+    /* band links: card opens downward; plain inline links in body copy */
+    .lp-down .lp-card { bottom: auto; top: calc(100% + 12px); }
+    .lp-plain { color: #D7AD56; font-weight: 700; text-decoration: none;
+          border-bottom: 1px solid rgba(215,173,86,0.45); transition: color .18s ease, border-color .18s ease; }
+    .lp-plain:hover { color: #FFFFFF; border-bottom-color: #FFFFFF; }
+    a.lp { text-decoration: none; }
 
     /* Programs dropdown — square panel, gold hairline, per the radius rule */
     .dd-wrap { position: relative; }

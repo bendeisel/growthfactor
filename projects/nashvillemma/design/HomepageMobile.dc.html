@@ -37,6 +37,9 @@
     @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
     @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
     @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    /* gold class band — tappable links through to each program page */
+    .lp-plain { text-decoration: none; border-bottom: 1px solid rgba(215,173,86,0.45); }
+    .lp-plain:active { color: #FFFFFF; border-bottom-color: #FFFFFF; }
   </style>
 </helmet>
 
@@ -64,15 +67,15 @@
       <h1 style="font-size: 58px; line-height: 0.88">Nashville MMA<br>Training Camp</h1>
       <div style="display: inline-block; border-top: 3px solid #FFFFFF; border-bottom: 3px solid #FFFFFF; margin-top: 20px">
         <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 4px 10px">
-          <span style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">MMA</span>
+          <a href="programs/mixed-martial-arts.html" class="lp-plain" style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">MMA</a>
           <span style="color: #FFFFFF; font-size: 15px">&bull;</span>
-          <span style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Jiu Jitsu</span>
+          <a href="programs/jiu-jitsu.html" class="lp-plain" style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Jiu Jitsu</a>
           <span style="color: #FFFFFF; font-size: 15px">&bull;</span>
-          <span style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Boxing</span>
+          <a href="programs/boxing.html" class="lp-plain" style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Boxing</a>
           <span style="color: #FFFFFF; font-size: 15px">&bull;</span>
-          <span style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Muay Thai</span>
+          <a href="programs/muay-thai.html" class="lp-plain" style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Muay Thai</a>
           <span style="color: #FFFFFF; font-size: 15px">&bull;</span>
-          <span style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Youth Martial Arts</span>
+          <a href="programs/kids-martial-arts.html" class="lp-plain" style="font-size: 19px; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; color: #D7AD56">Youth Martial Arts</a>
         </div>
       </div>
       <div style="font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.8); margin-top: 18px; max-width: 300px">40,000 sqft Facility, World Class Coaches, and 90+ Classes per Week</div>
