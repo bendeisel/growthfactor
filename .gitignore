@@ -12,3 +12,4 @@ site.preview.html
 # Built deploy bundles. Regenerate from the Astro build; no reason to
 # carry 8MB of duplicated HTML and video in git.
 fighters-website.zip
+retired-stub.html

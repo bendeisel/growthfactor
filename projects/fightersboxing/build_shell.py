@@ -423,7 +423,13 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 # replace, not %-formatting, same reasoning as CHROME_HEAD above.
 SITE_SCRIPT = SITE_SCRIPT.replace('__FLUIDBG_JS__', fluidbg_js).replace('__FLUIDBG_LOCAL__', fluidbg_local)
 
-output = """<title>__CLIENT__ | Site Preview</title>
+# Title convention, fixed across every client: "<Client> | Full Site".
+# Ben went looking for the Fighters build by that name and could not find
+# it, because this said "Site Preview" while an older, superseded artifact
+# had been renamed to the cleaner-sounding "Fighters Boxing Gym Site". The
+# name is how a build is found in a gallery of forty, so it is part of the
+# build, not a label someone types at publish time.
+output = """<title>__CLIENT__ | Full Site</title>
 
 <style>
 __CSS__
