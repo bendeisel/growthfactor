@@ -13,7 +13,10 @@ ASSET = os.path.join(SITE, "assets")
 MIME = {".jpg":"image/jpeg",".jpeg":"image/jpeg",".png":"image/png",
         ".mp4":"video/mp4",".webm":"video/webm"}
 
-cache = {}
+# Each asset is encoded ONCE into an ASSETS map and referenced by a short
+# token.  Pasting the data URI at every use site made the preview bundle 22MB,
+# because a coach photo that appears on eight pages was embedded eight times.
+cache, ASSETS = {}, {}
 def data_uri(name):
     if name not in cache:
         p = os.path.join(ASSET, name)
@@ -21,9 +24,10 @@ def data_uri(name):
             cache[name] = ""
         else:
             ext = os.path.splitext(name)[1].lower()
-            cache[name] = "data:%s;base64,%s" % (
+            ASSETS[name] = "data:%s;base64,%s" % (
                 MIME.get(ext, "application/octet-stream"),
                 base64.b64encode(open(p, "rb").read()).decode())
+            cache[name] = "asset:" + name
     return cache[name]
 
 links = json.load(open(os.path.join(SITE, "_links.json")))
@@ -45,6 +49,8 @@ for i, url in enumerate(routes):
     # assets -> data URIs
     body = re.sub(r'(src=")(?:\.\./)*assets/([^"]+)"',
                   lambda m: m.group(1) + data_uri(m.group(2)) + '"', body)
+    body = re.sub(r'url\((?:\.\./)*assets/([^)\"]+)\)',
+                  lambda m: 'url(' + data_uri(m.group(1)) + ')', body)
     # internal links -> hash routes
     body = re.sub(r'href="(?:\.\./)*([a-z0-9/_-]+\.html)"', r'href="#\1"', body)
     sections.append('<section class="route" data-route="%s" hidden>\n%s\n</section>' % (url, body))
@@ -56,6 +62,7 @@ function show(r){
   if (!document.querySelector('[data-route="' + (r||'') + '"]')) { r = null; }
   var secs = document.querySelectorAll('.route');
   for (var i = 0; i < secs.length; i++) { secs[i].hidden = true; }
+  resolveAssets(document);
   var nb = document.getElementById('notbuilt');
   if (r === null) {
     var want = (location.hash || '').replace(/^#/, '') || 'index.html';
@@ -66,6 +73,18 @@ function show(r){
   document.querySelector('[data-route="' + r + '"]').hidden = false;
   window.scrollTo(0, 0);
   if (!booted[r]) { booted[r] = true; boot(r); }
+}
+var ASSETS = __ASSETS__;
+function resolveAssets(root){
+  var el = (root||document).querySelectorAll('[src^="asset:"],[data-bg^="asset:"]');
+  for (var i=0;i<el.length;i++){
+    var e = el[i];
+    var key = (e.getAttribute('src') || e.getAttribute('data-bg')).slice(6);
+    var uri = ASSETS[key];
+    if (!uri) continue;
+    if (e.hasAttribute('src')) e.setAttribute('src', uri);
+    else e.style.backgroundImage = 'url(' + uri + ')';
+  }
 }
 function route(){ show((location.hash || '').replace(/^#/, '') || 'index.html'); }
 window.addEventListener('hashchange', route);
@@ -102,7 +121,8 @@ function boot(r){
 }
 %s
 </script>
-""" % (css, NOTBUILT, "\n".join(sections), js, "\n".join(scripts), ROUTER)
+""" % (css, NOTBUILT, "\n".join(sections), js, "\n".join(scripts),
+       ROUTER.replace("__ASSETS__", json.dumps(ASSETS)))
 
 dest = "/tmp/claude-0/-home-user-growthfactor/fd25f9a5-2f01-5cdc-827f-ef9f8685f442/scratchpad/nmma-full-site.html"
 open(dest, "w", encoding="utf-8").write(out)

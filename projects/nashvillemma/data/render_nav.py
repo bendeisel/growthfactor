@@ -181,62 +181,85 @@ SOCIAL = [("Facebook",  "https://www.facebook.com/nashvillemma/"),
 
 
 def footer():
-    # Explore: every top-level section, in two columns
-    items = [(label, href) for label, href, _ in MENU]
-    half = -(-len(items) // 2)
-    cols = [items[:half], items[half:]]
-    explore = "".join(
-        '<ul style="display: flex; flex-direction: column; gap: 9px">%s</ul>' % "".join(
-            '<li><a href="%s" class="nav">%s</a></li>' % (h, esc(l)) for l, h in col)
-        for col in cols)
+    """Four real link columns, the gym's own photo, and contact that works.
 
-    social = " &nbsp;·&nbsp; ".join(
-        '<a href="%s" style="color: rgba(255,255,255,0.45)" rel="noopener">%s</a>' % (h, n)
-        for n, h in SOCIAL)
+    The previous version put a fake map on the right — CSS grid lines, a grey
+    bar and a pin — which reads as a placeholder for a map rather than a map.
+    A photograph of the actual building does the same job honestly.  The
+    Explore list of eight tiny links is now four titled columns, so the footer
+    carries the whole site instead of hinting at it.
+    """
+    COLS = [
+        ("Martial Arts", MENU[1][2][:6]),
+        ("Kids & Strength", MENU[2][2] + MENU[3][2]),
+        ("The Gym", [("Schedule", "schedule.html", ""),
+                     ("Facilities", "facilities.html", ""),
+                     ("Recovery Room", "recovery.html", ""),
+                     ("Recovery Partners", "recovery-partners.html", ""),
+                     ("Open Gym", "programs/open-gym.html", "")]),
+        ("About", [("Coaches & Trainers", "coaches.html", ""),
+                   ("Reviews", "reviews.html", ""),
+                   ("FAQ", "faq.html", ""),
+                   ("Gear Recommendations", "gear.html", ""),
+                   ("Events", "events.html", ""),
+                   ("Sponsors", "sponsors.html", ""),
+                   ("Blog", "blog.html", ""),
+                   ("Contact Us", "contact.html", "")]),
+    ]
+    cols = "".join(
+        '<div><div class="micro" style="color: #D7AD56; margin-bottom: 14px">%s</div>'
+        '<ul style="display: flex; flex-direction: column; gap: 10px">%s</ul></div>'
+        % (esc(title), "".join(
+            '<li><a href="%s" style="color: rgba(255,255,255,0.72); font-size: 15px">%s</a></li>'
+            % (h, esc(n)) for n, h, _ in items))
+        for title, items in COLS)
 
-    return """<!-- ═══════════════ FOOTER — contact left, map right ═══════════════ -->
-  <div style="background: #000000">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; align-items: stretch">
+    icons = {
+      "Facebook": '<path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/>',
+      "Instagram": '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.2" cy="6.8" r="1.2"/>',
+      "YouTube": '<path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8C22 15.2 22 12 22 12s0-3.2-.4-4.8zM10 15V9l5 3-5 3z"/>',
+    }
+    social = "".join(
+        '<a href="%s" rel="noopener" aria-label="%s" style="width: 42px; height: 42px; display: flex; '
+        'align-items: center; justify-content: center; color: #FFFFFF; '
+        'box-shadow: inset 0 0 0 1px rgba(215,173,86,0.38); background: rgba(215,173,86,0.07)">'
+        '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">%s</svg></a>'
+        % (h, n, icons[n]) for n, h in SOCIAL)
 
-      <div style="padding: 66px 48px 60px 48px">
-        <a href="index.html"><img src="logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 100px; width: auto; margin-bottom: 34px"></a>
+    return """<!-- \u2550\u2550\u2550 FOOTER \u2550\u2550\u2550 -->
+  <div style="background: #000000; border-top: 1px solid rgba(255,255,255,0.09)">
+
+    <div style="display: grid; grid-template-columns: 1.06fr 0.94fr; align-items: stretch">
+
+      <div style="padding: 62px 48px 54px 48px">
+        <a href="index.html"><img src="logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 86px; width: auto; margin-bottom: 30px"></a>
         <div class="micro" style="margin-bottom: 12px">Our Location</div>
-        <h3 style="font-size: 44px; line-height: 1; margin-bottom: 26px">Visit Us Today</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: 26px; margin-bottom: 30px">
-          <div style="display: flex; flex-direction: column; gap: 16px">
-            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Address</div><div class="body" style="font-size: 14px">%s<br>%s</div></div>
-            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Phone</div><a href="%s" style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; color: #FFFFFF">%s</a></div>
-            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Email</div><a href="mailto:%s" style="font-size: 14px; color: rgba(255,255,255,0.75)">%s</a></div>
-          </div>
-          <div>
-            <div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 10px">Explore</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 9px 20px">%s</div>
-          </div>
-        </div>
-        <a href="%s" class="btn" style="padding: 15px 30px" rel="noopener">View Our Location</a>
+        <h3 style="font-size: 54px; line-height: 0.98; margin-bottom: 24px">Visit Us Today</h3>
+        <div class="body" style="font-size: 17px; margin-bottom: 22px">%s<br>%s</div>
+        <a href="%s" style="display: block; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 46px; line-height: 1; color: #D7AD56; margin-bottom: 8px">%s</a>
+        <a href="mailto:%s" style="display: inline-block; font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 30px">%s</a>
+        <div style="display: flex; gap: 10px; margin-bottom: 30px">%s</div>
+        <a href="%s" class="btn" style="padding: 16px 32px" rel="noopener">Get Directions</a>
       </div>
 
-      <div style="position: relative; min-height: 560px; overflow: hidden; background: #0F0F10; border-left: 1px solid rgba(255,255,255,0.1)">
-        <div style="position: absolute; inset: 0; background:
-          repeating-linear-gradient(0deg,  #1A1A1D 0 1px, transparent 1px 56px),
-          repeating-linear-gradient(90deg, #1A1A1D 0 1px, transparent 1px 56px)"></div>
-        <div style="position: absolute; top: 0; left: 58%%; width: 9px; height: 100%%; background: #1F1F23; transform: rotate(8deg)"></div>
-        <div style="position: absolute; top: 47%%; left: 0; width: 100%%; height: 11px; background: #1F1F23"></div>
-        <div style="position: absolute; top: 74%%; left: 0; width: 100%%; height: 5px; background: #17171A"></div>
-        <div class="map-ping" style="position: absolute; top: 47%%; left: 62%%; transform: translate(-50%%,-50%%) scale(0.6); width: 22px; height: 22px; border-radius: 30px; background: #D7AD56; opacity: 0.85"></div>
-        <a href="%s" rel="noopener" style="position: absolute; top: 47%%; left: 62%%; transform: translate(-50%%,-100%%)" aria-label="Open in Google Maps">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="#D7AD56" stroke="#000000" stroke-width="1.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#000000" stroke="none"/></svg>
-        </a>
-        <div class="micro" style="position: absolute; left: 26px; bottom: 22px; color: rgba(255,255,255,0.4)">1504 Elm Hill Pike &nbsp;·&nbsp; Nashville, TN</div>
-      </div>
+      <a href="%s" rel="noopener" style="position: relative; display: block; min-height: 580px; overflow: hidden; border-left: 1px solid rgba(255,255,255,0.09)">
+        <img src="facility-bg.jpg" alt="Inside Nashville MMA Training Camp" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover">
+        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%%, rgba(0,0,0,0.25) 45%%, rgba(0,0,0,0.45) 100%%)"></div>
+        <div style="position: absolute; left: 40px; right: 40px; bottom: 38px">
+          <div class="micro" style="color: #D7AD56; margin-bottom: 10px">40,000 Sq Ft &nbsp;\u00b7&nbsp; 13,000 Sq Ft Of Mats</div>
+          <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 40px; line-height: 1; color: #FFFFFF">1504 Elm Hill Pike<br>Nashville, TN 37210</div>
+        </div>
+      </a>
 
     </div>
 
-    <div style="padding: 24px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
-      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 <span style="white-space: nowrap">Nashville MMA Training Camp</span> &nbsp;·&nbsp; <a href="privacy.html" style="color: rgba(255,255,255,0.45)">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html" style="color: rgba(255,255,255,0.45)">Terms</a> &nbsp;·&nbsp; %s</span>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; padding: 52px 48px; border-top: 1px solid rgba(255,255,255,0.09)">%s</div>
+
+    <div style="padding: 22px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.09)">
+      <span style="font-size: 12px; color: rgba(255,255,255,0.32)">Copyright &copy; 2026 <span style="white-space: nowrap">Nashville MMA Training Camp</span> &nbsp;\u00b7&nbsp; <a href="privacy.html" style="color: rgba(255,255,255,0.45)">Privacy Policy</a> &nbsp;\u00b7&nbsp; <a href="terms.html" style="color: rgba(255,255,255,0.45)">Terms</a></span>
     </div>
   </div>""" % (ADDRESS[0], ADDRESS[1], PHONE_HREF, PHONE, EMAIL, EMAIL,
-               explore, MAPS, MAPS, social)
+               social, MAPS, MAPS, cols)
 
 
 PING_JS = """

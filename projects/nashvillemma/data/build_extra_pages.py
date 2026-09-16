@@ -10,6 +10,7 @@ adjacent pages (FAQ, reviews, contact, recovery), events (GoHighLevel embed),
 sponsors, blog, and the two legal pages.
 """
 import json, os, re, html, subprocess
+import render_nav as RV_NAV
 import render_reviews as RV
 
 HERE   = os.path.dirname(os.path.abspath(__file__))
@@ -60,7 +61,8 @@ def sl(a, b):
     i = TPL.index(a); return TPL[i:TPL.index(b, i)]
 HELMET = sl("<helmet>", "</helmet>") + "</helmet>"
 HEADER = sl("<!-- header -->", "<!-- ═══ PAGE HERO")
-FOOTER = sl("<!-- ═══════════════ FOOTER", "</x-dc>")
+# one source for the footer, same as the header
+FOOTER = RV_NAV.footer()
 SCRIPT = TPL[TPL.index("<script data-dc-script"):]
 
 # ── markdown ───────────────────────────────────────────────────────────────
@@ -265,14 +267,58 @@ body = [hero("Coaches & Trainers", "coach-bryan-tidwell.jpg" if any(c["slug"]=="
         cta()]
 built.append(write("coaches", "Coaches", "\n\n".join(body), 2400))
 
-for c in coaches:
+# Which programs each coach teaches, derived by rule from their own bio text
+# (data/coach_programs.json, built by tag_coaches.py).  Coach pages used to be
+# dead ends: one link in from coaches.html, nothing out, so the person teaching
+# jiu jitsu and the jiu jitsu page had no idea the other existed.
+COACH_PROGRAMS = json.load(open(os.path.join(HERE, "coach_programs.json"), encoding="utf-8"))
+PROG_LABEL = {"jiu-jitsu": "Brazilian Jiu Jitsu", "muay-thai": "Muay Thai", "boxing": "Boxing",
+              "wrestling": "Wrestling", "mixed-martial-arts": "Mixed Martial Arts",
+              "kids-martial-arts": "Kids Martial Arts", "strength-training": "Strength Training",
+              "self-defense": "Self-Defense", "personal-training": "Personal Training",
+              "womens-classes": "Women's Classes"}
+
+def teaches_band(slug):
+    progs = [p for p in COACH_PROGRAMS.get(slug, []) if p in PROG_LABEL]
+    if not progs:
+        return ""
+    chips = "".join(
+        '<a href="programs/%s.html" style="%s; display: block; padding: 22px 24px">'
+        '<span style="font-family: %s; font-size: 30px; line-height: 1; color: #FFFFFF; display: block">%s</span>'
+        '<span class="micro" style="font-size: 10px; margin-top: 6px; display: block">See the classes &rarr;</span>'
+        '</a>' % (p, PANEL, BEBAS, esc(PROG_LABEL[p])) for p in progs)
+    return ('<div class="rv" style="background: #000000; padding: 62px 48px">'
+            '\n  <div class="micro" style="margin-bottom: 12px">On The Mats</div>'
+            '\n  <h2 style="font-size: 50px; line-height: 1; margin-bottom: 28px">What they coach</h2>'
+            '\n  <div style="display: grid; grid-template-columns: repeat(%d, minmax(0,1fr)); gap: 14px">%s</div>'
+            '\n  <div style="margin-top: 26px"><a href="schedule.html" class="btn-line">See these classes on the schedule</a></div>'
+            '\n</div>' % (min(len(progs), 4), chips))
+
+for _i, c in enumerate(coaches):
     b = [hero(c["name"], c["photo"], "Coaches & Trainers")]
     if c["paras"]:
         b.append(section("", c["paras"], gold=True, n=0))
-    b.append('<div class="rv" style="background: #0A0A0A; padding: 50px 48px; text-align: center">'
-             '<a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a></div>')
+    b.append(teaches_band(c["slug"]))
+    # the rest of the team, so a coach page is never a dead end
+    # rotate the window so every coach is reachable from some other coach page,
+    # instead of the same first six getting all the links
+    others = (coaches[_i + 1:] + coaches[:_i])[:6]
+    peers = "".join(
+        '<a href="coaches/%s.html" style="%s; padding: 0; overflow: hidden; display: block">'
+        '<div style="position: relative; height: 170px; overflow: hidden; background: %s">%s</div>'
+        '<div style="padding: 13px 15px"><span style="font-family: %s; font-size: 21px; color: #FFFFFF">%s</span></div></a>'
+        % (o["slug"], PANEL, CARD,
+           ('<img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top">'
+            % (o["photo"], esc(o["name"]))) if o["photo"] else '',
+           BEBAS, esc(o["name"])) for o in others)
+    b.append('<div class="rv" style="background: #0A0A0A; padding: 58px 48px">'
+             '\n  <div class="micro" style="margin-bottom: 12px">The Team</div>'
+             '\n  <h2 style="font-size: 50px; line-height: 1; margin-bottom: 26px">More coaches</h2>'
+             '\n  <div style="display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px">%s</div>'
+             '\n  <div style="margin-top: 26px"><a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a></div>'
+             '\n</div>' % peers)
     b.append(cta())
-    page = write("coach-" + c["slug"], c["name"], "\n\n".join(b), 2300)
+    page = write("coach-" + c["slug"], c["name"], "\n\n".join(b), 3000)
     built.append(page)
 
 # ══ FAQ ════════════════════════════════════════════════════════════════════

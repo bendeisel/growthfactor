@@ -80,10 +80,6 @@ def wire_nav(body, url, active):
         body = re.sub(
             r'href="(?!https?:|//|/|#|\.\./|mailto:|tel:|sms:)([A-Za-z0-9._/-]+\.html)"',
             lambda m: 'href="%s%s"' % (p, m.group(1)), body)
-        body = re.sub(r'src="(?!https?:|//|/|data:|\.\./)(logo\.png)"',
-                      lambda m: 'src="%sassets/%s"' % (p, m.group(1)), body)
-    else:
-        body = body.replace('src="logo.png"', 'src="assets/logo.png"')
     # current page gets the gold treatment in the header
     body = body.replace('href="%s%s" class="nav"' % (p, url),
                         'href="%s%s" class="nav" style="color: #D7AD56"' % (p, url))

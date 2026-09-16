@@ -10,6 +10,7 @@ ProgramDetail artboard so every page stays identical to the signed-off one.
   python3 build_program_pages.py
 """
 import json, os, re, html, shutil, subprocess
+import render_nav as RV_NAV
 import render_reviews as RV
 
 HERE     = os.path.dirname(os.path.abspath(__file__))
@@ -39,6 +40,14 @@ PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8")
 
 # Review-section headings.  These carry the program term in an H2, which is the
 # part an AI answer engine actually quotes back.
+COACH_PROGRAMS = json.load(open(os.path.join(HERE, "coach_programs.json"), encoding="utf-8"))
+COACH_NAMES = {}
+for _f in sorted(os.listdir(CONTENT)):
+    if _f.startswith("instructors-"):
+        _slug = _f[len("instructors-"):-3]
+        _m = re.search(r"^##\s+(.+)$", open(os.path.join(CONTENT, _f), encoding="utf-8").read(), re.M)
+        COACH_NAMES[_slug] = _m.group(1).strip() if _m else _slug.replace("-", " ").title()
+
 REVIEW_HEADS = {
     "jiu-jitsu":                "What members say about our Jiu Jitsu",
     "kids-brazilian-jiu-jitsu": "What parents say about Kids Jiu Jitsu",
@@ -96,7 +105,8 @@ def slice_between(a, b):
     return TPL[i:j]
 HELMET = slice_between("<helmet>", "</helmet>") + "</helmet>"
 HEADER = slice_between("<!-- header -->", "<!-- ═══ PAGE HERO")
-FOOTER = slice_between("<!-- ═══════════════ FOOTER", "</x-dc>").replace("</div>\n</x-dc>", "</div>")
+# one source for the footer, same as the header
+FOOTER = RV_NAV.footer()
 SCRIPT = TPL[TPL.index("<script data-dc-script"):]
 
 # ── markdown -> blocks ─────────────────────────────────────────────────────
@@ -344,6 +354,33 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
             out.append('      <p class="ph" style="font-size: 18px; line-height: 1.7">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
         out.append('      <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px; display: inline-block; margin-top: 10px">Coaches &amp; Trainers</a>')
         out.append('    </div>\n  </div>\n</div>')
+
+    # coaches who teach this program — the other half of the link that used to
+    # be missing entirely: coach pages had one inbound link and no outbound
+    # ones, so the jiu jitsu page and the jiu jitsu coaches never referenced
+    # each other.
+    who = [slug for slug, progs in COACH_PROGRAMS.items() if p["slug"] in progs]
+    if who:
+        cards = []
+        for cs in who[:6]:
+            photo = "coach-%s.jpg" % cs
+            nice = COACH_NAMES.get(cs, cs.replace("-", " ").title())
+            has = os.path.exists(os.path.join(IMGOUT, photo))
+            cards.append(
+                '<a href="coaches/%s.html" style="%s; padding: 0; overflow: hidden; display: block">'
+                '<div style="position: relative; height: 210px; overflow: hidden; background: %s">%s</div>'
+                '<div style="padding: 15px 17px"><span style="font-family: %s; font-size: 24px; color: #FFFFFF">%s</span></div></a>'
+                % (cs, PANEL, CARD,
+                   ('<img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top">'
+                    % (photo, esc(nice))) if has else '',
+                   BEBAS, esc(nice)))
+        out.append('<div class="rv" style="background: #0A0A0A; padding: 66px 48px">')
+        out.append('  <div class="micro" style="margin-bottom: 12px">Who You Will Train With</div>')
+        out.append('  <h2 style="font-size: 54px; line-height: 1; margin-bottom: 28px">Your coaches</h2>')
+        out.append('  <div style="display: grid; grid-template-columns: repeat(%d, minmax(0,1fr)); gap: 14px">%s</div>'
+                   % (min(len(cards), 4), "".join(cards)))
+        out.append('  <div style="margin-top: 26px"><a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a></div>')
+        out.append('</div>')
 
     # reviews — filtered to this program, so the Muay Thai page carries the
     # reviews that actually mention Muay Thai
