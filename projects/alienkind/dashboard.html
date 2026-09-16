@@ -359,6 +359,34 @@
   .gate h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px; }
   .hidden { display: none !important; }
 
+  /* ------------------------------------------------------- popup --------- */
+  /* A popped out agent is a chat window and nothing else: no tabs, no rail in
+     flow, no wordmark. Same file, same code, just stripped down. */
+  body.popup .tabs { display: none; }
+  body.popup .mark span { display: none; }
+  body.popup .top { padding: 8px 12px; }
+  body.popup .chat-grid { grid-template-columns: 1fr; }
+  body.popup .rail { display: none; }
+  body.popup .rail.open {
+    display: flex; position: fixed; inset: 0; z-index: 30;
+    background: var(--paper); padding: 12px;
+  }
+  body.popup .stream { padding: 8px 12px; }
+  body.popup .composer { padding: 8px 12px 12px; }
+  body.popup .wrap, body.popup .composer-in, body.popup .readout { max-width: 100%; }
+  body.popup .grow { display: none; }
+  body.popup .switch { flex: 1; min-width: 0; }
+  body.popup .switch-btn { width: 100%; }
+
+  /* -------------------------------------------------- rail scope ---------- */
+  .rail-scope { display: flex; margin-bottom: 8px; }
+  .rail-scope .seg { width: 100%; }
+  .rail-scope .seg button { flex: 1; }
+  .thread-agent {
+    display: inline-block; width: 8px; height: 8px; border-radius: var(--pill);
+    margin-right: 8px; vertical-align: 1px; flex: 0 0 auto;
+  }
+
   /* Motion off means motion off. Nothing here is load bearing, so the page is
      fully usable with every transition killed. */
   @media (prefers-reduced-motion: reduce) {
@@ -462,6 +490,12 @@
             <button class="btn" id="rail-close" style="display:none">Close</button>
           </span>
         </div>
+        <div class="rail-scope">
+          <div class="seg" id="rail-scope">
+            <button data-scope="agent" aria-pressed="true">This agent</button>
+            <button data-scope="all" aria-pressed="false">All three</button>
+          </div>
+        </div>
         <div class="rail-list" id="thread-list"></div>
       </aside>
 
@@ -542,6 +576,19 @@ const $ = (id) => document.getElementById(id);
 
 let sb = null, session = null, agents = [], agent = null;
 let threadId = null, threads = [], busy = false, memScope = "agent";
+
+/* A popped out window is the same page with the furniture stripped off. */
+const POPUP = new URLSearchParams(location.search).has("popup");
+if (POPUP) document.body.classList.add("popup");
+
+/* The rail can list this agent's threads or all three at once, the way a chat
+   app lists conversations. It remembers which you left it on. */
+let railScope = "agent";
+try { railScope = localStorage.getItem("ak-rail") === "all" ? "all" : "agent"; } catch {}
+
+/* Set when a thread from another agent is clicked in the "all three" list, so
+   the switch lands on that conversation instead of the agent's newest. */
+let pendingThread = null;
 
 /* The three, created on first sign in. After that they are ordinary rows and
    can be renamed, re-scoped or added to from the database. */
@@ -684,7 +731,7 @@ function pick(next, push = true) {
   av.textContent = agent.name.slice(0, 1).toUpperCase();
   $("cur-name").textContent = agent.name;
   $("cur-role").textContent = agent.role;
-  $("rail-title").textContent = agent.name + "'s threads";
+  railTitle();
   $("say").placeholder = "Message " + agent.name;
   $("brief-label").textContent = agent.name + "'s own instructions";
   $("brief-body").value = agent.brief || "";
@@ -699,6 +746,16 @@ window.addEventListener("hashchange", () => {
   const found = agents.find((a) => a.slug === want);
   if (found && found.id !== agent?.id) pick(found, false);
 });
+
+/* Named windows, so clicking Bob twice focuses Bob's window instead of piling
+   up duplicates. Sized for a chat column rather than a browser tab. */
+function popOut(a) {
+  const url = location.pathname + "?popup=1#" + a.slug;
+  const win = window.open(url, "alienkind-" + a.slug,
+    "popup=yes,width=440,height=720,noopener=no");
+  if (win) win.focus();
+  return win;
+}
 
 function renderMenu() {
   const menu = $("menu");
@@ -721,16 +778,26 @@ function renderMenu() {
     menu.appendChild(item);
   }
   const sep = document.createElement("div"); sep.className = "menu-sep";
-  const open = document.createElement("button");
-  open.className = "menu-item";
-  const openTxt = document.createElement("span");
-  const ob = document.createElement("b"); ob.textContent = "Open this one in a new window";
-  const os = document.createElement("span"); os.textContent = "Run two or three side by side";
-  openTxt.append(ob, os);
-  open.appendChild(openTxt);
-  open.addEventListener("click", () => {
+  const one = document.createElement("button");
+  one.className = "menu-item";
+  const oneTxt = document.createElement("span");
+  const ob = document.createElement("b"); ob.textContent = "Pop out " + (agent ? agent.name : "this one");
+  const os = document.createElement("span"); os.textContent = "A chat window of its own";
+  oneTxt.append(ob, os);
+  one.appendChild(oneTxt);
+  one.addEventListener("click", () => { closeMenu(); popOut(agent); });
+
+  const all = document.createElement("button");
+  all.className = "menu-item";
+  const allTxt = document.createElement("span");
+  const ab = document.createElement("b"); ab.textContent = "Pop out all three";
+  const as = document.createElement("span"); as.textContent = "Bob, Kevin and Stewart, side by side";
+  allTxt.append(ab, as);
+  all.appendChild(allTxt);
+  all.addEventListener("click", () => {
     closeMenu();
-    window.open(location.pathname + "#" + agent.slug, "_blank", "noopener");
+    /* Staggered, because browsers throttle a burst of window.open calls. */
+    agents.forEach((a, i) => setTimeout(() => popOut(a), i * 120));
   });
   const bye = document.createElement("button");
   bye.className = "menu-item";
@@ -744,7 +811,7 @@ function renderMenu() {
   const hint = document.createElement("p");
   hint.className = "menu-note";
   hint.textContent = "Each agent keeps its own threads, memory and instructions.";
-  menu.append(sep, open, bye, hint);
+  menu.append(sep, one, all, bye, hint);
 }
 
 const closeMenu = () => {
@@ -771,14 +838,24 @@ document.querySelectorAll(".tab").forEach((tab) => {
 
 /* --------------------------------------------------------------- threads */
 async function loadThreads() {
-  const { data, error } = await sb.from("threads")
-    .select("id, title, updated_at").eq("agent_id", agent.id).eq("archived", false)
-    .order("updated_at", { ascending: false }).limit(50);
+  let q = sb.from("threads")
+    .select("id, title, updated_at, agent_id").eq("archived", false)
+    .order("updated_at", { ascending: false }).limit(60);
+  if (railScope === "agent") q = q.eq("agent_id", agent.id);
+
+  const { data, error } = await q;
   if (error) return note($("chat-note"), error.message, true);
   threads = data || [];
   renderThreads();
-  if (threads.length) await openThread(threads[0].id);
-  else blank();
+
+  /* A thread clicked from the all-three list wins, then this agent's newest.
+     Never open another agent's thread just because it sorted first. */
+  const want = pendingThread;
+  pendingThread = null;
+  if (want) return openThread(want);
+  const mine = threads.find((t) => t.agent_id === agent.id);
+  if (mine) return openThread(mine.id);
+  blank();
 }
 
 function blank() {
@@ -794,20 +871,67 @@ function blank() {
   $("stream").appendChild(w);
 }
 
+function railTitle() {
+  $("rail-title").textContent = railScope === "all"
+    ? "All threads" : agent.name + "'s threads";
+}
+
 function renderThreads() {
   const list = $("thread-list");
   list.textContent = "";
+  if (!threads.length) {
+    const p = document.createElement("p");
+    p.style.cssText = "font-size:12px;color:var(--ink-quiet);padding:4px 12px;margin:0";
+    p.textContent = "No threads yet.";
+    list.appendChild(p);
+    return;
+  }
   for (const t of threads) {
+    const owner = agents.find((a) => a.id === t.agent_id) || agent;
     const b = document.createElement("button");
     b.className = "thread";
     b.setAttribute("aria-current", String(t.id === threadId));
-    const title = document.createElement("b"); title.textContent = t.title;
-    const when = document.createElement("span"); when.textContent = ago(t.updated_at);
+
+    const title = document.createElement("b");
+    /* In the all-three list each row says whose it is, so switching agent by
+       clicking a conversation is never a surprise. */
+    if (railScope === "all") {
+      const dot = document.createElement("span");
+      dot.className = "thread-agent";
+      dot.style.background = owner.accent;
+      title.appendChild(dot);
+    }
+    title.appendChild(document.createTextNode(t.title));
+
+    const when = document.createElement("span");
+    when.textContent = railScope === "all"
+      ? owner.name + " · " + ago(t.updated_at)
+      : ago(t.updated_at);
+
     b.append(title, when);
-    b.addEventListener("click", () => { openThread(t.id); $("rail").classList.remove("open"); });
+    b.addEventListener("click", () => {
+      $("rail").classList.remove("open");
+      if (owner.id !== agent.id) {
+        pendingThread = t.id;
+        pick(owner);
+      } else {
+        openThread(t.id);
+      }
+    });
     list.appendChild(b);
   }
 }
+
+$("rail-scope").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  railScope = b.dataset.scope;
+  try { localStorage.setItem("ak-rail", railScope); } catch {}
+  $("rail-scope").querySelectorAll("button").forEach((x) =>
+    x.setAttribute("aria-pressed", String(x === b)));
+  railTitle();
+  loadThreads();
+});
 
 $("new-thread").addEventListener("click", () => {
   $("rail").classList.remove("open");
@@ -963,9 +1087,11 @@ async function send() {
 
 /* Refresh the rail without reopening the thread and losing what just streamed. */
 async function loadThreadList() {
-  const { data } = await sb.from("threads")
-    .select("id, title, updated_at").eq("agent_id", agent.id).eq("archived", false)
-    .order("updated_at", { ascending: false }).limit(50);
+  let q = sb.from("threads")
+    .select("id, title, updated_at, agent_id").eq("archived", false)
+    .order("updated_at", { ascending: false }).limit(60);
+  if (railScope === "agent") q = q.eq("agent_id", agent.id);
+  const { data } = await q;
   threads = data || [];
   renderThreads();
 }
@@ -1104,6 +1230,9 @@ const applyNarrow = () => {
 };
 narrow.addEventListener("change", applyNarrow);
 applyNarrow();
+
+$("rail-scope").querySelectorAll("button").forEach((x) =>
+  x.setAttribute("aria-pressed", String(x.dataset.scope === railScope)));
 </script>
 </body>
 </html>

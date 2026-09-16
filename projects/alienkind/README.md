@@ -16,10 +16,21 @@ created automatically the first time you sign in, then they are ordinary rows
 you can rename, re-scope or add to.
 
 **Switching.** The agent lives in the URL, so `#bob`, `#kevin` and `#stewart`
-are three independent windows. Switch in the dropdown to move between them in
-one window, or use "Open this one in a new window" to run two or three side by
-side. The whole page re-tints to whichever one you are talking to, so you never
-have to check which window is which.
+are three independent conversations. Switch in the dropdown to move between them
+in one window. The whole page re-tints to whichever one you are talking to, so
+you never have to check which window is which.
+
+**Popping out.** The dropdown has "Pop out <name>" and "Pop out all three". A
+popped out agent is the same page with the furniture stripped off: no tabs, no
+wordmark, just the chat column at 440 by 720. The windows are named, so clicking
+Bob twice focuses Bob's window instead of piling up duplicates. Pop out all
+three and you have Bob, Kevin and Stewart running side by side on one screen.
+
+**The thread list.** The rail lists conversations the way a chat app does, and
+it toggles between **This agent** and **All three**. On all three, every row
+carries its owner's dot and name, and clicking another agent's conversation
+switches agent and opens that thread in one move. It remembers which view you
+left it on.
 
 **What they share.** The house rules, the shared instructions, and anything in
 memory filed to all three. So "Ben is on Windows" is known by everyone while
@@ -48,6 +59,12 @@ The page holds nothing but a session token.
 There is no separate mobile version and there does not need to be one. It is the
 same file at the same URL, laid out for a phone from 320px up. Add it to your
 home screen and it opens like an app.
+
+This is the reason to build it as a web page rather than chase a desktop app.
+One build covers Windows, Android and iPhone, with nothing to install, no app
+store review, and no separate Apple and Android versions to keep in step. The
+popped out windows give you the multi window feel on the desktop without any of
+that.
 
 ## What is here
 
@@ -157,10 +174,19 @@ fires an n8n workflow, moves a GHL pipeline, attaches as a tool behind the same
 function. Each tool can be scoped per agent, so Bob gets Glofox and Kevin gets
 GHL without either reaching into the other's systems.
 
-**Superhuman, GHL and Glofox.** Not built. Each needs its API credentials and a
-decision about what the agent may do unattended versus what it drafts for you to
-send. Email is the one worth being careful with: reading is low risk, sending on
-your behalf is not.
+**Gmail, GHL and Glofox.** Not built. Superhuman is dropped: it has no public
+write API and sits on Gmail underneath, so Gmail directly is fewer moving parts
+and one less subscription. Each integration needs its credentials and a decision
+about what the agent may do unattended versus what it drafts for review. Email
+is the one worth being careful with: reading is low risk, sending on your behalf
+is not.
+
+**Kevin on Wingman.** Kevin currently runs on the home machine. Two ways to join
+them, and the right one depends on what Kevin exposes. If Kevin is config,
+prompts and memory, he moves in by pasting into the Instructions tab and the
+dashboard becomes his home. If Kevin is a running process with tools already
+wired up, Wingman keeps him and the dashboard reaches him through a tunnel,
+which means Wingman has to stay on and Kevin is down whenever it is.
 
 One constraint to design around: anything that drives apps on the Windows
 desktop cannot move to a headless server. Browser and API work moves fine.
