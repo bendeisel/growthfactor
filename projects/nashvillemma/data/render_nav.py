@@ -162,6 +162,104 @@ JS = """
   initNavDropdowns(document);
 """
 
+
+# ── Footer ──────────────────────────────────────────────────────────────────
+# Generated from the same MENU as the header.  It used to be hand-written into
+# each artboard with href="#" placeholders that build_site.py filled from a
+# second, separate list — so when the header menu was renamed, every footer
+# kept the old names and pointed at the old pages.  One source now.
+
+PHONE      = "615-297-4430"
+PHONE_HREF = "tel:6152974430"
+EMAIL      = "frontdesk@nashvillemma.com"
+ADDRESS    = ("1504 Elm Hill Pike", "Nashville, Tennessee 37210")
+MAPS = ("https://www.google.com/maps/search/?api=1&query="
+        "Nashville+MMA+Training+Camp+1504+Elm+Hill+Pike+Nashville+TN+37210")
+SOCIAL = [("Facebook",  "https://www.facebook.com/nashvillemma/"),
+          ("Instagram", "https://www.instagram.com/nashvillemma/"),
+          ("YouTube",   "https://www.youtube.com/@nashvillemmatrainingcamp1")]
+
+
+def footer():
+    # Explore: every top-level section, in two columns
+    items = [(label, href) for label, href, _ in MENU]
+    half = -(-len(items) // 2)
+    cols = [items[:half], items[half:]]
+    explore = "".join(
+        '<ul style="display: flex; flex-direction: column; gap: 9px">%s</ul>' % "".join(
+            '<li><a href="%s" class="nav">%s</a></li>' % (h, esc(l)) for l, h in col)
+        for col in cols)
+
+    social = " &nbsp;·&nbsp; ".join(
+        '<a href="%s" style="color: rgba(255,255,255,0.45)" rel="noopener">%s</a>' % (h, n)
+        for n, h in SOCIAL)
+
+    return """<!-- ═══════════════ FOOTER — contact left, map right ═══════════════ -->
+  <div style="background: #000000">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; align-items: stretch">
+
+      <div style="padding: 66px 48px 60px 48px">
+        <a href="index.html"><img src="logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 100px; width: auto; margin-bottom: 34px"></a>
+        <div class="micro" style="margin-bottom: 12px">Our Location</div>
+        <h3 style="font-size: 44px; line-height: 1; margin-bottom: 26px">Visit Us Today</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: 26px; margin-bottom: 30px">
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Address</div><div class="body" style="font-size: 14px">%s<br>%s</div></div>
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Phone</div><a href="%s" style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; color: #FFFFFF">%s</a></div>
+            <div><div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 4px">Email</div><a href="mailto:%s" style="font-size: 14px; color: rgba(255,255,255,0.75)">%s</a></div>
+          </div>
+          <div>
+            <div class="micro" style="color: rgba(255,255,255,0.34); margin-bottom: 10px">Explore</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 9px 20px">%s</div>
+          </div>
+        </div>
+        <a href="%s" class="btn" style="padding: 15px 30px" rel="noopener">View Our Location</a>
+      </div>
+
+      <div style="position: relative; min-height: 560px; overflow: hidden; background: #0F0F10; border-left: 1px solid rgba(255,255,255,0.1)">
+        <div style="position: absolute; inset: 0; background:
+          repeating-linear-gradient(0deg,  #1A1A1D 0 1px, transparent 1px 56px),
+          repeating-linear-gradient(90deg, #1A1A1D 0 1px, transparent 1px 56px)"></div>
+        <div style="position: absolute; top: 0; left: 58%%; width: 9px; height: 100%%; background: #1F1F23; transform: rotate(8deg)"></div>
+        <div style="position: absolute; top: 47%%; left: 0; width: 100%%; height: 11px; background: #1F1F23"></div>
+        <div style="position: absolute; top: 74%%; left: 0; width: 100%%; height: 5px; background: #17171A"></div>
+        <div class="map-ping" style="position: absolute; top: 47%%; left: 62%%; transform: translate(-50%%,-50%%) scale(0.6); width: 22px; height: 22px; border-radius: 30px; background: #D7AD56; opacity: 0.85"></div>
+        <a href="%s" rel="noopener" style="position: absolute; top: 47%%; left: 62%%; transform: translate(-50%%,-100%%)" aria-label="Open in Google Maps">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="#D7AD56" stroke="#000000" stroke-width="1.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#000000" stroke="none"/></svg>
+        </a>
+        <div class="micro" style="position: absolute; left: 26px; bottom: 22px; color: rgba(255,255,255,0.4)">1504 Elm Hill Pike &nbsp;·&nbsp; Nashville, TN</div>
+      </div>
+
+    </div>
+
+    <div style="padding: 24px 48px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08)">
+      <span style="font-size: 12px; color: rgba(255,255,255,0.3)">Copyright &copy; 2026 <span style="white-space: nowrap">Nashville MMA Training Camp</span> &nbsp;·&nbsp; <a href="privacy.html" style="color: rgba(255,255,255,0.45)">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html" style="color: rgba(255,255,255,0.45)">Terms</a> &nbsp;·&nbsp; %s</span>
+    </div>
+  </div>""" % (ADDRESS[0], ADDRESS[1], PHONE_HREF, PHONE, EMAIL, EMAIL,
+               explore, MAPS, MAPS, social)
+
+
+PING_JS = """
+  /* Map pin pulse. Was a CSS @keyframes, which the browser pauses in
+     low-power mode, so the footer sat dead. rAF keeps it alive. */
+  function initMapPing(root){
+    var pins = (root || document).querySelectorAll('.map-ping');
+    if (!pins.length || typeof requestAnimationFrame !== 'function') return;
+    var t0 = null;
+    function frame(now){
+      if (t0 === null) t0 = now;
+      var t = ((now - t0) / 1000) % 3.2, k = t / 3.2;
+      for (var i = 0; i < pins.length; i++) {
+        pins[i].style.transform = 'translate(-50%,-50%) scale(' + (0.6 + k * 2.2).toFixed(3) + ')';
+        pins[i].style.opacity = (0.85 * (1 - k)).toFixed(3);
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  initMapPing(document);
+"""
+
 if __name__ == "__main__":
     n = nav()
     print("top-level items : %d" % len(MENU))

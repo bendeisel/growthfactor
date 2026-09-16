@@ -40,15 +40,7 @@ for f in sorted(os.listdir(PAGES)):
 
 # nav label -> destination. Pages we have not designed yet still get their real
 # URL so the gap shows up as a broken link instead of silently vanishing.
-NAV = [("About", "about.html"), ("Fitness", "programs/strength-training.html"),
-       ("Programs", "programs/index.html"), ("Kids Programs", "programs/kids-martial-arts.html"),
-       ("Schedule", "schedule.html"), ("Recovery", "recovery.html"),
-       ("Events &amp; Sponsorships", "events.html")]
 # extra destinations added to the footer so every page is reachable
-FOOT_EXTRA = [("Coaches & Trainers", "coaches.html"), ("FAQ", "faq.html"),
-              ("Reviews", "reviews.html"), ("Contact", "contact.html"),
-              ("Sponsors", "sponsors.html"), ("Blog", "blog.html")]
-
 def depth_prefix(url):
     return "../" * url.count("/")
 
@@ -79,33 +71,22 @@ def to_plain(body, url):
     return body
 
 def wire_nav(body, url, active):
-    """Point the header/footer nav at real URLs instead of '#'."""
+    """Depth-prefix the generated nav/footer links and mark the current page."""
     p = depth_prefix(url)
-    for label, dest in NAV:
-        href = p + dest
-        cur = ' style="color: #D7AD56"' if dest == active else ''
-        body = body.replace('<a href="#" class="nav">%s</a>' % label,
-                            '<a href="%s" class="nav"%s>%s</a>' % (href, cur, label))
-        body = body.replace('<li><a href="#" class="nav">%s</a></li>' % label,
-                            '<li><a href="%s" class="nav">%s</a></li>' % (href, label))
-    # widen the footer so coaches, FAQ, reviews, contact, sponsors and blog are reachable
-    anchor = '<li><a href="%sevents.html" class="nav">Events &amp; Sponsorships</a></li>' % p
-    if anchor in body:
-        body = body.replace(anchor, anchor + "\n" + "\n".join(
-            '              <li><a href="%s%s" class="nav">%s</a></li>' % (p, d, l)
-            for l, d in FOOT_EXTRA))
-    # logo goes home
-    body = body.replace('<img src="%sassets/logo.png"' % p,
-                        '</a><a href="%sindex.html"><img src="%sassets/logo.png"' % (p, p), 1)
-    body = body.replace("</a><a href", "<a href", 1)
-    # dropdown / footer links are authored root-relative — add the depth prefix
+    # Any root-relative .html link gets the depth prefix.  This used to be a
+    # hardcoded list of page names, so every page added later broke on nested
+    # URLs until someone remembered to list it.
     if p:
-        # Any root-relative .html link gets the depth prefix.  This used to be a
-        # hardcoded list of page names, so every page added later (facilities,
-        # gear, recovery-partners) broke on nested URLs until it was listed.
         body = re.sub(
             r'href="(?!https?:|//|/|#|\.\./|mailto:|tel:|sms:)([A-Za-z0-9._/-]+\.html)"',
             lambda m: 'href="%s%s"' % (p, m.group(1)), body)
+        body = re.sub(r'src="(?!https?:|//|/|data:|\.\./)(logo\.png)"',
+                      lambda m: 'src="%sassets/%s"' % (p, m.group(1)), body)
+    else:
+        body = body.replace('src="logo.png"', 'src="assets/logo.png"')
+    # current page gets the gold treatment in the header
+    body = body.replace('href="%s%s" class="nav"' % (p, url),
+                        'href="%s%s" class="nav" style="color: #D7AD56"' % (p, url))
     # in-page buttons that name a destination
     body = body.replace('<a href="#" class="btn-line"', '<a href="%sschedule.html" class="btn-line"' % p)
     body = re.sub(r'<a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>',
