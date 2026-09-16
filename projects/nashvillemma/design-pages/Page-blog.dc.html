@@ -93,7 +93,32 @@
     @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
     @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
     @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+  
+    /* ── Review marquee ───────────────────────────────────────────────
+       Cards scroll on requestAnimationFrame (see site.js).  No CSS
+       animation here on purpose: low-power mode pauses those. */
+    .rvm { position: relative; overflow: hidden; padding: 6px 0; }
+    .rvm::before, .rvm::after { content: ""; position: absolute; top: 0; bottom: 0; width: 140px;
+          z-index: 3; pointer-events: none; }
+    .rvm::before { left: 0;  background: linear-gradient(90deg, #000000 8%, rgba(0,0,0,0)); }
+    .rvm::after  { right: 0; background: linear-gradient(270deg, #000000 8%, rgba(0,0,0,0)); }
+    .rvm-track { display: flex; width: max-content; will-change: transform; }
+    .rvm-set { display: flex; }
+    .rvm-card { margin: 0 11px 0 0; width: 372px; flex: 0 0 372px; display: flex;
+          flex-direction: column; justify-content: space-between;
+          background: rgba(255,255,255,0.028);
+          box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30);
+          border-top: 3px solid #D7AD56; padding: 30px 28px 26px; }
+    .rvm-text { margin: 0 0 24px 0; font-size: 16.5px; line-height: 1.65;
+          color: rgba(255,255,255,0.74); font-style: normal; }
+    .rvm-by { display: flex; align-items: center; gap: 13px; }
+    .rvm-mono { width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center;
+          justify-content: center; font-family: 'Bebas Neue','Oswald',sans-serif; font-size: 19px;
+          letter-spacing: 0.04em; color: #D7AD56; background: rgba(215,173,86,0.10);
+          box-shadow: inset 0 0 0 1px rgba(215,173,86,0.38); }
+    .rvm-name { font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 23px;
+          letter-spacing: 0.02em; color: #FFFFFF; }
+</style>
 </helmet>
 
 <div style="width: 1440px; overflow: hidden; background: #000000; position: relative">
@@ -271,6 +296,47 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+
+  /* Review marquee — rAF so it keeps moving in low-power mode, where the
+     browser silently pauses CSS animations. Hovering a lane pauses it. */
+  function initReviewMarquees(root){
+    var lanes = (root || document).querySelectorAll('.rvm');
+    for (var i = 0; i < lanes.length; i++) (function(lane){
+      var track = lane.querySelector('.rvm-track');
+      var sets  = lane.querySelectorAll('.rvm-set');
+      if (!track || sets.length < 2) return;
+      var speed   = parseFloat(lane.getAttribute('data-speed')) || 26;
+      var reverse = lane.getAttribute('data-reverse') === '1';
+      var span = 0, x = 0, paused = false, last = 0;
+
+      function measure(){
+        span = sets[0].getBoundingClientRect().width;
+        if (reverse && span && x === 0) x = -span;
+      }
+      measure();
+      window.addEventListener('resize', measure);
+      if (window.ResizeObserver) new ResizeObserver(measure).observe(sets[0]);
+
+      lane.addEventListener('mouseenter', function(){ paused = true; });
+      lane.addEventListener('mouseleave', function(){ paused = false; });
+
+      function frame(now){
+        if (!last) last = now;
+        var dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+        if (!paused && span > 0) {
+          x += (reverse ? dt * speed : -dt * speed);
+          if (!reverse && x <= -span) x += span;
+          if (reverse && x >= 0) x -= span;
+          track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })(lanes[i]);
+  }
+  initReviewMarquees(document);
+
 
     var ddw = document.querySelector('.dd-wrap');
     var ddp = document.getElementById('ddPanel');

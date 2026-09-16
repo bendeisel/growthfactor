@@ -93,7 +93,32 @@
     @keyframes drift { 0%,100% { transform: scale(1.04); } 50% { transform: scale(1.12); } }
     @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
     @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+  
+    /* ── Review marquee ───────────────────────────────────────────────
+       Cards scroll on requestAnimationFrame (see site.js).  No CSS
+       animation here on purpose: low-power mode pauses those. */
+    .rvm { position: relative; overflow: hidden; padding: 6px 0; }
+    .rvm::before, .rvm::after { content: ""; position: absolute; top: 0; bottom: 0; width: 140px;
+          z-index: 3; pointer-events: none; }
+    .rvm::before { left: 0;  background: linear-gradient(90deg, #000000 8%, rgba(0,0,0,0)); }
+    .rvm::after  { right: 0; background: linear-gradient(270deg, #000000 8%, rgba(0,0,0,0)); }
+    .rvm-track { display: flex; width: max-content; will-change: transform; }
+    .rvm-set { display: flex; }
+    .rvm-card { margin: 0 11px 0 0; width: 372px; flex: 0 0 372px; display: flex;
+          flex-direction: column; justify-content: space-between;
+          background: rgba(255,255,255,0.028);
+          box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30);
+          border-top: 3px solid #D7AD56; padding: 30px 28px 26px; }
+    .rvm-text { margin: 0 0 24px 0; font-size: 16.5px; line-height: 1.65;
+          color: rgba(255,255,255,0.74); font-style: normal; }
+    .rvm-by { display: flex; align-items: center; gap: 13px; }
+    .rvm-mono { width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center;
+          justify-content: center; font-family: 'Bebas Neue','Oswald',sans-serif; font-size: 19px;
+          letter-spacing: 0.04em; color: #D7AD56; background: rgba(215,173,86,0.10);
+          box-shadow: inset 0 0 0 1px rgba(215,173,86,0.38); }
+    .rvm-name { font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 23px;
+          letter-spacing: 0.02em; color: #FFFFFF; }
+</style>
 </helmet>
 
 <div style="width: 1440px; overflow: hidden; background: #000000; position: relative">
@@ -238,6 +263,13 @@
     <span style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); color: rgba(255,255,255,0.72); border-radius: 8px; font-size: 14px; font-weight: 700; letter-spacing: 0.05em; padding: 11px 18px">Old Hickory</span>
   </div>
 </div>
+<div class="rv" style="background: radial-gradient(900px 460px at 88%% 0%%, rgba(215,173,86,0.10), transparent 60%%), #000000; padding: 78px 0; overflow: hidden">
+  <div style="padding: 0 48px; margin-bottom: 34px">
+    <div class="micro" style="margin-bottom: 13px">Google Reviews</div>
+    <h2 style="font-size: 58px; line-height: 1">What parents say about Kids Jiu Jitsu</h2>
+  </div>
+  <div class="rvm" data-speed="24" data-reverse="0"><div class="rvm-track"><div class="rvm-set"><figure class="rvm-card"><blockquote class="rvm-text">I’ve been working out and training at Nashville MMA for almost 9 months and really love it. It can be an intense gym, but that is what you want in a gym! My experience has been that there is a place for every level of fitness and ability. My wife and two kids also joined a few months after I did. The kids love the jujitsu and boxing classes. Coach Travell is my personal favorite, both his Muay Thai and Cardio Kickboxing classes are intense and well worth it. I am a teacher myself, so I can spot when someone shares their craft out of a certain level of passion and expertise. Coach Travell has the kind of heart and intensity that is contagious and makes you want to work hard and keep coming back. I plan to be at Nashville MMA for awhile. Great place.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">JG</span><span class="rvm-name">Jason Giger</span></figcaption></figure><figure class="rvm-card"><blockquote class="rvm-text">I once struggled inside since leaving the military after my service of 4 Operation Iraqi Freedom campaigns of my 7 years in service as airborne special operations /global response task force. By becoming part of Nashville MMA East/ Team Shawn Hammonds, I was given a new meaning to my life. This is the place where I can come to feel welcomed and not judged based on my service-connected disability. I love the diversity in this organization, the friendliest, excellent staff and top of the line instructors. With new hope in my life, I truly don’t see myself going anywhere else as to be focused on my future investment with this sport organization in becoming BJJ competitor, physical fitness, instructor, or even possible a referee. I would like to encourage any military and Veterans in being part of this great organization.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">CS</span><span class="rvm-name">Carlos Stinson</span></figcaption></figure><figure class="rvm-card"><blockquote class="rvm-text">I've been training BJJ here since moving to Nashville 3 years ago and love the place. It's awesome that they have a full gym, plus BJJ, wrestling, judo, MMA, etc., all in one place. I've been training under BT (Bryan Tidwell) since I joined the gym and I learn something new every class I make because his coaching style is solid. He gives great instruction that is easy to follow for beginners, while still highlighting all the small details that can make a technique way more effective for more advanced students.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">NJ</span><span class="rvm-name">Nate James</span></figcaption></figure><figure class="rvm-card"><blockquote class="rvm-text">I've been a student for 5 years. It's an excellent athletic program. The gym has great spaces to train, good equipment, and Fantastic Instructors. Like BT (Bryan Tidwell), a BJJ black belt, and an instructor with decades of experience teaching people at every skill level. He has an emphasis on movement, with new and old school techniques. Nashville MMA is an excellent place to start a fitness journey.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">SM</span><span class="rvm-name">Skylar Mosbey</span></figcaption></figure><figure class="rvm-card"><blockquote class="rvm-text">Amazing gym! Almost a year in and I've met some very wonderful people. Getting to be part of a community of athletes that love what they do. Coaches? Top notch! I've learned a lot and continue to see my improvement. My son and I take part in Jiu Jitsu which has been an amazing sport! Definitely a place to check out!</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">MG</span><span class="rvm-name">Michelle G</span></figcaption></figure><figure class="rvm-card"><blockquote class="rvm-text">Today was my 6 yr old son’s trial class for Jiu-jitsu training. Staff was very friendly, helpful and informative. Instructors were patient and worked well with the kids. Clean facility. We signed him up for more classes.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">SS</span><span class="rvm-name">shannon staggs</span></figcaption></figure></div><div class="rvm-set"><figure class="rvm-card" aria-hidden="true"><blockquote class="rvm-text">I’ve been working out and training at Nashville MMA for almost 9 months and really love it. It can be an intense gym, but that is what you want in a gym! My experience has been that there is a place for every level of fitness and ability. My wife and two kids also joined a few months after I did. The kids love the jujitsu and boxing classes. Coach Travell is my personal favorite, both his Muay Thai and Cardio Kickboxing classes are intense and well worth it. I am a teacher myself, so I can spot when someone shares their craft out of a certain level of passion and expertise. Coach Travell has the kind of heart and intensity that is contagious and makes you want to work hard and keep coming back. I plan to be at Nashville MMA for awhile. Great place.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">JG</span><span class="rvm-name">Jason Giger</span></figcaption></figure><figure class="rvm-card" aria-hidden="true"><blockquote class="rvm-text">I once struggled inside since leaving the military after my service of 4 Operation Iraqi Freedom campaigns of my 7 years in service as airborne special operations /global response task force. By becoming part of Nashville MMA East/ Team Shawn Hammonds, I was given a new meaning to my life. This is the place where I can come to feel welcomed and not judged based on my service-connected disability. I love the diversity in this organization, the friendliest, excellent staff and top of the line instructors. With new hope in my life, I truly don’t see myself going anywhere else as to be focused on my future investment with this sport organization in becoming BJJ competitor, physical fitness, instructor, or even possible a referee. I would like to encourage any military and Veterans in being part of this great organization.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">CS</span><span class="rvm-name">Carlos Stinson</span></figcaption></figure><figure class="rvm-card" aria-hidden="true"><blockquote class="rvm-text">I've been training BJJ here since moving to Nashville 3 years ago and love the place. It's awesome that they have a full gym, plus BJJ, wrestling, judo, MMA, etc., all in one place. I've been training under BT (Bryan Tidwell) since I joined the gym and I learn something new every class I make because his coaching style is solid. He gives great instruction that is easy to follow for beginners, while still highlighting all the small details that can make a technique way more effective for more advanced students.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">NJ</span><span class="rvm-name">Nate James</span></figcaption></figure><figure class="rvm-card" aria-hidden="true"><blockquote class="rvm-text">I've been a student for 5 years. It's an excellent athletic program. The gym has great spaces to train, good equipment, and Fantastic Instructors. Like BT (Bryan Tidwell), a BJJ black belt, and an instructor with decades of experience teaching people at every skill level. He has an emphasis on movement, with new and old school techniques. Nashville MMA is an excellent place to start a fitness journey.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">SM</span><span class="rvm-name">Skylar Mosbey</span></figcaption></figure><figure class="rvm-card" aria-hidden="true"><blockquote class="rvm-text">Amazing gym! Almost a year in and I've met some very wonderful people. Getting to be part of a community of athletes that love what they do. Coaches? Top notch! I've learned a lot and continue to see my improvement. My son and I take part in Jiu Jitsu which has been an amazing sport! Definitely a place to check out!</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">MG</span><span class="rvm-name">Michelle G</span></figcaption></figure><figure class="rvm-card" aria-hidden="true"><blockquote class="rvm-text">Today was my 6 yr old son’s trial class for Jiu-jitsu training. Staff was very friendly, helpful and informative. Instructors were patient and worked well with the kids. Clean facility. We signed him up for more classes.</blockquote><figcaption class="rvm-by"><span class="rvm-mono" aria-hidden="true">SS</span><span class="rvm-name">shannon staggs</span></figcaption></figure></div></div></div>
+</div>
 <div class="rv" style="position: relative; overflow: hidden; background: #8A6224">
   <div aria-hidden="true" class="dg" data-ax="135" data-ay="40" data-per="19" style="position: absolute; top: -18%; bottom: -18%; left: -13%; width: 126%; filter: blur(1.5px); background-color: #8A6224; background-image: radial-gradient(150% 46.8% at 42.7% 6%, rgba(243,225,178,0.92) 0%, rgba(243,225,178,0) 51%), radial-gradient(150% 46.8% at 43.43% 33%, rgba(215,173,86,0.94) 0%, rgba(215,173,86,0) 51%), radial-gradient(150% 46.8% at 51.03% 67%, rgba(197,149,67,0.92) 0%, rgba(197,149,67,0) 51%), radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>
   <div style="position: relative; z-index: 2; padding: 66px 48px; text-align: center">
@@ -333,6 +365,47 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+
+  /* Review marquee — rAF so it keeps moving in low-power mode, where the
+     browser silently pauses CSS animations. Hovering a lane pauses it. */
+  function initReviewMarquees(root){
+    var lanes = (root || document).querySelectorAll('.rvm');
+    for (var i = 0; i < lanes.length; i++) (function(lane){
+      var track = lane.querySelector('.rvm-track');
+      var sets  = lane.querySelectorAll('.rvm-set');
+      if (!track || sets.length < 2) return;
+      var speed   = parseFloat(lane.getAttribute('data-speed')) || 26;
+      var reverse = lane.getAttribute('data-reverse') === '1';
+      var span = 0, x = 0, paused = false, last = 0;
+
+      function measure(){
+        span = sets[0].getBoundingClientRect().width;
+        if (reverse && span && x === 0) x = -span;
+      }
+      measure();
+      window.addEventListener('resize', measure);
+      if (window.ResizeObserver) new ResizeObserver(measure).observe(sets[0]);
+
+      lane.addEventListener('mouseenter', function(){ paused = true; });
+      lane.addEventListener('mouseleave', function(){ paused = false; });
+
+      function frame(now){
+        if (!last) last = now;
+        var dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+        if (!paused && span > 0) {
+          x += (reverse ? dt * speed : -dt * speed);
+          if (!reverse && x <= -span) x += span;
+          if (reverse && x >= 0) x -= span;
+          track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })(lanes[i]);
+  }
+  initReviewMarquees(document);
+
 
     var ddw = document.querySelector('.dd-wrap');
     var ddp = document.getElementById('ddPanel');

@@ -50,6 +50,31 @@
     .lp-plain:hover { color: #FFFFFF; border-bottom-color: #FFFFFF; }
     a.lp { text-decoration: none; }
 
+    /* ── Review marquee ───────────────────────────────────────────────
+       Cards scroll on requestAnimationFrame (see site.js).  No CSS
+       animation here on purpose: low-power mode pauses those. */
+    .rvm { position: relative; overflow: hidden; padding: 6px 0; }
+    .rvm::before, .rvm::after { content: ""; position: absolute; top: 0; bottom: 0; width: 140px;
+          z-index: 3; pointer-events: none; }
+    .rvm::before { left: 0;  background: linear-gradient(90deg, #000000 8%, rgba(0,0,0,0)); }
+    .rvm::after  { right: 0; background: linear-gradient(270deg, #000000 8%, rgba(0,0,0,0)); }
+    .rvm-track { display: flex; width: max-content; will-change: transform; }
+    .rvm-set { display: flex; }
+    .rvm-card { margin: 0 11px 0 0; width: 372px; flex: 0 0 372px; display: flex;
+          flex-direction: column; justify-content: space-between;
+          background: rgba(255,255,255,0.028);
+          box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30);
+          border-top: 3px solid #D7AD56; padding: 30px 28px 26px; }
+    .rvm-text { margin: 0 0 24px 0; font-size: 16.5px; line-height: 1.65;
+          color: rgba(255,255,255,0.74); font-style: normal; }
+    .rvm-by { display: flex; align-items: center; gap: 13px; }
+    .rvm-mono { width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center;
+          justify-content: center; font-family: 'Bebas Neue','Oswald',sans-serif; font-size: 19px;
+          letter-spacing: 0.04em; color: #D7AD56; background: rgba(215,173,86,0.10);
+          box-shadow: inset 0 0 0 1px rgba(215,173,86,0.38); }
+    .rvm-name { font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 23px;
+          letter-spacing: 0.02em; color: #FFFFFF; }
+
     /* Programs dropdown — square panel, gold hairline, per the radius rule */
     .dd-wrap { position: relative; }
     .dd-trigger { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }

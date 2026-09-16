@@ -10,6 +10,7 @@ ProgramDetail artboard so every page stays identical to the signed-off one.
   python3 build_program_pages.py
 """
 import json, os, re, html, shutil, subprocess
+import render_reviews as RV
 
 HERE     = os.path.dirname(os.path.abspath(__file__))
 PROJ     = os.path.dirname(HERE)
@@ -35,6 +36,25 @@ DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
 CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))["classes"]
 PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8"))["programs"]
+
+# Review-section headings.  These carry the program term in an H2, which is the
+# part an AI answer engine actually quotes back.
+REVIEW_HEADS = {
+    "jiu-jitsu":                "What members say about our Jiu Jitsu",
+    "kids-brazilian-jiu-jitsu": "What parents say about Kids Jiu Jitsu",
+    "boxing":                   "What members say about our Boxing",
+    "muay-thai":                "What members say about our Muay Thai",
+    "mixed-martial-arts":       "What members say about our MMA classes",
+    "mma-fight-team":           "What members say about the fight team",
+    "wrestling":                "What members say about our Wrestling",
+    "self-defense":             "What members say about Self-Defense",
+    "womens-classes":           "What women say about training here",
+    "kids-martial-arts":        "What parents say about Kids Martial Arts",
+    "kids-fitness":             "What parents say about Kids Fitness",
+    "sports-performance":       "What members say about Sports Performance",
+    "open-gym":                 "What members say about the open gym",
+    "personal-training":        "What members say about our coaches",
+}
 
 def esc(s): return html.escape(s, quote=False)
 
@@ -324,6 +344,22 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
             out.append('      <p class="ph" style="font-size: 18px; line-height: 1.7">[%s\'s background goes here — the sport he played professionally, the level, and what he coaches now. Not written yet: he is not on the current site, so we have nothing on file to quote.]</p>' % esc(c["name"].split()[0]))
         out.append('      <a href="#" class="btn-line" style="padding: 13px 26px; font-size: 12px; display: inline-block; margin-top: 10px">Coaches &amp; Trainers</a>')
         out.append('    </div>\n  </div>\n</div>')
+
+    # reviews — filtered to this program, so the Muay Thai page carries the
+    # reviews that actually mention Muay Thai
+    rtags = RV.PROGRAM_TAGS.get(p["slug"])
+    if rtags:
+        pool = RV.load(tag=rtags)
+        if len(pool) >= 3:
+            lane = RV.marquee(pool[:12], speed=24)
+            out.append('<div class="rv" style="background: radial-gradient(900px 460px at 88%% 0%%, '
+                       'rgba(215,173,86,0.10), transparent 60%%), #000000; padding: 78px 0; overflow: hidden">')
+            out.append('  <div style="padding: 0 48px; margin-bottom: 34px">')
+            out.append('    <div class="micro" style="margin-bottom: 13px">Google Reviews</div>')
+            out.append('    <h2 style="font-size: 58px; line-height: 1">%s</h2>' % esc(REVIEW_HEADS.get(p["slug"], "What members say")))
+            out.append('  </div>')
+            out.append('  ' + lane)
+            out.append('</div>')
 
     # cta
     out.append('<div class="rv" style="position: relative; overflow: hidden; background: #8A6224">')

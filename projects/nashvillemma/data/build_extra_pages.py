@@ -10,6 +10,7 @@ adjacent pages (FAQ, reviews, contact, recovery), events (GoHighLevel embed),
 sponsors, blog, and the two legal pages.
 """
 import json, os, re, html, subprocess
+import render_reviews as RV
 
 HERE   = os.path.dirname(os.path.abspath(__file__))
 PROJ   = os.path.dirname(HERE)
@@ -311,7 +312,72 @@ def simple(slug, source, title, eyebrow, hero_img=None, height=2200):
     b.append(cta())
     return write(slug, title, "\n\n".join(b), height)
 
-built.append(simple("reviews", "reviews", "Reviews", "What Members Say"))
+# ── Reviews page ───────────────────────────────────────────────────────────
+# Built from reviews.json rather than the harvest, because the vendor rendered
+# every review as an IMAGE — so none of this text was readable by a search
+# engine or an AI answer engine.  As plain text, grouped under topic headings,
+# it is.  Each review appears in exactly one bucket: no duplicated copy.
+REVIEW_BUCKETS = [
+    (["kids", "jiu-jitsu"], "Kids Jiu Jitsu"),
+    (["muay-thai"],         "Muay Thai"),
+    (["boxing"],            "Boxing"),
+    (["jiu-jitsu"],         "Brazilian Jiu Jitsu"),
+    (["kids"],              "Kids Martial Arts"),
+    (["mma"],               "Mixed Martial Arts"),
+    (["wrestling"],         "Wrestling"),
+    (["self-defense"],      "Self-Defense"),
+    (["fitness"],           "Fitness & Conditioning"),
+    (["coaches"],           "Our Coaches"),
+]
+
+def review_card(r):
+    return ('  <figure class="rvm-card" style="width: auto; flex: none; margin: 0">'
+            '<blockquote class="rvm-text">%s</blockquote>'
+            '<figcaption class="rvm-by">'
+            '<span class="rvm-mono" aria-hidden="true">%s</span>'
+            '<span class="rvm-name">%s</span>'
+            '</figcaption></figure>') % (RV.esc(r["text"]), RV.initials(r["name"]), RV.esc(r["name"]))
+
+def reviews_page():
+    allr = RV.load(min_words=4)
+    b = [hero("Reviews", None, "What Members Say")]
+
+    # moving lane up top
+    b.append('<div class="rv" style="background: #000000; padding: 54px 0 10px; overflow: hidden">'
+             + RV.marquee(allr[:14], speed=25, decorative=True) + '</div>')
+
+    used, n = set(), 0
+    for tags, label in REVIEW_BUCKETS:
+        rows = [r for r in allr
+                if r["name"] not in used and all(t in r["tags"] for t in tags)]
+        if len(rows) < 2:
+            continue
+        used.update(r["name"] for r in rows)
+        n += len(rows)
+        gold = (len(used) // 7) % 2 == 0
+        bg = ('radial-gradient(800px 420px at 90%% 0%%, rgba(215,173,86,0.09), transparent 62%%), #050505'
+              if gold else '#000000')
+        b.append(
+            '<div class="rv" style="background: %s; padding: 64px 48px">'
+            '\n  <div class="micro" style="margin-bottom: 12px">Google Reviews</div>'
+            '\n  <h2 style="font-size: 54px; line-height: 1; margin-bottom: 30px">%s</h2>'
+            '\n  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start">\n%s\n  </div>\n</div>'
+            % (bg, RV.esc(label), "\n".join(review_card(r) for r in rows)))
+
+    rest = [r for r in allr if r["name"] not in used]
+    if rest:
+        n += len(rest)
+        b.append(
+            '<div class="rv" style="background: #000000; padding: 64px 48px">'
+            '\n  <h2 style="font-size: 54px; line-height: 1; margin-bottom: 30px">More from our members</h2>'
+            '\n  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start">\n%s\n  </div>\n</div>'
+            % "\n".join(review_card(r) for r in rest))
+
+    b.append(cta())
+    print("   reviews page: %d reviews rendered as text" % n)
+    return write("reviews", "Reviews", "\n\n".join(b), 3200 + 46 * n)
+
+built.append(reviews_page())
 built.append(simple("contact", "contact", "Contact Us Today!", "Get In Touch"))
 built.append(simple("sponsors", "classes-sponsors", "Sponsorships", "Partners"))
 built.append(simple("blog", "blog", "Blog", "News & Notes"))

@@ -182,6 +182,47 @@
   }
   componentDidMount() {
 
+  /* Review marquee — rAF so it keeps moving in low-power mode, where the
+     browser silently pauses CSS animations. Hovering a lane pauses it. */
+  function initReviewMarquees(root){
+    var lanes = (root || document).querySelectorAll('.rvm');
+    for (var i = 0; i < lanes.length; i++) (function(lane){
+      var track = lane.querySelector('.rvm-track');
+      var sets  = lane.querySelectorAll('.rvm-set');
+      if (!track || sets.length < 2) return;
+      var speed   = parseFloat(lane.getAttribute('data-speed')) || 26;
+      var reverse = lane.getAttribute('data-reverse') === '1';
+      var span = 0, x = 0, paused = false, last = 0;
+
+      function measure(){
+        span = sets[0].getBoundingClientRect().width;
+        if (reverse && span && x === 0) x = -span;
+      }
+      measure();
+      window.addEventListener('resize', measure);
+      if (window.ResizeObserver) new ResizeObserver(measure).observe(sets[0]);
+
+      lane.addEventListener('mouseenter', function(){ paused = true; });
+      lane.addEventListener('mouseleave', function(){ paused = false; });
+
+      function frame(now){
+        if (!last) last = now;
+        var dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+        if (!paused && span > 0) {
+          x += (reverse ? dt * speed : -dt * speed);
+          if (!reverse && x <= -span) x += span;
+          if (reverse && x >= 0) x -= span;
+          track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })(lanes[i]);
+  }
+  initReviewMarquees(document);
+
+
     var ddw = document.querySelector('.dd-wrap');
     var ddp = document.getElementById('ddPanel');
     if (ddw && ddp) {
