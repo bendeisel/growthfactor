@@ -402,6 +402,46 @@ p{margin:0 0 1em}
 .deck-btn:hover{background:var(--white);color:var(--ground)}
 @media (prefers-reduced-motion:reduce){.deck-card{transition:none}}
 
+/* ---------- gallery mosaic ----------
+   The client's drone shots are 1440x2560, portrait. Landscape tiles would crop
+   them to a letterbox slot, so the grid is built to the source aspect instead. */
+.mosaic{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;
+  margin-top:clamp(30px,3.6vw,46px)}
+.mosaic .slot{aspect-ratio:9/16;cursor:zoom-in;min-width:0}
+
+/* ---------- reviews: staggered deck ---------- */
+.deck{position:relative;margin-top:clamp(34px,4vw,54px);
+  height:clamp(430px,52vw,600px);overflow:hidden;--card:365px}
+.deck-stage{position:absolute;inset:0}
+.deck-card{
+  position:absolute;left:50%;top:44%;width:var(--card);height:var(--card);
+  padding:clamp(22px,2.3vw,32px);display:flex;flex-direction:column;
+  background:var(--ground);border:1px solid var(--rule);color:var(--text-dim);
+  cursor:pointer;text-align:left;
+  clip-path:polygon(40px 0,100% 0,100% calc(100% - 40px),calc(100% - 40px) 100%,0 100%,0 40px);
+  transition:transform .55s cubic-bezier(.25,.46,.45,.94),background .4s ease,
+             border-color .4s ease,color .4s ease,opacity .4s ease;
+}
+.deck-card::before{content:"";position:absolute;left:0;top:40px;width:57px;height:1px;
+  background:var(--rule);transform:rotate(-45deg);transform-origin:0 0;transition:background .4s ease}
+.deck-card.is-center{background:var(--ground-edge);border-color:var(--white);color:var(--white);cursor:default}
+.deck-card.is-center::before{background:var(--white)}
+.deck-mark{display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:52px;background:var(--ground-raise);border:1px solid var(--rule);
+  font-family:var(--display);font-size:17px;letter-spacing:.08em;color:var(--text-mid);margin-bottom:18px}
+.deck-card.is-center .deck-mark{background:var(--ground);border-color:var(--rule);color:var(--white)}
+.deck-stars{font-size:11px;letter-spacing:.22em;margin:0 0 12px;color:inherit;opacity:.85}
+.deck-quote{margin:0;font-family:var(--display);font-size:clamp(17px,1.55vw,23px);
+  letter-spacing:.03em;line-height:1.22;text-transform:uppercase;color:inherit;flex:1}
+.deck-by{margin:14px 0 0;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:inherit;opacity:.7}
+.deck-nav{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;gap:1px;z-index:60}
+.deck-btn{width:54px;height:54px;display:flex;align-items:center;justify-content:center;
+  background:var(--ground);border:1px solid var(--rule);color:var(--white);
+  font-size:24px;line-height:1;cursor:pointer;transition:background .25s,color .25s}
+.deck-btn:hover{background:var(--white);color:var(--ground)}
+@media (prefers-reduced-motion:reduce){.deck-card{transition:none}}
+
 /* ---------- gallery mosaic (existing motif) ---------- */
 .mosaic{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(30px,3.6vw,46px)}
 .mosaic .slot{flex:1 1 calc(33.333% - 6px);min-width:240px;height:300px;cursor:zoom-in}
@@ -472,14 +512,15 @@ p{margin:0 0 1em}
   .navtoggle{display:block;margin-left:auto}
   .split{grid-template-columns:1fr}
   .plans{grid-template-columns:1fr;gap:26px}
-  .mosaic .slot,.mosaic .slot:nth-child(1),.mosaic .slot:nth-child(6){flex:1 1 calc(50% - 6px);height:220px}
+  .mosaic{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:620px){
   .idx-4,.idx-3{grid-template-columns:1fr}
   .ftr-grid{grid-template-columns:1fr}
-  .mosaic{flex-wrap:nowrap;overflow-x:auto;gap:0;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .mosaic{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:0;
+    scroll-snap-type:x mandatory;scrollbar-width:none}
   .mosaic::-webkit-scrollbar{display:none}
-  .mosaic .slot,.mosaic .slot:nth-child(1),.mosaic .slot:nth-child(6){flex:0 0 100%;min-width:100%;scroll-snap-align:start}
+  .mosaic .slot{flex:0 0 78%;scroll-snap-align:center}
 }
 
 @media (max-width:900px){
