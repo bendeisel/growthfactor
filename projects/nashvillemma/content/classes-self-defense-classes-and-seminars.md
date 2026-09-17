@@ -95,9 +95,9 @@ Grow your self-confidence and learn the skills required to defend yourself in th
 
 Please email us at frontdesk@nashvillemma.com with any questions.
 
-*Purchase of registration is non-refundable; please double-check the dates to ensure you can make the majority of classes before signing up.
+*Sign-up fees are non-refundable; please double-check the dates to ensure you can make the majority of classes before signing up.
 
-REGISTER NOW!
+SIGN UP NOW!
 
 ### Areas We Serve:
 

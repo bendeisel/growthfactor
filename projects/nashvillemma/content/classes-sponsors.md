@@ -33,7 +33,7 @@ Follow us on social media for the latest news on our upcoming events, announceme
 
 - Duration: 4 weeks
 
-[Link: REGISTER NOW](https://app.glofox.com/portal/#/branch/655274e15a904ca7b3057eda/courses?filters_courses=697111209d5b49c90b083fb4&header=courses)
+[Link: SIGN UP NOW](https://app.glofox.com/portal/#/branch/655274e15a904ca7b3057eda/courses?filters_courses=697111209d5b49c90b083fb4&header=courses)
 
 ## NASHVILLE MMA WRESTLING CLUB
 
@@ -69,7 +69,7 @@ Who Can Join? Middle School • High School • College Athletes (All skill leve
 
 Coach Sammy Shires
 
-Sign Up Today. Stop by the gym to register or call: 615-297-4430
+Sign Up Today. Stop by the gym to sign up or call: 615-297-4430
 
 ## Shop Local Market
 
