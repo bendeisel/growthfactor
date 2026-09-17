@@ -12,6 +12,9 @@ Sister project to Nashville MMA: that one is the **dark** site, this is the
   the raw homepage capture (`capture-mobile.html`) from Ben's browser-save
   zip. The session egress proxy blocks the dev domain, so the capture is
   the record.
+- `launch-seo.md`: the WordPress to Astro migration runbook. Read it before
+  touching the build config, the redirect map or launch day.
+- `ongoing-seo.md`: the post-launch content, backlink, local and AEO engine.
 - `site/`: the Astro build (static output per
   `.claude/skills/house-style/references/hostinger-delivery.md`).
   `npm install && npm run build` in `site/`; deploy `site/dist/`.
@@ -21,7 +24,9 @@ pending.
 
 Standing client instructions (Ben):
 - NEVER use an em dash. Anywhere. See root CLAUDE.md.
-- No blog. Boxing Blog is out of the nav.
+- Blog RETAINED (revised by Ben, Sep 2026). Out of the top nav, linked from
+  the footer instead. Posts that hold backlinks keep their exact legacy URLs.
+  See `launch-seo.md` section 3 and `ongoing-seo.md` section 2.
 - Popup lead form on every request CTA: the LeadConnector "New Trial Form"
   (`link.growth-factor.ai/widget/form/0maCMu9uqM7cqIfqR9Mb`) the WP build
   uses.
