@@ -69,7 +69,7 @@ Your Nashville MMA membership covers every Muay Thai class on the schedule, plus
 
 #### Ready To Start Muay Thai?
 
-Come try a class! Fill out the short form below or give us a call ( 615-297-4430 ) and we will help you pick the right class to start in. First class is free and the gear is on us.
+Come try a class! Fill out the short form below and we will help you pick the right class to start in. First class is free and the gear is on us.
 
 ### Areas We Serve:
 

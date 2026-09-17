@@ -49,7 +49,7 @@ The Recovery Room sits inside a 40,000 square foot building that also holds 13,0
 
 #### Come See It
 
-The Recovery Room is easier to understand standing in it than reading about it. Come take a tour, try a class, and use the sauna and the cold tub the same day. Fill out the form below or call us at ( 615-297-4430 ).
+The Recovery Room is easier to understand standing in it than reading about it. Come take a tour, try a class, and use the sauna and the cold tub the same day. Fill out the form below and we will set it up.
 
 ### Areas We Serve:
 

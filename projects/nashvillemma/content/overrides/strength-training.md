@@ -58,7 +58,7 @@ You also get the Recovery Room with an adult membership: dry heat sauna, cold tu
 
 **The full Nashville MMA membership includes the gym side.** If you are already a member for jiu jitsu, boxing, Muay Thai, wrestling or MMA, the weight room, both turf areas, the sleds and the 6:00 AM Sports Performance group exercise class are already yours. You are not paying twice and you do not need an add-on. Use it!
 
-**Just want the gym?** We have a separate gym-side membership for people who only want strength training, weightlifting and open gym access, with no martial arts classes. Come lift, use the turf and the sleds, hit the Recovery Room, and that is it. Call us at ( 615-297-4430 ) and we will walk you through the pricing.
+**Just want the gym?** We have a separate gym-side membership for people who only want strength training, weightlifting and open gym access, with no martial arts classes. Come lift, use the turf and the sleds, hit the Recovery Room, and that is it. Ask at the front desk or use the form below and we will walk you through the pricing.
 
 Either way you can upgrade later. Plenty of people join for the weights, watch a jiu jitsu class from the weight room and end up on the mats within a month!
 
