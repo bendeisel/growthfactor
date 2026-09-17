@@ -127,9 +127,79 @@ def wire_nav(body, url, active):
                   '<a href="%scontact.html" class="btn" style="padding: 15px 30px">View Our Location</a>' % p, body)
     return body
 
-PGBG = '<div class="pgbg" aria-hidden="true"><div aria-hidden="true" class="pgdg" data-ax="210" data-ay="72" data-per="13" data-ph="0.0" data-oper="15" data-oph="0.0" data-omin="0.3" data-omax="0.7" style="filter: blur(34px); background-image: radial-gradient(90% 60% at 22% 18%, rgba(243,225,178,0.30) 0%, rgba(243,225,178,0) 55%), radial-gradient(100% 65% at 68% 36%, rgba(215,173,86,0.34) 0%, rgba(215,173,86,0) 55%), radial-gradient(85% 55% at 40% 72%, rgba(197,149,67,0.28) 0%, rgba(197,149,67,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="-164" data-ay="56" data-per="17" data-ph="2.1" data-oper="11" data-oph="2.0" data-omin="0.16" data-omax="0.52" style="filter: blur(42px); background-image: radial-gradient(95% 62% at 78% 22%, rgba(215,173,86,0.30) 0%, rgba(215,173,86,0) 55%), radial-gradient(90% 58% at 18% 54%, rgba(192,136,58,0.30) 0%, rgba(192,136,58,0) 55%), radial-gradient(100% 60% at 62% 88%, rgba(138,98,36,0.34) 0%, rgba(138,98,36,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="122" data-ay="-48" data-per="21" data-ph="4.2" data-oper="19" data-oph="4.0" data-omin="0.22" data-omax="0.46" style="filter: blur(56px); background-image: radial-gradient(120% 70% at 50% 8%, rgba(138,98,36,0.34) 0%, rgba(138,98,36,0) 55%), radial-gradient(110% 65% at 12% 92%, rgba(197,149,67,0.24) 0%, rgba(197,149,67,0) 55%)"></div></div>\n'
+# ── the page-wide gold wash ────────────────────────────────────────────────
+# Three layers over a near-black ground. Each one travels on a different
+# period in x and y, so the path is a slow wave rather than a straight
+# diagonal slide, and cross-fades its own opacity on a third period. All of
+# it is driven by requestAnimationFrame in site.js, never CSS animation:
+# low-power mode pauses CSS animation while leaving rAF running, which is
+# exactly how a gradient ends up frozen on one machine and fine everywhere
+# else.
+_GOLDS = {"light": "243,225,178", "gold": "215,173,86", "mid": "197,149,67",
+          "deep": "138,98,36", "btn": "192,136,58"}
 
-SEAMLESS_CSS = '\n/* ── one continuous background ─────────────────────────────────────────\n   Sections no longer paint their own colour block, so the page reads as a\n   single surface instead of a stack of pages. The gold wash below drifts\n   across the whole viewport. Driven by rAF in site.js, never CSS\n   animation: low-power mode pauses CSS animation and this must keep\n   moving. */\nbody.seamless { background: #050505; }\n.pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }\n.pgbg .pgdg { position: absolute; top: -30%; bottom: -30%; left: -22%; width: 144%; }\nbody.seamless > *:not(.pgbg) { position: relative; z-index: 1; }\n\n/* the gold band keeps its gold but dissolves into the page at both edges\n   instead of butting against black on a hard line */\n.bloom { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);\n         mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%); }\n\n/* With the colour blocks gone, spacing carries the rhythm. Deliberately\n   uneven: a uniform gap for every section is one of the things that reads\n   as generated. */\nbody.seamless .rv { padding-top: 104px; padding-bottom: 104px; }\nbody.seamless .rv:nth-of-type(even) { padding-top: 132px; padding-bottom: 132px; }\nbody.seamless .rv.bloom { padding-top: 72px; padding-bottom: 72px; }\n'
+def _rg(size, at, key, a):
+    c = _GOLDS[key]
+    return "radial-gradient(%s at %s, rgba(%s,%s) 0%%, rgba(%s,0) 55%%)" % (size, at, c, a, c)
+
+def _wash(ax, ay, perx, pery, ph, oper, oph, omin, omax, blur, stops):
+    return ('<div aria-hidden="true" class="pgdg"'
+            ' data-ax="%s" data-ay="%s" data-perx="%s" data-pery="%s" data-ph="%s"'
+            ' data-oper="%s" data-oph="%s" data-omin="%s" data-omax="%s"'
+            ' style="filter: blur(%s); background-image: %s"></div>'
+            % (ax, ay, perx, pery, ph, oper, oph, omin, omax, blur, ", ".join(stops)))
+
+PGBG = '<div class="pgbg" aria-hidden="true">' + "".join([
+    # broad sweep, travels furthest across
+    _wash(300, 110, 15, 23, 0.0, 17, 0.0, 0.34, 0.78, "34px", [
+        _rg("90% 60%",  "22% 18%", "light", "0.32"),
+        _rg("100% 65%", "68% 36%", "gold",  "0.36"),
+        _rg("85% 55%",  "40% 72%", "mid",   "0.30")]),
+    # counter-sweep, warmer
+    _wash(-240, 140, 21, 13, 2.1, 11, 2.0, 0.18, 0.58, "42px", [
+        _rg("95% 62%",  "78% 22%", "gold", "0.32"),
+        _rg("90% 58%",  "18% 54%", "btn",  "0.32"),
+        _rg("100% 60%", "62% 88%", "deep", "0.36")]),
+    # slow bronze undertow
+    _wash(170, -96, 27, 19, 4.2, 19, 4.0, 0.24, 0.50, "56px", [
+        _rg("120% 70%", "50% 8%",  "deep", "0.36"),
+        _rg("110% 65%", "12% 92%", "mid",  "0.26")]),
+]) + '</div>\n'
+
+SEAMLESS_CSS = """
+/* ── one continuous background ─────────────────────────────────────────
+   Sections no longer paint their own colour block, so the page reads as a
+   single surface instead of a stack of pages, and the wash above moves
+   across all of it. */
+body.seamless { background: #050505; }
+.pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }
+body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
+
+/* The separator, in place of a colour change. A gold hairline that fades
+   out well before either edge reads as punctuation between sections
+   rather than a seam between two pages. */
+body.seamless .rv + .rv { position: relative; }
+body.seamless .rv + .rv::before {
+  content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(to right, transparent 0%,
+    rgba(215,173,86,0.30) 22%, rgba(215,173,86,0.30) 78%, transparent 100%);
+}
+/* no rule against the gold slab, on either side of it */
+body.seamless .rv.bloom::before, body.seamless .bloom + .rv::before { display: none; }
+
+/* the gold band keeps its fill and loses only its hard top and bottom edge */
+.bloom { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+         mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%); }
+
+/* With the colour blocks gone, spacing carries the rhythm. Deliberately
+   uneven: one uniform gap on every section is itself a generated-looking
+   tell. */
+body.seamless .rv { padding-top: 104px; padding-bottom: 104px; }
+body.seamless .rv:nth-of-type(even) { padding-top: 136px; padding-bottom: 136px; }
+body.seamless .rv.bloom { padding-top: 76px; padding-bottom: 76px; }
+"""
+
 
 SHELL = """<!doctype html>
 <html lang="en">
@@ -184,9 +254,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm()
     var t = (now - t0) / 1000;
     for (var i = 0; i < L.length; i++) {
       var el = L[i];
-      var s = Math.sin(2 * Math.PI * (t / num(el, 'data-per', 20)) + num(el, 'data-ph', 0));
-      el.style.transform = 'translate3d(' + (num(el, 'data-ax', 160) * s).toFixed(1) + 'px, '
-                                          + (num(el, 'data-ay', 60) * s).toFixed(1) + 'px, 0)';
+      // different periods per axis, so the layer traces a slow wave instead
+      // of sliding back and forth along one diagonal
+      var ph = num(el, 'data-ph', 0);
+      var sx = Math.sin(2 * Math.PI * (t / num(el, 'data-perx', 20)) + ph);
+      var sy = Math.sin(2 * Math.PI * (t / num(el, 'data-pery', 27)) + ph * 0.6);
+      el.style.transform = 'translate3d(' + (num(el, 'data-ax', 160) * sx).toFixed(1) + 'px, '
+                                          + (num(el, 'data-ay', 60) * sy).toFixed(1) + 'px, 0)';
       var oper = num(el, 'data-oper', 0);
       if (oper > 0) {
         var omin = num(el, 'data-omin', 0), omax = num(el, 'data-omax', 1);

@@ -31,6 +31,59 @@ SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-ax="135" data-ay="40" 
                  'radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>')
 PANEL = ("background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); "
          "border-radius: 10px")
+
+# Pages trialling the reworked card rhythm. One flat grid of identical panels
+# is both the "super basic" complaint and the top AI tell in the BMFG
+# standard, so the items descend in scale instead: one wide statement, then a
+# pair, then compact rows. Square corners, per the kernel's --cornerRadius: 0.
+VARIED_CARDS = {"muay-thai"}
+
+SQUARE = ("background: rgba(255,255,255,0.028); "
+          "box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)")
+
+def _card(i, name, desc, scale):
+    """One item card. `scale` sets its weight in the rhythm."""
+    spec = {"lead":    (78, 46, 20.0, "40px 44px", 6, "1.6px"),
+            "mid":     (48, 32, 18.0, "32px 34px", 3, "1.2px"),
+            "compact": (34, 23, 16.5, "26px 28px", 2, "1px")}[scale]
+    nsize, tsize, dsize, pad, span, stroke = spec
+    n = ('<div aria-hidden="true" style="font-family: %s; font-size: %dpx; line-height: 0.78; '
+         'color: transparent; -webkit-text-stroke: %s %s; letter-spacing: 0.02em">%02d</div>'
+         % (BEBAS, nsize, stroke, GOLD, i + 1))
+    head = ('<h3 style="font-size: %dpx; line-height: 1.02; margin: 0 0 10px; color: #FFFFFF">%s</h3>'
+            % (tsize, esc(name)) if name else "")
+    body = ('<p class="body" style="font-size: %.1fpx; line-height: 1.68; margin: 0; max-width: 64ch">%s</p>'
+            % (dsize, esc(desc)))
+    # the lead card runs the numeral beside the copy; the rest stack it above,
+    # so the row shapes differ as well as their sizes
+    if scale == "lead":
+        inner = ('<div style="display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: start">'
+                 '%s<div>%s%s</div></div>' % (n, head, body))
+    else:
+        inner = '%s<div style="margin-top: 14px">%s%s</div>' % (n, head, body)
+    return ('    <div style="%s; padding: %s; grid-column: span %d">%s</div>'
+            % (SQUARE, pad, span, inner))
+
+def varied_items(items):
+    """Lay an item list out with hierarchy instead of one uniform grid."""
+    parsed = []
+    for it in items:
+        m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
+        parsed.append((m.group(1).strip(), m.group(2).strip()) if m else (None, it))
+
+    n = len(parsed)
+    if n == 1:      scales = ["lead"]
+    elif n == 2:    scales = ["lead", "mid"]
+    elif n == 3:    scales = ["lead", "mid", "mid"]
+    elif n == 4:    scales = ["lead"] + ["compact"] * 3
+    else:           scales = ["lead", "mid", "mid"] + ["compact"] * (n - 3)
+
+    out = ['  <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); '
+           'gap: 18px; margin-top: 30px; align-items: start">']
+    for i, ((name, desc), sc) in enumerate(zip(parsed, scales)):
+        out.append(_card(i, name, desc, sc))
+    out.append('  </div>')
+    return out
 DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
 CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))["classes"]
@@ -257,7 +310,9 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
                 if not g: continue
                 out.append('    <div>' + "".join('<p class="body" style="font-size: 18px; line-height: 1.72">%s</p>' % esc(x) for x in g) + '</div>')
             out.append('  </div>')
-        if s["items"]:
+        if s["items"] and p.get("slug") in VARIED_CARDS:
+            out.extend(varied_items(s["items"]))
+        elif s["items"]:
             out.append('  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px">')
             for it in s["items"]:
                 m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
@@ -349,7 +404,14 @@ def find_image(name):
 LIMIT = 52 * 1024   # base64 inflates ~1.34x, so this lands under the ~70 KB canvas guidance
 
 def prep(src, dst, width):
-    """Encode down until the file fits the canvas per-entry budget."""
+    """Encode down until the file fits the canvas per-entry budget.
+
+    Already-prepared images are left alone. Re-encoding them costs an ffmpeg
+    dependency on every run, and without it the whole generator used to die
+    here before writing a single page.
+    """
+    if os.path.exists(dst) and os.path.getsize(dst) <= LIMIT:
+        return
     import imageio_ffmpeg
     ff = imageio_ffmpeg.get_ffmpeg_exe()
     for w, q in ((width, 5), (width, 7), (int(width * 0.85), 8), (int(width * 0.72), 9), (int(width * 0.6), 11)):

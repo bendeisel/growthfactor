@@ -32,9 +32,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm()
     var t = (now - t0) / 1000;
     for (var i = 0; i < L.length; i++) {
       var el = L[i];
-      var s = Math.sin(2 * Math.PI * (t / num(el, 'data-per', 20)) + num(el, 'data-ph', 0));
-      el.style.transform = 'translate3d(' + (num(el, 'data-ax', 160) * s).toFixed(1) + 'px, '
-                                          + (num(el, 'data-ay', 60) * s).toFixed(1) + 'px, 0)';
+      // different periods per axis, so the layer traces a slow wave instead
+      // of sliding back and forth along one diagonal
+      var ph = num(el, 'data-ph', 0);
+      var sx = Math.sin(2 * Math.PI * (t / num(el, 'data-perx', 20)) + ph);
+      var sy = Math.sin(2 * Math.PI * (t / num(el, 'data-pery', 27)) + ph * 0.6);
+      el.style.transform = 'translate3d(' + (num(el, 'data-ax', 160) * sx).toFixed(1) + 'px, '
+                                          + (num(el, 'data-ay', 60) * sy).toFixed(1) + 'px, 0)';
       var oper = num(el, 'data-oper', 0);
       if (oper > 0) {
         var omin = num(el, 'data-omin', 0), omax = num(el, 'data-omax', 1);

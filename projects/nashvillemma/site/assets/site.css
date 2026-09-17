@@ -50,23 +50,32 @@
   
 /* ── one continuous background ─────────────────────────────────────────
    Sections no longer paint their own colour block, so the page reads as a
-   single surface instead of a stack of pages. The gold wash below drifts
-   across the whole viewport. Driven by rAF in site.js, never CSS
-   animation: low-power mode pauses CSS animation and this must keep
-   moving. */
+   single surface instead of a stack of pages, and the wash above moves
+   across all of it. */
 body.seamless { background: #050505; }
 .pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.pgbg .pgdg { position: absolute; top: -30%; bottom: -30%; left: -22%; width: 144%; }
+.pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }
 body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
 
-/* the gold band keeps its gold but dissolves into the page at both edges
-   instead of butting against black on a hard line */
+/* The separator, in place of a colour change. A gold hairline that fades
+   out well before either edge reads as punctuation between sections
+   rather than a seam between two pages. */
+body.seamless .rv + .rv { position: relative; }
+body.seamless .rv + .rv::before {
+  content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(to right, transparent 0%,
+    rgba(215,173,86,0.30) 22%, rgba(215,173,86,0.30) 78%, transparent 100%);
+}
+/* no rule against the gold slab, on either side of it */
+body.seamless .rv.bloom::before, body.seamless .bloom + .rv::before { display: none; }
+
+/* the gold band keeps its fill and loses only its hard top and bottom edge */
 .bloom { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
          mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%); }
 
 /* With the colour blocks gone, spacing carries the rhythm. Deliberately
-   uneven: a uniform gap for every section is one of the things that reads
-   as generated. */
+   uneven: one uniform gap on every section is itself a generated-looking
+   tell. */
 body.seamless .rv { padding-top: 104px; padding-bottom: 104px; }
-body.seamless .rv:nth-of-type(even) { padding-top: 132px; padding-bottom: 132px; }
-body.seamless .rv.bloom { padding-top: 72px; padding-bottom: 72px; }
+body.seamless .rv:nth-of-type(even) { padding-top: 136px; padding-bottom: 136px; }
+body.seamless .rv.bloom { padding-top: 76px; padding-bottom: 76px; }
