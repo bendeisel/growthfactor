@@ -34,6 +34,44 @@ NAV = [("About", "about.html"), ("Fitness", "programs/sports-performance.html"),
        ("Schedule", "schedule.html"), ("Recovery", "recovery.html"),
        ("Events &amp; Sponsorships", "events.html")]
 
+# Pages built with one continuous background instead of stacked colour blocks.
+# Trial on Muay Thai first; widen this set once the look is approved.
+SEAMLESS = {"programs/muay-thai.html"}
+
+# The page ground. Sections painting these are what produced the visible seams
+# between sections. Panel colours (#0F0F10, #141416, #1F1F23, #17171A) are
+# components, not grounds, so they stay.
+GROUND = ("#000000", "#0A0A0A", "#0B0B0C")
+
+def make_seamless(body):
+    """Drop the per-section grounds so one page-wide background shows through.
+
+    Skipped for the header (z-index: 6), form inputs and inline-block buttons:
+    those need their own fill to stay legible over the moving background.
+    """
+    import re as _re
+    def fix(tag):
+        t = tag.group(0)
+        if t.startswith("<input") or "z-index: 6" in t or "display: inline-block" in t:
+            return t
+        for g in GROUND:
+            # the ground on its own ...
+            t = t.replace("background: %s" % g, "background: transparent")
+            # ... and as the fallback layer under a gradient, e.g.
+            # "background: radial-gradient(...), #0A0A0A". The accent gradient
+            # stays; only the opaque layer beneath it goes.
+            t = t.replace(", %s;" % g, ", transparent;")
+            t = t.replace(', %s"' % g, ', transparent"')
+        # The gold slab keeps its gold fill and loses only its hard top and
+        # bottom edge, via the .bloom mask. The fill has to stay: the headline
+        # inside it is near-black, and with the fill stripped the drifting
+        # gradient leaves parts of the band dark enough to swallow the text
+        # (measured at 1.09:1 against rgb(19,19,19)).
+        if "#8A6224" in t:
+            t = t.replace('class="rv"', 'class="rv bloom"')
+        return t
+    return _re.sub(r"<(?:div|input)[^>]*>", fix, body)
+
 def depth_prefix(url):
     return "../" * url.count("/")
 
@@ -89,6 +127,10 @@ def wire_nav(body, url, active):
                   '<a href="%scontact.html" class="btn" style="padding: 15px 30px">View Our Location</a>' % p, body)
     return body
 
+PGBG = '<div class="pgbg" aria-hidden="true"><div aria-hidden="true" class="pgdg" data-ax="210" data-ay="72" data-per="13" data-ph="0.0" data-oper="15" data-oph="0.0" data-omin="0.3" data-omax="0.7" style="filter: blur(34px); background-image: radial-gradient(90% 60% at 22% 18%, rgba(243,225,178,0.30) 0%, rgba(243,225,178,0) 55%), radial-gradient(100% 65% at 68% 36%, rgba(215,173,86,0.34) 0%, rgba(215,173,86,0) 55%), radial-gradient(85% 55% at 40% 72%, rgba(197,149,67,0.28) 0%, rgba(197,149,67,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="-164" data-ay="56" data-per="17" data-ph="2.1" data-oper="11" data-oph="2.0" data-omin="0.16" data-omax="0.52" style="filter: blur(42px); background-image: radial-gradient(95% 62% at 78% 22%, rgba(215,173,86,0.30) 0%, rgba(215,173,86,0) 55%), radial-gradient(90% 58% at 18% 54%, rgba(192,136,58,0.30) 0%, rgba(192,136,58,0) 55%), radial-gradient(100% 60% at 62% 88%, rgba(138,98,36,0.34) 0%, rgba(138,98,36,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="122" data-ay="-48" data-per="21" data-ph="4.2" data-oper="19" data-oph="4.0" data-omin="0.22" data-omax="0.46" style="filter: blur(56px); background-image: radial-gradient(120% 70% at 50% 8%, rgba(138,98,36,0.34) 0%, rgba(138,98,36,0) 55%), radial-gradient(110% 65% at 12% 92%, rgba(197,149,67,0.24) 0%, rgba(197,149,67,0) 55%)"></div></div>\n'
+
+SEAMLESS_CSS = '\n/* ── one continuous background ─────────────────────────────────────────\n   Sections no longer paint their own colour block, so the page reads as a\n   single surface instead of a stack of pages. The gold wash below drifts\n   across the whole viewport. Driven by rAF in site.js, never CSS\n   animation: low-power mode pauses CSS animation and this must keep\n   moving. */\nbody.seamless { background: #050505; }\n.pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }\n.pgbg .pgdg { position: absolute; top: -30%; bottom: -30%; left: -22%; width: 144%; }\nbody.seamless > *:not(.pgbg) { position: relative; z-index: 1; }\n\n/* the gold band keeps its gold but dissolves into the page at both edges\n   instead of butting against black on a hard line */\n.bloom { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);\n         mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%); }\n\n/* With the colour blocks gone, spacing carries the rhythm. Deliberately\n   uneven: a uniform gap for every section is one of the things that reads\n   as generated. */\nbody.seamless .rv { padding-top: 104px; padding-bottom: 104px; }\nbody.seamless .rv:nth-of-type(even) { padding-top: 132px; padding-bottom: 132px; }\nbody.seamless .rv.bloom { padding-top: 72px; padding-bottom: 72px; }\n'
+
 SHELL = """<!doctype html>
 <html lang="en">
 <head>
@@ -98,8 +140,8 @@ SHELL = """<!doctype html>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
 <link rel="stylesheet" href="%(prefix)sassets/site.css">
 </head>
-<body>
-%(body)s
+<body%(bodycls)s>
+%(pgbg)s%(body)s
 <script src="%(prefix)sassets/site.js"></script>
 <script>%(init)s
 try { var __page = new Component({}); if (__page.componentDidMount) __page.componentDidMount(); }
@@ -121,6 +163,41 @@ class DCLogic {
 function openForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=false;}}
 function closeForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=true;}}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm();}});
+
+/* Page background wash. Driven by requestAnimationFrame and not a CSS
+   animation for the usual reason: low-power mode pauses CSS animation but
+   keeps rAF running, which is how a gradient ends up frozen on one machine
+   and fine on every other. Each layer drifts on one sine and cross-fades its
+   opacity on a slower second sine, so the gold changes tone as well as
+   position. Its own class, so this never fights the artboards' .dg loop. */
+(function () {
+  var L = document.querySelectorAll('.pgdg');
+  if (!L.length || typeof requestAnimationFrame !== 'function') { return; }
+  for (var i = 0; i < L.length; i++) { L[i].style.willChange = 'transform, opacity'; }
+  var num = function (el, k, d) {
+    var v = parseFloat(el.getAttribute(k));
+    return isNaN(v) ? d : v;
+  };
+  var t0 = null;
+  var tick = function (now) {
+    if (t0 === null) { t0 = now; }
+    var t = (now - t0) / 1000;
+    for (var i = 0; i < L.length; i++) {
+      var el = L[i];
+      var s = Math.sin(2 * Math.PI * (t / num(el, 'data-per', 20)) + num(el, 'data-ph', 0));
+      el.style.transform = 'translate3d(' + (num(el, 'data-ax', 160) * s).toFixed(1) + 'px, '
+                                          + (num(el, 'data-ay', 60) * s).toFixed(1) + 'px, 0)';
+      var oper = num(el, 'data-oper', 0);
+      if (oper > 0) {
+        var omin = num(el, 'data-omin', 0), omax = num(el, 'data-omax', 1);
+        var u = 0.5 + 0.5 * Math.sin(2 * Math.PI * (t / oper) + num(el, 'data-oph', 0));
+        el.style.opacity = (omin + (omax - omin) * u).toFixed(3);
+      }
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+})();
 """
 
 os.makedirs(ASSET, exist_ok=True)
@@ -142,14 +219,20 @@ for src, url, title, base in ROUTES:
     css, body, init = extract(path)
     if not css_written:
         open(os.path.join(ASSET, "site.css"), "w", encoding="utf-8").write(
-            "/* shared across every page — lifted from the approved artboards */\n" + css)
+            "/* shared across every page — lifted from the approved artboards */\n"
+            + css + SEAMLESS_CSS)
         open(os.path.join(ASSET, "site.js"), "w", encoding="utf-8").write(SITE_JS)
         css_written = True
     body = wire_nav(to_plain(body, url), url, url)
+    seamless = url in SEAMLESS
+    if seamless:
+        body = make_seamless(body)
     dest = os.path.join(OUT, url)
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     open(dest, "w", encoding="utf-8").write(SHELL % {
-        "title": title, "body": body, "prefix": depth_prefix(url), "init": init})
+        "title": title, "body": body, "prefix": depth_prefix(url), "init": init,
+        "bodycls": ' class="seamless"' if seamless else "",
+        "pgbg": PGBG if seamless else ""})
     built.append(url)
     for href in re.findall(r'href="([^"#][^"]*\.html)"', body):
         links.append((url, os.path.normpath(os.path.join(os.path.dirname(url), href))))

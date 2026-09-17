@@ -48,3 +48,25 @@
     @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
     @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   
+/* ── one continuous background ─────────────────────────────────────────
+   Sections no longer paint their own colour block, so the page reads as a
+   single surface instead of a stack of pages. The gold wash below drifts
+   across the whole viewport. Driven by rAF in site.js, never CSS
+   animation: low-power mode pauses CSS animation and this must keep
+   moving. */
+body.seamless { background: #050505; }
+.pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.pgbg .pgdg { position: absolute; top: -30%; bottom: -30%; left: -22%; width: 144%; }
+body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
+
+/* the gold band keeps its gold but dissolves into the page at both edges
+   instead of butting against black on a hard line */
+.bloom { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+         mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%); }
+
+/* With the colour blocks gone, spacing carries the rhythm. Deliberately
+   uneven: a uniform gap for every section is one of the things that reads
+   as generated. */
+body.seamless .rv { padding-top: 104px; padding-bottom: 104px; }
+body.seamless .rv:nth-of-type(even) { padding-top: 132px; padding-bottom: 132px; }
+body.seamless .rv.bloom { padding-top: 72px; padding-bottom: 72px; }
