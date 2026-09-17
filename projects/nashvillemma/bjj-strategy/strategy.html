@@ -1,0 +1,731 @@
+<title>Owning Jiu Jitsu in Nashville</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FCFBF8;
+    --surface:#FFFFFF;
+    --ink:#16161A;
+    --ink-2:#43434D;
+    --ink-3:#6E6E7A;
+    --rule:#E2DED4;
+    --rule-2:#CFC9BA;
+    --accent:#C0883A;
+    --accent-text:#8A6020;
+    --indigo:#1E1E29;
+    --crit:#A32B21;
+    --crit-bg:#F7E9E7;
+    --mod:#2C6178;
+    --mod-bg:#E7EFF3;
+    --good:#3B7355;
+    --good-bg:#E8F0EB;
+    --shadow:0 1px 2px rgba(22,22,26,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#111114;
+      --surface:#1A1A20;
+      --ink:#F2EFE8;
+      --ink-2:#B9B5AC;
+      --ink-3:#8B8880;
+      --rule:#2C2C34;
+      --rule-2:#3D3D47;
+      --accent:#D7AD56;
+      --accent-text:#D7AD56;
+      --indigo:#0C0C0F;
+      --crit:#E8867A;
+      --crit-bg:#2E1A18;
+      --mod:#8FC0D6;
+      --mod-bg:#16262E;
+      --good:#8CC1A4;
+      --good-bg:#17251D;
+      --shadow:0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#111114;
+    --surface:#1A1A20;
+    --ink:#F2EFE8;
+    --ink-2:#B9B5AC;
+    --ink-3:#8B8880;
+    --rule:#2C2C34;
+    --rule-2:#3D3D47;
+    --accent:#D7AD56;
+    --accent-text:#D7AD56;
+    --indigo:#0C0C0F;
+    --crit:#E8867A;
+    --crit-bg:#2E1A18;
+    --mod:#8FC0D6;
+    --mod-bg:#16262E;
+    --good:#8CC1A4;
+    --good-bg:#17251D;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Montserrat",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:15.5px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px 96px}
+  .col{max-width:70ch}
+
+  h1,h2,h3,.display{font-family:"Bebas Neue","Haettenschweiler","Arial Narrow",sans-serif;font-weight:400;text-wrap:balance;letter-spacing:.01em}
+  h1{font-size:clamp(44px,7.5vw,76px);line-height:.94;margin:0}
+  h2{font-size:clamp(28px,4vw,40px);line-height:1.02;margin:0}
+  h3{font-size:20px;line-height:1.2;margin:0;letter-spacing:.02em}
+  p{margin:0}
+  a{color:var(--accent-text);text-decoration-thickness:1px;text-underline-offset:2px}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  code,.mono{font-family:"IBM Plex Mono",ui-monospace,"SFMono-Regular",monospace;font-size:.87em}
+  code{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:.1em .34em;color:var(--ink)}
+
+  /* ---------- masthead ---------- */
+  header.mast{border-bottom:2px solid var(--ink);padding:40px 0 22px;margin-bottom:0}
+  .mast-top{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:26px}
+  .gf{font-family:"Bebas Neue",sans-serif;font-size:17px;letter-spacing:.06em}
+  .gf span{color:var(--accent-text)}
+  .mast-meta{display:flex;flex-wrap:wrap;gap:18px}
+  .mast h1{margin-bottom:14px}
+  .sub{font-size:17px;color:var(--ink-2);max-width:60ch}
+  .scope{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
+  .scope b{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;
+    border:1px solid var(--rule-2);border-radius:2px;padding:5px 9px;color:var(--ink-2);
+  }
+
+  /* ---------- generic section ---------- */
+  section{padding-top:56px}
+  .shead{display:flex;flex-direction:column;gap:7px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  .num{color:var(--accent-text)}
+
+  .stack{display:flex;flex-direction:column;gap:18px}
+  .stack-sm{display:flex;flex-direction:column;gap:10px}
+
+  /* ---------- verdict ---------- */
+  .verdict{background:var(--indigo);color:#F2EFE8;border-radius:3px;padding:34px 32px;margin-top:34px}
+  .verdict .eyebrow{color:var(--accent)}
+  .verdict h2{color:#FFF;margin:10px 0 16px;font-size:clamp(26px,3.6vw,36px)}
+  .verdict p{color:#CFCAC0;max-width:64ch}
+  .verdict strong{color:#FFF;font-weight:600}
+  .vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#33333D;margin-top:28px;border:1px solid #33333D;border-radius:2px;overflow:hidden}
+  .vcell{background:var(--indigo);padding:16px 14px}
+  .vcell .n{font-family:"Bebas Neue",sans-serif;font-size:38px;line-height:1;color:var(--accent)}
+  .vcell .l{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#8B8880;margin-top:7px}
+
+  /* ---------- method note ---------- */
+  .note{border:1px solid var(--rule-2);border-left:3px solid var(--accent);background:var(--surface);border-radius:2px;padding:18px 20px}
+  .note .eyebrow{color:var(--accent-text);display:block;margin-bottom:8px}
+  .note p{color:var(--ink-2);max-width:66ch}
+  .note p + p{margin-top:9px}
+
+  /* ---------- findings ---------- */
+  .find{display:grid;grid-template-columns:auto 1fr;gap:0 18px;background:var(--surface);border:1px solid var(--rule);border-radius:2px;box-shadow:var(--shadow);overflow:hidden}
+  .stripe{width:4px;background:var(--mod)}
+  .find[data-sev="crit"] .stripe{background:var(--crit)}
+  .find[data-sev="good"] .stripe{background:var(--good)}
+  .find-body{padding:18px 20px 20px;min-width:0}
+  .find-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:9px}
+  .chip{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:2px;white-space:nowrap;
+    background:var(--mod-bg);color:var(--mod);
+  }
+  .find[data-sev="crit"] .chip-sev{background:var(--crit-bg);color:var(--crit)}
+  .find[data-sev="good"] .chip-sev{background:var(--good-bg);color:var(--good)}
+  .chip-id{background:transparent;border:1px solid var(--rule-2);color:var(--ink-3)}
+  .find h3{margin-bottom:10px}
+  .rowlabel{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;
+  }
+  .find-body .blk + .blk{margin-top:13px}
+  .find-body p{color:var(--ink-2)}
+  .find-body .fix p{color:var(--ink)}
+  .urls{display:flex;flex-direction:column;gap:3px}
+  .urls span{font-family:"IBM Plex Mono",monospace;font-size:12.4px;color:var(--ink-2);word-break:break-all}
+  .urls span::before{content:"/ ";color:var(--rule-2)}
+
+  /* ---------- tables ---------- */
+  .tw{overflow-x:auto;border:1px solid var(--rule);border-radius:2px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.4px}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);background:var(--paper);white-space:nowrap;
+  }
+  tr:last-child td{border-bottom:none}
+  td.m{font-family:"IBM Plex Mono",monospace;font-size:12.4px;word-break:break-all}
+  td.tgt{font-family:"IBM Plex Mono",monospace;font-size:12.4px;color:var(--accent-text);word-break:break-all;white-space:nowrap}
+
+  /* ---------- runbook ---------- */
+  .phase{display:grid;grid-template-columns:auto 1fr;gap:0 20px;border-top:1px solid var(--rule);padding-top:18px}
+  .phase:last-child{border-bottom:1px solid var(--rule);padding-bottom:20px}
+  .pnum{font-family:"Bebas Neue",sans-serif;font-size:34px;line-height:.8;color:var(--accent);width:2.1ch}
+  .phase h3{margin-bottom:4px}
+  .when{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:11px}
+  ul.tight{margin:0;padding-left:1.15em;color:var(--ink-2)}
+  ul.tight li{margin-bottom:6px;padding-left:.15em}
+  ul.tight li::marker{color:var(--rule-2)}
+  ul.tight li:last-child{margin-bottom:0}
+
+  pre{
+    margin:0;overflow-x:auto;background:var(--indigo);color:#E6E1D6;
+    border-radius:2px;padding:16px 18px;font-family:"IBM Plex Mono",monospace;
+    font-size:12.3px;line-height:1.7;
+  }
+  pre .c{color:#8B8880}
+  pre .k{color:var(--accent)}
+
+  footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:baseline}
+  footer p{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+
+  @media (max-width:620px){
+    .find{grid-template-columns:4px 1fr;gap:0}
+    .stripe{width:100%}
+    .find-body{padding:16px}
+    .phase{grid-template-columns:1fr;gap:8px}
+    .pnum{font-size:26px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:9px 16px;align-items:baseline}
+  .kv dt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .kv dd{margin:0;color:var(--ink-2)}
+  .diagram{background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:24px 20px}
+  .diagram svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px;justify-content:center}
+  .legend span{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-2);display:flex;align-items:center;gap:7px}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none}
+  .flag{border:1px solid var(--rule-2);border-left:3px solid var(--crit);background:var(--surface);border-radius:2px;padding:15px 18px}
+  .flag .rowlabel{color:var(--crit)}
+  .flag p{color:var(--ink-2);max-width:66ch}
+  .flag p + p{margin-top:8px}
+  .lede{font-size:17.5px;color:var(--ink-2);max-width:64ch}
+  .tier{display:grid;grid-template-columns:auto 1fr;gap:0 18px;padding:16px 0;border-top:1px solid var(--rule)}
+  .tier:last-child{border-bottom:1px solid var(--rule)}
+  .tw-tight table{min-width:520px}
+  .win{color:var(--good);font-weight:600}
+  .lose{color:var(--crit);font-weight:600}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <div class="gf">GROWTH FACTOR <span>AI</span></div>
+    <div class="mast-meta">
+      <span class="eyebrow">Nashville MMA</span>
+      <span class="eyebrow">BJJ program</span>
+      <span class="eyebrow">17 Sep 2026</span>
+    </div>
+  </div>
+  <h1>YOU ARE BEATING<br>YOURSELF TO IT.</h1>
+  <p class="sub">Nashville MMA runs at least four separate pages all targeting jiu jitsu,
+  so none of them accumulate anything. That is why gyms with the words in their name walk
+  past you. Here is the program-level plan to take it back.</p>
+  <div class="scope">
+    <b>Diagnosis</b><b>Business Profile</b><b>Page architecture</b><b>Authority</b><b>Links</b><b>Measurement</b>
+  </div>
+</header>
+
+<div class="verdict">
+  <span class="eyebrow">What is actually happening</span>
+  <h2>Your jiu jitsu signal is split four ways before a competitor even enters the picture.</h2>
+  <p>These are all live and all indexed right now, all fighting each other for the same
+  query:</p>
+  <div class="urls" style="margin-top:16px">
+    <span style="color:#CFCAC0">classes/Jiu-Jitsu</span>
+    <span style="color:#CFCAC0">classes/Brazilian-Jiu-Jitsu</span>
+    <span style="color:#CFCAC0">classes/New-Brazilian-Jiu-Jitsu</span>
+    <span style="color:#CFCAC0">classes/Brazilian-Jiu-Jitsu/Hermitage</span>
+    <span style="color:#CFCAC0">services/... mirrors of every one of the above</span>
+  </div>
+  <p style="margin-top:16px">Google cannot tell which one is the jiu jitsu page, because
+  you have not told it. Every internal link, every mention, every scrap of authority gets
+  divided across the set instead of compounding into one. <strong>A gym with one page and
+  the word in its name beats four pages and 485 reviews, every time.</strong></p>
+  <div class="vgrid">
+    <div class="vcell"><div class="n">4+</div><div class="l">Pages targeting one term</div></div>
+    <div class="vcell"><div class="n">1</div><div class="l">That should exist</div></div>
+    <div class="vcell"><div class="n">2002</div><div class="l">Year founded</div></div>
+    <div class="vcell"><div class="n">485</div><div class="l">Google reviews</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">01</span> &nbsp;/&nbsp; Diagnosis</span>
+    <h2>Three reasons the name-match gyms are winning</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p class="lede">You are right that exact-name gyms rank ahead of you, and you are right
+      that it is unfair. But the name is only one of three things beating you, and it is the
+      only one you cannot change cheaply. Fix the other two and the name stops being decisive.</p>
+    </div>
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head"><span class="chip chip-sev">Reason 1</span><span class="chip chip-id">Biggest, and fully yours to fix</span></div>
+        <h3>KEYWORD CANNIBALISATION ACROSS FOUR PAGES</h3>
+        <div class="blk">
+          <p>Covered above. <code>/classes/Jiu-Jitsu</code> and
+          <code>/classes/Brazilian-Jiu-Jitsu</code> are two different pages competing for the
+          same searcher, and <code>/classes/New-Brazilian-Jiu-Jitsu</code> makes three. This
+          is the single largest thing holding the program back and it costs nothing but a
+          decision to fix.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="crit">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head"><span class="chip chip-sev">Reason 2</span><span class="chip chip-id">Free, one afternoon</span></div>
+        <h3>YOUR CATEGORY SAYS MUAY THAI, NOT JIU JITSU</h3>
+        <div class="blk">
+          <div class="rowlabel">Evidence</div>
+          <p>Yelp files you under <strong>Muay Thai</strong> as the lead category. If the
+          Google Business Profile primary category follows the same logic (Mixed martial arts
+          gym, or Martial arts school), you are telling Google you are not primarily a jiu
+          jitsu school. Primary category is the strongest relevance lever in the local pack
+          and you only get one.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">The trade, stated plainly</div>
+          <p>Switching primary to a jiu jitsu category will help jiu jitsu queries and may
+          soften MMA and Muay Thai queries. That is a real business decision, not a free win.
+          You told me jiu jitsu is the target, so my recommendation is to make it primary and
+          carry the rest as secondary categories. But make that call knowingly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head"><span class="chip chip-sev">Reason 3</span><span class="chip chip-id">Partly fixable</span></div>
+        <h3>THE BUSINESS NAME HAS NO KEYWORD IN IT, AND THEIRS DO</h3>
+        <div class="blk">
+          <div class="rowlabel">Who you are up against</div>
+          <p>Artista Brazilian Jiu-Jitsu, Liberdade Jiu Jitsu, Legion Jiu Jitsu, Shawn
+          Hammonds Jiu Jitsu Academy, Triangle Academy of Jiu-Jitsu, Renzo Gracie Nashville,
+          Profectus Jiu-Jitsu, Gracie Barra Franklin. Most of those are genuine legal names,
+          not spam, so there is nothing to report.</p>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">What I am not going to tell you to do</div>
+          <p>Do not stuff "Jiu Jitsu" into the Business Profile name. It violates the naming
+          guideline, it is the most commonly reported local spam there is, and a suspension
+          puts 485 reviews at risk. That review profile is the most valuable asset the gym
+          owns. We are not gambling it for a keyword.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">The legitimate version</div>
+          <p>You already own the answer and you are not using it. <strong>Bryan Tidwell is the
+          founder and head black belt of the Matrix Jiu-Jitsu Association.</strong> That is a
+          real brand with a real person behind it. If the BJJ program operates as
+          "Matrix Jiu-Jitsu at Nashville MMA" with actual signage on the mat room, actual use
+          in enrollment paperwork and actual usage in the wild, the name becomes defensible
+          rather than invented. That is a months-long branding move, not a text edit, and it
+          is the only compliant route to a keyword in the name. Worth discussing with the
+          owners. Everything else in this document works without it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">02</span> &nbsp;/&nbsp; The target</span>
+    <h2>What "#1 in 10 miles" can and cannot mean</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p>I am not going to sell you a number I cannot hit. The map pack is proximity
+      weighted. From 1504 Elm Hill Pike, a 10 mile radius reaches downtown, Brentwood, Green
+      Hills, Madison and Franklin's edge, and at a grid point two blocks from a competitor's
+      front door, that competitor usually wins the point no matter what we do. One location
+      cannot be nearest everywhere.</p>
+      <p>So here is the honest target shape, and it is still a win worth paying for.</p>
+    </div>
+
+    <div class="diagram">
+      <svg viewBox="0 0 460 330" role="img" aria-label="Concentric rings showing achievable map rank by distance from the gym: number one within three miles, top three within seven miles, top five out to ten miles.">
+        <circle cx="230" cy="150" r="128" fill="var(--mod-bg)" stroke="var(--rule-2)" stroke-width="1"/>
+        <circle cx="230" cy="150" r="88" fill="var(--good-bg)" stroke="var(--rule-2)" stroke-width="1"/>
+        <circle cx="230" cy="150" r="44" fill="var(--accent)" fill-opacity="0.28" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="230" cy="150" r="6" fill="var(--accent)"/>
+        <circle cx="163" cy="97" r="4.5" fill="var(--crit)"/>
+        <circle cx="299" cy="196" r="4.5" fill="var(--crit)"/>
+        <circle cx="290" cy="82" r="4.5" fill="var(--crit)"/>
+        <circle cx="146" cy="205" r="4.5" fill="var(--crit)"/>
+        <text x="230" y="129" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="500" fill="var(--ink)">0 to 3 mi</text>
+        <text x="230" y="144" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="21" fill="var(--ink)">RANK #1</text>
+        <text x="230" y="212" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--ink-2)">3 to 7 mi · TOP 3</text>
+        <text x="230" y="256" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--ink-2)">7 to 10 mi · TOP 5</text>
+        <text x="230" y="308" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="0.08em" fill="var(--ink-3)">1504 ELM HILL PIKE · RED DOTS ARE COMPETITORS WHO WIN ON PROXIMITY ALONE</text>
+      </svg>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i>The gym</span>
+        <span><i style="background:var(--crit)"></i>Nearer competitor</span>
+      </div>
+    </div>
+
+    <div class="tw tw-tight">
+      <table>
+        <thead><tr><th>Surface</th><th>Realistic target</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Map pack, 0 to 3 mi</td><td class="win">#1</td><td>Proximity plus prominence. You should own this outright.</td></tr>
+          <tr><td>Map pack, 3 to 7 mi</td><td class="win">Top 3</td><td>Achievable everywhere. #1 wherever no competitor sits closer.</td></tr>
+          <tr><td>Map pack, 7 to 10 mi</td><td>Top 5</td><td>Proximity decay is steep. #1 only in pockets.</td></tr>
+          <tr><td>Organic, "jiu jitsu nashville"</td><td class="win">#1</td><td>No proximity weighting. This is winnable outright with the content plan below.</td></tr>
+          <tr><td>Aggregator listicles</td><td class="win">#1</td><td>Already #1 on one of them. Proximity does not apply. Biggest untapped surface.</td></tr>
+          <tr><td>AI answers</td><td class="win">Named first</td><td>Driven by the entity work in section 05, not by distance.</td></tr>
+          <tr><td>Map pack, full 10 mi grid</td><td class="lose">Not from one location</td><td>The honest answer. A second location is the only way, and that is a business decision, not an SEO one.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="eyebrow">How we will actually measure it</span>
+      <p>Average map rank across a geo grid, not a single check from your office wifi. Set a
+      7x7 grid at 10 mile span in BrightLocal, tracking <code>jiu jitsu</code>,
+      <code>brazilian jiu jitsu</code>, <code>bjj near me</code>,
+      <code>jiu jitsu near me</code> and <code>no gi jiu jitsu</code>. Baseline it before we
+      change anything, so the improvement is provable rather than felt.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">03</span> &nbsp;/&nbsp; Week one</span>
+    <h2>Free moves, highest leverage, do these first</h2>
+  </div>
+  <div class="stack" style="gap:0">
+    <div class="tier">
+      <div class="pnum">1</div>
+      <div>
+        <h3>CONSOLIDATE TO ONE JIU JITSU PAGE</h3>
+        <div class="when">Half a day · biggest single win</div>
+        <ul class="tight">
+          <li>Canonical page: <code>/classes/brazilian-jiu-jitsu</code>. It targets both "jiu jitsu" and "brazilian jiu jitsu", which the short form cannot do in reverse.</li>
+          <li>301 <code>/classes/Jiu-Jitsu</code>, <code>/classes/New-Brazilian-Jiu-Jitsu</code>, the Hermitage variant and every <code>/services/</code> mirror into it.</li>
+          <li>Fold the useful copy from each into the surviving page before redirecting. Do not lose the beginner framing that "New Brazilian Jiu Jitsu" was carrying.</li>
+          <li>Repoint every internal link. One target, one anchor, no exceptions.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="pnum">2</div>
+      <div>
+        <h3>FIX THE CATEGORIES EVERYWHERE</h3>
+        <div class="when">One afternoon · free</div>
+        <ul class="tight">
+          <li>Google Business Profile primary category to the jiu jitsu option. Secondary categories carry MMA, Muay Thai, boxing, wrestling, kickboxing, gym, self defense school, children's gym.</li>
+          <li>Yelp lead category off Muay Thai and onto Brazilian Jiu-Jitsu.</li>
+          <li>Same pass on Apple Maps, Bing Places, Facebook and Tripadvisor.</li>
+          <li>Business Profile Services: add a separate entry per jiu jitsu offering (adult gi, adult no-gi, kids BJJ, women's BJJ, beginner fundamentals, competition team), each with its own description.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="pnum">3</div>
+      <div>
+        <h3>START THE KEYWORD-RELEVANT REVIEW ENGINE</h3>
+        <div class="when">Ongoing · compounding</div>
+        <ul class="tight">
+          <li>Review text influences which queries you surface for. 485 reviews is meaningless for "jiu jitsu" if the reviews all say "great gym".</li>
+          <li>Ask BJJ students specifically, and ask what they train in the request itself, so the answer naturally contains the words. Never script it, never incentivise it. Prompted honestly is fine and it works.</li>
+          <li>Target 8 to 12 new reviews a month mentioning jiu jitsu by name. Velocity matters as much as total.</li>
+          <li>Reply to every one, using the program name in the reply. Your replies are indexable text too.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="pnum">4</div>
+      <div>
+        <h3>SEED THE PROFILE WITH JIU JITSU CONTENT</h3>
+        <div class="when">30 minutes a week · free</div>
+        <ul class="tight">
+          <li>Weekly Business Profile post about the BJJ program. Promotions, belt promotions, competition results, open mat.</li>
+          <li>Seed the Q&amp;A: do I need experience, do you have gi and no-gi, what age can kids start, do you have women's classes. Answer them from the business account.</li>
+          <li>Upload BJJ photos with real filenames, on a regular cadence. Mat shots, promotions, competitions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">04</span> &nbsp;/&nbsp; Build</span>
+    <h2>The jiu jitsu page cluster</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p>One canonical hub, supported by pages that each answer a different searcher. Every
+      one of these links up to the hub, and the hub links down to all of them. That is what
+      builds a topic instead of a page.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Page</th><th>Searcher it answers</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td class="m">/classes/brazilian-jiu-jitsu</td><td>The hub. "jiu jitsu nashville". Absorbs all four current pages.</td><td class="tgt">1</td></tr>
+          <tr><td class="m">/classes/brazilian-jiu-jitsu/curriculum</td><td>"what do you learn in bjj", belt-by-belt syllabus, white through black. Almost nobody publishes this properly.</td><td class="tgt">1</td></tr>
+          <tr><td class="m">/jiu-jitsu/first-class</td><td>"what to expect first bjj class", "do I need a gi". Highest-converting page you will build.</td><td class="tgt">1</td></tr>
+          <tr><td class="m">/instructors/bryan-tidwell</td><td>"bjj black belt nashville". The authority anchor. See section 05.</td><td class="tgt">1</td></tr>
+          <tr><td class="m">/classes/brazilian-jiu-jitsu/no-gi</td><td>"no gi jiu jitsu nashville". Distinct searcher, distinct class.</td><td class="tgt">2</td></tr>
+          <tr><td class="m">/classes/kids-brazilian-jiu-jitsu</td><td>Parents. Completely different intent and vocabulary. Never merge this with the adult page.</td><td class="tgt">2</td></tr>
+          <tr><td class="m">/classes/womens-jiu-jitsu</td><td>"womens bjj nashville". Underserved query, you already run the class.</td><td class="tgt">2</td></tr>
+          <tr><td class="m">/jiu-jitsu/lineage</td><td>"bjj lineage", "matrix jiu jitsu". The 24 year claim, made verifiable. See section 05.</td><td class="tgt">2</td></tr>
+          <tr><td class="m">/classes/brazilian-jiu-jitsu/competition-team</td><td>Competitors. Feeds the results content that earns links.</td><td class="tgt">3</td></tr>
+          <tr><td class="m">/schedule?program=bjj</td><td>"jiu jitsu classes near me schedule". Filtered view of the real timetable.</td><td class="tgt">3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stack-sm">
+      <div class="rowlabel">What the hub page has to carry</div>
+      <div class="col stack-sm">
+        <p>Not 400 words and a photo. The page that outranks a name-match competitor has to
+        be visibly the most complete answer on the subject in this city:</p>
+      </div>
+      <ul class="tight" style="max-width:70ch">
+        <li>Gi and no-gi both named and explained, because half your searchers only want one.</li>
+        <li>The actual weekly BJJ timetable on the page, not a link to a PDF.</li>
+        <li>Every BJJ coach, with belt rank, lineage and years training, linked to their bio.</li>
+        <li>Five to eight reviews that specifically mention jiu jitsu, with first names.</li>
+        <li>Five FAQs with <code>FAQPage</code> schema, answered in the first 40 words then expanded.</li>
+        <li><code>Course</code> schema with skill level and age range, <code>Offer</code> for the free trial.</li>
+        <li>Real photos of the mat room and real students, not stock. Stock photography reads as a gym that has nothing to show.</li>
+        <li>One clear trial CTA that opens the popup form, per the standing build instruction.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">05</span> &nbsp;/&nbsp; Authority</span>
+    <h2>You have two assets no competitor in Nashville can copy</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p class="lede">This is how you claim it. Not by saying you are the authority, by
+      publishing the receipts that make the claim checkable.</p>
+    </div>
+
+    <div class="find" data-sev="good">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head"><span class="chip chip-sev">Asset</span><span class="chip chip-id">Unused</span></div>
+        <h3>THE MATRIX JIU-JITSU ASSOCIATION</h3>
+        <div class="blk">
+          <dl class="kv">
+            <dt>Who</dt><dd>Bryan "The Matrix" Tidwell, 3rd degree black belt, founder and head black belt of the Matrix Jiu-Jitsu Association, born and raised in Nashville.</dd>
+            <dt>Also</dt><dd>WKA State Champion, 4-1 amateur MMA, 20+ years on the mats.</dd>
+          </dl>
+        </div>
+        <div class="blk">
+          <div class="rowlabel">Why this is the whole ballgame</div>
+          <p>Every serious competitor in this city borrows authority from somebody else's
+          name. Renzo Gracie Nashville is a Renzo affiliate. Gracie Barra Franklin is a Gracie
+          Barra affiliate. Legion is Checkmat. <strong>They are franchises of a lineage.
+          Tidwell founded his own.</strong> That is a stronger position than any of them and
+          it is currently invisible.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Do this</div>
+          <ul class="tight">
+            <li>Build the association its own site at its own domain. Not a page on nashvillemma.com. An association that lives on one gym's website is not an association.</li>
+            <li>Academy locator listing every affiliate school, with Nashville MMA as the headquarters. That is a genuinely earned, highly relevant inbound link, and it is the "coach association page" you were describing.</li>
+            <li>Publish the promotion criteria, the belt requirements and the curriculum the association teaches. That is what makes it real to a person and to a model.</li>
+            <li>If there are no affiliate schools yet, that is the actual growth product. An association with three affiliate academies is a business line, not just a link.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="good">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head"><span class="chip chip-sev">Asset</span><span class="chip chip-id">Under-used</span></div>
+        <h3>AN 8-TIME UFC FIGHTER IN THE BUILDING</h3>
+        <div class="blk">
+          <dl class="kv">
+            <dt>Who</dt><dd>Luke "Cool Hand" Sanders. 8 UFC fights, 2x MMA world champion, 13-5 professional. Has a Wikipedia article, an ESPN profile and a Tapology page.</dd>
+            <dt>Why it matters</dt><dd>Wikipedia and ESPN are exactly the sources language models weight most heavily. An entity that already exists in those corpora can be tied to yours.</dd>
+          </dl>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">Do this</div>
+          <ul class="tight">
+            <li><code>Person</code> schema on his bio page with <code>sameAs</code> pointing at the Wikipedia article, the ESPN profile, Tapology and Instagram. That is the link that connects your site to an entity Google already trusts.</li>
+            <li>Same treatment for Tidwell, Dustin Ortiz, Monty Burks and every ranked coach. <code>sameAs</code> to Tapology, Smoothcomp, IBJJF and social.</li>
+            <li>Cross-link every coach to the programs they teach and back again.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="find" data-sev="mod">
+      <div class="stripe"></div>
+      <div class="find-body">
+        <div class="find-head"><span class="chip chip-sev">Build</span><span class="chip chip-id">Lineage</span></div>
+        <h3>THE LINEAGE PAGE, THE ONE THING A THREE-YEAR-OLD GYM CANNOT FAKE</h3>
+        <div class="blk">
+          <p>BJJ has a formal, traceable lineage, and practitioners take it seriously enough
+          to search for it. A page that traces Tidwell's promotion back through his professors
+          to the Gracie line is content no new gym can produce, it is exactly what "true
+          authority in Nashville" looks like written down, and it is the sort of page that
+          gets cited and linked by the BJJ community rather than ignored.</p>
+        </div>
+        <div class="blk fix">
+          <div class="rowlabel">What goes on it</div>
+          <ul class="tight">
+            <li>The lineage chain itself, named professor by professor.</li>
+            <li>Every black belt the academy has promoted since 2002, with the year. This is the strongest authority claim a BJJ school can make and almost nobody publishes it.</li>
+            <li>Notable competition results by year.</li>
+            <li>The 2002 founding, with what the gym looked like then.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="flag">
+      <div class="rowlabel">Three numbers to settle before any of this gets published</div>
+      <p>You said 25 years. The site says established 2002, which is 24. On a page whose entire
+      job is being the verifiable authority, a number that does not add up undermines the
+      thing you are claiming. My recommendation is to drop the round number and say
+      <strong>"since 2002"</strong> everywhere, because it is checkable, it never goes stale,
+      and it beats a competitor's vague "years of experience" outright.</p>
+      <p>Two more conflicts in the same family: the facility is described as both 30,000 and
+      40,000 square feet depending on the page, and class volume is quoted as both 80+ and
+      90+. Pick one of each and push it everywhere. Also worth fixing: Tapology spells him
+      <strong>Brian</strong> Tidwell while your site says <strong>Bryan</strong>. Two spellings
+      means two entities to a machine, which is precisely the connection we are trying to make.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">06</span> &nbsp;/&nbsp; Links</span>
+    <h2>Where jiu jitsu links actually come from</h2>
+  </div>
+  <div class="stack">
+    <div class="col stack-sm">
+      <p>Generic local citations will not move a jiu jitsu ranking. Relevance is the whole
+      point. These are ranked by what they will actually do for this specific term.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Target</th><th>Play</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr><td>Matrix Jiu-Jitsu Association site</td><td>Own domain, academy locator, HQ listing. Highest relevance link available to you, and you control it.</td><td class="tgt">Medium</td></tr>
+          <tr><td class="m">goldbjj.com/blogs/gyms/nashville</td><td>"12 Best Jiu Jitsu Gyms in Nashville" already ranks. Get the entry corrected, expanded and moved up.</td><td class="tgt">Low</td></tr>
+          <tr><td class="m">jiujitsuauthority.com</td><td>Already lists you at #1 with 485 reviews. Confirm it links to the BJJ page, not the homepage.</td><td class="tgt">Low</td></tr>
+          <tr><td class="m">bjjmetrics.com</td><td>Listed. Enrich it: coach roster, gi and no-gi, schedule.</td><td class="tgt">Low</td></tr>
+          <tr><td>IBJJF and Smoothcomp</td><td>Academy profiles populate when your team registers under the academy name consistently. Free, and it is the sport's own record.</td><td class="tgt">Low</td></tr>
+          <tr><td>Tapology</td><td>Gym page 1244. Fix the Brian / Bryan split, link every fighter to the gym.</td><td class="tgt">Low</td></tr>
+          <tr><td>Local press</td><td>Luke Sanders fight coverage, belt promotions, competition wins. Tennessean, Nashville Scene, WSMV. A UFC name gets picked up where a gym opening does not.</td><td class="tgt">Medium</td></tr>
+          <tr><td>Law enforcement and military</td><td>You already train police, firefighters and active military. Those programs produce .gov and .org mentions that almost no gym can get. Ask for the link.</td><td class="tgt">Medium</td></tr>
+          <tr><td>University clubs</td><td>Vanderbilt, Belmont, Lipscomb. Club affiliations produce .edu links and a student pipeline at the same time.</td><td class="tgt">Medium</td></tr>
+          <tr><td>BJJ podcasts and YouTube</td><td>Tidwell on the Matrix system. Founder of his own association is a real booking hook, not a favour ask.</td><td class="tgt">High</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <span class="eyebrow">What to skip</span>
+      <p>Paid guest posts on generic fitness blogs, directory blasts, and anything selling
+      "500 citations for $99". None of it is relevant to jiu jitsu in Nashville, and the
+      cheap-citation vendors are how duplicate listings like the closed Yelp record in the
+      main audit get created in the first place.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shead">
+    <span class="eyebrow"><span class="num">07</span> &nbsp;/&nbsp; Sequence</span>
+    <h2>Six months, in the order that compounds</h2>
+  </div>
+  <div class="stack" style="gap:0">
+    <div class="tier">
+      <div class="pnum">1</div>
+      <div>
+        <h3>MONTH 1</h3>
+        <div class="when">Free moves and the baseline</div>
+        <ul class="tight">
+          <li>Grid baseline before anything changes. Without it you cannot prove any of this worked.</li>
+          <li>All four week-one actions in section 03.</li>
+          <li>Settle the founding year, square footage, class count and the Bryan / Brian spelling.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="pnum">2</div>
+      <div>
+        <h3>MONTHS 2 TO 3</h3>
+        <div class="when">The cluster</div>
+        <ul class="tight">
+          <li>Priority 1 and 2 pages built, with schema in as they are written.</li>
+          <li>Coach bios expanded, <code>Person</code> and <code>sameAs</code> across the roster.</li>
+          <li>Lineage page published. Aggregator listings corrected.</li>
+          <li>Review engine running at 8 to 12 jiu jitsu mentions a month.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier">
+      <div class="pnum">3</div>
+      <div>
+        <h3>MONTHS 4 TO 6</h3>
+        <div class="when">Authority and links</div>
+        <ul class="tight">
+          <li>Matrix Jiu-Jitsu Association site live with the academy locator.</li>
+          <li>Press, university and law enforcement outreach.</li>
+          <li>Competition results published after every event, which is the link engine that keeps running without us.</li>
+          <li>Monthly grid re-read against the month-1 baseline.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col stack-sm" style="margin-top:34px">
+    <p>Expect movement on the map grid inside 4 to 8 weeks from the category and
+    consolidation work alone, because those are relevance signals and they re-evaluate fast.
+    The authority and link work is a two-quarter play, and it is the part that makes the
+    position hard to take back once you have it.</p>
+    <p>One thing I want to be straight about: the name-match gyms will not disappear. What
+    changes is that name match stops being the only signal that matters, because you will be
+    winning on category, on page relevance, on review language, on entity strength and on
+    review volume at the same time. Four out of five beats one, and you already have the
+    hardest one to build.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Growth Factor AI &nbsp;/&nbsp; Automate Everything</p>
+  <p>Nashville MMA &nbsp;/&nbsp; BJJ program strategy &nbsp;/&nbsp; 17 Sep 2026</p>
+</footer>
+
+</div>
