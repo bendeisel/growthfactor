@@ -74,55 +74,34 @@ def grid_rows(classes):
 
 # ── per-program day cards ──────────────────────────────────────────────────
 def program_cards(slug, audience=None):
-    """The small calendar: a miniature of the master grid, not a different thing.
-
-    It used to be a row of day cards with a bullet list inside each — a
-    completely separate visual system from the week grid on the schedule page.
-    Now it is the same grid at a smaller scale: same gold day headers, same
-    time gutter on the left, same class chips, just narrower and showing only
-    the rows where this program actually runs.
-    """
+    """Adult program pages exclude kids classes; kids pages get their own page."""
     picked = [c for c in CLASSES if slug in c["programs"]
               and (c["audience"] == audience if audience else c["audience"] != "kids")]
-    if not picked:
-        return "", 0
-
-    # only the days and time slots this program uses, so the grid stays compact
-    days = [d for d in DAYS if any(c["day"] == d for c in picked)]
-    slots = sorted({c["sort"] for c in picked})
-    label = {c["sort"]: c["start"] for c in picked}
     by = defaultdict(list)
     for c in picked:
-        by[(c["sort"], c["day"])].append(c)
-
-    out = ['    <div style="display: grid; grid-template-columns: 92px repeat(%d, minmax(0, 1fr)); '
-           'align-items: stretch">' % len(days)]
-    out.append('      <div></div>')
-    for d in days:
-        out.append('      <div style="background: %s; color: #0A0A0A; font-family: %s; font-size: 22px; '
-                   'text-align: center; padding: 9px 0; letter-spacing: 0.04em; '
-                   'border-left: 1px solid rgba(0,0,0,0.15)">%s</div>' % (GOLD, BEBAS, d[:3]))
-    for s_ in slots:
-        out.append('      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); '
-                   'padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); '
-                   'white-space: nowrap">%s</div>' % label[s_])
-        for d in days:
-            chips = []
-            for c in by[(s_, d)]:
-                head, lvl = split_name(c["name"])
-                lvl_html = ('<span style="display: block; font-size: 10.5px; font-weight: 700; '
-                            'letter-spacing: 0.08em; text-transform: uppercase; color: %s; margin-top: 4px">%s</span>'
-                            % (GOLD, esc(lvl))) if lvl else ""
-                chips.append(
-                    '<div style="%s; padding: 9px 11px; flex: 1 1 0; display: flex; '
-                    'flex-direction: column; justify-content: center">'
-                    '<span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; '
-                    'color: #FFFFFF">%s</span>%s</div>' % (PANEL, esc(head), lvl_html))
-            out.append('      <div style="border-left: 1px solid rgba(255,255,255,0.09); '
-                       'border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; '
-                       'flex-direction: column; gap: 6px; min-height: 48px">%s</div>' % "".join(chips))
-    out.append('    </div>')
-    return "\n".join(out), len(picked)
+        by[c["day"]].append(c)
+    cards = []
+    for d in DAYS:
+        if not by[d]:
+            continue
+        lines = "".join(
+            '<div style="display: flex; gap: 8px; align-items: baseline">'
+            '<span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">%s</span>'
+            '<span class="body" style="font-size: 12.5px; line-height: 1.4">%s</span></div>'
+            % (c["start"], esc(c["name"])) for c in sorted(by[d], key=lambda x: x["sort"]))
+        cards.append(
+            '      <div style="background: %s; border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px 18px">\n'
+            '        <div style="font-family: %s; font-size: 24px; margin-bottom: 10px">%s</div>\n'
+            '        <div style="display: flex; flex-direction: column; gap: 8px">%s</div>\n'
+            '      </div>' % (CARD, GOLD, BEBAS, d, lines))
+    cards.append(
+        '      <div style="background: linear-gradient(135deg, rgba(215,173,86,0.2), rgba(215,173,86,0.06)), %s; '
+        'border-left: 3px solid %s; border-radius: 0 8px 8px 0; padding: 18px 18px; display: flex; '
+        'flex-direction: column; justify-content: center; align-items: flex-start; gap: 12px">\n'
+        '        <div style="font-family: %s; font-size: 30px; line-height: 1">90+ Classes Per Week</div>\n'
+        '        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>\n'
+        '      </div>' % (CARD, GOLD, BEBAS))
+    return "\n".join(cards), len(picked)
 
 # ── splice into artboards between generated-block markers ──────────────────
 def splice(path, block, start_mark, end_mark):
