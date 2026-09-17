@@ -61,6 +61,12 @@ def to_plain(body, url):
     # asset paths
     body = re.sub(r'(src=")(?:\./)?([^":/][^"]*\.(?:jpg|jpeg|png|webm|mp4))"',
                   lambda m: m.group(1) + p + "assets/" + os.path.basename(m.group(2)) + '"', body)
+    # same for inline-style url(...) refs. Without this the hero fallback
+    # background pointed at ./hero-bg.jpg, which is not where assets land.
+    # The ':' exclusion keeps data: and https: URIs out of the rewrite.
+    body = re.sub(r'url\((["\']?)(?:\./)?([^"\'():/][^"\'():]*\.(?:jpg|jpeg|png|webp|svg|webm|mp4))\1\)',
+                  lambda m: "url(" + m.group(1) + p + "assets/" +
+                            os.path.basename(m.group(2)) + m.group(1) + ")", body)
     return body
 
 def wire_nav(body, url, active):
