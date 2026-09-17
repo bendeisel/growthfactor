@@ -68,7 +68,7 @@ If you want one-on-one instead of a group exercise class, our certified personal
 
 #### Come See The Weight Room
 
-The fastest way to judge a gym is to stand in it. Come by, walk the floor, look at the turf and the racks, and try the 6:00 AM group exercise class for free. Fill out the form below or call ( 615-297-4430 ).
+The fastest way to judge a gym is to stand in it. Come by, walk the floor, look at the turf and the racks, and try the 6:00 AM group exercise class for free. Fill out the form below and we will get straight back to you.
 
 ### Areas We Serve:
 
