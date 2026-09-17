@@ -151,6 +151,118 @@
   }
   componentDidMount() {
 
+  /* Coverflow. Same constants as the homepage original: pitch 1.08x card
+     width, 44deg tilt, 0.56 falloff, 0.16 settle easing. rAF only. */
+  function initCoverflows(root){
+    var rigs = (root || document).querySelectorAll('.cf');
+    for (var r = 0; r < rigs.length; r++) (function(rig){
+      var stage = rig.querySelector('.cf-stage');
+      var frame = rig.querySelector('.cf-frame');
+      if (!stage || !frame) return;
+      var cards = stage.querySelectorAll('[data-cf]');
+      var count = cards.length;
+      if (!count) return;
+      var W = parseFloat(rig.getAttribute('data-w')) || 320;
+      var pitch = W * 1.08, rotate = 44, depth = 0.6, falloff = 0.56, fadeK = 0.09;
+      var dots = rig.querySelectorAll('.cf-dots span');
+      var nameEl = rig.querySelector('.cf-name'), teaseEl = rig.querySelector('.cf-teaser');
+      var pos = 0, target = 0, sel = -1, raf = null;
+      var dragging = false, startX = 0, startPos = 0, dist = 0, auto = null;
+
+      function paint(){
+        for (var i = 0; i < count; i++){
+          var off = i - pos;
+          off = ((off % count) + count) % count;
+          if (off > count / 2) off -= count;
+          var d = Math.abs(off);
+          var ramp = Math.pow(d, falloff);
+          var tilt = Math.min(rotate * ramp, 82) * (off < 0 ? -1 : (off > 0 ? 1 : 0));
+          var c = cards[i];
+          c.style.transform = 'translateX(calc(-50% + ' + (off * pitch).toFixed(1) + 'px)) '
+            + 'translateZ(' + (-depth * W * ramp).toFixed(1) + 'px) rotateY(' + (-tilt).toFixed(2) + 'deg)';
+          c.style.opacity = Math.max(0, 1 - fadeK * d * d).toFixed(3);
+          c.style.zIndex = String(1000 - Math.round(d * 10));
+          c.style.pointerEvents = d < 0.5 ? 'auto' : 'none';
+        }
+      }
+      function indexAt(p){ return ((Math.round(p) % count) + count) % count; }
+      function setSel(i){
+        if (i === sel) return;
+        sel = i;
+        var c = cards[i];
+        if (nameEl)  nameEl.textContent  = c.getAttribute('data-name')  || '';
+        if (teaseEl) teaseEl.textContent = c.getAttribute('data-teaser') || '';
+        for (var k = 0; k < dots.length; k++){
+          var on = k === i;
+          dots[k].style.background = on ? '#D7AD56' : 'rgba(255,255,255,0.2)';
+          dots[k].style.width = on ? '30px' : '12px';
+        }
+      }
+      function settle(t){
+        if (raf) cancelAnimationFrame(raf);
+        target = t; setSel(indexAt(t));
+        (function step(){
+          var rem = target - pos;
+          if (Math.abs(rem) < 0.0005){ pos = target; paint(); raf = null; return; }
+          pos += rem * 0.16; paint();
+          raf = requestAnimationFrame(step);
+        })();
+      }
+      function goTo(i){ settle(i + Math.round((target - i) / count) * count); }
+      function nudge(by){ settle(Math.round(target) + by); }
+
+      var p = rig.querySelector('[data-cf-prev]'), n = rig.querySelector('[data-cf-next]');
+      if (p) p.addEventListener('click', function(){ nudge(-1); stopAuto(); });
+      if (n) n.addEventListener('click', function(){ nudge(1);  stopAuto(); });
+      for (var k = 0; k < dots.length; k++) (function(i){
+        dots[i].addEventListener('click', function(){ goTo(i); stopAuto(); });
+      })(k);
+      for (var c2 = 0; c2 < count; c2++) (function(i){
+        cards[i].addEventListener('click', function(e){
+          if (dist > 4){ e.preventDefault(); return; }   // a drag is not a click
+          if (i !== indexAt(pos)){ e.preventDefault(); goTo(i); stopAuto(); }
+        });
+      })(c2);
+
+      function cx(e){ return e.clientX !== undefined ? e.clientX
+                       : (e.touches && e.touches[0] ? e.touches[0].clientX : 0); }
+      frame.addEventListener('pointerdown', function(e){
+        dragging = true; dist = 0; startX = cx(e); startPos = pos;
+        if (raf) cancelAnimationFrame(raf);
+        stopAuto();
+        if (frame.setPointerCapture) { try { frame.setPointerCapture(e.pointerId); } catch(_){} }
+      });
+      frame.addEventListener('pointermove', function(e){
+        if (!dragging) return;
+        var dx = cx(e) - startX;
+        dist = Math.abs(dx);
+        pos = startPos - dx / pitch;
+        setSel(indexAt(pos)); paint();
+      });
+      function up(){ if (!dragging) return; dragging = false; settle(Math.round(pos)); }
+      frame.addEventListener('pointerup', up);
+      frame.addEventListener('pointercancel', up);
+      frame.addEventListener('mouseleave', up);
+
+      function stopAuto(){ if (auto){ clearInterval(auto); auto = null; } }
+      function startAuto(){
+        stopAuto();
+        auto = setInterval(function(){
+          if (document.hidden) return;
+          var b = rig.getBoundingClientRect();
+          if (b.bottom < 0 || b.top > innerHeight) return;   // off-screen, leave it
+          nudge(1);
+        }, 6000);
+      }
+      rig.addEventListener('mouseenter', stopAuto);
+      rig.addEventListener('mouseleave', startAuto);
+
+      setSel(0); paint(); startAuto();
+    })(rigs[r]);
+  }
+  initCoverflows(document);
+
+
   /* Map pin pulse. Was a CSS @keyframes, which the browser pauses in
      low-power mode, so the footer sat dead. rAF keeps it alive. */
   function initMapPing(root){

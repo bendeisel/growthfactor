@@ -10,6 +10,7 @@ adjacent pages (FAQ, reviews, contact, recovery), events (GoHighLevel embed),
 sponsors, blog, and the two legal pages.
 """
 import json, os, re, html, subprocess
+import render_slideshow as SS
 import render_nav as RV_NAV
 import render_reviews as RV
 
@@ -278,21 +279,44 @@ PROG_LABEL = {"jiu-jitsu": "Brazilian Jiu Jitsu", "muay-thai": "Muay Thai", "box
               "self-defense": "Self-Defense", "personal-training": "Personal Training",
               "womens-classes": "Women's Classes"}
 
+PROG_IMG = {"jiu-jitsu": "prog-jiu-jitsu-hero.jpg", "muay-thai": "prog-muay-thai-hero.jpg",
+            "boxing": "prog-boxing-hero.jpg", "wrestling": "prog-wrestling-hero.jpg",
+            "mixed-martial-arts": "prog-mixed-martial-arts-hero.jpg",
+            "kids-martial-arts": "prog-kids-martial-arts-hero.jpg",
+            "strength-training": "prog-strength-training-hero.jpg",
+            "self-defense": "prog-self-defense-hero.jpg",
+            "personal-training": "prog-personal-training-hero.jpg",
+            "womens-classes": "prog-womens-classes-hero.jpg"}
+PROG_TEASER = {"jiu-jitsu": "Gi and No-Gi, all levels", "muay-thai": "The art of eight limbs",
+               "boxing": "Fundamentals through intermediate", "wrestling": "All levels",
+               "mixed-martial-arts": "Striking and grappling together",
+               "kids-martial-arts": "Ages 6-14", "strength-training": "6am group exercise",
+               "self-defense": "Classes and seminars", "personal-training": "One on one",
+               "womens-classes": "Women only"}
+
 def teaches_band(slug):
+    """The programs this coach runs, in the Find Your Discipline slideshow."""
     progs = [p for p in COACH_PROGRAMS.get(slug, []) if p in PROG_LABEL]
     if not progs:
         return ""
-    chips = "".join(
-        '<a href="programs/%s.html" style="%s; display: block; padding: 22px 24px">'
-        '<span style="font-family: %s; font-size: 30px; line-height: 1; color: #FFFFFF; display: block">%s</span>'
-        '<span class="micro" style="font-size: 10px; margin-top: 6px; display: block">See the classes &rarr;</span>'
-        '</a>' % (p, PANEL, BEBAS, esc(PROG_LABEL[p])) for p in progs)
-    return ('<div class="rv" style="background: #000000; padding: 62px 48px">'
-            '\n  <div class="micro" style="margin-bottom: 12px">On The Mats</div>'
-            '\n  <h2 style="font-size: 50px; line-height: 1; margin-bottom: 28px">What they coach</h2>'
-            '\n  <div style="display: grid; grid-template-columns: repeat(%d, minmax(0,1fr)); gap: 14px">%s</div>'
-            '\n  <div style="margin-top: 26px"><a href="schedule.html" class="btn-line">See these classes on the schedule</a></div>'
-            '\n</div>' % (min(len(progs), 4), chips))
+    items = [{"name": PROG_LABEL[p], "teaser": PROG_TEASER.get(p, ""),
+              "href": "programs/%s.html" % p,
+              "img": PROG_IMG.get(p) if os.path.exists(os.path.join(IMGOUT, PROG_IMG.get(p, "_"))) else None}
+             for p in progs]
+    return ('<div class="rv" style="background: #000000; padding: 70px 48px">%s</div>'
+            % SS.slideshow(items, "cf-teach-" + slug, kicker="On The Mats",
+                           heading="What they coach", width=300, height=380,
+                           foot='<a href="schedule.html" class="btn-line">See these classes on the schedule</a>'))
+
+def team_band(coaches, i):
+    """The rest of the team, same slideshow rather than a row of boxes."""
+    others = (coaches[i + 1:] + coaches[:i])[:8]
+    items = [{"name": o["name"], "teaser": "Coach", "href": "coaches/%s.html" % o["slug"],
+              "img": o["photo"]} for o in others]
+    return ('<div class="rv" style="background: #0A0A0A; padding: 70px 48px">%s</div>'
+            % SS.slideshow(items, "cf-team", kicker="The Team", heading="More coaches",
+                           width=280, height=360,
+                           foot='<a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a>'))
 
 for _i, c in enumerate(coaches):
     b = [hero(c["name"], c["photo"], "Coaches & Trainers")]
@@ -300,23 +324,7 @@ for _i, c in enumerate(coaches):
         b.append(section("", c["paras"], gold=True, n=0))
     b.append(teaches_band(c["slug"]))
     # the rest of the team, so a coach page is never a dead end
-    # rotate the window so every coach is reachable from some other coach page,
-    # instead of the same first six getting all the links
-    others = (coaches[_i + 1:] + coaches[:_i])[:6]
-    peers = "".join(
-        '<a href="coaches/%s.html" style="%s; padding: 0; overflow: hidden; display: block">'
-        '<div style="position: relative; height: 170px; overflow: hidden; background: %s">%s</div>'
-        '<div style="padding: 13px 15px"><span style="font-family: %s; font-size: 21px; color: #FFFFFF">%s</span></div></a>'
-        % (o["slug"], PANEL, CARD,
-           ('<img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top">'
-            % (o["photo"], esc(o["name"]))) if o["photo"] else '',
-           BEBAS, esc(o["name"])) for o in others)
-    b.append('<div class="rv" style="background: #0A0A0A; padding: 58px 48px">'
-             '\n  <div class="micro" style="margin-bottom: 12px">The Team</div>'
-             '\n  <h2 style="font-size: 50px; line-height: 1; margin-bottom: 26px">More coaches</h2>'
-             '\n  <div style="display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px">%s</div>'
-             '\n  <div style="margin-top: 26px"><a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a></div>'
-             '\n</div>' % peers)
+    b.append(team_band(coaches, _i))
     b.append(cta())
     page = write("coach-" + c["slug"], c["name"], "\n\n".join(b), 3000)
     built.append(page)

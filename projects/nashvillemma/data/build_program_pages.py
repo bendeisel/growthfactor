@@ -11,6 +11,7 @@ ProgramDetail artboard so every page stays identical to the signed-off one.
 """
 import json, os, re, html, shutil, subprocess
 import render_nav as RV_NAV
+import render_slideshow as SS
 import render_reviews as RV
 
 HERE     = os.path.dirname(os.path.abspath(__file__))
@@ -143,6 +144,13 @@ def parse(md):
 
 # ── schedule cards from classes.json ───────────────────────────────────────
 def schedule_cards(tag, audience, enabled=True):
+    """The small calendar: the master week grid at a smaller scale.
+
+    This was a row of day cards with a bullet list inside each — a different
+    visual system from the schedule page, so the two never looked related.
+    Same grid now: gold day headers, time gutter down the left, the same class
+    chips, narrowed to the days and time slots this program actually uses.
+    """
     if not enabled or (tag is None and audience is None):
         return None, 0
     picked = [c for c in CLASSES
@@ -151,27 +159,42 @@ def schedule_cards(tag, audience, enabled=True):
               and (audience is not None or c["audience"] != "kids")]
     if not picked:
         return None, 0
+
+    days = [d for d in DAYS if any(c["day"] == d for c in picked)]
+    slots = sorted({c["sort"] for c in picked})
+    label = {c["sort"]: c["start"] for c in picked}
     by = {}
     for c in picked:
-        by.setdefault(c["day"], []).append(c)
-    out = []
-    for d in DAYS:
-        if d not in by: continue
-        lines = "".join(
-            '<div style="display: flex; gap: 8px; align-items: baseline">'
-            '<span class="micro" style="font-size: 11px; flex: 0 0 62px; letter-spacing: 0.08em">%s</span>'
-            '<span class="body" style="font-size: 15px; line-height: 1.45">%s</span></div>'
-            % (c["start"], esc(c["name"])) for c in sorted(by[d], key=lambda x: x["sort"]))
-        out.append('      <div style="%s; padding: 22px 22px">\n'
-                   '        <div style="font-family: %s; font-size: 29px; margin-bottom: 14px; color: %s">%s</div>\n'
-                   '        <div style="display: flex; flex-direction: column; gap: 8px">%s</div>\n      </div>'
-                   % (PANEL, BEBAS, GOLD, d, lines))
-    out.append('      <div style="%s; background: linear-gradient(135deg, rgba(215,173,86,0.16), rgba(215,173,86,0.04)); '
-               'padding: 22px; display: flex; flex-direction: column; '
-               'justify-content: center; align-items: flex-start; gap: 14px">\n'
-               '        <div style="font-family: %s; font-size: 35px; line-height: 1">90+ Classes Per Week</div>\n'
-               '        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>\n'
-               '      </div>' % (PANEL, BEBAS))
+        by.setdefault((c["sort"], c["day"]), []).append(c)
+
+    out = ['    <div class="mini-grid" style="display: grid; grid-template-columns: 96px repeat(%d, minmax(0, 1fr)); '
+           'align-items: stretch">' % len(days)]
+    out.append('      <div></div>')
+    for d in days:
+        out.append('      <div style="background: %s; color: #0A0A0A; font-family: %s; font-size: 24px; '
+                   'text-align: center; padding: 10px 0; letter-spacing: 0.04em; '
+                   'border-left: 1px solid rgba(0,0,0,0.15)">%s</div>' % (GOLD, BEBAS, esc(d)))
+    for s_ in slots:
+        out.append('      <div class="micro" style="font-size: 12px; color: rgba(255,255,255,0.68); '
+                   'padding: 14px 13px 0 0; text-align: right; '
+                   'border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">%s</div>' % label[s_])
+        for d in days:
+            chips = []
+            for c in by.get((s_, d), []):
+                nm = c["name"]
+                head, lvl = (nm.split(":", 1) + [""])[:2] if ":" in nm else (nm, "")
+                lvl_html = ('<span style="display: block; font-size: 11px; font-weight: 700; '
+                            'letter-spacing: 0.08em; text-transform: uppercase; color: %s; '
+                            'margin-top: 4px">%s</span>' % (GOLD, esc(lvl.strip()))) if lvl.strip() else ""
+                chips.append('<div style="%s; padding: 10px 12px; flex: 1 1 0; display: flex; '
+                             'flex-direction: column; justify-content: center">'
+                             '<span style="display: block; font-size: 14.5px; font-weight: 700; '
+                             'line-height: 1.25; color: #FFFFFF">%s</span>%s</div>'
+                             % (PANEL, esc(head.strip()), lvl_html))
+            out.append('      <div style="border-left: 1px solid rgba(255,255,255,0.09); '
+                       'border-top: 1px solid rgba(255,255,255,0.09); padding: 7px; display: flex; '
+                       'flex-direction: column; gap: 6px; min-height: 54px">%s</div>' % "".join(chips))
+    out.append('    </div>')
     return "\n".join(out), len(picked)
 
 # ── render one page ────────────────────────────────────────────────────────
@@ -361,26 +384,17 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
     # each other.
     who = [slug for slug, progs in COACH_PROGRAMS.items() if p["slug"] in progs]
     if who:
-        cards = []
-        for cs in who[:6]:
+        items = []
+        for cs in who[:10]:
             photo = "coach-%s.jpg" % cs
-            nice = COACH_NAMES.get(cs, cs.replace("-", " ").title())
-            has = os.path.exists(os.path.join(IMGOUT, photo))
-            cards.append(
-                '<a href="coaches/%s.html" style="%s; padding: 0; overflow: hidden; display: block">'
-                '<div style="position: relative; height: 210px; overflow: hidden; background: %s">%s</div>'
-                '<div style="padding: 15px 17px"><span style="font-family: %s; font-size: 24px; color: #FFFFFF">%s</span></div></a>'
-                % (cs, PANEL, CARD,
-                   ('<img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top">'
-                    % (photo, esc(nice))) if has else '',
-                   BEBAS, esc(nice)))
-        out.append('<div class="rv" style="background: #0A0A0A; padding: 66px 48px">')
-        out.append('  <div class="micro" style="margin-bottom: 12px">Who You Will Train With</div>')
-        out.append('  <h2 style="font-size: 54px; line-height: 1; margin-bottom: 28px">Your coaches</h2>')
-        out.append('  <div style="display: grid; grid-template-columns: repeat(%d, minmax(0,1fr)); gap: 14px">%s</div>'
-                   % (min(len(cards), 4), "".join(cards)))
-        out.append('  <div style="margin-top: 26px"><a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a></div>')
-        out.append('</div>')
+            items.append({"name": COACH_NAMES.get(cs, cs.replace("-", " ").title()),
+                          "teaser": "Coach",
+                          "href": "coaches/%s.html" % cs,
+                          "img": photo if os.path.exists(os.path.join(IMGOUT, photo)) else None})
+        out.append('<div class="rv" style="background: #0A0A0A; padding: 72px 48px">%s</div>'
+                   % SS.slideshow(items, "cf-coaches", kicker="Who You Will Train With",
+                                  heading="Your coaches", width=290, height=370,
+                                  foot='<a href="coaches.html" class="btn-line">All Coaches &amp; Trainers</a>'))
 
     # reviews — filtered to this program, so the Muay Thai page carries the
     # reviews that actually mention Muay Thai

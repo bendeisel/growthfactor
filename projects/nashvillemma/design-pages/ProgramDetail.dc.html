@@ -118,6 +118,11 @@
           box-shadow: inset 0 0 0 1px rgba(215,173,86,0.38); }
     .rvm-name { font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 23px;
           letter-spacing: 0.02em; color: #FFFFFF; }
+
+    /* Coverflow slideshow — the Find Your Discipline component, reusable */
+    .cf-frame:active { cursor: grabbing; }
+    .cf [data-cf] { text-decoration: none; }
+    .cf [data-cf] h3 { color: #FFFFFF; }
 </style>
 </helmet>
 
@@ -225,38 +230,80 @@
     </div>
     <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
       <!-- GENERATED:cards -->
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Monday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu: Intermediate</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">10:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">11:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">5:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Rolling Class (Gi &amp; No Gi)</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No Gi Brazilian Jiu-Jitsu: Intermediate</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">7:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No Gi Brazilian Jiu-Jitsu: Fundamentals</span></div></div>
-      </div>
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Tuesday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu: Advanced</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">10:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">11:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">5:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No Gi Brazilian Jiu-Jitsu: Advanced</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu: Intermediate</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">7:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu Fundamentals</span></div></div>
-      </div>
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Wednesday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu: Intermediate</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">10:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">11:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">5:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu Fundamentals</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No Gi Brazilian Jiu-Jitsu: Intermediate</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">7:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu: Fundamentals</span></div></div>
-      </div>
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Thursday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu: Advanced</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">10:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">11:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">5:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu: Advanced</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu: Intermediate</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">7:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu: Fundamentals</span></div></div>
-      </div>
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Friday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">6:00 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu: Advanced</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">10:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">11:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">4:30 PM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No-Gi Brazilian Jiu-Jitsu: Intermediate</span></div></div>
-      </div>
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Saturday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">8:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Brazilian Jiu-Jitsu OPEN MAT ROLLING (All Levels)</span></div><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">11:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">No Gi Brazilian Jiu Jitsu: Fundamentals</span></div></div>
-      </div>
-      <div style="background: #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 24px; margin-bottom: 10px">Sunday</div>
-        <div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px; align-items: baseline"><span class="micro" style="font-size: 9px; flex: 0 0 52px; letter-spacing: 0.1em">10:30 AM</span><span class="body" style="font-size: 12.5px; line-height: 1.4">Women's Jiu Jitsu All Levels</span></div></div>
-      </div>
-      <div style="background: linear-gradient(135deg, rgba(215,173,86,0.2), rgba(215,173,86,0.06)), #1E1E29; border-left: 3px solid #D7AD56; border-radius: 0 8px 8px 0; padding: 18px 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 12px">
-        <div style="font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 30px; line-height: 1">90+ Classes Per Week</div>
-        <div onClick="{{ openForm }}" class="btn" style="padding: 11px 20px; font-size: 11px">Request more information</div>
-      </div>
+    <div style="display: grid; grid-template-columns: 92px repeat(7, minmax(0, 1fr)); align-items: stretch">
+      <div></div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Mon</div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Tue</div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Wed</div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Thu</div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Fri</div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Sat</div>
+      <div style="background: #D7AD56; color: #0A0A0A; font-family: 'Bebas Neue','Oswald','Arial Narrow',sans-serif; font-size: 22px; text-align: center; padding: 9px 0; letter-spacing: 0.04em; border-left: 1px solid rgba(0,0,0,0.15)">Sun</div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">6:00 AM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Advanced</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Advanced</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Advanced</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">8:30 AM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Brazilian Jiu-Jitsu OPEN MAT ROLLING (All Levels)</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">10:30 AM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Women's Jiu Jitsu All Levels</span></div></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">11:30 AM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No Gi Brazilian Jiu Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Fundamentals</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">4:30 PM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">5:30 PM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Rolling Class (Gi &amp; No Gi)</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Advanced</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu Fundamentals</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Advanced</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">6:30 PM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Intermediate</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div class="micro" style="font-size: 11.5px; color: rgba(255,255,255,0.68); padding: 12px 12px 0 0; text-align: right; border-top: 1px solid rgba(255,255,255,0.09); white-space: nowrap">7:30 PM</div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Fundamentals</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">Gi Brazilian Jiu-Jitsu Fundamentals</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Fundamentals</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"><div style="background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); border-radius: 8px; padding: 9px 11px; flex: 1 1 0; display: flex; flex-direction: column; justify-content: center"><span style="display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; color: #FFFFFF">No-Gi Brazilian Jiu-Jitsu</span><span style="display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #D7AD56; margin-top: 4px">Fundamentals</span></div></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); border-top: 1px solid rgba(255,255,255,0.09); padding: 6px; display: flex; flex-direction: column; gap: 6px; min-height: 48px"></div>
+    </div>
     <!-- /GENERATED:cards -->
     </div>
   </div>
@@ -355,6 +402,118 @@ class Component extends DCLogic {
     this.state = { formOpen: false };
   }
   componentDidMount() {
+
+  /* Coverflow. Same constants as the homepage original: pitch 1.08x card
+     width, 44deg tilt, 0.56 falloff, 0.16 settle easing. rAF only. */
+  function initCoverflows(root){
+    var rigs = (root || document).querySelectorAll('.cf');
+    for (var r = 0; r < rigs.length; r++) (function(rig){
+      var stage = rig.querySelector('.cf-stage');
+      var frame = rig.querySelector('.cf-frame');
+      if (!stage || !frame) return;
+      var cards = stage.querySelectorAll('[data-cf]');
+      var count = cards.length;
+      if (!count) return;
+      var W = parseFloat(rig.getAttribute('data-w')) || 320;
+      var pitch = W * 1.08, rotate = 44, depth = 0.6, falloff = 0.56, fadeK = 0.09;
+      var dots = rig.querySelectorAll('.cf-dots span');
+      var nameEl = rig.querySelector('.cf-name'), teaseEl = rig.querySelector('.cf-teaser');
+      var pos = 0, target = 0, sel = -1, raf = null;
+      var dragging = false, startX = 0, startPos = 0, dist = 0, auto = null;
+
+      function paint(){
+        for (var i = 0; i < count; i++){
+          var off = i - pos;
+          off = ((off % count) + count) % count;
+          if (off > count / 2) off -= count;
+          var d = Math.abs(off);
+          var ramp = Math.pow(d, falloff);
+          var tilt = Math.min(rotate * ramp, 82) * (off < 0 ? -1 : (off > 0 ? 1 : 0));
+          var c = cards[i];
+          c.style.transform = 'translateX(calc(-50% + ' + (off * pitch).toFixed(1) + 'px)) '
+            + 'translateZ(' + (-depth * W * ramp).toFixed(1) + 'px) rotateY(' + (-tilt).toFixed(2) + 'deg)';
+          c.style.opacity = Math.max(0, 1 - fadeK * d * d).toFixed(3);
+          c.style.zIndex = String(1000 - Math.round(d * 10));
+          c.style.pointerEvents = d < 0.5 ? 'auto' : 'none';
+        }
+      }
+      function indexAt(p){ return ((Math.round(p) % count) + count) % count; }
+      function setSel(i){
+        if (i === sel) return;
+        sel = i;
+        var c = cards[i];
+        if (nameEl)  nameEl.textContent  = c.getAttribute('data-name')  || '';
+        if (teaseEl) teaseEl.textContent = c.getAttribute('data-teaser') || '';
+        for (var k = 0; k < dots.length; k++){
+          var on = k === i;
+          dots[k].style.background = on ? '#D7AD56' : 'rgba(255,255,255,0.2)';
+          dots[k].style.width = on ? '30px' : '12px';
+        }
+      }
+      function settle(t){
+        if (raf) cancelAnimationFrame(raf);
+        target = t; setSel(indexAt(t));
+        (function step(){
+          var rem = target - pos;
+          if (Math.abs(rem) < 0.0005){ pos = target; paint(); raf = null; return; }
+          pos += rem * 0.16; paint();
+          raf = requestAnimationFrame(step);
+        })();
+      }
+      function goTo(i){ settle(i + Math.round((target - i) / count) * count); }
+      function nudge(by){ settle(Math.round(target) + by); }
+
+      var p = rig.querySelector('[data-cf-prev]'), n = rig.querySelector('[data-cf-next]');
+      if (p) p.addEventListener('click', function(){ nudge(-1); stopAuto(); });
+      if (n) n.addEventListener('click', function(){ nudge(1);  stopAuto(); });
+      for (var k = 0; k < dots.length; k++) (function(i){
+        dots[i].addEventListener('click', function(){ goTo(i); stopAuto(); });
+      })(k);
+      for (var c2 = 0; c2 < count; c2++) (function(i){
+        cards[i].addEventListener('click', function(e){
+          if (dist > 4){ e.preventDefault(); return; }   // a drag is not a click
+          if (i !== indexAt(pos)){ e.preventDefault(); goTo(i); stopAuto(); }
+        });
+      })(c2);
+
+      function cx(e){ return e.clientX !== undefined ? e.clientX
+                       : (e.touches && e.touches[0] ? e.touches[0].clientX : 0); }
+      frame.addEventListener('pointerdown', function(e){
+        dragging = true; dist = 0; startX = cx(e); startPos = pos;
+        if (raf) cancelAnimationFrame(raf);
+        stopAuto();
+        if (frame.setPointerCapture) { try { frame.setPointerCapture(e.pointerId); } catch(_){} }
+      });
+      frame.addEventListener('pointermove', function(e){
+        if (!dragging) return;
+        var dx = cx(e) - startX;
+        dist = Math.abs(dx);
+        pos = startPos - dx / pitch;
+        setSel(indexAt(pos)); paint();
+      });
+      function up(){ if (!dragging) return; dragging = false; settle(Math.round(pos)); }
+      frame.addEventListener('pointerup', up);
+      frame.addEventListener('pointercancel', up);
+      frame.addEventListener('mouseleave', up);
+
+      function stopAuto(){ if (auto){ clearInterval(auto); auto = null; } }
+      function startAuto(){
+        stopAuto();
+        auto = setInterval(function(){
+          if (document.hidden) return;
+          var b = rig.getBoundingClientRect();
+          if (b.bottom < 0 || b.top > innerHeight) return;   // off-screen, leave it
+          nudge(1);
+        }, 6000);
+      }
+      rig.addEventListener('mouseenter', stopAuto);
+      rig.addEventListener('mouseleave', startAuto);
+
+      setSel(0); paint(); startAuto();
+    })(rigs[r]);
+  }
+  initCoverflows(document);
+
 
   /* Map pin pulse. Was a CSS @keyframes, which the browser pauses in
      low-power mode, so the footer sat dead. rAF keeps it alive. */

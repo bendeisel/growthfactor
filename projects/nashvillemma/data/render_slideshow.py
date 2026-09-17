@@ -1,4 +1,96 @@
+#!/usr/bin/env python3
+"""The coverflow from the homepage, as a component any page can use.
 
+This is the same slideshow Ben approved under "Find your discipline" — same
+perspective, same pitch and tilt constants, same settle easing, same drag and
+flick behaviour. It lived inside the Homepage component class and was bound
+through DCLogic, so nothing else could use it; here the maths is identical but
+the JS reads its items out of the markup, so it runs anywhere.
+
+Motion is requestAnimationFrame, never a CSS animation.
+"""
+
+GOLD = "#D7AD56"
+BEBAS = "'Bebas Neue','Oswald','Arial Narrow',sans-serif"
+
+
+def esc(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def slideshow(items, sid, kicker="", heading="", width=320, height=400, foot=None):
+    """items: [{name, teaser, href, img}]  — img may be None."""
+    if not items:
+        return ""
+
+    cards = []
+    for n, it in enumerate(items):
+        media = ('<img src="%s" alt="%s" draggable="false" style="position: absolute; inset: 0; '
+                 'width: 100%%; height: 100%%; object-fit: cover; object-position: top">'
+                 % (it["img"], esc(it["name"]))) if it.get("img") else ""
+        cards.append(
+            '<a data-cf data-name="%s" data-teaser="%s" href="%s" '
+            'style="position: absolute; left: 50%%; top: 0; width: %dpx; height: %dpx; '
+            'border-radius: 8px; overflow: hidden; background: #131313; '
+            'box-shadow: 0 24px 60px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(215,173,86,0.28); '
+            'display: block; will-change: transform">'
+            '%s'
+            '<div style="position: absolute; inset: 0; background: linear-gradient(to top, '
+            'rgba(0,0,0,0.9) 0%%, rgba(0,0,0,0.05) 58%%)"></div>'
+            '<div style="position: absolute; left: 20px; bottom: 18px; right: 20px">'
+            '<div class="micro" style="margin-bottom: 6px">%02d</div>'
+            '<h3 class="shim" style="font-size: 30px; line-height: 1">%s</h3>'
+            '</div></a>' % (esc(it["name"]), esc(it.get("teaser", "")), it.get("href", "#"),
+                            width, height, media, n + 1, esc(it["name"])))
+
+    dots = "".join(
+        '<span style="height: 4px; width: %s; border-radius: 0; background: %s; '
+        'cursor: pointer; transition: width .22s ease, background .22s ease"></span>'
+        % ("30px" if i == 0 else "12px", GOLD if i == 0 else "rgba(255,255,255,0.2)")
+        for i in range(len(items)))
+
+    head = ""
+    if kicker or heading:
+        head = (
+            '<div style="display: flex; align-items: flex-end; justify-content: space-between; '
+            'gap: 24px; margin-bottom: 10px">'
+            '<div>%s%s</div>'
+            '<div style="display: flex; align-items: center; gap: 12px">'
+            '<div class="ctl" data-cf-prev><svg width="18" height="18" viewBox="0 0 24 24" fill="none" '
+            'stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg></div>'
+            '<div class="ctl" data-cf-next><svg width="18" height="18" viewBox="0 0 24 24" fill="none" '
+            'stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></div>'
+            '</div></div>'
+            % (('<div class="micro" style="margin-bottom: 14px">%s</div>' % esc(kicker)) if kicker else "",
+               ('<h2 style="font-size: 58px; line-height: 1">%s</h2>' % esc(heading)) if heading else ""))
+
+    return (
+        '<div class="cf" id="%s" data-w="%d">'
+        '%s'
+        '<div class="cf-frame" style="perspective: 960px; overflow: hidden; padding: 44px 0; '
+        'cursor: grab; touch-action: pan-y">'
+        '<div class="cf-stage" style="position: relative; height: %dpx; transform-style: preserve-3d">%s</div>'
+        '</div>'
+        '<div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 6px">'
+        '<div class="cf-caption" style="min-height: 26px"><span class="cf-name" style="font-family: %s; '
+        'font-size: 26px; color: #FFFFFF; letter-spacing: 0.02em"></span> '
+        '<span class="cf-teaser body" style="font-size: 15px; margin-left: 10px"></span></div>'
+        '<div class="cf-dots" style="display: flex; align-items: center; gap: 7px">%s</div>'
+        '</div>'
+        '%s'
+        '</div>'
+        % (sid, width, head, height, "".join(cards), BEBAS, dots,
+           ('<div style="margin-top: 24px">%s</div>' % foot) if foot else ""))
+
+
+CSS = """
+    /* Coverflow slideshow — the Find Your Discipline component, reusable */
+    .cf-frame:active { cursor: grabbing; }
+    .cf [data-cf] { text-decoration: none; }
+    .cf [data-cf] h3 { color: #FFFFFF; }
+"""
+
+JS = """
   /* Coverflow. Same constants as the homepage original: pitch 1.08x card
      width, 44deg tilt, 0.56 falloff, 0.16 settle easing. rAF only. */
   function initCoverflows(root){
@@ -109,127 +201,4 @@
     })(rigs[r]);
   }
   initCoverflows(document);
-
-  /* Nav dropdowns. Hover opens on a device that can hover, and the trigger
-     stays a real link so clicking Martial Arts goes to the programs index.
-     On touch, where there is no hover, the first tap opens the panel. */
-  function initNavDropdowns(root){
-    var wraps = (root || document).querySelectorAll('.dd-wrap');
-    var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;
-    var open = null;
-
-    function show(w){
-      if (open && open !== w) hide(open);
-      var p = w.querySelector('.dd-panel'), t = w.querySelector('.dd-trigger');
-      if (!p) return;
-      p.hidden = false; w.setAttribute('data-open','1');
-      if (t) t.setAttribute('aria-expanded','true');
-      open = w;
-    }
-    function hide(w){
-      var p = w.querySelector('.dd-panel'), t = w.querySelector('.dd-trigger');
-      if (!p) return;
-      p.hidden = true; w.removeAttribute('data-open');
-      if (t) t.setAttribute('aria-expanded','false');
-      if (open === w) open = null;
-    }
-
-    for (var i = 0; i < wraps.length; i++) (function(w){
-      var trg = w.querySelector('.dd-trigger');
-      var shutTimer = null;
-
-      if (canHover) {
-        w.addEventListener('mouseenter', function(){
-          if (shutTimer) { clearTimeout(shutTimer); shutTimer = null; }
-          show(w);
-        });
-        w.addEventListener('mouseleave', function(){
-          shutTimer = setTimeout(function(){ hide(w); }, 120);
-        });
-        /* click is NOT bound here: the trigger is an anchor, so the click
-           navigates. Binding a toggle as well is what closed the panel
-           immediately after hover opened it. */
-      } else {
-        trg.addEventListener('click', function(e){
-          if (w.getAttribute('data-open') !== '1') { e.preventDefault(); show(w); }
-        });
-      }
-
-      trg.addEventListener('keydown', function(e){
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault(); show(w);
-          var first = w.querySelector('.dd-item'); if (first) first.focus();
-        }
-      });
-    })(wraps[i]);
-
-    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && open) hide(open); });
-    document.addEventListener('click', function(e){
-      if (open && !open.contains(e.target)) hide(open);
-    });
-    document.addEventListener('focusin', function(e){
-      if (open && !open.contains(e.target)) hide(open);
-    });
-  }
-  initNavDropdowns(document);
-
-  /* Review marquee — rAF so it keeps moving in low-power mode, where the
-     browser silently pauses CSS animations. Hovering a lane pauses it. */
-  function initReviewMarquees(root){
-    var lanes = (root || document).querySelectorAll('.rvm');
-    for (var i = 0; i < lanes.length; i++) (function(lane){
-      var track = lane.querySelector('.rvm-track');
-      var sets  = lane.querySelectorAll('.rvm-set');
-      if (!track || sets.length < 2) return;
-      var speed   = parseFloat(lane.getAttribute('data-speed')) || 26;
-      var reverse = lane.getAttribute('data-reverse') === '1';
-      var span = 0, x = 0, paused = false, last = 0;
-
-      function measure(){
-        span = sets[0].getBoundingClientRect().width;
-        if (reverse && span && x === 0) x = -span;
-      }
-      measure();
-      window.addEventListener('resize', measure);
-      if (window.ResizeObserver) new ResizeObserver(measure).observe(sets[0]);
-
-      lane.addEventListener('mouseenter', function(){ paused = true; });
-      lane.addEventListener('mouseleave', function(){ paused = false; });
-
-      function frame(now){
-        if (!last) last = now;
-        var dt = Math.min((now - last) / 1000, 0.05);
-        last = now;
-        if (!paused && span > 0) {
-          x += (reverse ? dt * speed : -dt * speed);
-          if (!reverse && x <= -span) x += span;
-          if (reverse && x >= 0) x -= span;
-          track.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
-        }
-        requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    })(lanes[i]);
-  }
-  initReviewMarquees(document);
-
-/* Minimal stand-in for the canvas runtime so the artboard component class runs
-   as-is on a plain page. State changes drive the modal directly. */
-class DCLogic {
-  constructor(props){ this.props = props || {}; this.state = {}; }
-  setState(patch){
-    Object.assign(this.state, patch);
-    if ('formOpen' in patch) { patch.formOpen ? openForm() : closeForm(); }
-  }
-}
-document.addEventListener('click', function (e) {
-  var q = e.target.closest ? e.target.closest('.faq-q') : null;
-  if (!q) { return; }
-  var a = q.parentNode.querySelector('.faq-a');
-  var plus = q.querySelector('.faq-plus');
-  a.hidden = !a.hidden;
-  if (plus) { plus.textContent = a.hidden ? '+' : '–'; }
-});
-function openForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=false;}}
-function closeForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=true;}}
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm();}});
+"""
