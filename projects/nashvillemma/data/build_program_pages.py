@@ -40,6 +40,19 @@ PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8")
 
 # Review-section headings.  These carry the program term in an H2, which is the
 # part an AI answer engine actually quotes back.
+# Which menu section each program page sits under.  The eyebrow above the H1
+# names this, so the page tells you where you are in the menu you just used.
+PAGE_SECTION = {
+    "jiu-jitsu": "Martial Arts", "muay-thai": "Martial Arts", "boxing": "Martial Arts",
+    "mixed-martial-arts": "Martial Arts", "wrestling": "Martial Arts",
+    "self-defense": "Martial Arts", "mma-fight-team": "Martial Arts",
+    "womens-classes": "Martial Arts",
+    "kids-martial-arts": "Kids Classes", "kids-brazilian-jiu-jitsu": "Kids Classes",
+    "kids-fitness": "Kids Classes",
+    "strength-training": "Strength Training", "personal-training": "Strength Training",
+    "open-gym": "Strength Training",
+}
+
 REVIEW_HEADS = {
     "jiu-jitsu":                "What members say about our Jiu Jitsu",
     "kids-brazilian-jiu-jitsu": "What parents say about Kids Jiu Jitsu",
@@ -214,7 +227,8 @@ def render(p):
                    'radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.78) 100%)"></div>')
         out.append('    <div style="position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; '
                    'align-items: center; justify-content: center; text-align: center; padding: 0 60px">')
-        out.append('      <div class="micro" style="margin-bottom: 16px">Programs</div>')
+        out.append('      <div class="micro" style="margin-bottom: 16px">%s</div>'
+                   % esc(PAGE_SECTION.get(p["slug"], "Classes")))
         import re as _re
         m = _re.match(r"^(.*?)\s+in\s+(.*)$", title, _re.I)
         h1 = ('%s<br>In %s' % (esc(m.group(1)), esc(m.group(2)))) if m else esc(title)
@@ -229,7 +243,8 @@ def render(p):
     out.append('  <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; z-index: 1">' % (hero_img, esc(title)))
     out.append('  <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.9) 100%); z-index: 2"></div>')
     out.append('  <div style="position: absolute; left: 48px; bottom: 44px; z-index: 3; max-width: 1100px">')
-    out.append('    <div class="micro" style="margin-bottom: 14px">Programs</div>')
+    out.append('    <div class="micro" style="margin-bottom: 14px">%s</div>'
+               % esc(PAGE_SECTION.get(p["slug"], "Classes")))
     size = 104 if len(title) < 34 else 80
     out.append('    <h1 style="font-size: %dpx; line-height: 0.92">%s</h1>' % (size, esc(title)))
     out.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 20px"></div>' % GOLD)

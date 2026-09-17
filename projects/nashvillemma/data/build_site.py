@@ -20,12 +20,18 @@ OUT   = os.path.join(PROJ, "site")
 ASSET = os.path.join(OUT, "assets")
 
 # ── which artboard becomes which URL ───────────────────────────────────────
+# Browser-tab titles that should not be derived from the slug, because the slug
+# is a leftover from the old menu naming.
+TITLE = {"programs": "Martial Arts", "gear": "Gear Recommendations",
+         "recovery-partners": "Recovery Partners", "strength-training":
+         "Strength Training and Sports Performance"}
+
 ROUTES = [("Homepage.dc.html", "index.html", "Nashville MMA Training Camp", DESIGN),
           ("Schedule.dc.html", "schedule.html", "Class Schedule", PAGES)]
 for f in sorted(os.listdir(PAGES)):
     if f.startswith("Program-") and f.endswith(".dc.html"):
         slug = f[len("Program-"):-len(".dc.html")]
-        ROUTES.append((f, "programs/%s.html" % slug, slug.replace("-", " ").title(), PAGES))
+        ROUTES.append((f, "programs/%s.html" % slug, TITLE.get(slug, slug.replace("-", " ").title()), PAGES))
 
 SPECIAL = {"programs": "programs/index.html"}
 for f in sorted(os.listdir(PAGES)):
@@ -36,7 +42,7 @@ for f in sorted(os.listdir(PAGES)):
         url = "coaches/%s.html" % slug[len("coach-"):]
     else:
         url = SPECIAL.get(slug, "%s.html" % slug)
-    ROUTES.append((f, url, slug.replace("coach-", "").replace("-", " ").title(), PAGES))
+    ROUTES.append((f, url, TITLE.get(slug, slug.replace("coach-", "").replace("-", " ").title()), PAGES))
 
 # nav label -> destination. Pages we have not designed yet still get their real
 # URL so the gap shows up as a broken link instead of silently vanishing.
@@ -69,6 +75,39 @@ def to_plain(body, url):
     body = re.sub(r'(src=")(?:\./)?([^":/][^"]*\.(?:jpg|jpeg|png|webm|mp4))"',
                   lambda m: m.group(1) + p + "assets/" + os.path.basename(m.group(2)) + '"', body)
     return body
+
+# Requires a separator, so it matches 615-297-4430 and (615) 297-4430 but not
+# an arbitrary run of ten digits. Leading parens stay outside the link text.
+PHONE_RX = re.compile(r"\(?(\d{3})\)?[.\u2013\-\s](\d{3})[.\u2013\-\s](\d{4})(?!\d)")
+
+def link_phones(body):
+    """Make every phone number on the page tappable.
+
+    Walks text nodes only: anything inside a tag (so href="tel:...", SVG path
+    data and style values are untouched) and anything already inside an <a> is
+    left alone. That way a number written into body copy as ( 615-297-4430 )
+    becomes a call link without the markup having to know about it.
+    """
+    out, pos, depth = [], 0, 0
+    for m in re.finditer(r"<[^>]+>", body):
+        text = body[pos:m.start()]
+        out.append(text if depth else PHONE_RX.sub(
+            lambda x: '<a href="tel:%s%s%s" style="color: inherit">%s</a>'
+                      % (x.group(1), x.group(2), x.group(3), x.group(0)), text))
+        tag = m.group(0)
+        low = tag.lower()
+        if low.startswith("<a ") or low == "<a>":
+            depth += 1
+        elif low.startswith("</a"):
+            depth = max(0, depth - 1)
+        out.append(tag)
+        pos = m.end()
+    tail = body[pos:]
+    out.append(tail if depth else PHONE_RX.sub(
+        lambda x: '<a href="tel:%s%s%s" style="color: inherit">%s</a>'
+                  % (x.group(1), x.group(2), x.group(3), x.group(0)), tail))
+    return "".join(out)
+
 
 def wire_nav(body, url, active):
     """Depth-prefix the generated nav/footer links and mark the current page."""
@@ -367,7 +406,7 @@ for src, url, title, base in ROUTES:
             "/* shared across every page — lifted from the approved artboards */\n" + css)
         open(os.path.join(ASSET, "site.js"), "w", encoding="utf-8").write(SITE_JS)
         css_written = True
-    body = wire_nav(to_plain(body, url), url, url)
+    body = link_phones(wire_nav(to_plain(body, url), url, url))
     dest = os.path.join(OUT, url)
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     open(dest, "w", encoding="utf-8").write(SHELL % {

@@ -213,10 +213,11 @@ LABEL = {"jiu-jitsu":"Brazilian Jiu Jitsu","boxing":"Boxing","muay-thai":"Muay T
   "kids-fitness":"Kids Fitness","strength-training":"Strength Training",
   "personal-training":"Personal Training","open-gym":"Open Gym"}
 GRP = [("Adults Martial Arts", ["jiu-jitsu","boxing","muay-thai","mixed-martial-arts","wrestling","self-defense","mma-fight-team","womens-classes"]),
-       ("Kids Programs", ["kids-martial-arts","kids-brazilian-jiu-jitsu","kids-fitness"]),
+       ("Kids Classes", ["kids-martial-arts","kids-brazilian-jiu-jitsu","kids-fitness"]),
        ("Strength Training", ["strength-training","personal-training","open-gym"])]
 t2, secs2 = blocks_to_sections(parse("services"))
-body = [hero("Martial Arts and Fitness Programs Available In Nashville", "prog-jiu-jitsu-hero.jpg", "Programs")]
+# H1 and eyebrow name the menu section, not the retired "Programs" tab
+body = [hero("Martial Arts Classes In Nashville", "prog-jiu-jitsu-hero.jpg", "Martial Arts")]
 if secs2 and secs2[0]["paras"]:
     body.append(section("", secs2[0]["paras"][:2], gold=True, n=0))
 for gi, (gname, slugs) in enumerate(GRP):
@@ -234,7 +235,7 @@ for gi, (gname, slugs) in enumerate(GRP):
       '\n  <div style="display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px">\n%s\n  </div>\n</div>'
       % ("#000000" if gi % 2 == 0 else "#0A0A0A", esc(gname), "\n".join(cards)))
 body.append(cta())
-built.append(write("programs", "Programs", "\n\n".join(body), 2900))
+built.append(write("programs", "Martial Arts", "\n\n".join(body), 2900))
 
 # ══ COACHES ════════════════════════════════════════════════════════════════
 ALIAS = {"dedrek-sanders": r"Dedri?c?k[-_ ]*Sanders"}
