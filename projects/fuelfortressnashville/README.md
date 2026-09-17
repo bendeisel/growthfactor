@@ -63,6 +63,25 @@ Client's priority terms: *weightlifting Nashville*, *weightlifting*, *East Nashv
 the location section are all built around these. `ExerciseGym` structured data
 carries the real NAP, areas served, and the genuine 5.0/8 Google rating.
 
+## Images are wired to the live server
+
+Every image slot points at the photos already sitting in
+`wp-content/uploads/2026/03/` on the client's own Hostinger account, which is where
+this site deploys. The files never needed to travel: the site and the photos end up
+on the same server. The ten gallery shots are mapped in timestamp order, page heroes
+are assigned from the library, and the hero uses `snaptik_7606791376570682637_v3.mp4`
+(0.6 MB), the clip the old homepage used, rather than `0308-2.mp4` at 142 MB.
+
+Each placeholder still sits underneath its photo and an `onerror` handler removes a
+failed image, so a wrong filename degrades to the labelled slot instead of a broken
+icon.
+
+The review artifact cannot show these: Claude's viewer blocks images from other
+domains by policy. The deployed site is unaffected. To preview with real photography,
+the files have to be embedded, which needs a small zip through chat or Drive.
+
+Running `prep_assets.py` later swaps the absolute URLs for local optimised copies.
+
 ## Why the media is missing
 
 A WordPress `.sql` export contains the **database only**. Media files live on disk

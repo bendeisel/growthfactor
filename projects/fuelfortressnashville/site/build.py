@@ -4,6 +4,9 @@ single-file preview that routes between them for review. Output is plain
 static HTML, no framework, per the Hostinger delivery spec."""
 import os, re
 
+LIVE = "https://fuelfortressnashville.com/wp-content/uploads/2026/03/"
+GAL = ['dji_mimo_20260309_143028_20260309143028_1773085545234_photo.jpeg', 'dji_mimo_20260309_143128_20260309143129_1773085545116_photo.jpeg', 'dji_mimo_20260309_143220_20260309143220_1773085544961_photo.jpeg', 'dji_mimo_20260309_143406_20260309143405_1773085544829_photo.jpeg', 'dji_mimo_20260309_143424_20260309143424_1773085544732_photo.jpeg', 'dji_mimo_20260309_143528_20260309143529_1773085544606_photo.jpeg', 'dji_mimo_20260309_143602_20260309143601_1773085544459_photo.jpeg', 'dji_mimo_20260309_143710_20260309143710_1773085544250_photo.jpeg', 'dji_mimo_20260309_143916_20260309143917_1773085544139_photo.jpeg', 'dji_mimo_20260309_144014_20260309144013_1773085544000_photo.jpeg']
+
 NAV = [("equipment.html","Equipment"),("gym.html","The Gym"),
        ("addons.html","Add-Ons"),("membership.html","Membership"),
        ("kickboxing.html","Kickboxing")]
@@ -151,8 +154,8 @@ def cta(kicker, heading, body):
 def page_hero(eyebrow, h1, lede, slot_label, slot_file):
     return '''<section class="phero">
   <div class="phero-media">
-    <!-- SWAP IN: <img src="%s" alt="%s"> -->
     <div class="slot-ph"><b>%s</b><code>%s</code></div>
+    <img src="%s" alt="%s" onerror="this.remove()">
   </div>
   <div class="phero-scrim"></div>
   <div class="phero-inner">
@@ -160,7 +163,7 @@ def page_hero(eyebrow, h1, lede, slot_label, slot_file):
     <h1 class="d1">%s</h1>
     <p class="lede">%s</p>
   </div>
-</section>''' % (slot_file, slot_label, slot_label, slot_file, eyebrow, h1, lede)
+</section>''' % (slot_label, slot_file, slot_file, slot_label, eyebrow, h1, lede)
 
 EQ_BRANDS = [
  ("01","Arsenal Strength","Plate-loaded and selectorized",
@@ -240,9 +243,9 @@ def review_deck(heading="Real people. Real results.", lede="Every review below i
 GALLERY_SHOTS = ["143028","143128","143220","143406","143424","143528","143602","143710","143916","144014"]
 def gallery(heading="Where lifestyle meets luxury."):
     tiles = "".join(
-      '      <div class="slot"><div class="slot-ph"><b>Gallery photo</b>'
-      '<code>img/gallery-%02d.jpg &middot; dji_mimo_20260309_%s</code></div></div>\n' % (i+1, s)
-      for i, s in enumerate(GALLERY_SHOTS))
+      '      <div class="slot"><div class="slot-ph"><b>Gallery</b><code>%02d</code></div>'
+      '<img src="%s%s" alt="Inside Fuel Fortress Nashville" loading="lazy" onerror="this.remove()"></div>\n'
+      % (i + 1, LIVE, f) for i, f in enumerate(GAL))
     return '''<section class="band" id="gallery">
   <div class="band-inner">
     <p class="eyebrow rv">Gallery</p>
@@ -261,8 +264,11 @@ PAGES["index.html"] = dict(
  canon="", ld=LD,
  main='''<section class="hero">
   <div class="hero-media">
-    <!-- SWAP IN: <video autoplay muted loop playsinline poster="img/hero-poster.jpg"><source src="video/hero.mp4" type="video/mp4"></video> -->
-    <div class="slot-ph"><b>Hero video</b><code>video/hero.mp4 &middot; from 0308-2.mp4</code></div>
+    <div class="slot-ph"><b>Fuel Fortress Nashville</b><code>hero</code></div>
+    <video autoplay muted loop playsinline preload="metadata"
+           poster="https://fuelfortressnashville.com/wp-content/uploads/2026/03/dji_mimo_20260309_143406_20260309143405_1773085544829_photo.jpeg" onerror="this.remove()">
+      <source src="https://fuelfortressnashville.com/wp-content/uploads/2026/03/snaptik_7606791376570682637_v3.mp4" type="video/mp4">
+    </video>
   </div>
   <div class="hero-scrim"></div>
   <div class="hero-inner">
@@ -369,7 +375,7 @@ PAGES["equipment.html"] = dict(
  canon="equipment.html", ld="",
  main=page_hero("The Equipment","The best equipment<br>in Nashville.",
    "Four manufacturers, one floor, and nothing on it chosen because it was cheap. This is the reason most of our members drove past three closer gyms to get here.",
-   "Equipment hero","img/equip-hero.jpg") + '''
+   "Equipment","https://fuelfortressnashville.com/wp-content/uploads/2026/03/6I8A7049.jpg") + '''
 
 <section class="band eq-band">
   <div class="band-inner">
@@ -412,7 +418,7 @@ PAGES["gym.html"] = dict(
  canon="gym.html", ld="",
  main=page_hero("The Gym","Open when<br>you are.",
    "A 24 hour gym on Davidson Street with a weightlifting floor, a sauna and no class schedule to work around. You get the floor, the recovery room and the door code. The rest is yours.",
-   "Gym floor hero","img/gym-hero.jpg") + '''
+   "The gym","https://fuelfortressnashville.com/wp-content/uploads/2026/03/DRONE_PIC-2.jpg") + '''
 
 <section class="band">
   <div class="band-inner">
@@ -429,8 +435,8 @@ PAGES["gym.html"] = dict(
 
 <section class="split on-light" id="sauna">
   <div class="slot">
-    <!-- SWAP IN: <img src="img/sauna.jpg" alt="The sauna at Fuel Fortress Nashville"> -->
-    <div class="slot-ph"><b>Sauna</b><code>img/sauna.jpg</code></div>
+    <div class="slot-ph"><b>Sauna</b><code>needs a photo of the sauna</code></div>
+    <img src="https://fuelfortressnashville.com/wp-content/uploads/2026/03/IMG_3584.jpg" alt="Inside Fuel Fortress Nashville" loading="lazy" onerror="this.remove()">
   </div>
   <div class="split-pad">
     <p class="eyebrow rv">Recovery</p>
@@ -457,7 +463,7 @@ PAGES["addons.html"] = dict(
  canon="addons.html", ld="",
  main=page_hero("Add-Ons","Available, but not<br>part of the membership.",
    "Two things we offer on top of your membership. Both cost extra, both are optional, and neither one is bundled into your monthly rate. We would rather say that plainly than surprise you at the desk.",
-   "Add-ons hero","img/addons-hero.jpg") + '''
+   "Add-ons","https://fuelfortressnashville.com/wp-content/uploads/2026/03/IMG_3587.jpg") + '''
 
 <section class="band">
   <div class="band-inner">
@@ -505,7 +511,7 @@ PAGES["membership.html"] = dict(
  canon="membership.html", ld="",
  main=page_hero("Membership","One rate.<br>Every location.",
    "From $84.99 a month, covering the weightlifting floor, the sauna, kickboxing and 24 hour access at all four Fuel Fortress locations across Kentucky and Tennessee. No extra fees, no friction.",
-   "Membership hero","img/membership-hero.jpg") + '''
+   "Membership","https://fuelfortressnashville.com/wp-content/uploads/2026/03/dji_mimo_20260309_143602_20260309143601_1773085544459_photo.jpeg") + '''
 
 <section class="band" id="pricing">
   <div class="band-inner">
@@ -626,7 +632,7 @@ PAGES["kickboxing.html"] = dict(
  canon="kickboxing.html", ld="",
  main=page_hero("Kickboxing","Train with a<br>former fighter.",
    "Teryn is a former fighter and one of the owners of the gym. Twice a week she runs kickboxing for members: an outstanding workout on its own, and real striking instruction if you want to take it further. You do not have to be a fighter. Included with every membership.",
-   "Kickboxing hero","img/kickboxing-hero.jpg") + '''
+   "Kickboxing","https://fuelfortressnashville.com/wp-content/uploads/2026/03/DSC05669.jpeg") + '''
 
 <section class="band">
   <div class="band-inner">

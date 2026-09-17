@@ -100,7 +100,7 @@ p{margin:0 0 1em}
 /* ---------- page hero (inner pages) ---------- */
 .phero{position:relative;min-height:clamp(380px,58vh,620px);display:flex;align-items:flex-end;overflow:hidden}
 .phero-media{position:absolute;inset:0;z-index:0}
-.phero-media img{width:100%;height:100%;object-fit:cover}
+.phero-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .phero-media .slot-ph{border:0}
 .phero-scrim{position:absolute;inset:0;z-index:1;background:
   linear-gradient(180deg,rgba(9,9,9,.78) 0%,rgba(9,9,9,.48) 38%,rgba(9,9,9,.86) 80%,var(--ground) 100%)}
@@ -147,7 +147,7 @@ p{margin:0 0 1em}
 /* ---------- media slot (photography placeholder) ----------
    Real files drop into img/ and video/ and replace these outright. */
 .slot{position:relative;overflow:hidden;background:var(--ground-raise);display:block}
-.slot img,.slot video{width:100%;height:100%;object-fit:cover;
+.slot img,.slot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:brightness(.85) grayscale(.2);transition:transform .6s cubic-bezier(.25,.46,.45,.94),filter .6s ease}
 .slot:hover img,.slot:hover video{transform:scale(1.06);filter:brightness(1) grayscale(0)}
 .slot-ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
@@ -161,7 +161,7 @@ p{margin:0 0 1em}
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden}
 .hero-media{position:absolute;inset:0;z-index:0}
-.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero-media video,.hero-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-media .slot-ph{border:0}
 .hero-scrim{position:absolute;inset:0;z-index:1;background:
   linear-gradient(180deg,rgba(9,9,9,.72) 0%,rgba(9,9,9,.42) 34%,rgba(9,9,9,.80) 76%,var(--ground) 100%)}
