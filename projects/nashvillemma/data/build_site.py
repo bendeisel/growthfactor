@@ -335,6 +335,15 @@ MOBILE_CSS = """
   h2 { font-size: 30px !important; line-height: 1.08 !important; }
   h3 { font-size: 22px !important; line-height: 1.12 !important; }
   .body, p.body { font-size: 16px !important; line-height: 1.66 !important; }
+  /* The card stack only reads when a card is shorter than the screen, so the
+     next one can come over it. On a phone these run 631 to 840px against an
+     844px viewport, so nothing overlaps and the sticky just costs scroll.
+     They become ordinary cards below the breakpoint. */
+  .stackwrap { perspective: none !important; padding-bottom: 0 !important; }
+  .stackcard { position: static !important; transform: none !important;
+               min-height: 0 !important; margin-bottom: 18px !important;
+               padding: 28px 24px !important; }
+
   /* nowrap is set on the gym's name, which is too long for a phone line */
   [style*="white-space: nowrap"] { white-space: normal !important; }
   .rv { padding-top: 44px !important; padding-bottom: 44px !important; }

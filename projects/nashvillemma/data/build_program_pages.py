@@ -105,14 +105,14 @@ def varied_items(items):
     # incrementZ both 10, applied from index + 2 as the demo does.
     TOP0, STEP_Y, STEP_Z, GAP = 26, 18, 10, "150px"
 
-    out = ['  <div style="position: relative; width: 100%; perspective: 1000px; '
-           'margin-top: 34px; padding-bottom: 220px">']
+    out = ['  <div class="stackwrap" style="position: relative; width: 100%; '
+           'perspective: 1000px; margin-top: 34px; padding-bottom: 220px">']
     last = len(parsed) - 1
     for i, (name, desc) in enumerate(parsed):
         head = ('<h3 style="font-size: 34px; line-height: 1.04; margin: 0 0 12px; '
                 'color: #FFFFFF">%s</h3>' % esc(name)) if name else ""
         out.append(
-            '    <div style="position: sticky; top: %dpx; z-index: %d; '
+            '    <div class="stackcard" style="position: sticky; top: %dpx; z-index: %d; '
             'transform: translateZ(%dpx); backface-visibility: hidden; '
             '%s; padding: 40px 44px; min-height: 210px%s">'
             '<div aria-hidden="true" style="width: 52px; height: 4px; background: %s"></div>'
@@ -285,7 +285,8 @@ def render(p):
                    'radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.78) 100%)"></div>')
         out.append('    <div style="position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; '
                    'align-items: center; justify-content: center; text-align: center; padding: 0 60px">')
-        out.append('      <div class="micro" style="margin-bottom: 16px">Programs</div>')
+        # No eyebrow over the hero headline. Ben cut it: the nav already says
+        # where you are and the label was doing nothing the H1 does not.
         import re as _re
         m = _re.match(r"^(.*?)\s+in\s+(.*)$", title, _re.I)
         h1 = ('%s<br>In %s' % (esc(m.group(1)), esc(m.group(2)))) if m else esc(title)
