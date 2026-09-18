@@ -70,23 +70,58 @@ def _card(name, desc, scale):
             % (SQUARE, pad, span, inner))
 
 def varied_items(items):
-    """Lay an item list out with hierarchy instead of one uniform grid."""
+    """Cards that stack as you scroll, from the cards-stack component.
+
+    The original Ben sent is React with motion/react and Tailwind. None of
+    that does the work: the effect is position: sticky with a staggered top
+    per card, inside a container with perspective, which is what
+    ContainerScroll and CardSticky reduce to. So this is the same behaviour
+    with no library and no build step.
+
+    It is also not a CSS animation, so it cannot freeze in low-power mode
+    the way @keyframes does. Sticky is layout driven by scroll position.
+
+    Two things from the demo are deliberately dropped: rounded-2xl, against
+    the kernel's --cornerRadius: 0, and the padStart index numerals.
+    """
     parsed = []
     for it in items:
         m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
         parsed.append((m.group(1).strip(), m.group(2).strip()) if m else (None, it))
 
-    n = len(parsed)
-    if n == 1:      scales = ["lead"]
-    elif n == 2:    scales = ["lead", "mid"]
-    elif n == 3:    scales = ["lead", "mid", "mid"]
-    elif n == 4:    scales = ["lead"] + ["compact"] * 3
-    else:           scales = ["lead", "mid", "mid"] + ["compact"] * (n - 3)
+    # Cards need a solid fill or the ones underneath show through the stack,
+    # and scroll distance between them or they pile up all at once.
+    FILL = ("background: #0E0E10; box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30), "
+            "0 -18px 40px rgba(0,0,0,0.55)")
+    # The gap is scroll distance between one card pinning and the next
+    # arriving. Too large and the section reads as voids between cards, which
+    # is what 46vh did. The padding-bottom gives the last card room to sit
+    # pinned before the section's clip edge reaches it.
+    # CardSticky sets `top: index * incrementY` and `z: index * incrementZ`.
+    # In motion, `z` is translateZ, not z-index, and that is the whole effect:
+    # against the container's perspective each card sits nearer the viewer
+    # than the one before, so it comes over the top of it rather than just
+    # painting above it. Defaults from the component: incrementY and
+    # incrementZ both 10, applied from index + 2 as the demo does.
+    TOP0, STEP_Y, STEP_Z, GAP = 26, 18, 10, "150px"
 
-    out = ['  <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); '
-           'gap: 18px; margin-top: 30px; align-items: start">']
-    for (name, desc), sc in zip(parsed, scales):
-        out.append(_card(name, desc, sc))
+    out = ['  <div style="position: relative; width: 100%; perspective: 1000px; '
+           'margin-top: 34px; padding-bottom: 220px">']
+    last = len(parsed) - 1
+    for i, (name, desc) in enumerate(parsed):
+        head = ('<h3 style="font-size: 34px; line-height: 1.04; margin: 0 0 12px; '
+                'color: #FFFFFF">%s</h3>' % esc(name)) if name else ""
+        out.append(
+            '    <div style="position: sticky; top: %dpx; z-index: %d; '
+            'transform: translateZ(%dpx); backface-visibility: hidden; '
+            '%s; padding: 40px 44px; min-height: 210px%s">'
+            '<div aria-hidden="true" style="width: 52px; height: 4px; background: %s"></div>'
+            '<div style="margin-top: 22px">%s'
+            '<p class="body" style="font-size: 18px; line-height: 1.68; margin: 0; '
+            'max-width: 68ch">%s</p></div></div>'
+            % (TOP0 + i * STEP_Y, i + 1, (i + 2) * STEP_Z, FILL,
+               "" if i == last else "; margin-bottom: %s" % GAP,
+               GOLD, head, esc(desc)))
     out.append('  </div>')
     return out
 DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]

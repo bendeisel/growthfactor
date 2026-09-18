@@ -62,6 +62,13 @@ def make_seamless(body):
             # stays; only the opaque layer beneath it goes.
             t = t.replace(", %s;" % g, ", transparent;")
             t = t.replace(', %s"' % g, ', transparent"')
+        # overflow: hidden on any ancestor silently kills position: sticky in
+        # a descendant, which is what stopped the stacked cards pinning. The
+        # sections use it to clip the wash layers, so swap in overflow: clip,
+        # which clips the same way without creating a scroll container. The
+        # hidden stays first as the fallback for anything that predates clip.
+        if "overflow: hidden" in t:
+            t = t.replace("overflow: hidden", "overflow: hidden; overflow: clip")
         # The gold slab keeps its gold fill and loses only its hard top and
         # bottom edge, via the .bloom mask. The fill has to stay: the headline
         # inside it is near-black, and with the fill stripped the drifting
