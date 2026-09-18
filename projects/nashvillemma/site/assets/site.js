@@ -10,6 +10,18 @@ class DCLogic {
 }
 function openForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=false;}}
 function closeForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=true;}}
+/* mobile nav. The toggle is inserted immediately before the nav row. */
+function toggleNav(btn){
+  var nav = btn.nextElementSibling;
+  if (!nav || nav.className.indexOf('mainnav') === -1) {
+    nav = btn.parentNode && btn.parentNode.querySelector('.mainnav');
+  }
+  if (!nav) { return; }
+  var open = nav.className.indexOf('open') === -1;
+  nav.className = open ? nav.className + ' open'
+                       : nav.className.replace(/\s*\bopen\b/, '');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm();}});
 
 /* Page background wash. Driven by requestAnimationFrame and not a CSS

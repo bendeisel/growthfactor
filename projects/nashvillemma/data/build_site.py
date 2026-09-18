@@ -117,15 +117,37 @@ def wire_nav(body, url, active):
                             '<a href="%s" class="nav"%s>%s</a>' % (href, cur, label))
         body = body.replace('<li><a href="#" class="nav">%s</a></li>' % label,
                             '<li><a href="%s" class="nav">%s</a></li>' % (href, label))
-    # logo goes home
-    body = body.replace('<img src="%sassets/logo.png"' % p,
-                        '</a><a href="%sindex.html"><img src="%sassets/logo.png"' % (p, p), 1)
-    body = body.replace("</a><a href", "<a href", 1)
+    # logo goes home. Wrap the whole img tag: the previous version inserted an
+    # opening anchor and then stripped the closing one, so every page shipped
+    # with an unclosed <a> around the header.
+    body = re.sub(r'(<img src="%sassets/logo\.png"[^>]*>)' % re.escape(p),
+                  lambda m: '<a href="%sindex.html">%s</a>' % (p, m.group(1)), body, count=1)
     # in-page buttons that name a destination
     body = body.replace('<a href="#" class="btn-line"', '<a href="%sschedule.html" class="btn-line"' % p)
     body = re.sub(r'<a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>',
                   '<a href="%scontact.html" class="btn" style="padding: 15px 30px">View Our Location</a>' % p, body)
     return body
+
+def add_mobile_nav(body):
+    """Tag the main nav and put a toggle in front of it.
+
+    The artboards have no mobile nav at all: seven links laid out in a row.
+    Below the breakpoint the row becomes a panel the toggle opens.
+    """
+    i = body.find('class="nav"')
+    if i == -1:
+        return body
+    a = body.rfind("<div", 0, i)
+    if a == -1:
+        return body
+    end = body.find(">", a)
+    tag = body[a:end + 1]
+    if "mainnav" in tag:
+        return body
+    tag = tag.replace("<div ", '<div class="mainnav" ', 1)
+    btn = ('<button type="button" class="navtoggle" aria-label="Menu" aria-expanded="false" '
+           'onclick="toggleNav(this)"><span></span><span></span><span></span></button>')
+    return body[:a] + btn + tag + body[end + 1:]
 
 # ── the footer, one source for every page ──────────────────────────────────
 # Modelled on the Fighters Boxing footer Ben pointed at: brand and contact,
@@ -246,6 +268,64 @@ FOOTER_CSS = """
 }
 """
 
+MOBILE_CSS = """
+/* ── mobile ────────────────────────────────────────────────────────────
+   The artboards are drawn at a fixed 1440px, so without this a phone shows
+   the top-left corner of a desktop page. Everything in the artboards is
+   inline-styled and inline styles beat a stylesheet, so these overrides
+   have to carry !important. Desktop is untouched: every rule sits inside a
+   max-width query. */
+
+/* the hamburger. Hidden until the breakpoint. */
+.navtoggle { display: none; background: none; border: 0; cursor: pointer;
+  flex-direction: column; gap: 5px; padding: 11px; margin-left: auto; }
+.navtoggle span { display: block; width: 26px; height: 2px; background: #FFFFFF; }
+.navtoggle[aria-expanded="true"] span { background: #D7AD56; }
+
+@media (max-width: 1100px) {
+  body > div[style*="1440px"] { width: 100% !important; max-width: 100% !important; }
+}
+
+@media (max-width: 900px) {
+  /* every inline grid collapses to a single column */
+  [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  [style*="grid-column: span"] { grid-column: auto !important; }
+
+  .rv { padding-left: 22px !important; padding-right: 22px !important;
+        padding-top: 56px !important; padding-bottom: 56px !important; }
+  .site-footer > div { padding-left: 22px !important; padding-right: 22px !important; }
+
+  /* the seven-link row becomes a panel the toggle opens */
+  .navtoggle { display: inline-flex; }
+  div:has(> .navtoggle) { flex-wrap: wrap !important; }
+  .mainnav { display: none !important; width: 100%; order: 9;
+    flex-direction: column !important; align-items: stretch !important;
+    gap: 0 !important; padding: 4px 0 12px !important; }
+  .mainnav.open { display: flex !important; }
+  .mainnav .nav { padding: 15px 2px; border-bottom: 1px solid rgba(255,255,255,0.09); }
+  .mainnav .btn { margin-top: 16px; text-align: center; }
+
+  /* header chrome: the full street address does not fit a phone */
+  [style*="z-index: 6"] .micro { display: none !important; }
+  [style*="z-index: 6"] img { height: 64px !important; }
+  [style*="z-index: 6"] > div { padding-left: 22px !important; padding-right: 22px !important; }
+
+  /* tall artboard blocks are sized for a desktop column */
+  [style*="min-height"] { min-height: 260px !important; }
+  [style*="height: 620px"], [style*="height: 560px"] { height: auto !important; }
+}
+
+@media (max-width: 620px) {
+  h1 { font-size: 40px !important; line-height: 1.03 !important; }
+  h2 { font-size: 30px !important; line-height: 1.08 !important; }
+  h3 { font-size: 22px !important; line-height: 1.12 !important; }
+  .body, p.body { font-size: 16px !important; line-height: 1.66 !important; }
+  /* nowrap is set on the gym's name, which is too long for a phone line */
+  [style*="white-space: nowrap"] { white-space: normal !important; }
+  .rv { padding-top: 44px !important; padding-bottom: 44px !important; }
+}
+"""
+
 # ── the page-wide gold wash ────────────────────────────────────────────────
 # Three layers over a near-black ground. Each one travels on a different
 # period in x and y, so the path is a slow wave rather than a straight
@@ -351,6 +431,18 @@ class DCLogic {
 }
 function openForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=false;}}
 function closeForm(){var m=document.getElementById('leadModal'); if(m){m.hidden=true;}}
+/* mobile nav. The toggle is inserted immediately before the nav row. */
+function toggleNav(btn){
+  var nav = btn.nextElementSibling;
+  if (!nav || nav.className.indexOf('mainnav') === -1) {
+    nav = btn.parentNode && btn.parentNode.querySelector('.mainnav');
+  }
+  if (!nav) { return; }
+  var open = nav.className.indexOf('open') === -1;
+  nav.className = open ? nav.className + ' open'
+                       : nav.className.replace(/\\s*\\bopen\\b/, '');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeForm();}});
 
 /* Page background wash. Driven by requestAnimationFrame and not a CSS
@@ -413,11 +505,12 @@ for src, url, title, base in ROUTES:
     if not css_written:
         open(os.path.join(ASSET, "site.css"), "w", encoding="utf-8").write(
             "/* shared across every page — lifted from the approved artboards */\n"
-            + css + FOOTER_CSS + SEAMLESS_CSS)
+            + css + FOOTER_CSS + MOBILE_CSS + SEAMLESS_CSS)
         open(os.path.join(ASSET, "site.js"), "w", encoding="utf-8").write(SITE_JS)
         css_written = True
     body = wire_nav(to_plain(body, url), url, url)
     body = swap_footer(body, url)
+    body = add_mobile_nav(body)
     seamless = url in SEAMLESS
     if seamless:
         body = make_seamless(body)
