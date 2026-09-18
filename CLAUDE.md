@@ -17,3 +17,8 @@
   reasons, blockers and observations are not any of those, so write them
   as prose or bullets. Ben has asked for this many times and it keeps
   coming back, which is why it is written down here.
+
+- **This covers built UI, not just prose.** No index numerals on cards,
+  tiles or feature blocks, and that holds even when the items do have a
+  natural order like beginner to advanced. Ben calls it one of his big
+  no-nos. Mark a card with the gold rule or let the heading carry it.

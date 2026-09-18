@@ -41,26 +41,31 @@ VARIED_CARDS = {"muay-thai"}
 SQUARE = ("background: rgba(255,255,255,0.028); "
           "box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)")
 
-def _card(i, name, desc, scale):
-    """One item card. `scale` sets its weight in the rhythm."""
-    spec = {"lead":    (78, 46, 20.0, "40px 44px", 6, "1.6px"),
-            "mid":     (48, 32, 18.0, "32px 34px", 3, "1.2px"),
-            "compact": (34, 23, 16.5, "26px 28px", 2, "1px")}[scale]
-    nsize, tsize, dsize, pad, span, stroke = spec
-    n = ('<div aria-hidden="true" style="font-family: %s; font-size: %dpx; line-height: 0.78; '
-         'color: transparent; -webkit-text-stroke: %s %s; letter-spacing: 0.02em">%02d</div>'
-         % (BEBAS, nsize, stroke, GOLD, i + 1))
+def _card(name, desc, scale):
+    """One item card. `scale` sets its weight in the rhythm.
+
+    No index numerals. Ben calls numbering on cards a hard no, and these
+    items are not a sequence anyone counts through. The gold rule already in
+    the brand's vocabulary does the same marking job without pretending the
+    cards are steps.
+    """
+    spec = {"lead":    (56, 46, 20.0, "40px 44px", 6, "4px"),
+            "mid":     (40, 32, 18.0, "32px 34px", 3, "3px"),
+            "compact": (28, 23, 16.5, "26px 28px", 2, "3px")}[scale]
+    rule_w, tsize, dsize, pad, span, rule_h = spec
+    rule = ('<div aria-hidden="true" style="width: %dpx; height: %s; background: %s"></div>'
+            % (rule_w, rule_h, GOLD))
     head = ('<h3 style="font-size: %dpx; line-height: 1.02; margin: 0 0 10px; color: #FFFFFF">%s</h3>'
             % (tsize, esc(name)) if name else "")
     body = ('<p class="body" style="font-size: %.1fpx; line-height: 1.68; margin: 0; max-width: 64ch">%s</p>'
             % (dsize, esc(desc)))
-    # the lead card runs the numeral beside the copy; the rest stack it above,
-    # so the row shapes differ as well as their sizes
+    # the lead card sets its rule beside the copy; the rest stack it above, so
+    # the row shapes differ as well as their sizes
     if scale == "lead":
         inner = ('<div style="display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: start">'
-                 '%s<div>%s%s</div></div>' % (n, head, body))
+                 '<div style="padding-top: 16px">%s</div><div>%s%s</div></div>' % (rule, head, body))
     else:
-        inner = '%s<div style="margin-top: 14px">%s%s</div>' % (n, head, body)
+        inner = '%s<div style="margin-top: 20px">%s%s</div>' % (rule, head, body)
     return ('    <div style="%s; padding: %s; grid-column: span %d">%s</div>'
             % (SQUARE, pad, span, inner))
 
@@ -80,8 +85,8 @@ def varied_items(items):
 
     out = ['  <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); '
            'gap: 18px; margin-top: 30px; align-items: start">']
-    for i, ((name, desc), sc) in enumerate(zip(parsed, scales)):
-        out.append(_card(i, name, desc, sc))
+    for (name, desc), sc in zip(parsed, scales):
+        out.append(_card(name, desc, sc))
     out.append('  </div>')
     return out
 DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
