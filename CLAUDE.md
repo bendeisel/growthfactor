@@ -11,3 +11,9 @@
   text, not in commit messages. Rewrite with a comma, period, or colon.
   When client copy arrives containing em dashes, replace them with the
   closest natural punctuation and note the change at handover.
+
+- **Do not number things that are not ordered.** Numbered lists are for
+  steps in a sequence and for things being counted. Findings, options,
+  reasons, blockers and observations are not any of those, so write them
+  as prose or bullets. Ben has asked for this many times and it keeps
+  coming back, which is why it is written down here.

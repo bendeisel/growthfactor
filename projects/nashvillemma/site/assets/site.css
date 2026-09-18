@@ -48,6 +48,19 @@
     @keyframes ping  { 0% { transform: scale(0.6); opacity: 0.85; } 100% { transform: scale(2.8); opacity: 0; } }
     @keyframes rise  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   
+/* Footer styling that inline styles cannot carry: underlines off so the
+   address and email match the links column, and a gold hover so every
+   footer link behaves the same way. */
+.site-footer a { text-decoration: none; }
+.site-footer a:hover, .site-footer a:focus-visible { color: #D7AD56; }
+@media (max-width: 900px) {
+  .site-footer > div:first-child { grid-template-columns: 1fr 1fr !important; }
+  .site-footer > div:first-child > div:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .site-footer > div:first-child { grid-template-columns: 1fr !important; }
+}
+
 /* ── one continuous background ─────────────────────────────────────────
    Sections no longer paint their own colour block, so the page reads as a
    single surface instead of a stack of pages, and the wash above moves

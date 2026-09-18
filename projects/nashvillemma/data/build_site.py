@@ -127,6 +127,125 @@ def wire_nav(body, url, active):
                   '<a href="%scontact.html" class="btn" style="padding: 15px 30px">View Our Location</a>' % p, body)
     return body
 
+# ── the footer, one source for every page ──────────────────────────────────
+# Modelled on the Fighters Boxing footer Ben pointed at: brand and contact,
+# a links column, social, and a real map, over a legal bar. Built here rather
+# than in the artboards because all three artboards carried an identical copy.
+#
+# The map is a live Google embed. The old footer drew a fake map in CSS with
+# `animation: ping` on the pin, which is a CSS animation and therefore frozen
+# in low-power mode, the failure this project keeps hitting.
+#
+# Social accounts are the real ones, taken from the vendor harvest in
+# source/pages, not invented.
+FOOT_ADDRESS = "1504 Elm Hill Pike, Nashville, Tennessee 37210"
+FOOT_PHONE   = "615-297-4430"
+FOOT_EMAIL   = "frontdesk@nashvillemma.com"
+FOOT_MAPS    = "https://www.google.com/maps/search/?api=1&query=1504+Elm+Hill+Pike,+Nashville,+TN+37210"
+FOOT_EMBED   = "https://maps.google.com/maps?q=1504+Elm+Hill+Pike,+Nashville,+TN+37210&z=15&output=embed"
+FOOT_SOCIAL  = [
+    ("Facebook",  "https://www.facebook.com/nashvillemma/",
+     '<path d="M14 8.5V6.8c0-.8.5-1.3 1.4-1.3H17V2.4h-2.4C11.9 2.4 10.4 4 10.4 6.5V8.5H8v3.2h2.4v9.9H14v-9.9h2.6l.4-3.2H14Z" fill="currentColor"/>'),
+    ("Instagram", "https://www.instagram.com/nashvillemma/",
+     '<rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>'
+     '<circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.8"/>'
+     '<circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/>'),
+    ("YouTube",   "https://www.youtube.com/@nashvillemmatrainingcamp1",
+     '<path d="M22 12s0-3.3-.42-4.88a2.54 2.54 0 0 0-1.79-1.8C18.2 4.9 12 4.9 12 4.9s-6.2 0-7.79.42a2.54 2.54 0 0 0-1.79 1.8C2 8.7 2 12 2 12s0 3.3.42 4.88a2.54 2.54 0 0 0 1.79 1.8C5.8 19.1 12 19.1 12 19.1s6.2 0 7.79-.42a2.54 2.54 0 0 0 1.79-1.8C22 15.3 22 12 22 12Z" fill="none" stroke="currentColor" stroke-width="1.8"/>'
+     '<path d="M10.1 9.3v5.4l4.7-2.7-4.7-2.7Z" fill="currentColor"/>'),
+]
+
+def build_footer(url):
+    p = depth_prefix(url)
+    lab = ('font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; '
+           'font-weight: 800; color: rgba(255,255,255,0.42); margin-bottom: 16px')
+    lnk = "color: rgba(255,255,255,0.78); font-size: 15px"
+    o = ['  <div class="site-footer" style="background: #000000">',
+         '    <div style="display: grid; grid-template-columns: 1.5fr 0.9fr 0.8fr 1.4fr; '
+         'gap: 48px; padding: 72px 48px 56px 48px; align-items: start">']
+
+    # brand and contact
+    o.append('      <div>')
+    o.append('        <a href="%sindex.html"><img src="%sassets/logo.png" alt="Nashville MMA Training Camp" '
+             'style="display: block; height: 86px; width: auto; margin-bottom: 26px"></a>' % (p, p))
+    o.append('        <address style="font-style: normal; display: grid; gap: 12px">')
+    o.append('          <a href="%s" target="_blank" rel="noopener" style="%s">%s</a>'
+             % (FOOT_MAPS, lnk, FOOT_ADDRESS))
+    o.append('          <a href="mailto:%s" style="%s">%s</a>' % (FOOT_EMAIL, lnk, FOOT_EMAIL))
+    o.append('          <a href="tel:%s" style="font-family: \'Bebas Neue\',\'Oswald\',\'Arial Narrow\',sans-serif; '
+             'font-size: 30px; color: #FFFFFF; letter-spacing: 0.02em">%s</a>'
+             % (FOOT_PHONE.replace("-", ""), FOOT_PHONE))
+    o.append('        </address>')
+    o.append('        <a href="%scontact.html" class="btn" style="padding: 14px 28px; margin-top: 28px; '
+             'display: inline-block; white-space: nowrap">View Our Location</a>' % p)
+    o.append('      </div>')
+
+    # links
+    o.append('      <nav aria-label="Footer">')
+    o.append('        <p style="%s">Links</p>' % lab)
+    o.append('        <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 11px">')
+    for label, dest in NAV:
+        o.append('          <li><a href="%s%s" style="%s">%s</a></li>' % (p, dest, lnk, label))
+    o.append('        </ul>\n      </nav>')
+
+    # social
+    o.append('      <div>')
+    o.append('        <p style="%s">Get in touch</p>' % lab)
+    o.append('        <div style="display: flex; gap: 14px">')
+    for name, href, svg in FOOT_SOCIAL:
+        o.append('          <a href="%s" target="_blank" rel="noopener" aria-label="%s" '
+                 'style="display: inline-flex; padding: 9px; color: rgba(255,255,255,0.78); '
+                 'box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16)">'
+                 '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">%s</svg></a>'
+                 % (href, name, svg))
+    o.append('        </div>')
+    o.append('      </div>')
+
+    # real map, square per the kernel's --cornerRadius: 0
+    o.append('      <div>')
+    o.append('        <p style="%s">Find us</p>' % lab)
+    o.append('        <div style="overflow: hidden; border: 1px solid rgba(255,255,255,0.16)">')
+    o.append('          <iframe src="%s" title="Map to Nashville MMA Training Camp, 1504 Elm Hill Pike" '
+             'loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen '
+             'style="display: block; width: 100%%; height: 240px; border: 0"></iframe>' % FOOT_EMBED)
+    o.append('        </div>\n      </div>')
+
+    o.append('    </div>')
+    o.append('    <div style="padding: 20px 48px 26px 48px; border-top: 1px solid rgba(255,255,255,0.14)">')
+    o.append('      <p style="font-size: 14px; color: rgba(255,255,255,0.42); margin: 0">'
+             '&copy; 2026 Nashville MMA Training Camp. All rights reserved.</p>')
+    o.append('    </div>\n  </div>\n')
+    return "\n".join(o)
+
+def swap_footer(body, url):
+    """Replace the artboard footer with the one built above."""
+    a = body.find("<!-- \u2550")
+    while a != -1 and "FOOTER" not in body[a:a + 90]:
+        a = body.find("<!-- \u2550", a + 4)
+    if a == -1:
+        return body
+    b = body.find("<!-- \u2550", a + 4)
+    while b != -1 and "POPUP LEAD FORM" not in body[b:b + 90]:
+        b = body.find("<!-- \u2550", b + 4)
+    if b == -1:
+        return body
+    return body[:a] + build_footer(url) + body[b:]
+
+FOOTER_CSS = """
+/* Footer styling that inline styles cannot carry: underlines off so the
+   address and email match the links column, and a gold hover so every
+   footer link behaves the same way. */
+.site-footer a { text-decoration: none; }
+.site-footer a:hover, .site-footer a:focus-visible { color: #D7AD56; }
+@media (max-width: 900px) {
+  .site-footer > div:first-child { grid-template-columns: 1fr 1fr !important; }
+  .site-footer > div:first-child > div:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .site-footer > div:first-child { grid-template-columns: 1fr !important; }
+}
+"""
+
 # ── the page-wide gold wash ────────────────────────────────────────────────
 # Three layers over a near-black ground. Each one travels on a different
 # period in x and y, so the path is a slow wave rather than a straight
@@ -294,10 +413,11 @@ for src, url, title, base in ROUTES:
     if not css_written:
         open(os.path.join(ASSET, "site.css"), "w", encoding="utf-8").write(
             "/* shared across every page — lifted from the approved artboards */\n"
-            + css + SEAMLESS_CSS)
+            + css + FOOTER_CSS + SEAMLESS_CSS)
         open(os.path.join(ASSET, "site.js"), "w", encoding="utf-8").write(SITE_JS)
         css_written = True
     body = wire_nav(to_plain(body, url), url, url)
+    body = swap_footer(body, url)
     seamless = url in SEAMLESS
     if seamless:
         body = make_seamless(body)
