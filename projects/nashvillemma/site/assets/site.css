@@ -127,6 +127,20 @@ body.seamless { background: #050505; }
 /* the CSS wash is the fallback. Once the WebGL gradient mounts it takes
    over, so the two never stack. */
 .pgbg.fluid-on .pgdg { display: none; }
+
+/* Light copy sits over a moving gold background, so it carries its own
+   dark surround. Brand gold at full brightness is 2.10:1 against white,
+   which no amount of tuning fixes, but a halo keeps the immediate
+   surround near-black wherever a plume drifts under a line. Excluded on
+   .bloom, whose headline is near-black on gold and needs the opposite. */
+body.seamless .rv:not(.bloom) .body,
+body.seamless .rv:not(.bloom) p,
+body.seamless .rv:not(.bloom) h1,
+body.seamless .rv:not(.bloom) h2,
+body.seamless .rv:not(.bloom) h3,
+body.seamless .rv:not(.bloom) .micro {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.88), 0 0 12px rgba(0,0,0,0.62);
+}
 body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
 
 /* The separator, in place of a colour change. A gold hairline that fades

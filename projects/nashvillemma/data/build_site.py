@@ -351,7 +351,11 @@ if (host && !reduced) {
       // Fighters runs this on a white ground where low-velocity areas still
       // read. On near-black they disappear, so the field is driven harder
       // and faded less.
-      mountFluidBg(host, { opacity: 1.0, autoIntensity: 2.8, autoSpeed: 0.30 });
+      // A wash, not a blob: lower intensity spreads the plume, a finer pixel
+      // grid drops the chunky dithering, and the fade keeps it behind the
+      // content rather than competing with it.
+      mountFluidBg(host, { opacity: 0.9, autoIntensity: 3.2,
+                           autoSpeed: 0.26, pixelSize: 7 });
       host.className += ' fluid-on';
     } catch (e) {
       console.warn('fluid background unavailable, keeping the CSS wash', e);
@@ -409,7 +413,7 @@ SEAMLESS_CSS = """
    across all of it. */
 body.seamless { background: #050505; }
 .pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }\n/* the CSS wash is the fallback. Once the WebGL gradient mounts it takes\n   over, so the two never stack. */\n.pgbg.fluid-on .pgdg { display: none; }
+.pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }\n/* the CSS wash is the fallback. Once the WebGL gradient mounts it takes\n   over, so the two never stack. */\n.pgbg.fluid-on .pgdg { display: none; }\n\n/* Light copy sits over a moving gold background, so it carries its own\n   dark surround. Brand gold at full brightness is 2.10:1 against white,\n   which no amount of tuning fixes, but a halo keeps the immediate\n   surround near-black wherever a plume drifts under a line. Excluded on\n   .bloom, whose headline is near-black on gold and needs the opposite. */\nbody.seamless .rv:not(.bloom) .body,\nbody.seamless .rv:not(.bloom) p,\nbody.seamless .rv:not(.bloom) h1,\nbody.seamless .rv:not(.bloom) h2,\nbody.seamless .rv:not(.bloom) h3,\nbody.seamless .rv:not(.bloom) .micro {\n  text-shadow: 0 1px 2px rgba(0,0,0,0.88), 0 0 12px rgba(0,0,0,0.62);\n}
 body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
 
 /* The separator, in place of a colour change. A gold hairline that fades

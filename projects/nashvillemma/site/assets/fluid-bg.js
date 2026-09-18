@@ -202,14 +202,15 @@ void main(){
 
 // Nashville MMA's kernel golds, dark end first. The output shader reads this
 // by velocity magnitude, so index 0 is the resting ground and index 4 is the
-// brightest the fluid ever gets.
+// brightest the fluid gets.
 //
-// The top is capped at #8A6224, the slogan band gold. Anything brighter and
-// the white body copy that sits over this fails contrast when a plume drifts
-// under it: #9C7029 measures 4.41:1 against white and #C0883A only 3.08:1,
-// against a 4.5:1 requirement. Measured on the page, an uncapped palette put
-// body text at 2.38:1 as the fluid moved.
-const PALETTE = ['#0A0A0A', '#241903', '#4A340F', '#6E4E1B', '#8A6224'];
+// Tops out at #D7AD56, the brand gold (--dynamic), on purpose. An earlier
+// version capped this at #8A6224 to protect the white body copy, and that
+// reads as bronze rather than gold. The gold is not the problem: #D7AD56 is
+// 9.43:1 against the site's own near-black ink and only 2.10:1 against white.
+// So the gold stays bright and the light copy over it carries a dark halo
+// instead, see FOOTER/SEAMLESS css.
+const PALETTE = ['#0A0A0A', '#1E1708', '#5C4A1E', '#A08339', '#D7AD56'];
 
 function makePaletteTexture(stops) {
   const data = new Uint8Array(stops.length * 4);

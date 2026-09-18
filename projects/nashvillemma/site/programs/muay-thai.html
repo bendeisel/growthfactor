@@ -338,7 +338,11 @@ if (host && !reduced) {
       // Fighters runs this on a white ground where low-velocity areas still
       // read. On near-black they disappear, so the field is driven harder
       // and faded less.
-      mountFluidBg(host, { opacity: 1.0, autoIntensity: 2.8, autoSpeed: 0.30 });
+      // A wash, not a blob: lower intensity spreads the plume, a finer pixel
+      // grid drops the chunky dithering, and the fade keeps it behind the
+      // content rather than competing with it.
+      mountFluidBg(host, { opacity: 0.9, autoIntensity: 3.2,
+                           autoSpeed: 0.26, pixelSize: 7 });
       host.className += ' fluid-on';
     } catch (e) {
       console.warn('fluid background unavailable, keeping the CSS wash', e);
