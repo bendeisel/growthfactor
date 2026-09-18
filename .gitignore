@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 config.env
 .claude/skills/site-factory/config.env
+
+# Alien Kind dashboard: project keys, filled in per machine
+projects/alienkind/config.js

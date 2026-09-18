@@ -1,0 +1,1481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Alien Kind</title>
+<meta name="description" content="Bob, Kevin and Stewart. Three agents, one dashboard, every device.">
+<meta name="theme-color" content="#FAF9F5">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C2521A'/%3E%3C/svg%3E">
+
+<!-- Project keys. Git-ignored, filled in per machine. -->
+<script src="config.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  /* Light by default, on purpose. Dark is opt-in through the toggle and never
+     follows the OS, because the OS is not the one who asked. */
+  :root {
+    --paper:      #FAF9F5;
+    --surface:    #FFFFFF;
+    --surface-2:  #F3F1EA;
+    --line:       #E5E1D7;
+    --line-soft:  #EFEDE5;
+    --ink:        #22201D;
+    --ink-mid:    #5C5952;
+    --ink-quiet:  #6F6C63;
+    --accent:     #C2521A;
+    --accent-ink: #FFFFFF;
+    --accent-wash:#FAEEE5;
+    --ok:         #2F8A5B;
+    --warn:       #C2851A;
+    --bad:        #C4382F;
+
+    /* Per-agent tint. Set on #app when the agent changes. */
+    --agent:      var(--accent);
+    --agent-wash: var(--accent-wash);
+    --agent-veil: #C2521A0A;
+
+    --r-xs:  6px;
+    --r-sm:  10px;
+    --r:     14px;
+    --r-lg:  20px;
+    --pill:  999px;
+
+    --sh-sm: 0 1px 2px rgba(34, 32, 29, 0.05);
+    --sh:    0 2px 8px rgba(34, 32, 29, 0.06);
+    --sh-lg: 0 12px 32px rgba(34, 32, 29, 0.12);
+
+    --f: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #1C1B19;
+    --surface:    #26241F;
+    --surface-2:  #2F2D27;
+    --line:       #3A372F;
+    --line-soft:  #322F29;
+    --ink:        #F0EDE6;
+    --ink-mid:    #B8B3A8;
+    --ink-quiet:  #98948A;
+    --accent:     #E8834A;
+    --accent-ink: #1C1B19;
+    --accent-wash:#3A2A1F;
+    --ok:         #4FB37E;
+    --warn:       #E0A63C;
+    --bad:        #E2685C;
+    --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --sh:    0 2px 8px rgba(0, 0, 0, 0.35);
+    --sh-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button, input, textarea, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--agent); outline-offset: 2px; border-radius: var(--r-xs); }
+
+  /* ------------------------------------------------------- top bar -------- */
+  .top {
+    flex: 0 0 auto;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .mark {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 700; font-size: 16px; letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .mark i {
+    width: 26px; height: 26px; border-radius: 8px; flex: 0 0 auto;
+    background: var(--agent); display: block;
+  }
+  .grow { flex: 1; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface); color: var(--ink-mid);
+    border: 1px solid var(--line); border-radius: var(--pill);
+    padding: 8px 16px; font-size: 14px; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .btn:hover { background: var(--surface-2); color: var(--ink); }
+  .btn.icon { padding: 8px 12px; }
+
+  .btn.solid {
+    background: var(--agent); color: var(--accent-ink);
+    border-color: transparent; font-weight: 600;
+  }
+  .btn.solid:hover { background: var(--agent); filter: brightness(0.94); color: var(--accent-ink); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* --------------------------------------------- agent switcher ----------- */
+  .switch { position: relative; min-width: 0; }
+  .switch-btn {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: var(--pill); padding: 8px 16px 8px 8px;
+    cursor: pointer; max-width: 300px;
+    transition: border-color 0.12s ease;
+  }
+  .switch-btn:hover { border-color: var(--agent); }
+  .av {
+    width: 28px; height: 28px; border-radius: var(--pill); flex: 0 0 auto;
+    display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 12px;
+  }
+  .switch-txt { min-width: 0; text-align: left; line-height: 1.25; }
+  .switch-txt b { display: block; font-size: 14px; font-weight: 600; }
+  .switch-txt span {
+    display: block; font-size: 12px; color: var(--ink-quiet);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .chev { color: var(--ink-quiet); flex: 0 0 auto; }
+
+  .menu {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 40;
+    width: 320px; max-width: calc(100vw - 32px);
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); box-shadow: var(--sh-lg);
+    padding: 8px; display: none;
+  }
+  .menu.open { display: block; }
+  .menu-item {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    background: transparent; border: 0; border-radius: var(--r-sm);
+    padding: 8px 12px; cursor: pointer; text-align: left;
+  }
+  .menu-item:hover { background: var(--surface-2); }
+  .menu-item b { display: block; font-size: 14px; font-weight: 600; }
+  .menu-item span {
+    display: block; font-size: 12px; color: var(--ink-quiet); line-height: 1.4;
+  }
+  .menu-item .tick { margin-left: auto; color: var(--agent); flex: 0 0 auto; }
+  .menu-sep { height: 1px; background: var(--line-soft); margin: 8px 4px; }
+  .menu-note {
+    padding: 4px 12px 8px; font-size: 12px; color: var(--ink-quiet); line-height: 1.45;
+  }
+
+  /* ------------------------------------------------------- tabs ----------- */
+  .tabs {
+    flex: 0 0 auto;
+    display: flex; gap: 4px; padding: 12px 20px;
+    background: var(--paper);
+  }
+  .tab {
+    background: transparent; border: 0; border-radius: var(--pill);
+    padding: 8px 16px; font-size: 14px; font-weight: 500;
+    color: var(--ink-quiet); cursor: pointer;
+  }
+  .tab:hover { background: var(--surface-2); color: var(--ink); }
+  .tab[aria-selected="true"] {
+    background: var(--agent-wash); color: var(--agent); font-weight: 600;
+  }
+
+  /* ------------------------------------------------------- views ---------- */
+  #app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .view { display: none; }
+  .view.on { display: block; }
+  /* The tint sits behind content and fades out by 260px, so it reads as warmth
+     rather than as a coloured panel with an edge. */
+  #view-chat.on, #view-mail.on, #view-memory.on, #view-rules.on, #view-links.on {
+    background-image: linear-gradient(180deg, var(--agent-veil) 0, transparent 260px);
+  }
+  #view-chat.on { display: flex; flex: 1; min-height: 0; }
+  #view-memory.on, #view-rules.on, #view-links.on { flex: 1; overflow-y: auto; }
+
+  .chat-grid {
+    display: grid; grid-template-columns: 264px minmax(0, 1fr);
+    flex: 1; min-height: 0; width: 100%; gap: 0;
+  }
+
+  /* ------------------------------------------------------- rail ----------- */
+  .rail {
+    display: flex; flex-direction: column; min-height: 0;
+    padding: 0 12px 12px 20px;
+  }
+  .rail-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; padding: 4px 4px 12px;
+  }
+  .rail-title { font-size: 12px; font-weight: 600; color: var(--ink-quiet); letter-spacing: 0.02em; }
+  .rail-list {
+    overflow-y: auto; flex: 1; min-height: 0;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .thread {
+    display: block; width: 100%; text-align: left;
+    background: transparent; border: 0; border-radius: var(--r-sm);
+    padding: 8px 12px; cursor: pointer; color: var(--ink-mid);
+  }
+  .thread:hover { background: var(--surface-2); color: var(--ink); }
+  .thread[aria-current="true"] {
+    background: var(--surface); color: var(--ink);
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--line-soft);
+    border-left: 4px solid var(--agent);
+    padding: 8px 12px 8px 8px;
+  }
+  .thread b {
+    display: block; font-weight: 500; font-size: 14px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .thread span { font-size: 12px; color: var(--ink-quiet); }
+
+  /* ------------------------------------------------------- stream --------- */
+  .stream-col { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .stream {
+    flex: 1; overflow-y: auto; min-height: 0;
+    padding: 8px 20px 4px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .wrap { width: 100%; max-width: 720px; margin: 0 auto; }
+
+  /* Ben's turns sit in a card. The agent answers in plain text, so the reply
+     reads as prose rather than as a chat bubble. */
+  .turn.me .wrap-in {
+    background-color: var(--surface);
+    background-image: linear-gradient(135deg, var(--agent-veil) 0, transparent 70%);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--r); box-shadow: var(--sh-sm);
+    padding: 12px 16px; margin-left: auto; max-width: 92%;
+  }
+  .turn.me .body { color: var(--ink); }
+  .turn.me .head { justify-content: flex-end; }
+
+  .head {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--ink-quiet); margin-bottom: 8px;
+  }
+  .head b { color: var(--ink); font-weight: 600; }
+  .head .av { width: 22px; height: 22px; font-size: 12px; }
+  .body { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  .thinking {
+    display: flex; gap: 8px; align-items: flex-start;
+    font-size: 14px; color: var(--ink-quiet);
+    background: var(--surface-2); border-radius: var(--r-sm);
+    padding: 12px 12px; margin-bottom: 12px;
+    white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+
+  /* ------------------------------------------------------- composer ------- */
+  .composer { flex: 0 0 auto; padding: 12px 20px 20px; }
+  .composer-in {
+    max-width: 720px; margin: 0 auto;
+    display: flex; gap: 12px; align-items: flex-end;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 8px 8px 8px 16px;
+    box-shadow: var(--sh);
+  }
+  .composer-in:focus-within {
+    border-color: var(--agent);
+    box-shadow: var(--sh), 0 0 0 4px var(--agent-veil);
+  }
+  textarea#say {
+    flex: 1; resize: none; min-height: 28px; max-height: 200px;
+    background: transparent; border: 0; outline: none;
+    padding: 8px 0; font-size: 16px; line-height: 1.5;
+  }
+  textarea#say::placeholder { color: var(--ink-quiet); }
+  .send {
+    flex: 0 0 auto; width: 38px; height: 38px; border-radius: var(--pill);
+    background: var(--agent); color: var(--accent-ink); border: 0;
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .send:hover:not(:disabled) { filter: brightness(0.94); }
+  .send:disabled { opacity: 0.4; cursor: not-allowed; }
+  .readout {
+    max-width: 720px; margin: 8px auto 0;
+    font-size: 12px; color: var(--ink-quiet); min-height: 18px;
+  }
+  .readout.bad { color: var(--bad); }
+
+  /* ------------------------------------------------------- panels --------- */
+  .pad { max-width: 720px; margin: 0 auto; padding: 8px 20px 72px; }
+  h2.sec { font-size: 22px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 8px; }
+  .lede { color: var(--ink-mid); margin: 0 0 24px; max-width: 62ch; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line-soft);
+    border-radius: var(--r); box-shadow: var(--sh-sm);
+    padding: 16px 16px; margin-bottom: 12px;
+  }
+  .card-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 8px;
+  }
+  .card-top b { font-size: 16px; font-weight: 600; }
+  .card p { margin: 0; color: var(--ink-mid); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  .chip {
+    font-size: 12px; font-weight: 600; padding: 4px 8px;
+    border-radius: var(--pill); background: var(--surface-2); color: var(--ink-quiet);
+  }
+  .chip.mine { background: var(--agent-wash); color: var(--agent); }
+
+  .field { display: block; margin-bottom: 16px; }
+  .field > span {
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--ink-mid); margin-bottom: 8px;
+  }
+  .field input, .field textarea {
+    width: 100%; background: var(--surface); color: var(--ink);
+    border: 1px solid var(--line); border-radius: var(--r-sm);
+    padding: 12px 12px; outline: none;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--agent); }
+  .field textarea { min-height: 160px; resize: vertical; line-height: 1.6; }
+  .hint { font-size: 12px; color: var(--ink-quiet); margin: 4px 0 0; }
+
+  .seg { display: inline-flex; background: var(--surface-2); border-radius: var(--pill); padding: 4px; }
+  .seg button {
+    background: transparent; border: 0; border-radius: var(--pill);
+    padding: 4px 12px; font-size: 12px; font-weight: 500;
+    color: var(--ink-quiet); cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] {
+    background: var(--surface); color: var(--ink); box-shadow: var(--sh-sm); font-weight: 600;
+  }
+
+  .dot { width: 8px; height: 8px; border-radius: var(--pill); background: var(--ink-quiet); flex: 0 0 auto; }
+  .dot.live { background: var(--ok); }
+  .dot.degraded { background: var(--warn); }
+  .dot.down { background: var(--bad); }
+  .row-status { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-quiet); }
+
+  .note { font-size: 12px; color: var(--ink-quiet); margin-top: 12px; }
+  .note.bad { color: var(--bad); }
+
+  /* ------------------------------------------------------- gate ----------- */
+  .gate { max-width: 400px; margin: 12vh auto; padding: 0 20px; }
+  .gate-mark { width: 44px; height: 44px; border-radius: 12px; background: var(--accent); margin-bottom: 20px; }
+  .gate h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .hidden { display: none !important; }
+
+  /* -------------------------------------------------------- mail ---------- */
+  .pad.wide { max-width: 860px; }
+  .head-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .chip-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--pill); padding: 8px 12px;
+    font-size: 12px; color: var(--ink-mid); cursor: pointer;
+  }
+  .chip-btn:hover { border-color: var(--ink-quiet); }
+  .chip-btn[aria-pressed="true"] {
+    border-color: var(--agent); color: var(--agent);
+    background: var(--agent-wash); font-weight: 600;
+  }
+
+  .mail-row {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line-soft);
+    border-radius: var(--r); box-shadow: var(--sh-sm);
+    padding: 12px 16px; margin-bottom: 8px;
+  }
+  .mail-row.unread {
+    border-left: 4px solid var(--agent);
+    padding-left: 12px;
+    background-image: linear-gradient(90deg, var(--agent-veil) 0, transparent 160px);
+  }
+  .mail-row:hover { border-color: var(--line); }
+  .mail-row[aria-expanded="true"] { border-color: var(--agent); }
+  .mail-top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  }
+  .mail-from { font-size: 14px; font-weight: 600; }
+  .mail-row.unread .mail-from::before {
+    content: ""; display: inline-block; width: 8px; height: 8px;
+    border-radius: var(--pill); background: var(--agent); margin-right: 8px;
+  }
+  .mail-when { font-size: 12px; color: var(--ink-quiet); white-space: nowrap; }
+  .mail-subject { font-size: 14px; margin-top: 4px; }
+  .mail-sub2 {
+    font-size: 12px; color: var(--ink-quiet); margin-top: 4px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .msg { border-top: 1px solid var(--line-soft); padding-top: 12px; margin-top: 12px; }
+  .msg-meta { font-size: 12px; color: var(--ink-quiet); margin-bottom: 4px; }
+  .msg-body {
+    font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .mail-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  /* ------------------------------------------------------- popup --------- */
+  /* A popped out agent is a chat window and nothing else: no tabs, no rail in
+     flow, no wordmark. Same file, same code, just stripped down. */
+  body.popup .tabs { display: none; }
+  body.popup .mark span { display: none; }
+  body.popup .top { padding: 8px 12px; }
+  body.popup .chat-grid { grid-template-columns: 1fr; }
+  body.popup .rail { display: none; }
+  body.popup .rail.open {
+    display: flex; position: fixed; inset: 0; z-index: 30;
+    background: var(--paper); padding: 12px;
+  }
+  body.popup .stream { padding: 8px 12px; }
+  body.popup .composer { padding: 8px 12px 12px; }
+  body.popup .wrap, body.popup .composer-in, body.popup .readout { max-width: 100%; }
+  body.popup .grow { display: none; }
+  body.popup .switch { flex: 1; min-width: 0; }
+  body.popup .switch-btn { width: 100%; }
+
+  /* -------------------------------------------------- rail scope ---------- */
+  .rail-scope { display: flex; margin-bottom: 8px; }
+  .rail-scope .seg { width: 100%; }
+  .rail-scope .seg button { flex: 1; }
+  .thread-agent {
+    display: inline-block; width: 8px; height: 8px; border-radius: var(--pill);
+    margin-right: 8px; vertical-align: 1px; flex: 0 0 auto;
+  }
+
+  /* Motion off means motion off. Nothing here is load bearing, so the page is
+     fully usable with every transition killed. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ------------------------------------------------------- narrow --------- */
+  /* Last in the sheet on purpose: these override base rules at the same
+     specificity, so source order is what makes them win. */
+  @media (max-width: 860px) {
+    .top { padding: 12px 12px; gap: 8px; flex-wrap: nowrap; }
+    .grow { display: none; }
+    .switch { flex: 1; }
+    .switch-btn { max-width: none; width: 100%; min-width: 0; padding-right: 12px; }
+    .switch-txt { min-width: 0; }
+    .switch-txt b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn { padding: 8px 12px; }
+    .btn.icon { padding: 8px 8px; }
+
+    /* Five tabs, 360px and up, no scrolling and no clipping. */
+    .tabs { padding: 8px 8px; gap: 4px; }
+    .tab { white-space: nowrap; padding: 8px 8px; font-size: 12px; }
+
+    .chat-grid { grid-template-columns: 1fr; }
+    .rail { display: none; }
+    .rail.open {
+      display: flex; position: fixed; inset: 0; z-index: 30;
+      background: var(--paper); padding: 16px;
+    }
+    .stream { padding: 4px 16px; }
+    .composer { padding: 8px 16px calc(16px + env(safe-area-inset-bottom)); }
+    .pad { padding: 4px 16px 56px; }
+    .turn.me .wrap-in { max-width: 100%; }
+    .hide-narrow { display: none; }
+  }
+
+  /* Below 360px five tabs genuinely will not fit at a comfortable tap size, so
+     the strip scrolls and the selected tab is scrolled into view. Nothing is
+     hidden, it is just off screen until you reach for it. */
+  @media (max-width: 359px) {
+    .tabs {
+      padding: 8px 8px; gap: 4px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { padding: 8px 8px; font-size: 12px; }
+    .top { padding: 12px 12px; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-mark"></div>
+  <h1>Alien Kind</h1>
+  <p class="lede">Bob, Kevin and Stewart. Sign in once and pick up any of them from any machine.</p>
+  <label class="field"><span>Email</span><input id="email" type="email" autocomplete="email" placeholder="ben@growth-factor.ai"></label>
+  <button class="btn solid" id="send-link" style="width:100%;justify-content:center">Send sign in link</button>
+  <p class="note" id="gate-note"></p>
+</div>
+
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="mark"><i></i><span class="hide-narrow">Alien Kind</span></div>
+
+    <div class="switch">
+      <button class="switch-btn" id="switch-btn" aria-haspopup="menu" aria-expanded="false">
+        <span class="av" id="cur-av">K</span>
+        <span class="switch-txt">
+          <b id="cur-name">Loading</b>
+          <span id="cur-role"></span>
+        </span>
+        <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="menu" id="menu" role="menu"></div>
+    </div>
+
+    <span class="grow"></span>
+    <button class="btn" id="rail-toggle" style="display:none" aria-label="Threads"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="hide-narrow">Threads</span></button>
+    <button class="btn icon" id="theme" title="Light or dark" aria-label="Light or dark">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="btn hide-narrow" id="out">Sign out</button>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-view="chat" aria-selected="true">Chat</button>
+    <button class="tab" role="tab" data-view="mail" aria-selected="false">Mail</button>
+    <button class="tab" role="tab" data-view="memory" aria-selected="false">Memory</button>
+    <button class="tab" role="tab" data-view="rules" aria-selected="false">Instructions</button>
+    <button class="tab" role="tab" data-view="links" aria-selected="false">Connections</button>
+  </nav>
+
+  <!-- ------------------------------------------------------------- chat -->
+  <section class="view on" id="view-chat">
+    <div class="chat-grid">
+      <aside class="rail" id="rail">
+        <div class="rail-head">
+          <span class="rail-title" id="rail-title">Threads</span>
+          <span style="display:flex;gap:8px">
+            <button class="btn" id="new-thread">New</button>
+            <button class="btn" id="rail-close" style="display:none">Close</button>
+          </span>
+        </div>
+        <div class="rail-scope">
+          <div class="seg" id="rail-scope">
+            <button data-scope="agent" aria-pressed="true">This agent</button>
+            <button data-scope="all" aria-pressed="false">All three</button>
+          </div>
+        </div>
+        <div class="rail-list" id="thread-list"></div>
+      </aside>
+
+      <div class="stream-col">
+        <div class="stream" id="stream"></div>
+        <div class="composer">
+          <div class="composer-in">
+            <textarea id="say" rows="1" placeholder="Message Alien Kind" title="Enter sends. Shift+Enter breaks a line."></textarea>
+            <button class="send" id="go" aria-label="Send">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </button>
+          </div>
+          <p class="readout" id="chat-note"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------- mail -->
+  <section class="view" id="view-mail">
+    <div class="pad wide">
+      <div class="head-row">
+        <h2 class="sec">Mail</h2>
+        <button class="btn" id="mail-refresh">Refresh</button>
+      </div>
+      <p class="lede">Every linked account in one list. Filter to one when you want it split out. Replies and calendar events go through whichever agent you have open, so you see the draft before anything leaves.</p>
+      <div class="chips" id="mail-accounts"></div>
+      <p class="note" id="mail-note"></p>
+      <div id="mail-list"></div>
+    </div>
+  </section>
+
+  <!-- ----------------------------------------------------------- memory -->
+  <section class="view" id="view-memory">
+    <div class="pad">
+      <h2 class="sec">Memory</h2>
+      <p class="lede">Facts that survive between threads. File something to one agent and only that one sees it. File it to all three and it travels.</p>
+
+      <label class="field"><span>Label</span><input id="mem-label" placeholder="Short name for this fact"></label>
+      <label class="field"><span>What it should remember</span><textarea id="mem-body" style="min-height:90px" placeholder="A line or two, factual. It is read on every message this agent sends."></textarea></label>
+      <div class="field">
+        <span>Who gets this</span>
+        <div class="seg" id="mem-scope">
+          <button data-scope="agent" aria-pressed="true">Only this agent</button>
+          <button data-scope="all" aria-pressed="false">All three</button>
+        </div>
+      </div>
+      <button class="btn solid" id="mem-add">Add to memory</button>
+      <p class="note" id="mem-note"></p>
+      <div id="mem-list" style="margin-top:28px"></div>
+    </div>
+  </section>
+
+  <!-- ----------------------------------------------------- instructions -->
+  <section class="view" id="view-rules">
+    <div class="pad">
+      <h2 class="sec">Instructions</h2>
+      <p class="lede">How they operate. The house writing rules are enforced server side and do not need repeating here.</p>
+
+      <label class="field">
+        <span id="brief-label">This agent's own instructions</span>
+        <textarea id="brief-body" placeholder="What this one owns, what it should never touch, how it should answer."></textarea>
+      </label>
+      <button class="btn solid" id="brief-save">Save</button>
+      <p class="note" id="brief-note"></p>
+
+      <hr style="border:0;border-top:1px solid var(--line-soft);margin:32px 0">
+
+      <label class="field">
+        <span>Shared instructions, read by all three</span>
+        <textarea id="rules-body" placeholder="Anything true for Bob, Kevin and Stewart alike."></textarea>
+      </label>
+      <button class="btn" id="rules-save">Save shared</button>
+      <p class="note" id="rules-note"></p>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------ connections -->
+  <section class="view" id="view-links">
+    <div class="pad">
+      <h2 class="sec">Connections</h2>
+      <p class="lede">What this agent can reach. Status is written by whatever checks each service, so the board reports reality rather than intent.</p>
+      <div id="link-list"></div>
+      <p class="note" id="link-note"></p>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+const cfg = window.ALIEN_KIND || {};
+const $ = (id) => document.getElementById(id);
+
+let sb = null, session = null, agents = [], agent = null;
+let threadId = null, threads = [], busy = false, memScope = "agent";
+
+/* A popped out window is the same page with the furniture stripped off. */
+const POPUP = new URLSearchParams(location.search).has("popup");
+if (POPUP) document.body.classList.add("popup");
+
+/* The rail can list this agent's threads or all three at once, the way a chat
+   app lists conversations. It remembers which you left it on. */
+let railScope = "agent";
+try { railScope = localStorage.getItem("ak-rail") === "all" ? "all" : "agent"; } catch {}
+
+/* Set when a thread from another agent is clicked in the "all three" list, so
+   the switch lands on that conversation instead of the agent's newest. */
+let pendingThread = null;
+
+/* The three, created on first sign in. After that they are ordinary rows and
+   can be renamed, re-scoped or added to from the database. */
+const SEED = [
+  { slug: "bob", name: "Bob", position: 0, accent: "#2F8A5B",
+    role: "The gyms: Nashville MMA Training Camp and Fighters Boxing Gym",
+    brief: "You own the two gyms and nothing else. Nashville MMA Training Camp and Fighters Boxing Gym: their sites, their content, their classes, their members, their local search. Agency operations, other clients and anything personal belong to Kevin or Stewart." },
+  { slug: "kevin", name: "Kevin", position: 1, accent: "#C2521A",
+    role: "Growth Factor agency work",
+    brief: "You own the agency. Client work, proposals, pricing, builds, SEO, ads, GHL automation, the pipeline, the process. The two gyms are Bob's. Anything personal is Stewart's." },
+  { slug: "stewart", name: "Stewart", position: 2, accent: "#5B58C4",
+    role: "Personal and side hustles",
+    brief: "You own everything outside the agency. Personal projects, side hustles, money, admin, whatever Ben is building that is not client work. Agency work is Kevin's. The gyms are Bob's." },
+];
+
+function device() {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPod/.test(ua)) return "iPhone";
+  if (/iPad/.test(ua)) return "iPad";
+  if (/Android/.test(ua)) return "Android";
+  if (/Windows/.test(ua)) return "Windows desktop";
+  if (/Macintosh/.test(ua)) return "Mac";
+  if (/Linux/.test(ua)) return "Linux";
+  return "unknown";
+}
+
+const ago = (iso) => {
+  const s = Math.floor((Date.now() - new Date(iso)) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.floor(s / 60) + "m ago";
+  if (s < 86400) return Math.floor(s / 3600) + "h ago";
+  return Math.floor(s / 86400) + "d ago";
+};
+
+function note(el, text, bad = false) {
+  el.textContent = text;
+  el.classList.toggle("bad", bad);
+}
+
+function svg(d, size = 16) {
+  const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("width", size);
+  s.setAttribute("height", size); s.setAttribute("fill", "none");
+  s.setAttribute("stroke", "currentColor"); s.setAttribute("stroke-width", "2.5");
+  s.setAttribute("stroke-linecap", "round"); s.setAttribute("stroke-linejoin", "round");
+  const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  p.setAttribute("d", d); s.appendChild(p);
+  return s;
+}
+
+function avatar(a, cls = "av") {
+  const el = document.createElement("span");
+  el.className = cls;
+  el.style.background = a.accent;
+  el.textContent = a.name.slice(0, 1).toUpperCase();
+  return el;
+}
+
+/* ------------------------------------------------------------------ boot */
+(async function boot() {
+  if (!cfg.supabaseUrl || cfg.supabaseUrl.includes("YOUR-PROJECT")) {
+    note($("gate-note"), "config.js is missing or still has placeholders in it. Copy config.example.js to config.js and fill in the project URL and anon key.", true);
+    return;
+  }
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
+  sb = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+
+  const { data } = await sb.auth.getSession();
+  session = data.session;
+  sb.auth.onAuthStateChange((_e, s) => {
+    const was = !!session;
+    session = s;
+    if (session && !was) open();
+    if (!session && was) location.reload();
+  });
+  if (session) open(); else $("gate").classList.remove("hidden");
+})();
+
+$("send-link").addEventListener("click", async () => {
+  const email = $("email").value.trim();
+  if (!email) return note($("gate-note"), "Type an email first.", true);
+  note($("gate-note"), "Sending...");
+  const { error } = await sb.auth.signInWithOtp({
+    email, options: { emailRedirectTo: location.href },
+  });
+  note($("gate-note"), error ? error.message : "Link sent. Open it on this device.", !!error);
+});
+
+$("out").addEventListener("click", () => sb.auth.signOut());
+
+/* Light unless told otherwise. The OS does not get a vote. */
+try {
+  if (localStorage.getItem("ak-theme") === "dark")
+    document.documentElement.setAttribute("data-theme", "dark");
+} catch {}
+$("theme").addEventListener("click", () => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (dark) document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", "dark");
+  try { localStorage.setItem("ak-theme", dark ? "light" : "dark"); } catch {}
+});
+
+async function open() {
+  $("gate").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  await loadAgents();
+}
+
+/* ----------------------------------------------------------------- agents */
+async function loadAgents() {
+  let { data, error } = await sb.from("agents")
+    .select("id, slug, name, role, brief, accent").order("position");
+  if (error) return note($("chat-note"), error.message, true);
+
+  if (!data.length) {
+    const rows = SEED.map((a) => ({ ...a, user_id: session.user.id }));
+    const seeded = await sb.from("agents").insert(rows).select("id, slug, name, role, brief, accent");
+    if (seeded.error) return note($("chat-note"), seeded.error.message, true);
+    data = seeded.data;
+  }
+  agents = data;
+
+  /* The agent lives in the URL, which is what makes "one window each" work:
+     three windows on three hashes are three independent conversations. */
+  const want = location.hash.replace("#", "");
+  pick(agents.find((a) => a.slug === want) || agents[0], false);
+  renderMenu();
+}
+
+function pick(next, push = true) {
+  closeMenu();
+  agent = next;
+  threadId = null;
+  if (push) location.hash = agent.slug;
+  document.documentElement.style.setProperty("--agent", agent.accent);
+  document.documentElement.style.setProperty("--agent-wash", agent.accent + "1A");
+  document.documentElement.style.setProperty("--agent-veil", agent.accent + "14");
+
+  const av = $("cur-av");
+  av.style.background = agent.accent;
+  av.textContent = agent.name.slice(0, 1).toUpperCase();
+  $("cur-name").textContent = agent.name;
+  $("cur-role").textContent = agent.role;
+  railTitle();
+  $("say").placeholder = "Message " + agent.name;
+  $("brief-label").textContent = agent.name + "'s own instructions";
+  $("brief-body").value = agent.brief || "";
+  document.title = agent.name + " · Alien Kind";
+  renderMenu();
+
+  return Promise.all([loadThreads(), loadMemory(), loadRules(), loadLinks()]);
+}
+
+window.addEventListener("hashchange", () => {
+  const want = location.hash.replace("#", "");
+  const found = agents.find((a) => a.slug === want);
+  if (found && found.id !== agent?.id) pick(found, false);
+});
+
+/* Named windows, so clicking Bob twice focuses Bob's window instead of piling
+   up duplicates. Sized for a chat column rather than a browser tab. */
+function popOut(a) {
+  const url = location.pathname + "?popup=1#" + a.slug;
+  const win = window.open(url, "alienkind-" + a.slug,
+    "popup=yes,width=440,height=720,noopener=no");
+  if (win) win.focus();
+  return win;
+}
+
+function renderMenu() {
+  const menu = $("menu");
+  menu.textContent = "";
+  for (const a of agents) {
+    const item = document.createElement("button");
+    item.className = "menu-item";
+    item.setAttribute("role", "menuitem");
+    const txt = document.createElement("span");
+    const n = document.createElement("b"); n.textContent = a.name;
+    const r = document.createElement("span"); r.textContent = a.role;
+    txt.append(n, r);
+    item.append(avatar(a), txt);
+    if (agent && a.id === agent.id) {
+      const tick = svg("M20 6 9 17l-5-5", 16);
+      tick.classList.add("tick");
+      item.appendChild(tick);
+    }
+    item.addEventListener("click", () => { closeMenu(); pick(a); });
+    menu.appendChild(item);
+  }
+  const sep = document.createElement("div"); sep.className = "menu-sep";
+  const one = document.createElement("button");
+  one.className = "menu-item";
+  const oneTxt = document.createElement("span");
+  const ob = document.createElement("b"); ob.textContent = "Pop out " + (agent ? agent.name : "this one");
+  const os = document.createElement("span"); os.textContent = "A chat window of its own";
+  oneTxt.append(ob, os);
+  one.appendChild(oneTxt);
+  one.addEventListener("click", () => { closeMenu(); popOut(agent); });
+
+  const all = document.createElement("button");
+  all.className = "menu-item";
+  const allTxt = document.createElement("span");
+  const ab = document.createElement("b"); ab.textContent = "Pop out all three";
+  const as = document.createElement("span"); as.textContent = "Bob, Kevin and Stewart, side by side";
+  allTxt.append(ab, as);
+  all.appendChild(allTxt);
+  all.addEventListener("click", () => {
+    closeMenu();
+    /* Staggered, because browsers throttle a burst of window.open calls. */
+    agents.forEach((a, i) => setTimeout(() => popOut(a), i * 120));
+  });
+  const bye = document.createElement("button");
+  bye.className = "menu-item";
+  const byeTxt = document.createElement("span");
+  const bb = document.createElement("b"); bb.textContent = "Sign out";
+  const bs = document.createElement("span"); bs.textContent = session?.user?.email || "";
+  byeTxt.append(bb, bs);
+  bye.appendChild(byeTxt);
+  bye.addEventListener("click", () => { closeMenu(); sb.auth.signOut(); });
+
+  const hint = document.createElement("p");
+  hint.className = "menu-note";
+  hint.textContent = "Each agent keeps its own threads, memory and instructions.";
+  menu.append(sep, one, all, bye, hint);
+}
+
+const closeMenu = () => {
+  $("menu").classList.remove("open");
+  $("switch-btn").setAttribute("aria-expanded", "false");
+};
+$("switch-btn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = $("menu").classList.toggle("open");
+  $("switch-btn").setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", closeMenu);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+$("menu").addEventListener("click", (e) => e.stopPropagation());
+
+/* ------------------------------------------------------------------ tabs */
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+    document.querySelectorAll(".view").forEach((v) => v.classList.remove("on"));
+    $("view-" + tab.dataset.view).classList.add("on");
+    tab.scrollIntoView({ block: "nearest", inline: "nearest" });
+    if (tab.dataset.view === "mail") loadMail();
+  });
+});
+
+/* --------------------------------------------------------------- threads */
+async function loadThreads() {
+  let q = sb.from("threads")
+    .select("id, title, updated_at, agent_id").eq("archived", false)
+    .order("updated_at", { ascending: false }).limit(60);
+  if (railScope === "agent") q = q.eq("agent_id", agent.id);
+
+  const { data, error } = await q;
+  if (error) return note($("chat-note"), error.message, true);
+  threads = data || [];
+  renderThreads();
+
+  /* A thread clicked from the all-three list wins, then this agent's newest.
+     Never open another agent's thread just because it sorted first. */
+  const want = pendingThread;
+  pendingThread = null;
+  if (want) return openThread(want);
+  const mine = threads.find((t) => t.agent_id === agent.id);
+  if (mine) return openThread(mine.id);
+  blank();
+}
+
+function blank() {
+  $("stream").textContent = "";
+  const w = document.createElement("div");
+  w.className = "wrap";
+  const p = document.createElement("p");
+  p.className = "lede";
+  p.style.marginTop = "18px";
+  p.textContent = "Nothing here yet. Whatever you start with " + agent.name +
+    " is readable from any machine you sign in on.";
+  w.appendChild(p);
+  $("stream").appendChild(w);
+}
+
+function railTitle() {
+  $("rail-title").textContent = railScope === "all"
+    ? "All threads" : agent.name + "'s threads";
+}
+
+function renderThreads() {
+  const list = $("thread-list");
+  list.textContent = "";
+  if (!threads.length) {
+    const p = document.createElement("p");
+    p.style.cssText = "font-size:12px;color:var(--ink-quiet);padding:4px 12px;margin:0";
+    p.textContent = "No threads yet.";
+    list.appendChild(p);
+    return;
+  }
+  for (const t of threads) {
+    const owner = agents.find((a) => a.id === t.agent_id) || agent;
+    const b = document.createElement("button");
+    b.className = "thread";
+    b.setAttribute("aria-current", String(t.id === threadId));
+
+    const title = document.createElement("b");
+    /* In the all-three list each row says whose it is, so switching agent by
+       clicking a conversation is never a surprise. */
+    if (railScope === "all") {
+      const dot = document.createElement("span");
+      dot.className = "thread-agent";
+      dot.style.background = owner.accent;
+      title.appendChild(dot);
+    }
+    title.appendChild(document.createTextNode(t.title));
+
+    const when = document.createElement("span");
+    when.textContent = railScope === "all"
+      ? owner.name + " · " + ago(t.updated_at)
+      : ago(t.updated_at);
+
+    b.append(title, when);
+    b.addEventListener("click", () => {
+      $("rail").classList.remove("open");
+      if (owner.id !== agent.id) {
+        pendingThread = t.id;
+        pick(owner);
+      } else {
+        openThread(t.id);
+      }
+    });
+    list.appendChild(b);
+  }
+}
+
+$("rail-scope").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  railScope = b.dataset.scope;
+  try { localStorage.setItem("ak-rail", railScope); } catch {}
+  $("rail-scope").querySelectorAll("button").forEach((x) =>
+    x.setAttribute("aria-pressed", String(x === b)));
+  railTitle();
+  loadThreads();
+});
+
+$("new-thread").addEventListener("click", () => {
+  $("rail").classList.remove("open");
+  threadId = null;
+  renderThreads();
+  blank();
+  $("say").focus();
+});
+
+$("rail-toggle").addEventListener("click", () => $("rail").classList.toggle("open"));
+$("rail-close").addEventListener("click", () => $("rail").classList.remove("open"));
+
+async function openThread(id) {
+  threadId = id;
+  renderThreads();
+  const { data, error } = await sb.from("messages")
+    .select("role, content, device").eq("thread_id", id)
+    .order("created_at", { ascending: true });
+  $("stream").textContent = "";
+  if (error) return note($("chat-note"), error.message, true);
+  for (const m of data || []) turn(m.role === "user", m.content, m.device);
+  scroll();
+}
+
+/* Build one turn. Returns the parts a streaming reply grows into. */
+function turn(mine, text, from) {
+  const wrap = document.createElement("div");
+  wrap.className = "wrap turn" + (mine ? " me" : "");
+  const inner = document.createElement("div");
+  inner.className = "wrap-in";
+
+  const head = document.createElement("div");
+  head.className = "head";
+  if (mine) {
+    if (from && from !== "server") {
+      const dev = document.createElement("span"); dev.textContent = from;
+      head.appendChild(dev);
+    }
+    const name = document.createElement("b"); name.textContent = "You";
+    head.appendChild(name);
+  } else {
+    head.appendChild(avatar(agent));
+    const name = document.createElement("b"); name.textContent = agent.name;
+    head.appendChild(name);
+  }
+
+  const body = document.createElement("div");
+  body.className = "body";
+  body.textContent = text;
+  inner.append(head, body);
+  wrap.appendChild(inner);
+  $("stream").appendChild(wrap);
+  return { body, inner };
+}
+
+const scroll = () => { const s = $("stream"); s.scrollTop = s.scrollHeight; };
+
+/* ------------------------------------------------------------- the send */
+const say = $("say");
+say.addEventListener("input", () => {
+  say.style.height = "auto";
+  say.style.height = Math.min(say.scrollHeight, 200) + "px";
+});
+say.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+});
+$("go").addEventListener("click", send);
+
+async function send() {
+  const text = say.value.trim();
+  if (!text || busy || !agent) return;
+
+  busy = true;
+  $("go").disabled = true;
+  note($("chat-note"), "");
+  const lede = $("stream").querySelector(".lede");
+  if (lede) lede.parentElement.remove();
+
+  say.value = "";
+  say.style.height = "auto";
+  turn(true, text, device());
+  const reply = turn(false, "");
+  let thinkEl = null;
+  scroll();
+
+  try {
+    const res = await fetch(cfg.supabaseUrl + "/functions/v1/chat", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: "Bearer " + session.access_token,
+      },
+      body: JSON.stringify({ agentId: agent.id, threadId, message: text, device: device() }),
+    });
+
+    if (!res.ok || !res.body) {
+      const detail = await res.text().catch(() => "");
+      throw new Error("Server said " + res.status + ". " + detail.slice(0, 200));
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const chunks = buffer.split("\n\n");
+      buffer = chunks.pop() || "";
+
+      for (const chunk of chunks) {
+        const line = chunk.trim();
+        if (!line.startsWith("data:")) continue;
+        let ev;
+        try { ev = JSON.parse(line.slice(5).trim()); } catch { continue; }
+
+        if (ev.type === "thread") {
+          threadId = ev.threadId;
+        } else if (ev.type === "text") {
+          reply.body.textContent += ev.text;
+          scroll();
+        } else if (ev.type === "thinking") {
+          if (!thinkEl) {
+            thinkEl = document.createElement("div");
+            thinkEl.className = "thinking";
+            reply.inner.insertBefore(thinkEl, reply.body);
+          }
+          thinkEl.textContent += ev.text;
+          scroll();
+        } else if (ev.type === "error") {
+          note($("chat-note"), ev.message, true);
+        } else if (ev.type === "done") {
+          const u = ev.usage || {};
+          const cached = u.cache_read_input_tokens ?? 0;
+          note($("chat-note"), [agent.name, ev.model,
+            ((u.input_tokens ?? 0) + cached) + " in", (u.output_tokens ?? 0) + " out",
+            cached ? cached + " cached" : null].filter(Boolean).join("  ·  "));
+        }
+      }
+    }
+    /* Thinking is scaffolding. Once the answer has landed, drop it. */
+    if (thinkEl && reply.body.textContent) thinkEl.remove();
+    await loadThreadList();
+  } catch (err) {
+    note($("chat-note"), err.message, true);
+  } finally {
+    busy = false;
+    $("go").disabled = false;
+    say.focus();
+  }
+}
+
+/* Refresh the rail without reopening the thread and losing what just streamed. */
+async function loadThreadList() {
+  let q = sb.from("threads")
+    .select("id, title, updated_at, agent_id").eq("archived", false)
+    .order("updated_at", { ascending: false }).limit(60);
+  if (railScope === "agent") q = q.eq("agent_id", agent.id);
+  const { data } = await q;
+  threads = data || [];
+  renderThreads();
+}
+
+/* --------------------------------------------------------------- memory */
+$("mem-scope").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  memScope = b.dataset.scope;
+  $("mem-scope").querySelectorAll("button").forEach((x) =>
+    x.setAttribute("aria-pressed", String(x === b)));
+});
+
+async function loadMemory() {
+  const { data, error } = await sb.from("memory")
+    .select("id, label, body, agent_id")
+    .or(`agent_id.is.null,agent_id.eq.${agent.id}`)
+    .order("updated_at", { ascending: false });
+  if (error) return note($("mem-note"), error.message, true);
+
+  const list = $("mem-list");
+  list.textContent = "";
+  if (!data.length) {
+    const p = document.createElement("p");
+    p.className = "lede";
+    p.textContent = "Nothing stored yet. Anything added here is in force on the next message, from any device.";
+    list.appendChild(p);
+    return;
+  }
+  for (const m of data) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const left = document.createElement("span");
+    left.style.cssText = "display:flex;align-items:center;gap:8px;min-width:0";
+    const label = document.createElement("b"); label.textContent = m.label;
+    const chip = document.createElement("span");
+    chip.className = "chip" + (m.agent_id ? " mine" : "");
+    chip.textContent = m.agent_id ? agent.name + " only" : "All three";
+    left.append(label, chip);
+    const drop = document.createElement("button");
+    drop.className = "btn"; drop.textContent = "Forget";
+    drop.addEventListener("click", async () => {
+      const { error } = await sb.from("memory").delete().eq("id", m.id);
+      if (error) return note($("mem-note"), error.message, true);
+      loadMemory();
+    });
+    top.append(left, drop);
+    const body = document.createElement("p"); body.textContent = m.body;
+    card.append(top, body);
+    list.appendChild(card);
+  }
+}
+
+$("mem-add").addEventListener("click", async () => {
+  const label = $("mem-label").value.trim();
+  const body = $("mem-body").value.trim();
+  if (!label || !body) return note($("mem-note"), "Both fields, please.", true);
+  const { error } = await sb.from("memory").insert({
+    user_id: session.user.id,
+    agent_id: memScope === "agent" ? agent.id : null,
+    label, body,
+  });
+  if (error) return note($("mem-note"), error.message, true);
+  $("mem-label").value = ""; $("mem-body").value = "";
+  note($("mem-note"), memScope === "agent"
+    ? "Stored for " + agent.name + "."
+    : "Stored for all three.");
+  loadMemory();
+});
+
+/* --------------------------------------------------------- instructions */
+async function loadRules() {
+  const { data, error } = await sb.from("instructions").select("body").maybeSingle();
+  if (error) return note($("rules-note"), error.message, true);
+  $("rules-body").value = data?.body || "";
+}
+
+$("brief-save").addEventListener("click", async () => {
+  const brief = $("brief-body").value;
+  const { error } = await sb.from("agents").update({ brief }).eq("id", agent.id);
+  if (error) return note($("brief-note"), error.message, true);
+  agent.brief = brief;
+  note($("brief-note"), "Saved. Live on " + agent.name + "'s next message.");
+});
+
+$("rules-save").addEventListener("click", async () => {
+  const { error } = await sb.from("instructions").upsert(
+    { user_id: session.user.id, body: $("rules-body").value, updated_at: new Date().toISOString() },
+    { onConflict: "user_id" });
+  note($("rules-note"), error ? error.message : "Saved. All three read it on their next message.", !!error);
+});
+
+/* ---------------------------------------------------------- connections */
+async function loadLinks() {
+  const { data, error } = await sb.from("connections")
+    .select("name, kind, status, detail, agent_id, last_checked_at")
+    .or(`agent_id.is.null,agent_id.eq.${agent.id}`).order("name");
+  if (error) return note($("link-note"), error.message, true);
+  const list = $("link-list");
+  list.textContent = "";
+  if (!data.length) {
+    const p = document.createElement("p");
+    p.className = "lede";
+    p.textContent = "Nothing registered yet. Add a row to the connections table for each service " +
+      agent.name + " should be able to reach.";
+    list.appendChild(p);
+    return;
+  }
+  for (const c of data) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const name = document.createElement("b"); name.textContent = c.name;
+    const status = document.createElement("span");
+    status.className = "row-status";
+    const dot = document.createElement("span"); dot.className = "dot " + c.status;
+    const word = document.createElement("span");
+    word.textContent = c.status + (c.last_checked_at ? " · " + ago(c.last_checked_at) : "");
+    status.append(dot, word);
+    top.append(name, status);
+    const body = document.createElement("p"); body.textContent = c.detail || c.kind;
+    card.append(top, body);
+    list.appendChild(card);
+  }
+}
+
+/* ------------------------------------------------------------------ mail */
+/* Mail is not scoped per agent: every agent reads every account. The filter
+   here is by account, which is how Ben actually reads it. */
+let mailAccounts = [], mailFilter = [], mailThreads = [], mailLoaded = false;
+
+async function callMail(payload) {
+  const res = await fetch(cfg.supabaseUrl + "/functions/v1/mail", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: "Bearer " + session.access_token,
+    },
+    body: JSON.stringify(payload),
+  });
+  let data = {};
+  try { data = await res.json(); } catch {}
+  if (!res.ok) throw new Error(data.message || data.error || "Server said " + res.status);
+  return data;
+}
+
+async function loadMail(force = false) {
+  if (mailLoaded && !force) return;
+  note($("mail-note"), "Reading...");
+  $("mail-list").textContent = "";
+  try {
+    if (!mailAccounts.length) {
+      const got = await callMail({ action: "accounts" });
+      mailAccounts = got.accounts || [];
+      renderMailAccounts();
+    }
+    const got = await callMail({ action: "list", accounts: mailFilter });
+    mailThreads = got.threads || [];
+    mailLoaded = true;
+    renderMail();
+    const n = mailThreads.length;
+    note($("mail-note"), n
+      ? n + (n === 1 ? " thread" : " threads") +
+        (mailFilter.length ? " in " + mailFilter.join(", ") : " across every account")
+      : "Nothing in the inbox.");
+  } catch (err) {
+    note($("mail-note"), err.message, true);
+  }
+}
+
+function renderMailAccounts() {
+  const row = $("mail-accounts");
+  row.textContent = "";
+  const make = (label, emails) => {
+    const b = document.createElement("button");
+    b.className = "chip-btn";
+    b.textContent = label;
+    const on = emails.length
+      ? emails.every((e) => mailFilter.includes(e)) && mailFilter.length === emails.length
+      : mailFilter.length === 0;
+    b.setAttribute("aria-pressed", String(on));
+    b.addEventListener("click", () => {
+      mailFilter = emails;
+      renderMailAccounts();
+      loadMail(true);
+    });
+    row.appendChild(b);
+  };
+  make("All accounts", []);
+  for (const a of mailAccounts) make(a.email, [a.email]);
+}
+
+function renderMail() {
+  const list = $("mail-list");
+  list.textContent = "";
+  for (const t of mailThreads) {
+    const row = document.createElement("button");
+    row.className = "mail-row" + (t.unread ? " unread" : "");
+    row.setAttribute("aria-expanded", "false");
+
+    const top = document.createElement("div");
+    top.className = "mail-top";
+    const from = document.createElement("span");
+    from.className = "mail-from"; from.textContent = t.from;
+    const when = document.createElement("span");
+    when.className = "mail-when"; when.textContent = ago(t.date);
+    top.append(from, when);
+
+    const subject = document.createElement("div");
+    subject.className = "mail-subject"; subject.textContent = t.subject;
+
+    const sub2 = document.createElement("div");
+    sub2.className = "mail-sub2";
+    sub2.textContent = [t.account, t.needsReply ? "waiting on you" : null, t.snippet]
+      .filter(Boolean).join("  ·  ");
+
+    row.append(top, subject, sub2);
+    row.addEventListener("click", () => openMail(row, t));
+    list.appendChild(row);
+  }
+}
+
+/* Expand in place. The list is the point, so opening one does not navigate
+   away from the rest of it. */
+async function openMail(row, t) {
+  if (row.getAttribute("aria-expanded") === "true") {
+    row.setAttribute("aria-expanded", "false");
+    row.querySelectorAll(".msg, .mail-actions").forEach((n) => n.remove());
+    return;
+  }
+  row.setAttribute("aria-expanded", "true");
+  const loading = document.createElement("div");
+  loading.className = "msg"; loading.textContent = "Opening...";
+  row.appendChild(loading);
+
+  try {
+    const full = await callMail({ action: "thread", threadId: t.id });
+    loading.remove();
+    for (const m of full.messages || []) {
+      const msg = document.createElement("div");
+      msg.className = "msg";
+      const meta = document.createElement("div");
+      meta.className = "msg-meta";
+      meta.textContent = m.from + "  to  " + m.to + "  ·  " + ago(m.date);
+      const body = document.createElement("div");
+      body.className = "msg-body"; body.textContent = m.body;
+      msg.append(meta, body);
+      row.appendChild(msg);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "mail-actions";
+    const act = (label, prompt) => {
+      const b = document.createElement("button");
+      b.className = "btn"; b.textContent = label;
+      b.addEventListener("click", (e) => { e.stopPropagation(); handOff(prompt); });
+      actions.appendChild(b);
+    };
+    const ref = `the thread "${t.subject}" from ${t.from} on ${t.account} (id ${t.id})`;
+    act("Draft a reply", `Read ${ref} and draft a reply. Show me the draft, do not send it.`);
+    act("Add to calendar", `Read ${ref} and create the calendar event it is asking for. Tell me what you booked.`);
+    act("Summarise", `Read ${ref} and tell me what it needs from me, in two lines.`);
+    row.appendChild(actions);
+  } catch (err) {
+    loading.textContent = err.message;
+  }
+}
+
+/* Anything that writes goes to the agent, where there is a conversation to
+   approve it in rather than a button that silently sends mail. */
+function handOff(text) {
+  document.querySelector('.tab[data-view="chat"]').click();
+  const box = $("say");
+  box.value = text;
+  box.dispatchEvent(new Event("input"));
+  box.focus();
+}
+
+$("mail-refresh").addEventListener("click", () => loadMail(true));
+
+/* The rail is an overlay on a phone, so its controls only exist there. */
+const narrow = window.matchMedia("(max-width: 860px)");
+const applyNarrow = () => {
+  $("rail-toggle").style.display = narrow.matches ? "" : "none";
+  $("rail-close").style.display = narrow.matches ? "" : "none";
+  if (!narrow.matches) $("rail").classList.remove("open");
+};
+narrow.addEventListener("change", applyNarrow);
+applyNarrow();
+
+$("rail-scope").querySelectorAll("button").forEach((x) =>
+  x.setAttribute("aria-pressed", String(x.dataset.scope === railScope)));
+</script>
+</body>
+</html>

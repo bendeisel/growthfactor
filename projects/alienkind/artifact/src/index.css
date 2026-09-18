@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Burnt orange on a lifted charcoal. The ground is a blackish grey with warmth
+   in it, not a void and not a navy, so the orange sits on something. Red,
+   purple and green are the three agents and nothing else. Pace uses green,
+   amber and red, and the legend says so in words.
+
+   Archivo and JetBrains Mono because they are already the build console's
+   faces, so this is Growth Factor's own type rather than an imported default. */
+@layer base {
+  :root {
+    --void: #201f1d;
+    --ground: #2b2a28;
+    --panel: #322f2c;
+    --raised: #3a3733;
+    --line: #45423c;
+    --line-soft: #3a3733;
+
+    --ink: #edeae4;
+    --ink-2: #bdb8ae;
+    --ink-3: #969187;
+
+    --orange: #e8751f;
+    --wash: #e8751f1f;
+
+    --agent-bob: #e8615a;
+    --agent-kevin: #b08be8;
+    --agent-stewart: #5fc285;
+
+    --good: #5fc285;
+    --warn: #e0a93c;
+    --bad: #e8615a;
+
+    /* shadcn surface tokens, mapped on so anything pulled in with the CLI
+       lands in the right colours without being restyled. */
+    --background: 40 6% 16%;
+    --foreground: 40 18% 91%;
+    --card: 36 5% 19%;
+    --card-foreground: 40 18% 91%;
+    --popover: 36 5% 19%;
+    --popover-foreground: 40 18% 91%;
+    --primary: 25 82% 51%;
+    --primary-foreground: 40 6% 12%;
+    --secondary: 36 6% 22%;
+    --secondary-foreground: 40 18% 91%;
+    --muted: 36 6% 22%;
+    --muted-foreground: 36 6% 58%;
+    --accent: 36 6% 22%;
+    --accent-foreground: 40 18% 91%;
+    --destructive: 3 73% 63%;
+    --destructive-foreground: 40 6% 12%;
+    --border: 36 8% 25%;
+    --input: 36 8% 25%;
+    --ring: 25 82% 51%;
+    --radius: 0.625rem;
+  }
+
+  :root[data-theme="light"] {
+    --void: #edebe5;
+    --ground: #f5f3ed;
+    --panel: #ffffff;
+    --raised: #efece4;
+    --line: #dcd8cf;
+    --line-soft: #e7e3db;
+    --ink: #22201d;
+    --ink-2: #55524b;
+    --ink-3: #78736a;
+    --orange: #b4500f;
+    --wash: #b4500f14;
+    --agent-bob: #c2352e;
+    --agent-kevin: #6a45b0;
+    --agent-stewart: #24794a;
+    --good: #24794a;
+    --warn: #8f6209;
+    --bad: #c2352e;
+
+    --background: 44 29% 94%;
+    --foreground: 36 9% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 36 9% 12%;
+    --primary: 27 84% 38%;
+    --primary-foreground: 0 0% 100%;
+    --muted-foreground: 36 7% 44%;
+    --border: 36 16% 84%;
+    --input: 36 16% 84%;
+  }
+
+  html, body, #root { height: 100%; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* The obsidian, rolling. Three ellipses in one SVG spinning around the centre:
+   a flatter ry reads as a steeper tilt and the spin is the roll. Three divs
+   each carrying a rotateX, which is how the reference did it, made Chromium
+   paint a white plane outline around every ring box. */
+.core { --hue: var(--orange); --rate: 1; }
+.core[data-state="working"] { --rate: 3.4; }
+
+.ak-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ak-roll calc(var(--dur) / var(--rate)) linear infinite;
+}
+.ak-ring-rev { animation-direction: reverse; }
+@keyframes ak-roll {
+  from { transform: rotate(var(--tilt)); }
+  to { transform: rotate(calc(var(--tilt) + 360deg)); }
+}
+
+.orb {
+  background: radial-gradient(circle at 50% 45%, #fff4ea 0%, var(--hue) 38%, rgba(232,117,31,0) 72%);
+  animation: ak-breathe calc(3.4s / var(--rate)) ease-in-out infinite;
+}
+.orb-glow {
+  background: radial-gradient(circle, rgba(232,117,31,.2) 0%, transparent 62%);
+  animation: ak-breathe calc(5s / var(--rate)) ease-in-out infinite;
+}
+@keyframes ak-breathe {
+  0%, 100% { transform: scale(1); opacity: .95; }
+  50% { transform: scale(1.07); opacity: .72; }
+}
+
+/* Stands in for the UnicornStudio scene, which cannot load under an artifact's
+   CSP. Two slow drifting washes in the agent colours. */
+.ak-wash {
+  background:
+    radial-gradient(60vw 40vw at 18% 8%, rgba(232,117,31,.16), transparent 62%),
+    radial-gradient(55vw 38vw at 86% 12%, rgba(176,139,232,.12), transparent 58%);
+  animation: ak-drift 24s ease-in-out infinite alternate;
+}
+@keyframes ak-drift {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to { transform: translate3d(0,-3%,0) scale(1.06); }
+}
+
+/* The light that rides the badge trace, from the Eldora badge. */
+.ml-light {
+  offset-anchor: 10px 0px;
+  animation: ak-trace 3s linear infinite;
+}
+@keyframes ak-trace {
+  0% { offset-distance: 0%; }
+  50%, 100% { offset-distance: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
