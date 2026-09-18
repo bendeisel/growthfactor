@@ -6,6 +6,7 @@
 <title>Muay Thai | Nashville MMA Training Camp</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
 <link rel="stylesheet" href="../assets/site.css">
+<script type="importmap">{"imports":{"three":"../assets/three.module.min.js"}}</script>
 </head>
 <body class="seamless">
 <div class="pgbg" aria-hidden="true"><div aria-hidden="true" class="pgdg" data-ax="300" data-ay="110" data-perx="15" data-pery="23" data-ph="0.0" data-oper="17" data-oph="0.0" data-omin="0.34" data-omax="0.78" style="filter: blur(34px); background-image: radial-gradient(90% 60% at 22% 18%, rgba(243,225,178,0.32) 0%, rgba(243,225,178,0) 55%), radial-gradient(100% 65% at 68% 36%, rgba(215,173,86,0.36) 0%, rgba(215,173,86,0) 55%), radial-gradient(85% 55% at 40% 72%, rgba(197,149,67,0.30) 0%, rgba(197,149,67,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="-240" data-ay="140" data-perx="21" data-pery="13" data-ph="2.1" data-oper="11" data-oph="2.0" data-omin="0.18" data-omax="0.58" style="filter: blur(42px); background-image: radial-gradient(95% 62% at 78% 22%, rgba(215,173,86,0.32) 0%, rgba(215,173,86,0) 55%), radial-gradient(90% 58% at 18% 54%, rgba(192,136,58,0.32) 0%, rgba(192,136,58,0) 55%), radial-gradient(100% 60% at 62% 88%, rgba(138,98,36,0.36) 0%, rgba(138,98,36,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="170" data-ay="-96" data-perx="27" data-pery="19" data-ph="4.2" data-oper="19" data-oph="4.0" data-omin="0.24" data-omax="0.5" style="filter: blur(56px); background-image: radial-gradient(120% 70% at 50% 8%, rgba(138,98,36,0.36) 0%, rgba(138,98,36,0) 55%), radial-gradient(110% 65% at 12% 92%, rgba(197,149,67,0.26) 0%, rgba(197,149,67,0) 55%)"></div></div>
@@ -327,5 +328,25 @@
 }
 try { var __page = new Component({}); if (__page.componentDidMount) __page.componentDidMount(); }
 catch (e) { console.error('page init', e); }</script>
+<script type="module">
+import { mountFluidBg } from '../assets/fluid-bg.js';
+var host = document.querySelector('.pgbg');
+var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (host && !reduced) {
+  var start = function () {
+    try {
+      // Fighters runs this on a white ground where low-velocity areas still
+      // read. On near-black they disappear, so the field is driven harder
+      // and faded less.
+      mountFluidBg(host, { opacity: 1.0, autoIntensity: 2.8, autoSpeed: 0.30 });
+      host.className += ' fluid-on';
+    } catch (e) {
+      console.warn('fluid background unavailable, keeping the CSS wash', e);
+    }
+  };
+  if ('requestIdleCallback' in window) { requestIdleCallback(start, { timeout: 2500 }); }
+  else { setTimeout(start, 800); }
+}
+</script>
 </body>
 </html>

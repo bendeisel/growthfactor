@@ -124,6 +124,9 @@
 body.seamless { background: #050505; }
 .pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }
+/* the CSS wash is the fallback. Once the WebGL gradient mounts it takes
+   over, so the two never stack. */
+.pgbg.fluid-on .pgdg { display: none; }
 body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
 
 /* The separator, in place of a colour change. A gold hairline that fades

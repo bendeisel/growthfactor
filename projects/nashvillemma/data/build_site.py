@@ -75,6 +75,14 @@ def make_seamless(body):
 def depth_prefix(url):
     return "../" * url.count("/")
 
+def mod_prefix(url):
+    """Prefix for ES module specifiers.
+
+    A module specifier has to be relative, so "assets/x.js" is rejected as
+    a bare specifier. Root-level pages need "./" where depth_prefix is "".
+    """
+    return depth_prefix(url) or "./"
+
 # ── strip the canvas layer ─────────────────────────────────────────────────
 def extract(path):
     s = open(path, encoding="utf-8").read()
@@ -326,6 +334,35 @@ MOBILE_CSS = """
 }
 """
 
+# The fluid gradient, on pages built with the continuous background. The
+# importmap has to sit in <head> and before any module script. If the module
+# never loads (no module support, no WebGL, reduced motion), nothing happens
+# and the CSS wash underneath stays as the fallback.
+FLUIDMAP = ('<script type="importmap">{"imports":{"three":"%(prefix)sassets/three.module.min.js"}}'
+            '</script>\n')
+
+FLUID_MOUNT = """<script type="module">
+import { mountFluidBg } from '%(prefix)sassets/fluid-bg.js';
+var host = document.querySelector('.pgbg');
+var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (host && !reduced) {
+  var start = function () {
+    try {
+      // Fighters runs this on a white ground where low-velocity areas still
+      // read. On near-black they disappear, so the field is driven harder
+      // and faded less.
+      mountFluidBg(host, { opacity: 1.0, autoIntensity: 2.8, autoSpeed: 0.30 });
+      host.className += ' fluid-on';
+    } catch (e) {
+      console.warn('fluid background unavailable, keeping the CSS wash', e);
+    }
+  };
+  if ('requestIdleCallback' in window) { requestIdleCallback(start, { timeout: 2500 }); }
+  else { setTimeout(start, 800); }
+}
+</script>
+"""
+
 # ── the page-wide gold wash ────────────────────────────────────────────────
 # Three layers over a near-black ground. Each one travels on a different
 # period in x and y, so the path is a slow wave rather than a straight
@@ -372,7 +409,7 @@ SEAMLESS_CSS = """
    across all of it. */
 body.seamless { background: #050505; }
 .pgbg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }
+.pgbg .pgdg { position: absolute; top: -34%; bottom: -34%; left: -26%; width: 152%; }\n/* the CSS wash is the fallback. Once the WebGL gradient mounts it takes\n   over, so the two never stack. */\n.pgbg.fluid-on .pgdg { display: none; }
 body.seamless > *:not(.pgbg) { position: relative; z-index: 1; }
 
 /* The separator, in place of a colour change. A gold hairline that fades
@@ -408,14 +445,14 @@ SHELL = """<!doctype html>
 <title>%(title)s | Nashville MMA Training Camp</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
 <link rel="stylesheet" href="%(prefix)sassets/site.css">
-</head>
+%(fluidmap)s</head>
 <body%(bodycls)s>
 %(pgbg)s%(body)s
 <script src="%(prefix)sassets/site.js"></script>
 <script>%(init)s
 try { var __page = new Component({}); if (__page.componentDidMount) __page.componentDidMount(); }
 catch (e) { console.error('page init', e); }</script>
-</body>
+%(fluid)s</body>
 </html>
 """
 
@@ -491,7 +528,10 @@ for src_dir in (os.path.join(PAGES, "img"), os.path.join(DESIGN, "img")):
     if os.path.isdir(src_dir):
         for f in os.listdir(src_dir):
             shutil.copy2(os.path.join(src_dir, f), os.path.join(ASSET, f))
-for v in ("hero-854.mp4", "hero-854.webm"):
+for v in ("hero-854.mp4", "hero-854.webm",
+          # the fluid gradient and its vendored three.js. Vendored rather than
+          # pulled from a CDN so the site has no third-party runtime dependency.
+          "fluid-bg.js", "three.module.min.js"):
     vp = os.path.join(PROJ, "assets", v)
     if os.path.exists(vp):
         shutil.copy2(vp, os.path.join(ASSET, v))
@@ -519,7 +559,9 @@ for src, url, title, base in ROUTES:
     open(dest, "w", encoding="utf-8").write(SHELL % {
         "title": title, "body": body, "prefix": depth_prefix(url), "init": init,
         "bodycls": ' class="seamless"' if seamless else "",
-        "pgbg": PGBG if seamless else ""})
+        "pgbg": PGBG if seamless else "",
+        "fluidmap": (FLUIDMAP % {"prefix": mod_prefix(url)}) if seamless else "",
+        "fluid": (FLUID_MOUNT % {"prefix": mod_prefix(url)}) if seamless else ""})
     built.append(url)
     for href in re.findall(r'href="([^"#][^"]*\.html)"', body):
         links.append((url, os.path.normpath(os.path.join(os.path.dirname(url), href))))
