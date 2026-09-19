@@ -2,6 +2,7 @@
   "built": [
     "index.html",
     "schedule.html",
+    "programs/index.html",
     "programs/boxing.html",
     "programs/jiu-jitsu.html",
     "programs/kids-brazilian-jiu-jitsu.html",
@@ -15,13 +16,31 @@
     "programs/self-defense.html",
     "programs/sports-performance.html",
     "programs/womens-classes.html",
-    "programs/wrestling.html"
-  ],
-  "missing_targets": [
+    "programs/wrestling.html",
     "about.html",
     "contact.html",
-    "events.html",
-    "programs/index.html",
-    "recovery.html"
-  ]
+    "faq.html",
+    "coaches.html",
+    "coaches/dustin-ortiz.html",
+    "coaches/ronnie-lawrence.html",
+    "coaches/bryan-tidwell.html",
+    "coaches/shawn-allen.html",
+    "coaches/shannon-goughary.html",
+    "coaches/kevin-patterson.html",
+    "coaches/dedrek-sanders.html",
+    "coaches/zack-hicks.html",
+    "coaches/rashad-lockhart.html",
+    "coaches/sammy-shires.html",
+    "coaches/paul-hunter.html",
+    "coaches/anne-smith.html",
+    "coaches/monty-burks.html",
+    "coaches/jim-casey.html",
+    "coaches/david-sacks.html",
+    "coaches/justin-weber.html",
+    "reviews.html",
+    "facilities.html",
+    "recovery.html",
+    "events.html"
+  ],
+  "missing_targets": []
 }
