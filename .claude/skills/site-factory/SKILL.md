@@ -90,18 +90,47 @@ breaks divergence for every future client.
 
 ## Non-negotiables
 
-These are the four things that went wrong often enough to be worth stating as
+These are the things that went wrong often enough to be worth stating as
 rules rather than advice.
 
 1. **One artifact per site, never one per page.** Pages are sections inside a
    single artifact, switched by the chrome nav.
-2. **The artifact is published automatically**, at build start, and redeployed
+
+   This one has teeth because **a published artifact cannot be deleted from a
+   session**. No tool here can remove one: `delete_asset` removes a file
+   inside an artifact, `ArtifactData`'s delete removes a database row, and
+   the docs connector's delete removes a tab from a doc. Only the person can
+   delete an artifact, by hand, in the gallery. So every stray artifact is
+   permanent clutter in someone else's list until they clean it up.
+
+   The Fighters build cost Ben nine of them, and worse: one superseded build
+   was later renamed to a cleaner name than the real one, so the August
+   version sat above the September version in the gallery, with the wrong
+   class times, looking authoritative. He opened the wrong one.
+
+   So: publish the shell, redeploy that same path, and never publish a page
+   on its own "just to show someone". Show them the shell with the page
+   open.
+
+2. **Name it `<Client> | Full Site`.** Every build, no exceptions. The name
+   is how a build gets found in a gallery of forty, so it belongs in the
+   build script's `<title>`, not typed at publish time. A build whose name
+   does not follow this is either not current or not ours, and that is the
+   whole point of the convention.
+
+   When a superseded artifact already exists and cannot be deleted,
+   republish it as a short retired notice pointing at the current link and
+   saying what was wrong with it. Do not simply rename it: a rename bumps it
+   to the top of the gallery by updated-date, which is exactly how the
+   Fighters mix-up happened.
+
+3. **The artifact is published automatically**, at build start, and redeployed
    to the same path — so the URL in the registry never goes stale.
-3. **Previews never live inside a client's production website.** The Hostinger
+4. **Previews never live inside a client's production website.** The Hostinger
    static-deploy endpoint overwrites an entire website. See
    `references/preview-hosting.md` — this one has actually destructive failure
    modes, so read it before touching deploy.
-4. **Previews are `noindex`.** A preview of a client's site is duplicate
+5. **Previews are `noindex`.** A preview of a client's site is duplicate
    content against their real domain, and Google is happy to index a preview
    subdomain nobody linked to. `deploy_preview.sh` writes the header and the
    robots file; do not "clean up" either.

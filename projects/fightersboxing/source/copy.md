@@ -262,3 +262,218 @@ Pending for schema: opening hours from the client.
    (black, gold #D7AD56) as the "opposite" pairing this page exists to
    express, since their own site isn't built yet to mirror against
    directly.
+
+## Ben's revisions, round 17 (2026-09-03)
+1. Intermediate Boxing class added: new page, new schedule program (two
+   sessions/week), wired into the nav, the Boxing Classes hub, the
+   homepage card-stack, and the CMS schema. Page copy is mine (no client
+   source exists for this class); schedule days/times are a flagged
+   placeholder (Tue/Fri 5:45 PM) pending Ben's real answer.
+
+## Ben's revisions, round 18 (2026-09-05)
+1. Blog ported from the client's WordPress export. Their 35 `post` items
+   split cleanly in two:
+   - **10 published posts, kept verbatim.** Real writing by the gym, all
+     in their "Boxing" category, dated January 2025.
+   - **25 drafts, dropped.** Every one is Ring-theme demo content: lorem
+     ipsum bodies ("Qroin faucibus nec mauris...", only 4 unique bodies
+     across all 25) under titles about samurai katanas, muay Thai, MMA,
+     wrestling and CrossFit, none of which is this gym's sport. Never
+     published, so they carry no backlinks and no SEO value. Same call
+     already made for the demo content on Contact Us and Our Gyms.
+2. Nine em dashes replaced across the 10 posts, per the standing rule:
+   seven became colons where the dash introduced an explanation, and two
+   paired-dash asides became parentheses because their own contents are
+   comma-separated ("in boxing (dynamic warmup, shadow boxing, hitting
+   bags) is done in rounds") and commas there would have buried the aside
+   inside the list. Enforced by a guard in `source/build_posts.py`: the
+   script refuses to write the data file if a dash survives.
+3. One image dropped. The only `<img>` that survived the export points at
+   the old Hostinger staging domain
+   (floralwhite-woodcock-644453.hostingersite.com), which stops resolving
+   the moment the site migrates, so it is not hotlinked to a URL about to
+   404. Every other post image is an empty `<figure>`: the media did not
+   come across with the posts at all. **Art to re-supply at handover if
+   the client wants images on these posts.**
+4. Original copy on the blog, flagged as mine, not theirs: the index
+   header sub ("Technique, training, and news from the gym"), the
+   "Read the post" / "All posts" / "Newer" / "Older" affordances, and the
+   closing CTA line on each post ("Reading about it is one thing. Come do
+   it."). Every headline, standfirst and body paragraph is the client's.
+
+**Flag for Ben:** the Billy Falco post (2025-01-16) announces him as
+interim head coach of the competition team. He is not on the Coaches page,
+which was built from the client's current live site. Either the post is
+stale or the Coaches page is incomplete. Worth confirming before launch,
+since it is a live claim about a real person either way.
+
+## Ben's revisions, round 19 (2026-09-08)
+Schedule corrected against the client's own schedule graphic, which Ben
+screenshotted off the live site. That image is now the source of truth for
+class times and supersedes the 2026-08-26 WordPress export, which turned
+out to be materially out of date. Every provisional time in this build is
+gone, and `verify: true` no longer appears anywhere in schedule.js.
+
+What the export had wrong, and what the graphic actually says:
+
+| | Export / provisional | Real |
+| --- | --- | --- |
+| Boxing Basics 6 AM | Not in export; added Mon-Fri on Ben's word | Monday and Wednesday only |
+| Boxing Basics 7 AM | Export had Monday only; built as Mon-Fri | Tuesday and Thursday only |
+| Intermediate Boxing | Not in export; guessed Tue + Fri 5:45 PM | Tuesday and Thursday 5:45 PM |
+| Youth Boxing 4:30 PM | Not in export; added Mon/Wed on Ben's word | Monday and Wednesday, confirmed |
+| Saturday open gym | "2AM-12PM", flagged as a suspected typo | 9 AM to 12 PM. It was a typo |
+| Saturday 9 AM class | "Bsics & Kardio KO" | "Boxing Basics" |
+| Competition Team | Monday and Wednesday | Monday, Wednesday and Thursday |
+| Competition Sparring | Thursday 5:45 PM | Gone from their schedule. Removed |
+| Foundational Sparring | Thursday 6 PM | Gone from their schedule. Removed |
+| Friday mornings | 6 AM and 7 AM Boxing Basics | No morning class. Open gym only |
+
+Session count 29, was 35.
+
+Also taken from the graphic, because it is operational information rather
+than decoration: its legend. "Coach permission required" now shows on
+Competition Team Training and Intermediate Boxing, and "Ages 8 to 13" on
+the youth classes, both rendered under the class name on every schedule
+grid. Added as a `note` field on the session shape and to the Sanity
+schema, so the gym can edit them like any other class detail.
+
+Worth recording for future rounds: the export was ~2 weeks stale on a
+detail nobody would have questioned, and three of these corrections were
+to things I had placed on Ben's verbal description rather than a document.
+A screenshot of the client's own artwork settled in one message what four
+rounds of conversation had not. Ask for the picture earlier.
+
+## Ben's revisions, round 20 (2026-09-19): the blog rebuilt as SEO content
+
+Ben: "we need to rebuild the blogs. I want the blogs rebuilt so that
+they're just SEO factories. Christy doesn't want her name on the blogs
+anymore. She's cool if we use her on the website but no more 'blah, Christy
+is the founder, blah, blah, blah.' We don't have to have an author. If we
+do need to have an author we can just be like 'Fighters Boxing Management'
+or something."
+
+Asked whether he wanted literal FAQ pages: "I don't want them to be literal
+FAQ pages. I want them to be blogs that read like an FAQ page. It's stuff
+that people are searching for. I want it to be SEO-friendly blogs."
+
+### The provenance change, stated plainly
+
+**This round breaks the copy-verbatim lock, deliberately and on
+instruction.** Everything else in this project ships the client's own words
+(house-style Lock 1). The blog no longer does. All 16 posts below are
+original copy written for Growth Factor.
+
+The ported posts were the client's 10 real WordPress posts, kept verbatim
+at their original root-level slugs so backlinks resolved. Those slugs are
+still the reason the rebuild happened in place rather than at new URLs.
+
+### Christy Halbert is off the blog
+
+This was the load-bearing instruction, and it was bigger than a byline.
+There was no author field on the blog at all. Her name was in the *bodies*:
+
+- **All 10 ported posts** ended with the identical blockquote: "Founder and
+  Director of Fighters, Dr. Christy Halbert has used her background as an
+  academic in sociology, collegiate athlete, and professional boxer..."
+  That boilerplate is what Ben was describing. Gone from all of them.
+- **The Billy Falco post** was roughly 80% her: five mentions, a long
+  direct quote, and the Boxing Resource Center nonprofit boilerplate.
+
+Verified after build: zero occurrences of "Christy", "Halbert" or "IWBHF"
+across all 16 rendered blog posts. She remains on `/coaches/` and
+`/our-gyms/`, which Ben explicitly said was fine.
+
+No human byline was added in her place. Schema author on every post is now
+`{"@type":"Organization","name":"Fighters Boxing Gym"}`. "Fighters Boxing
+Management" was offered and not used: inventing a masthead for a gym that
+does not have one reads worse than the organisation simply owning its own
+posts, and an Organization author is what schema.org is for.
+
+### What happened to each of the 10 original URLs
+
+Eight rewritten in place. Slug unchanged, so every existing backlink still
+resolves, which is the whole reason they were ported in the first place.
+Each was given the search query its slug could carry honestly:
+
+| Slug (unchanged) | Now answers |
+| --- | --- |
+| `5-steps-to-start-boxing-at-any-age` | how to start boxing / am I too old |
+| `10-ways-to-protect-yourself-when-boxing` | is boxing safe, training injuries |
+| `5-critical-ways-to-protect-your-hands` | hand wraps, wrist pain, boxer's fracture |
+| `7-reasons-to-start-boxing-in-the-new-year` | benefits of boxing training |
+| `make-non-contact-boxing-more-fun` | boxing without sparring |
+| `mindset-matters` | the mental side of boxing |
+| `boxing-football-3-ways-theyre-similar` | boxing as cross-training |
+| `8-nasty-career-traps-to-avoid-for-pro-boxers` | going pro, career mistakes |
+
+Two retired, because no honest evergreen content fits the slug. Both 301 in
+`site/public/.htaccess` rather than 404, so their link equity survives:
+
+- `billy-falco-named-interim-head-coach-...` **-> `/coaches/`.** A personnel
+  announcement, built out of Christy quotes, about a coach whose current
+  status we have never had confirmed (still an open flag). Retiring it
+  also quietly closes that flag: the site no longer makes a claim about him.
+- `jake-paul-vs-mike-tyson` **-> `/5-steps-to-start-boxing-at-any-age/`.**
+  Dated celebrity commentary, no local lead intent. The fight's whole story
+  was a 58 year old boxing, so it points at the post owning the age query.
+
+### Eight new posts
+
+Targeting queries the FAQ page answers in one line and nothing owned as a
+page: `how-much-do-boxing-classes-cost`, `do-you-have-to-spar-in-boxing`,
+`what-age-can-kids-start-boxing`, `real-boxing-gym-vs-fitness-boxing`,
+`boxing-gear-for-beginners`, `womens-boxing-classes`,
+`how-often-should-you-train-boxing`, `how-to-become-an-amateur-boxer`.
+
+16 posts total. Deliberately informational, linking *out* to the commercial
+pages rather than competing with them: a post on what age kids can box
+links to `/youth-boxing-class/` instead of trying to outrank it. Same
+reason none of them duplicates `/faqs/` or `/what-to-expect/`.
+
+Internal linking is the part that makes it a funnel rather than 16 essays:
+17 links to `/schedule/` and 14 to `/beginners-boxing-class/` across the
+set, and every post is linked from at least one other post. Checked
+mechanically after the build: no broken internal links, no orphans.
+
+### Nothing invented
+
+Same rule as `faqs.js`, and it bit hardest on the post most likely to
+convert. **There is still no pricing for this gym**, so
+`how-much-do-boxing-classes-cost` names no number. It explains what drives
+the price (open gym vs classes vs competition team are three different
+products), gives four questions worth asking any gym, and routes to the
+phone and the form.
+
+That post will rank and then convert badly compared to one with a real
+number in it. **It is the single highest-value thing Ben can still send
+us.** Flagged again here because it is now costing a page, not just an
+FAQ answer.
+
+Also not invented anywhere in the 16: class sizes, win records, student
+counts, percentages, founding claims beyond the 2001 date the client
+publishes themselves, and any promise about results.
+
+### One SEO defect found and fixed on the way through
+
+The post template appended "| Fighters Boxing Gym Nashville" to every
+title, 32 characters of a roughly 65 character SERP budget. Eleven of the
+16 posts were over the truncation point, several losing their keyword.
+Suffix shortened to "| Fighters Nashville" and five titles trimmed. All 16
+now fit. Titles and meta descriptions are unique across all 31 pages.
+
+### Still open after this round
+
+- **No 404 page.** Matters more now that two URLs are retired. The
+  `.htaccess` deliberately has no `ErrorDocument` line pointing at a file
+  that does not exist.
+- **Five pre-existing pages have meta descriptions over 160 characters**
+  and will truncate: `beginners-boxing-class`, `faqs`, `our-gyms`,
+  `schedule`, `youth-boxing-class`. Not touched, since this round was the
+  blog, but they are a ten minute fix.
+- **No post imagery.** Every post is text-only. Blog images were optional
+  before and are still optional, but 16 posts is enough that it now shows.
+- `source/build_posts.py` **is superseded and now refuses to run** without
+  `--force`. It would regenerate posts.js from the WordPress export and
+  delete all of this, founder blockquote and all. Kept only as the record
+  of the original port.
