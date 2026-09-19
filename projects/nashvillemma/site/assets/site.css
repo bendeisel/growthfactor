@@ -121,6 +121,11 @@
      the headline spans the width. Vertical veil instead, dark where the
      type sits. The min-height cap below would otherwise crush it. */
   .bleedhero { min-height: 540px !important; }
+  /* At 1440 the photo covers by width, so object-position X does nothing.
+     At 390 it covers by height and crops 420px horizontally, which lands on
+     the middle of the frame and cuts the fighter's head off. Pushed right to
+     keep him. Desktop is unaffected by this for the reason above. */
+  .bleedhero img { object-position: 80% 22% !important; }
   .bleedhero > div > div.bleedveil {
     background: linear-gradient(to bottom, rgba(5,5,5,0.42) 0%,
       rgba(5,5,5,0.80) 42%, rgba(5,5,5,0.94) 72%, rgba(5,5,5,0.97) 100%) !important;

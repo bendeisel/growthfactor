@@ -302,7 +302,7 @@ def render(p):
         out.append('  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; '
                    '-webkit-mask-image: %s; mask-image: %s">' % (mask, mask))
         out.append('    <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; '
-                   'height: 100%%; object-fit: cover; object-position: 68%% 38%%">'
+                   'height: 100%%; object-fit: cover; object-position: 50%% 26%%">'
                    % (hero_img, esc(title)))
         # Seat the photo back, then carry the headline on a near-solid left.
         # This hero photo has a near-white wall in it, so a veil that looks
