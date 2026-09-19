@@ -10,7 +10,7 @@ Outputs:
   site/            one .html per page, shared assets, real nav links
   site/_links.json every internal link and whether its target exists
 """
-import json, os, re, shutil, base64
+import json, os, re, shutil, base64, html
 
 HERE  = os.path.dirname(os.path.abspath(__file__))
 PROJ  = os.path.dirname(HERE)
@@ -30,20 +30,80 @@ for f in sorted(os.listdir(PAGES)):
         slug = f[len("Program-"):-len(".dc.html")]
         ROUTES.append((f, "programs/%s.html" % slug, slug.replace("-", " ").title(), PAGES))
 
-# nav label -> destination. Pages we have not designed yet still get their real
-# URL so the gap shows up as a broken link instead of silently vanishing.
+# about, contact, FAQ, coaches, reviews, facilities, recovery and events, from
+# build_content_pages.py. Their manifest carries the meta description harvested
+# with the copy, so the descriptions reach the built pages instead of sitting
+# unused in the front matter.
+META = {}
+_man = os.path.join(HERE, "generated-content-pages.json")
+if os.path.exists(_man):
+    for row in json.load(open(_man, encoding="utf-8")):
+        ROUTES.append((row["file"], row["url"], row["title"], PAGES))
+        if row.get("description"):
+            META[row["url"]] = row["description"]
+
+# the program pages and the classes index carry theirs in the other manifest
+_pman = os.path.join(HERE, "generated-pages.json")
+if os.path.exists(_pman):
+    for row in json.load(open(_pman, encoding="utf-8")):
+        if row.get("url") and row.get("description"):
+            META[row["url"]] = row["description"]
+
+
+def _harvest_desc(name):
+    """Pull a meta description straight out of a harvested page's front matter."""
+    path = os.path.join(PROJ, "content", name + ".md")
+    if not os.path.exists(path):
+        return ""
+    m = re.match(r"^---(.*?)---", open(path, encoding="utf-8").read(), re.S)
+    if not m:
+        return ""
+    v = re.search(r'meta_description:\s*"(.*?)"\s*$', m.group(1), re.M)
+    return v.group(1).replace('\\"', '"') if v else ""
+
+# the two hand-built artboards, which have no generator to carry theirs
+for _u, _c in (("index.html", "index"), ("schedule.html", "home-schedule")):
+    _d = _harvest_desc(_c)
+    if _d:
+        META[_u] = _d
+
 # THE header and footer menu. Labels and destinations both live here and
 # nowhere else. They used to be hard-coded in all three artboards, 14 links
 # apiece, while this list only rewrote hrefs by matching the label text. So
 # editing here changed nothing you could see, and editing an artboard left
 # the other two behind. That is why the header kept reverting.
 #
-# "Programs" and "Kids Programs" are out per Ben. Change a label here and it
-# changes on all 16 pages, header and footer, on the next build.
-NAV = [("About", "about.html"), ("Fitness", "programs/sports-performance.html"),
-       ("Martial Arts", "programs/index.html"), ("Kids Classes", "programs/kids-martial-arts.html"),
-       ("Schedule", "schedule.html"), ("Recovery", "recovery.html"),
-       ("Events &amp; Sponsorships", "events.html")]
+# The menu is now built from what the site actually has, not from 97Display's
+# structure. Their menu split "Programs" from "Kids Programs" from "Fitness"
+# and sent three of its seven links at pages that did not exist. Every link
+# below goes at a page that is built.
+#
+# Fitness lives inside Classes and Events lives in the footer, because the
+# header holds seven before it wraps. Either one comes back by editing this
+# list, and it changes on every page on the next build.
+NAV = [("About", "about.html"),
+       ("Classes", "programs/index.html"),
+       ("Kids", "programs/kids-martial-arts.html"),
+       ("Coaches", "coaches.html"),
+       ("Schedule", "schedule.html"),
+       ("Recovery", "recovery.html"),
+       ("Contact", "contact.html")]
+
+# The footer carries the rest. A footer can hold what a header cannot, so the
+# pages that lost their header slot are still one click from anywhere.
+FOOT_COLS = [("Train", [("Classes", "programs/index.html"),
+                        ("Kids Classes", "programs/kids-martial-arts.html"),
+                        ("Fitness", "programs/sports-performance.html"),
+                        ("Personal Training", "programs/personal-training.html"),
+                        ("Schedule", "schedule.html"),
+                        ("Recovery Room", "recovery.html")]),
+             ("Gym", [("About", "about.html"),
+                      ("Coaches &amp; Trainers", "coaches.html"),
+                      ("Facilities", "facilities.html"),
+                      ("Reviews", "reviews.html"),
+                      ("Events &amp; Sponsorships", "events.html"),
+                      ("FAQ", "faq.html"),
+                      ("Contact", "contact.html")])]
 
 # Pages built with one continuous background instead of stacked colour blocks.
 # Trial on Muay Thai first; widen this set once the look is approved.
@@ -89,6 +149,19 @@ def make_seamless(body):
             t = t.replace('class="rv"', 'class="rv bloom"')
         return t
     return _re.sub(r"<(?:div|input)[^>]*>", fix, body)
+
+EM_DASH = re.compile(r"\s*\u2014\s*")
+
+def dedash(text):
+    """No em dash reaches a built page, including in the client's own copy.
+
+    Every one of them in this harvest joins a clause or hangs an appositive
+    off the end of a sentence, so a comma reads the same. Eleven of them came
+    in with the copy and this is where they are replaced, once, rather than
+    by editing the client's files. Flag the change at handover.
+    """
+    return EM_DASH.sub(", ", text)
+
 
 def depth_prefix(url):
     return "../" * url.count("/")
@@ -228,8 +301,8 @@ def build_footer(url):
            'font-weight: 800; color: rgba(255,255,255,0.42); margin-bottom: 16px')
     lnk = "color: rgba(255,255,255,0.78); font-size: 15px"
     o = ['  <div class="site-footer" style="background: #000000">',
-         '    <div style="display: grid; grid-template-columns: 1.5fr 0.9fr 0.8fr 1.4fr; '
-         'gap: 48px; padding: 72px 48px 56px 48px; align-items: start">']
+         '    <div style="display: grid; grid-template-columns: 1.35fr 0.85fr 0.95fr 0.7fr 1.25fr; '
+         'gap: 40px; padding: 72px 48px 56px 48px; align-items: start">']
 
     # brand and contact
     o.append('      <div>')
@@ -247,13 +320,14 @@ def build_footer(url):
              'display: inline-block; white-space: nowrap">View Our Location</a>' % p)
     o.append('      </div>')
 
-    # links
-    o.append('      <nav aria-label="Footer">')
-    o.append('        <p style="%s">Links</p>' % lab)
-    o.append('        <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 11px">')
-    for label, dest in NAV:
-        o.append('          <li><a href="%s%s" style="%s">%s</a></li>' % (p, dest, lnk, label))
-    o.append('        </ul>\n      </nav>')
+    # links, in two columns. The header holds seven, the footer holds the site.
+    for heading, items in FOOT_COLS:
+        o.append('      <nav aria-label="%s">' % heading)
+        o.append('        <p style="%s">%s</p>' % (lab, heading))
+        o.append('        <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 11px">')
+        for label, dest in items:
+            o.append('          <li><a href="%s%s" style="%s">%s</a></li>' % (p, dest, lnk, label))
+        o.append('        </ul>\n      </nav>')
 
     # social
     o.append('      <div>')
@@ -358,6 +432,14 @@ MOBILE_CSS = """
   /* tall artboard blocks are sized for a desktop column */
   [style*="min-height"] { min-height: 260px !important; }
   [style*="height: 620px"], [style*="height: 560px"] { height: auto !important; }
+
+  /* Two exceptions to the single-column rule. Sixteen coaches and three
+     sponsor logos stacked one per screen is ten thousand pixels of scrolling
+     for a page whose whole job is letting you scan faces. Both are picture
+     tiles with two lines under them, which read fine at half width. */
+  .roster { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  .roster > a > div:first-child { height: 200px !important; }
+  .logos { grid-template-columns: 1fr 1fr !important; }
 }
 
 @media (max-width: 620px) {
@@ -512,6 +594,7 @@ SHELL = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>%(title)s | Nashville MMA Training Camp</title>
+%(desc)s
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
 <link rel="stylesheet" href="%(prefix)sassets/site.css">
 %(fluidmap)s</head>
@@ -624,11 +707,14 @@ for src, url, title, base in ROUTES:
     seamless = (SEAMLESS == "ALL" or url in SEAMLESS)
     if seamless:
         body = make_seamless(body)
+    body = dedash(body)
     dest = os.path.join(OUT, url)
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     open(dest, "w", encoding="utf-8").write(SHELL % {
         "title": title, "body": body, "prefix": depth_prefix(url), "init": init,
         "bodycls": ' class="seamless"' if seamless else "",
+        "desc": ('<meta name="description" content="%s">\n'
+                 % html.escape(dedash(META[url]), quote=True)) if META.get(url) else "",
         "pgbg": PGBG if seamless else "",
         "fluidmap": (FLUIDMAP % {"prefix": mod_prefix(url)}) if seamless else "",
         "fluid": (FLUID_MOUNT % {"prefix": mod_prefix(url)}) if seamless else ""})

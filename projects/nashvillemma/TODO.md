@@ -1,75 +1,78 @@
 # Nashville MMA: what is left to finish the site
 
 Checked against the working tree on 2026-09-19. Every "ready" item names the
-file its content already comes from, so anyone can pick it up without asking
-Ben first. Every "blocked" item says exactly what is missing.
+file its content comes from. Every "blocked" item says exactly what is
+missing and who has it.
 
 ## Where it stands
 
-17 pages built: the homepage, the schedule, the classes index, and 14 program
-pages. All of them share the continuous gold background, the header and footer
-from one source, and a working mobile layout. The 14 program pages and the
-classes index carry the full-bleed hero and the card stack.
+41 pages built, and no link on the site points at a page that does not exist.
 
-Four internal links still go nowhere: `about.html`, `contact.html`,
-`events.html`, `recovery.html`.
+The homepage, the schedule, the classes index and 14 program pages were there
+before. New this round: about, contact, FAQ, coaches index plus a page for
+each of the 16 coaches, reviews, facilities, recovery and events. All 41 share
+the continuous gold background, one header, one footer, a working mobile
+layout, and now a meta description.
+
+The menu is no longer 97Display's. It is built from what the site has:
+About, Classes, Kids, Coaches, Schedule, Recovery, Contact. Fitness sits
+inside Classes and Events sits in the footer, because the header row holds
+seven labels before it wraps. Both live in `NAV` in `data/build_site.py` and
+swapping either back is a one-line edit that lands on all 41 pages.
 
 ## Ready to build, content already in the repo
 
-Nothing here needs Ben. The copy is harvested and the pages can be generated
-the same way the program pages are.
-
-- **Contact** from `content/contact.md`, 315 words. Kills a dead link that the
-  footer's View Our Location button also points at.
-- **FAQ** from `content/faq.md`, 2002 words, plus 16 individual FAQ pages in
-  `content/faq-*.md`. A real FAQ set, not filler.
-- **Coaches** from `content/instructors.md` plus 17 `content/instructors-*.md`
-  files. Index plus a page each. Note the standing rule: no invented
-  credentials, and Dedrek Sanders still has no photo.
-- **Reviews** from `content/reviews.md`. 62 reviews named, 38 with body text.
-  The other 24 are a name only, because the vendor rendered reviews as images.
-  No star rows, the gym is at 4.9.
-- **Sponsors** from `content/classes-sponsors.md`, 564 words. This is half of
-  what the Events and Sponsorships link needs.
-- **Facilities** from `content/classes-facilities.md`, 505 words. Could stand
-  alone or feed the About page.
+- **Blog.** A decision, not a blocker. The listing page carries excerpts for
+  10 articles and the harvest has the full text of exactly one,
+  `blog-155719-gear-recommendations.md`, which is not among the 10. So either
+  the articles get re-harvested from the live site or the blog starts fresh.
+  Worth deciding rather than defaulting: the existing posts are long
+  general-interest pieces on sleep, mindfulness and motivation that would sit
+  on any gym's blog. Fewer pages aimed at Nashville intent would carry more.
 
 ## Blocked, needs Ben
 
-- **Header structure.** Still 97Display's menu with two labels swapped. Needs
-  the real sections and where each points. Cheap to change now: labels and
-  destinations both live in `NAV` in `data/build_site.py` and nothing else.
-- **About.** No source in the harvest at all. Facilities copy could carry part
-  of it, the rest needs writing.
-- **Recovery.** No copy and no photos. Recovery appears only as passing
-  mentions inside the blog, facilities and FAQ pages. Nothing about what is
-  actually in the room, so nothing can be written honestly.
-- **Events.** No copy and no photos. Sponsors covers half the page.
+- **The lead form posts nowhere.** The popup has inputs but no `<form>` and no
+  action anywhere on the site. Every Request Information button opens a modal
+  that cannot submit. This is the biggest functional hole in the build and it
+  needs a destination: GHL, an inbox, or a webhook.
+- **A recovery room photo.** The page is built from the gym's own words, which
+  name the sauna, the cold tub, the Normatec boots and the mobility area. The
+  hero is a general gym photo, captioned as one, because no photo of that room
+  exists anywhere in the harvest.
+- **Two numbers disagree in the client's own copy.** The homepage says 80+
+  classes per week, the call to action on every program page says 90+. Both
+  came from the vendor site. Pick one and it changes everywhere.
+- **Upcoming events have passed.** The events page carries March and April
+  dates, harvested as written. They need replacing with what is actually next.
 - **Privacy and Terms.** No source, and legal text is not something to draft
   from nothing.
-- **Blog.** The listing page carries excerpts for 10 articles and the harvest
-  has the full text of exactly one, `blog-155719-gear-recommendations.md`,
-  which is not among the 10. So the articles have to be re-harvested from the
-  live site or the blog starts fresh. Worth deciding rather than defaulting:
-  the existing posts are long general-interest pieces on sleep, mindfulness
-  and motivation that would sit on any gym's blog. Fewer pages aimed at
-  Nashville intent would carry more weight than ten that are not.
-- **Photography.** Ben is generating new images. The current hero sources top
-  out around 1000px, so they are upscaled in a 1440px hero and read soft.
-  Target roughly 2400px wide at about 2:1, subject right, left third quiet.
+- **Photography.** The current hero sources top out around 1000px, so they are
+  upscaled in a 1440px hero and read soft. Target roughly 2400px wide at about
+  2:1, subject right, left third quiet.
 
 ## Functional gaps, not pages
 
-- **The lead form posts nowhere.** The popup has inputs but no `<form>` and no
-  action anywhere on the site. Every Request Information button opens a modal
-  that cannot submit. This is the biggest functional hole in the build.
-- **Meta descriptions unused.** 56 sit in the harvest front matter and zero
-  reach the built pages. One change in the page shell.
 - **The homepage has not been touched.** It still runs the original artboard
   hero and layout. It has the new background, header and footer, but not the
-  bleed hero or the card treatment the program pages now use.
+  bleed hero or the card treatment the rest of the site now uses.
 - **No sitemap or canonical tags.** The `site-ship` routine adds these at
   deploy, worth confirming before go-live rather than after.
+- **24 of the 62 reviews are a name with no words**, because the vendor
+  rendered every review as the same image. Those 24 are left off the reviews
+  page rather than given words they never said. Pulling their text from the
+  Google listing would put them back.
+
+## What changed in the structure, and why
+
+97Display gave every FAQ answer its own page, fifteen of them, each one
+question long, and then repeated all fifteen on a listing page as well. That
+is thin duplicate content twice over. The FAQ is now one page with a jump
+list, and every question keeps an anchor you can link straight to.
+
+The coaches went the other way. Sixteen coaches with real biographies were a
+single scrolling list on the old site. Each one now has a page, because a
+named coach with three paragraphs of history is exactly what people search.
 
 ## Standing rules that apply to all of it
 

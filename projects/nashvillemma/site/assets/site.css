@@ -105,6 +105,14 @@
   /* tall artboard blocks are sized for a desktop column */
   [style*="min-height"] { min-height: 260px !important; }
   [style*="height: 620px"], [style*="height: 560px"] { height: auto !important; }
+
+  /* Two exceptions to the single-column rule. Sixteen coaches and three
+     sponsor logos stacked one per screen is ten thousand pixels of scrolling
+     for a page whose whole job is letting you scan faces. Both are picture
+     tiles with two lines under them, which read fine at half width. */
+  .roster { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  .roster > a > div:first-child { height: 200px !important; }
+  .logos { grid-template-columns: 1fr 1fr !important; }
 }
 
 @media (max-width: 620px) {

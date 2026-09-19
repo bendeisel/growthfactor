@@ -623,7 +623,7 @@ class Component extends DCLogic {
       if (!self._drag && !self.state.formOpen) { self.nudge(1); }
     }, (this.props.autoplaySeconds || 6) * 1000);
 
-    // the strip is driven by JS, not a CSS animation — some browsers
+    // the strip is driven by JS, not a CSS animation, because some browsers
     // (low-power modes, battery savers) pause CSS animations but keep
     // requestAnimationFrame running, and this strip must always move
     var track = document.getElementById('mqTrack');

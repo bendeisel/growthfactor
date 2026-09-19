@@ -137,6 +137,34 @@ PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8")
 def esc(s): return html.escape(s, quote=False)
 
 
+def meta_desc(content_name):
+    """The meta description harvested with the copy.
+
+    56 of these came through the harvest and none of them reached a built
+    page. They are the client's own, written for these pages, so they ship.
+    """
+    try:
+        md = open(os.path.join(CONTENT, content_name + ".md"), encoding="utf-8").read()
+    except OSError:
+        return ""
+    m = re.match(r"^---(.*?)---", md, re.S)
+    v = re.search(r'meta_description:\s*"(.*?)"\s*$', m.group(1), re.M) if m else None
+    if v:
+        return v.group(1).replace('\\"', '"')
+    # the two pages we wrote ourselves have no harvested front matter, so the
+    # description comes off their own opening paragraph rather than being
+    # written for them
+    for line in re.sub(r"^---.*?---\s*", "", md, flags=re.S).split("\n"):
+        t = line.strip()
+        if not t or t.startswith(("#", "-", "!", "[")):
+            continue
+        if len(t) <= 158:
+            return t
+        cut = t[:158].rsplit(" ", 1)[0]
+        return cut.rstrip(",;:") + "..."
+    return ""
+
+
 BTN_LINE = re.compile(r'(<a\b[^>]*class="btn-line"[^>]*>)(.*?)(</a>)', re.S)
 
 def spark_buttons(html_str):
@@ -609,7 +637,7 @@ for p in PROGRAMS:
             + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</x-dc>\n" + SCRIPT)
     name = "Program-%s.dc.html" % p["slug"]
     open(os.path.join(PAGES, name), "w", encoding="utf-8").write(page)
-    made.append((name, title, n_cls))
+    made.append((name, title, n_cls, "programs/%s.html" % p["slug"], meta_desc(p["content"])))
     print("%-42s %-52s %2d classes" % (name, title[:50], n_cls))
 
 # the classes index, from services.md
@@ -623,6 +651,8 @@ open(os.path.join(PAGES, "ProgramsIndex.dc.html"), "w", encoding="utf-8").write(
     + HEADER + "\n\n" + idx_body + "\n\n" + FOOTER + "\n</x-dc>\n" + SCRIPT)
 print("%-42s %-52s" % ("ProgramsIndex.dc.html", idx_title[:50]))
 
-json.dump([{"file": f, "title": t} for f, t, _ in made],
+json.dump([{"file": f, "title": t, "url": u, "description": d} for f, t, _, u, d in made]
+          + [{"file": "ProgramsIndex.dc.html", "url": "programs/index.html",
+              "title": idx_title, "description": meta_desc("services")}],
           open(os.path.join(HERE, "generated-pages.json"), "w", encoding="utf-8"), indent=2)
 print("\n%d program pages generated" % len(made))
