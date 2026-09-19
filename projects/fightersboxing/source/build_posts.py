@@ -27,6 +27,7 @@ import html
 import json
 import os
 import re
+import sys
 
 XML = 'source/wp-export/fightersnashville.WordPress.20260826.xml'
 OUT = 'site/src/data/posts.js'
@@ -197,5 +198,30 @@ def main():
         print('  %s  %-46s %d chars' % (p['date'], p['slug'], len(p['body'])))
 
 
+def _guard():
+    """Refuse to run by default.
+
+    SUPERSEDED 2026-09-19. src/data/posts.js is now hand-authored original
+    SEO copy (Ben round 11), not the client's WordPress copy. Running this
+    script would silently overwrite all 16 rebuilt posts with the 10 ported
+    ones and put the founder bio blockquote back on every page, which she
+    asked to be taken off.
+
+    Kept because it is the provenance record of the original port: it
+    documents which 10 of the 35 exported posts were published, why the 25
+    drafts were dropped, and the em dash fixes applied on the way through.
+
+    Run it only to inspect that history, and only with --force, which
+    writes to a path you name rather than clobbering posts.js.
+    """
+    if '--force' not in sys.argv:
+        raise SystemExit(
+            'build_posts.py is superseded and will not run.\n'
+            'posts.js is hand-authored now; regenerating it would delete the\n'
+            'rebuilt blog. See the header of site/src/data/posts.js.\n'
+            'To inspect the original port anyway: --force -o <other-path>')
+
+
 if __name__ == '__main__':
+    _guard()
     main()

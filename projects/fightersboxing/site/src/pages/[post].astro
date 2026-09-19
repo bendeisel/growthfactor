@@ -11,9 +11,14 @@
 // prefers a matching static page file over a dynamic route anyway, and
 // nothing in posts.js collides with an existing page slug.
 //
-// Body copy is the client's, verbatim from their WordPress export, minus
-// em dashes per Ben's standing rule. See source/build_posts.py for the
-// conversion and source/copy.md for what was dropped and flagged.
+// Body copy was rebuilt as original SEO content on 2026-09-19 (Ben round
+// 11). It is no longer the client's verbatim WordPress copy. See the header
+// of ../data/posts.js for the rules it is written under and source/copy.md
+// for the provenance change.
+//
+// No human byline. Two of the ported posts carried a founder bio and every
+// one of them ended with the same blockquote about her; she asked to come
+// off the blog. The author in schema is the organisation.
 import Base from '../layouts/Base.astro';
 import { posts } from '../data/posts.js';
 
@@ -48,6 +53,13 @@ const schema = {
   datePublished: post.date,
   articleSection: 'Boxing',
   mainEntityOfPage: new URL(`/${post.slug}/`, Astro.site).toString(),
+  // Authored by the gym, not a person, and deliberately so: see the note
+  // at the top of this file.
+  author: {
+    '@type': 'Organization',
+    name: 'Fighters Boxing Gym',
+    url: Astro.site?.toString(),
+  },
   publisher: {
     '@type': 'Organization',
     name: 'Fighters Boxing Gym',
@@ -56,7 +68,10 @@ const schema = {
 };
 ---
 
-<Base title={`${post.title} | Fighters Boxing Gym Nashville`} description={metaDesc}>
+<!-- Brand suffix is deliberately short. "| Fighters Boxing Gym Nashville"
+     spent 32 characters of a ~65 character SERP title and truncated most
+     post titles before their keyword. -->
+<Base title={`${post.title} | Fighters Nashville`} description={metaDesc}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
 
   <article class="post">
@@ -167,6 +182,7 @@ const schema = {
     line-height: 1.68;
   }
   .post-body :global(p) { margin-bottom: 1.15em; }
+  .post-body :global(h2),
   .post-body :global(h5),
   .post-body :global(h4),
   .post-body :global(h3) {

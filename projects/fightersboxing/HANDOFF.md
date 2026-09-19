@@ -46,17 +46,19 @@ current.**
 
 ## What is built
 
-25 pages, one artifact, one Astro project.
+31 pages, one artifact, one Astro project.
 
 - Home, Boxing Classes hub, 4 class pages (Beginners, Intermediate,
   Competition Team, Youth)
 - Coaches, Schedule, FAQs, What to Expect, Our Gyms, Contact
 - Privacy Policy, Terms
-- **Boxing Blog**: index at `/boxing-blog/` plus 10 real posts
+- **Boxing Blog**: index at `/boxing-blog/` plus **16 SEO posts**
+  (rebuilt 2026-09-19, see below)
 
-SEO in place: unique title and meta description on all 25 pages,
+SEO in place: unique title and meta description on all 31 pages,
 `SportsActivityLocation` schema sitewide, `FAQPage` (22 Q&As),
-`BlogPosting` on each post, generated `sitemap.xml` (25 URLs), robots.
+`BlogPosting` on each post with an Organization author, generated
+`sitemap.xml` (31 URLs), robots, and `.htaccess` carrying two 301s.
 
 ---
 
@@ -68,10 +70,15 @@ In priority order. **None of these block a launch except by choice.**
    faces. The files exist on the client's live site. Exact filenames are
    in `SEO-PLAN.md` Part 8 (`Image-01-1.jpg` through `Image-09-1.jpg`,
    mapped to coaches). This environment cannot fetch them, see below.
-2. **Billy Falco: coach or not?** A blog post (2025-01-16) announces him
-   as interim head coach of the competition team. He is not on the
-   Coaches page, which came from the current live site. One of the two is
-   stale. It is a live claim about a real person, so it needs settling.
+2. **Real pricing.** Escalated: the blog now has a post targeting "what do
+   boxing classes cost in Nashville" and it cannot state a number, because
+   the gym has never given us one. It routes to the phone instead. This is
+   now costing a page rather than one FAQ answer.
+
+   (*Billy Falco is no longer an open question. The post announcing him
+   was retired on 2026-09-19 and 301s to `/coaches/`, so the site makes no
+   claim about him. If he is coaching, he just needs adding to the Coaches
+   page like anyone else.*)
 3. **Confirm the production domain.** `fightersnashville.com` is assumed
    from `astro.config.mjs`, never confirmed.
 4. **Hostinger API token**, only if he wants us to deploy rather than
@@ -113,11 +120,32 @@ Things that look wrong but are right:
 
 ### Blog URLs must stay at root level
 
-The 10 posts live at `/mindset-matters/`, `/jake-paul-vs-mike-tyson/` and
-so on, **not** under `/blog/`. That is exactly where WordPress served
-them, and keeping it is the only reason existing backlinks still resolve.
-The index is `/boxing-blog/` because that was their real archive URL.
-`/blog/` was an empty page on their site.
+Posts live at `/mindset-matters/` and so on, **not** under `/blog/`. That
+is exactly where WordPress served them, and keeping it is the only reason
+existing backlinks still resolve. The index is `/boxing-blog/` because that
+was their real archive URL. `/blog/` was an empty page on their site.
+
+### The blog was rebuilt on 2026-09-19. Read this before touching it.
+
+It is no longer the client's ported copy. Ben's instruction: SEO blogs
+answering what people search, and **Christy Halbert's name off the blog**
+(she stays on `/coaches/` and `/our-gyms/`). Every old post had ended with
+the same founder-bio blockquote.
+
+- **16 posts of original copy.** `site/src/data/posts.js` is now
+  **hand-authored**. Its header carries the rules. Read them before editing.
+- `source/build_posts.py` **refuses to run** without `--force`. It would
+  regenerate posts.js from the WordPress export and wipe all 16, putting
+  the founder blockquote back. It is kept only as the port's record.
+- **8 original slugs unchanged**, so their backlinks still resolve.
+- **2 retired with 301s** in `site/public/.htaccess`: the Billy Falco
+  announcement to `/coaches/`, Jake Paul vs Tyson to
+  `/5-steps-to-start-boxing-at-any-age/`.
+- **No human byline.** Schema author is the Organization, by design.
+- **No invented facts**, and no prices anywhere: see the ledger.
+
+Full reasoning, the slug-to-query table and what is still open:
+`source/copy.md`, round 20.
 
 The 25 draft posts in the export are Ring-theme lorem ipsum about samurai
 katanas and CrossFit. They were dropped deliberately. Do not "restore"

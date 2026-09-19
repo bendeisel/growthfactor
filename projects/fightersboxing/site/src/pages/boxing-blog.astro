@@ -7,17 +7,18 @@
 // URL keeps their backlinks, which is the whole reason this page exists.
 // It is deliberately NOT in the header nav, per Ben: footer link only.
 //
-// Form: an editorial index, not a card grid. Every post in the export is
-// text-only (the media did not survive the export, see source/copy.md), and
-// a grid of identical bordered cards with a title and two lines of grey
-// text under it is the single most "generated"-looking pattern there is.
-// A lead item plus ruled rows gives the page hierarchy and lets the
-// headlines carry it at the size they deserve.
+// Form: an editorial index, not a card grid. Every post is text-only (no
+// post imagery has ever been supplied, see source/copy.md), and a grid of
+// identical bordered cards with a title and two lines of grey text under
+// it is the single most "generated"-looking pattern there is. A lead item
+// plus ruled rows gives the page hierarchy and lets the headlines carry it
+// at the size they deserve.
 //
-// Copy in the rows is the client's own: their headlines, and the first
-// sentence of each post as the standfirst. The only original copy on this
-// page is the header sub and the "Read the post" affordance, both logged
-// in source/copy.md.
+// Rebuilt 2026-09-19 (Ben round 11): 16 posts of original SEO copy,
+// replacing the 10 ported WordPress posts. Titles and deks come from
+// posts.js, so this page needs no change when posts are added. There is
+// deliberately no news category any more: every post is evergreen and
+// answers a query somebody searches.
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ClassTicker from '../components/ClassTicker.astro';
@@ -50,11 +51,11 @@ const schema = {
 
 <Base
   title="Boxing Blog | Fighters Boxing Gym Nashville"
-  description="Boxing training, technique, hand protection, mindset, and gym news from the coaches at Fighters Boxing Gym in Nashville."
+  description="Straight answers on starting boxing, what it costs, gear, sparring, youth classes and training, from a Nashville boxing gym."
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
 
-  <PageHeader lines={['BOXING', 'BLOG']} sub="Technique, training, and news from the gym" />
+  <PageHeader lines={['BOXING', 'BLOG']} sub="Straight answers about training, gear, and getting started" />
 
   <section class="idx">
     <div class="wrap">

@@ -1,0 +1,31 @@
+# Fighters Boxing Gym: Apache config for the Hostinger static deploy.
+#
+# Added 2026-09-19 with the blog rebuild. Two of the client's 10 original
+# WordPress posts were retired because they could not carry evergreen
+# content honestly:
+#
+#   billy-falco-named-interim-head-coach-...  a personnel announcement,
+#       built almost entirely from quotes by a founder who has asked to
+#       come off the blog, about a coach whose current status we have
+#       never had confirmed. Sent to the Coaches page, which is the live
+#       equivalent of what it was about.
+#
+#   jake-paul-vs-mike-tyson  dated celebrity commentary with no local
+#       lead intent. The fight's whole story was a 58 year old boxing, so
+#       it is sent to the post that owns the age question.
+#
+# 301 rather than delete: both URLs were published and may carry links.
+# A 301 passes that equity to a live, relevant page. A 404 throws it away.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Retired posts. [R=301,L] with NC so a linked variant in the wrong case
+  # still lands. The optional trailing slash covers both link forms.
+  RewriteRule ^billy-falco-named-interim-head-coach-of-fighters-boxing-gym/?$ /coaches/ [R=301,L,NC]
+  RewriteRule ^jake-paul-vs-mike-tyson/?$ /5-steps-to-start-boxing-at-any-age/ [R=301,L,NC]
+</IfModule>
+
+# No ErrorDocument line on purpose: this build has no 404 page yet, and
+# pointing Apache at a file that does not exist is worse than its default.
+# Worth adding one before launch now that two URLs are retired.

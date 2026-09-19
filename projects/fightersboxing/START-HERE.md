@@ -41,11 +41,18 @@ same glance.
 | Item | What is wrong |
 | --- | --- |
 | **Coach photos** | The Coaches page shows initials instead of faces. The 9 photo files exist on your live site. Filenames are listed in `SEO-PLAN.md` Part 8. Send them and they go straight in. |
-| **Billy Falco** | A blog post announces him as interim head coach, but he is not on the Coaches page. One of the two is out of date. |
+| **Your rates** | The blog now has a page answering "what do boxing classes cost in Nashville", and it cannot give a number because we have never had one. It ranks either way. It converts far better with a real figure on it. |
+
+**Billy Falco is settled.** You no longer need to answer this. The post
+announcing him as interim head coach has been retired and its web address
+now forwards to your Coaches page, so the site makes no claim about him
+either way. If he is coaching and you want him listed, send his details and
+he goes on the Coaches page like anyone else.
 
 ### Genuinely optional, can follow later
 
-Blog post images, class pricing, extra schema, the new local SEO pages.
+Blog post images, extra schema, the new local SEO pages, and a "page not
+found" page.
 
 ---
 
@@ -63,7 +70,7 @@ Nine steps, about 10 minutes.
 The preview link I keep sending you is **not** what gets uploaded. That
 link is a special all-in-one page built for reviewing.
 
-The real website is **25 separate pages**, and that is what is in the zip.
+The real website is **31 separate pages**, and that is what is in the zip.
 
 ---
 
@@ -97,6 +104,29 @@ blank**. All 34 pages. Zero titles, zero descriptions.
 Going from that to this is the biggest cheap win you had, and it is
 already banked.
 
+### The blog is now doing SEO work
+
+It was 10 posts copied over from your old WordPress site. It is now **16
+posts**, each one written to answer a single thing people actually type
+into Google: what classes cost, whether you have to spar, what age kids can
+start, what gear you need, whether this is a real boxing gym or a fitness
+class.
+
+Two changes worth knowing:
+
+- **Christy's name is off the blog entirely.** Every one of the old posts
+  ended with the same paragraph about her being the founder. All gone. She
+  is still on the Coaches page and Our Gyms, which you said was fine. The
+  posts are credited to the gym, not to a person.
+- **Two old posts were retired** and their web addresses now forward to
+  live pages, so no links to them break. The Billy Falco announcement
+  forwards to your Coaches page, and the Jake Paul vs Mike Tyson post
+  forwards to the post about starting boxing at any age.
+
+Every post links to your schedule and your Boxing Basics page, which is the
+point. Someone searching "do you have to spar" lands on an answer and is one
+click from your class times.
+
 ### What software cannot do (this is where the leads are)
 
 1. **Google Business Profile.** For a gym this matters more than the
@@ -126,8 +156,8 @@ launch.
 
 ## What I need from you, in priority order
 
-1. **The 9 coach photos.** Now the biggest visible gap.
-2. **Is Billy Falco a coach or not.**
+1. **The 9 coach photos.** Still the biggest visible gap.
+2. **Your rates.** Now costing you a page, not just an FAQ answer. See above.
 3. **Confirm the domain** is `fightersnashville.com`.
 4. **Google Business Profile access**, when you are ready for that stage.
 
