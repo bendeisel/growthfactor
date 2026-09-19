@@ -2,6 +2,7 @@
   "built": [
     "index.html",
     "schedule.html",
+    "programs/index.html",
     "programs/boxing.html",
     "programs/jiu-jitsu.html",
     "programs/kids-brazilian-jiu-jitsu.html",
@@ -21,7 +22,6 @@
     "about.html",
     "contact.html",
     "events.html",
-    "programs/index.html",
     "recovery.html"
   ]
 }

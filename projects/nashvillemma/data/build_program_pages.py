@@ -487,6 +487,84 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
 
     return title, "\n".join(out), n_cls
 
+
+# ── the classes index ──────────────────────────────────────────────────────
+# "Martial Arts" in the header pointed at programs/index.html, which was one
+# of the five dead links. The copy for it was already harvested: services.md
+# is the old site's own classes landing page, a headline plus one section per
+# program. Nothing here is written, only placed.
+INDEX_SLUGS = {
+    "jiu-jitsu": "jiu-jitsu", "muay thai kickboxing": "muay-thai", "boxing": "boxing",
+    "mixed martial arts": "mixed-martial-arts", "mma fight team": "mma-fight-team",
+    "women's classes": "womens-classes", "wrestling": "wrestling",
+    "self defense classes & seminars": "self-defense",
+    "personal training": "personal-training", "sports performance": "sports-performance",
+    "kids martial arts": "kids-martial-arts", "kids fitness classes": "kids-fitness",
+    "kids brazilian jiu-jitsu": "kids-brazilian-jiu-jitsu",
+}
+
+def build_index_page():
+    md = open(os.path.join(CONTENT, "services.md"), encoding="utf-8").read()
+    head = re.search(r"^# (.+)$", md, re.M).group(1).strip()
+    secs = re.findall(r"^## (.+?)\n\n(.+?)\n", md, re.M)
+
+    o = []
+    mask = ("linear-gradient(to bottom, #000 0%, #000 54%, rgba(0,0,0,0.35) 82%, "
+            "rgba(0,0,0,0) 100%)")
+    o.append('<div class="bleedhero" style="position: relative; overflow: hidden; '
+             'min-height: 620px; isolation: isolate; background: #050505">')
+    o.append('  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; '
+             '-webkit-mask-image: %s; mask-image: %s">' % (mask, mask))
+    o.append('    <img src="about-bg.jpg" alt="Martial arts and fitness classes in Nashville" '
+             'style="position: absolute; inset: 0; width: 100%; height: 100%; '
+             'object-fit: cover; object-position: 55% 40%">')
+    o.append('    <div style="position: absolute; inset: 0; background: rgba(5,5,5,0.30)"></div>')
+    o.append('    <div class="bleedveil" style="position: absolute; inset: 0; background: '
+             'linear-gradient(to right, rgba(5,5,5,0.97) 0%, rgba(5,5,5,0.95) 32%, '
+             'rgba(5,5,5,0.70) 55%, rgba(5,5,5,0.26) 76%, rgba(5,5,5,0.04) 100%)"></div>')
+    o.append('  </div>')
+    o.append('  <div style="position: relative; z-index: 2; max-width: 980px; '
+             'padding: 122px 48px 140px 48px">')
+    o.append('    <h1 style="font-size: 74px; line-height: 0.96; max-width: 860px">%s</h1>' % esc(head))
+    o.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 30px"></div>' % GOLD)
+    o.append('  </div>\n</div>')
+
+    # one card per program, photo led. An index is for choosing, so every card
+    # carries its own picture and links straight through.
+    o.append('<div class="rv" style="background: transparent; padding: 78px 48px">')
+    # stretch, not start: cards size to their own copy otherwise and the rows
+    # come out ragged along the bottom
+    o.append('  <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); '
+             'gap: 20px; align-items: stretch">')
+    for i, (name, body) in enumerate(secs):
+        slug = INDEX_SLUGS.get(name.lower().strip())
+        if not slug:
+            continue
+        lead = (i == 0)
+        span, h, tsize = (6, 300, 46) if lead else (2, 210, 27)
+        # the index itself lives at programs/index.html, so its cards link
+        # within that folder, not back through it
+        o.append('    <a href="%s.html" class="idxcard" style="grid-column: span %d; '
+                 'display: block; text-decoration: none; background: #0E0E10; '
+                 'box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)">' % (slug, span))
+        o.append('      <div style="position: relative; height: %dpx; overflow: hidden">' % h)
+        o.append('        <img src="prog-%s-hero.jpg" alt="%s" style="position: absolute; '
+                 'inset: 0; width: 100%%; height: 100%%; object-fit: cover">' % (slug, esc(name)))
+        o.append('        <div style="position: absolute; inset: 0; background: linear-gradient('
+                 'to top, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.25) 55%, rgba(5,5,5,0.05) 100%)"></div>')
+        o.append('      </div>')
+        o.append('      <div style="padding: %s">' % ("30px 34px 34px 34px" if lead else "24px 26px 28px 26px"))
+        o.append('        <div aria-hidden="true" style="width: %dpx; height: 4px; background: %s"></div>'
+                 % (52 if lead else 34, GOLD))
+        o.append('        <h2 style="font-size: %dpx; line-height: 1.04; margin: 18px 0 10px; '
+                 'color: #FFFFFF">%s</h2>' % (tsize, esc(name)))
+        o.append('        <p class="body" style="font-size: %s; line-height: 1.66; margin: 0; '
+                 'max-width: 64ch">%s</p>' % ("18px" if lead else "16px", esc(body.strip())))
+        o.append('        <div class="micro" style="margin-top: 18px; color: %s">Learn more</div>' % GOLD)
+        o.append('      </div>\n    </a>')
+    o.append('  </div>\n</div>')
+    return head, "\n".join(o)
+
 # ── image prep ─────────────────────────────────────────────────────────────
 def find_image(name):
     direct = os.path.join(IMAGES, name)
@@ -533,6 +611,17 @@ for p in PROGRAMS:
     open(os.path.join(PAGES, name), "w", encoding="utf-8").write(page)
     made.append((name, title, n_cls))
     print("%-42s %-52s %2d classes" % (name, title[:50], n_cls))
+
+# the classes index, from services.md
+idx_title, idx_body = build_index_page()
+idx_body = spark_buttons(no_break_name(idx_body))
+open(os.path.join(PAGES, "ProgramsIndex.dc.html"), "w", encoding="utf-8").write(
+    '<!doctype html>\n<html>\n<head>\n  <meta charset="utf-8">\n'
+    '  <script src="./support.js"></script>\n</head>\n<body>\n'
+    '<x-dc>\n' + HELMET + '\n\n<div style="width: 1440px; overflow: hidden; '
+    'background: #000000; position: relative">\n\n'
+    + HEADER + "\n\n" + idx_body + "\n\n" + FOOTER + "\n</x-dc>\n" + SCRIPT)
+print("%-42s %-52s" % ("ProgramsIndex.dc.html", idx_title[:50]))
 
 json.dump([{"file": f, "title": t} for f, t, _ in made],
           open(os.path.join(HERE, "generated-pages.json"), "w", encoding="utf-8"), indent=2)

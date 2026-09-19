@@ -21,7 +21,10 @@ ASSET = os.path.join(OUT, "assets")
 
 # ── which artboard becomes which URL ───────────────────────────────────────
 ROUTES = [("Homepage.dc.html", "index.html", "Nashville MMA Training Camp", DESIGN),
-          ("Schedule.dc.html", "schedule.html", "Class Schedule", PAGES)]
+          ("Schedule.dc.html", "schedule.html", "Class Schedule", PAGES),
+          # the classes index the header's Martial Arts link points at
+          ("ProgramsIndex.dc.html", "programs/index.html",
+           "Martial Arts and Fitness Programs", PAGES)]
 for f in sorted(os.listdir(PAGES)):
     if f.startswith("Program-") and f.endswith(".dc.html"):
         slug = f[len("Program-"):-len(".dc.html")]
