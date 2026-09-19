@@ -6,9 +6,11 @@
 <title>Class Schedule | Nashville MMA Training Camp</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap">
 <link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports":{"three":"./assets/three.module.min.js"}}</script>
 </head>
-<body>
-<div style="width: 1440px; overflow: hidden; background: #000000; position: relative">
+<body class="seamless">
+<div class="pgbg" aria-hidden="true"><div aria-hidden="true" class="pgdg" data-ax="300" data-ay="110" data-perx="15" data-pery="23" data-ph="0.0" data-oper="17" data-oph="0.0" data-omin="0.34" data-omax="0.78" style="filter: blur(34px); background-image: radial-gradient(90% 60% at 22% 18%, rgba(243,225,178,0.32) 0%, rgba(243,225,178,0) 55%), radial-gradient(100% 65% at 68% 36%, rgba(215,173,86,0.36) 0%, rgba(215,173,86,0) 55%), radial-gradient(85% 55% at 40% 72%, rgba(197,149,67,0.30) 0%, rgba(197,149,67,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="-240" data-ay="140" data-perx="21" data-pery="13" data-ph="2.1" data-oper="11" data-oph="2.0" data-omin="0.18" data-omax="0.58" style="filter: blur(42px); background-image: radial-gradient(95% 62% at 78% 22%, rgba(215,173,86,0.32) 0%, rgba(215,173,86,0) 55%), radial-gradient(90% 58% at 18% 54%, rgba(192,136,58,0.32) 0%, rgba(192,136,58,0) 55%), radial-gradient(100% 60% at 62% 88%, rgba(138,98,36,0.36) 0%, rgba(138,98,36,0) 55%)"></div><div aria-hidden="true" class="pgdg" data-ax="170" data-ay="-96" data-perx="27" data-pery="19" data-ph="4.2" data-oper="19" data-oph="4.0" data-omin="0.24" data-omax="0.5" style="filter: blur(56px); background-image: radial-gradient(120% 70% at 50% 8%, rgba(138,98,36,0.36) 0%, rgba(138,98,36,0) 55%), radial-gradient(110% 65% at 12% 92%, rgba(197,149,67,0.26) 0%, rgba(197,149,67,0) 55%)"></div></div>
+<div style="width: 1440px; overflow: hidden; overflow: clip; background: transparent; position: relative">
 
     <!-- header -->
     <div style="position: relative; z-index: 6; background: #000000; border-bottom: 1px solid rgba(255,255,255,0.1)">
@@ -48,7 +50,7 @@
 
 
   <!-- ═══ SCHEDULE — one grid, times aligned across every day ═══ -->
-  <div style="background: linear-gradient(180deg, rgba(215,173,86,0.16) 0%, rgba(215,173,86,0.05) 30%, rgba(0,0,0,0) 55%), #0A0A0A; padding: 64px 48px 80px 48px">
+  <div style="background: linear-gradient(180deg, rgba(215,173,86,0.16) 0%, rgba(215,173,86,0.05) 30%, rgba(0,0,0,0) 55%), transparent; padding: 64px 48px 80px 48px">
     <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 10px">
       <div>
         <div class="micro" style="margin-bottom: 14px">90+ Classes Per Week</div>
@@ -182,7 +184,7 @@
     <!-- /GENERATED:grid -->
   </div>
 
-    <div class="site-footer" style="background: #000000">
+    <div class="site-footer" style="background: transparent">
     <div style="display: grid; grid-template-columns: 1.5fr 0.9fr 0.8fr 1.4fr; gap: 48px; padding: 72px 48px 56px 48px; align-items: start">
       <div>
         <a href="index.html"><img src="assets/logo.png" alt="Nashville MMA Training Camp" style="display: block; height: 86px; width: auto; margin-bottom: 26px"></a>
@@ -215,7 +217,7 @@
       </div>
       <div>
         <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 800; color: rgba(255,255,255,0.42); margin-bottom: 16px">Find us</p>
-        <div style="overflow: hidden; border: 1px solid rgba(255,255,255,0.16)">
+        <div style="overflow: hidden; overflow: clip; border: 1px solid rgba(255,255,255,0.16)">
           <iframe src="https://maps.google.com/maps?q=1504+Elm+Hill+Pike,+Nashville,+TN+37210&z=15&output=embed" title="Map to Nashville MMA Training Camp, 1504 Elm Hill Pike" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen style="display: block; width: 100%; height: 240px; border: 0"></iframe>
         </div>
       </div>
@@ -345,5 +347,29 @@
 }
 try { var __page = new Component({}); if (__page.componentDidMount) __page.componentDidMount(); }
 catch (e) { console.error('page init', e); }</script>
+<script type="module">
+import { mountFluidBg } from './assets/fluid-bg.js';
+var host = document.querySelector('.pgbg');
+var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (host && !reduced) {
+  var start = function () {
+    try {
+      // Fighters runs this on a white ground where low-velocity areas still
+      // read. On near-black they disappear, so the field is driven harder
+      // and faded less.
+      // A wash, not a blob: lower intensity spreads the plume, a finer pixel
+      // grid drops the chunky dithering, and the fade keeps it behind the
+      // content rather than competing with it.
+      mountFluidBg(host, { opacity: 0.9, autoIntensity: 3.2,
+                           autoSpeed: 0.26, pixelSize: 7 });
+      host.className += ' fluid-on';
+    } catch (e) {
+      console.warn('fluid background unavailable, keeping the CSS wash', e);
+    }
+  };
+  if ('requestIdleCallback' in window) { requestIdleCallback(start, { timeout: 2500 }); }
+  else { setTimeout(start, 800); }
+}
+</script>
 </body>
 </html>

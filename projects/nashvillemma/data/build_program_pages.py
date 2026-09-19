@@ -36,12 +36,12 @@ PANEL = ("background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(
 # is both the "super basic" complaint and the top AI tell in the BMFG
 # standard, so the items descend in scale instead: one wide statement, then a
 # pair, then compact rows. Square corners, per the kernel's --cornerRadius: 0.
-VARIED_CARDS = {"muay-thai"}
+VARIED_CARDS = "ALL"   # every program page, approved off the Muay Thai trial
 
 # Pages using the full-bleed hero, from the reference Ben sent: photo
 # edge to edge, dissolving into the page at the bottom, headline left.
 # The rest keep the framed hero until this is approved.
-BLEED_HERO = {"muay-thai"}
+BLEED_HERO = "ALL"     # every program page, approved off the Muay Thai trial
 
 SQUARE = ("background: rgba(255,255,255,0.028); "
           "box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)")
@@ -278,7 +278,7 @@ def render(p):
     body_img = "prog-%s-body.jpg" % p["slug"]
 
     out = []
-    if p.get("hero_style") == "inset" and p.get("slug") in BLEED_HERO:
+    if p.get("hero_style") == "inset" and (BLEED_HERO == "ALL" or p.get("slug") in BLEED_HERO):
         # Full-bleed hero, from the reference Ben sent: the photo runs edge to
         # edge and dissolves into the page at the bottom rather than sitting
         # in a frame, with the headline left over the dark side.
@@ -297,8 +297,14 @@ def render(p):
         lead = m.group(1) if m else title
         mask = ("linear-gradient(to bottom, #000 0%, #000 54%, rgba(0,0,0,0.35) 82%, "
                 "rgba(0,0,0,0) 100%)")
+        # Solid ground under the hero. The page wash is fixed behind everything,
+        # so without this it shows through the photo's dissolved edge. Ben
+        # wants the gradient out of the hero, so the photo fades to black and
+        # the wash starts below. #050505 matches body.seamless, so where the
+        # wash is dark there is no boundary at all.
         out.append('<div class="bleedhero" style="position: relative; overflow: hidden; '
-                   'overflow: clip; min-height: 660px; isolation: isolate">')
+                   'overflow: clip; min-height: 660px; isolation: isolate; '
+                   'background: #050505">')
         out.append('  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; '
                    '-webkit-mask-image: %s; mask-image: %s">' % (mask, mask))
         out.append('    <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; '
@@ -398,7 +404,7 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
                 if not g: continue
                 out.append('    <div>' + "".join('<p class="body" style="font-size: 18px; line-height: 1.72">%s</p>' % esc(x) for x in g) + '</div>')
             out.append('  </div>')
-        if s["items"] and p.get("slug") in VARIED_CARDS:
+        if s["items"] and (VARIED_CARDS == "ALL" or p.get("slug") in VARIED_CARDS):
             out.extend(varied_items(s["items"]))
         elif s["items"]:
             out.append('  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px">')

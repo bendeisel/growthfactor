@@ -36,7 +36,7 @@ NAV = [("About", "about.html"), ("Fitness", "programs/sports-performance.html"),
 
 # Pages built with one continuous background instead of stacked colour blocks.
 # Trial on Muay Thai first; widen this set once the look is approved.
-SEAMLESS = {"programs/muay-thai.html"}
+SEAMLESS = "ALL"   # every page, approved off the Muay Thai trial
 
 # The page ground. Sections painting these are what produced the visible seams
 # between sections. Panel colours (#0F0F10, #141416, #1F1F23, #17171A) are
@@ -590,7 +590,7 @@ for src, url, title, base in ROUTES:
     body = wire_nav(to_plain(body, url), url, url)
     body = swap_footer(body, url)
     body = add_mobile_nav(body)
-    seamless = url in SEAMLESS
+    seamless = (SEAMLESS == "ALL" or url in SEAMLESS)
     if seamless:
         body = make_seamless(body)
     dest = os.path.join(OUT, url)
