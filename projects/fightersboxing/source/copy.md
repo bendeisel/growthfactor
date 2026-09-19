@@ -262,3 +262,84 @@ Pending for schema: opening hours from the client.
    (black, gold #D7AD56) as the "opposite" pairing this page exists to
    express, since their own site isn't built yet to mirror against
    directly.
+
+## Ben's revisions, round 17 (2026-09-03)
+1. Intermediate Boxing class added: new page, new schedule program (two
+   sessions/week), wired into the nav, the Boxing Classes hub, the
+   homepage card-stack, and the CMS schema. Page copy is mine (no client
+   source exists for this class); schedule days/times are a flagged
+   placeholder (Tue/Fri 5:45 PM) pending Ben's real answer.
+
+## Ben's revisions, round 18 (2026-09-05)
+1. Blog ported from the client's WordPress export. Their 35 `post` items
+   split cleanly in two:
+   - **10 published posts, kept verbatim.** Real writing by the gym, all
+     in their "Boxing" category, dated January 2025.
+   - **25 drafts, dropped.** Every one is Ring-theme demo content: lorem
+     ipsum bodies ("Qroin faucibus nec mauris...", only 4 unique bodies
+     across all 25) under titles about samurai katanas, muay Thai, MMA,
+     wrestling and CrossFit, none of which is this gym's sport. Never
+     published, so they carry no backlinks and no SEO value. Same call
+     already made for the demo content on Contact Us and Our Gyms.
+2. Nine em dashes replaced across the 10 posts, per the standing rule:
+   seven became colons where the dash introduced an explanation, and two
+   paired-dash asides became parentheses because their own contents are
+   comma-separated ("in boxing (dynamic warmup, shadow boxing, hitting
+   bags) is done in rounds") and commas there would have buried the aside
+   inside the list. Enforced by a guard in `source/build_posts.py`: the
+   script refuses to write the data file if a dash survives.
+3. One image dropped. The only `<img>` that survived the export points at
+   the old Hostinger staging domain
+   (floralwhite-woodcock-644453.hostingersite.com), which stops resolving
+   the moment the site migrates, so it is not hotlinked to a URL about to
+   404. Every other post image is an empty `<figure>`: the media did not
+   come across with the posts at all. **Art to re-supply at handover if
+   the client wants images on these posts.**
+4. Original copy on the blog, flagged as mine, not theirs: the index
+   header sub ("Technique, training, and news from the gym"), the
+   "Read the post" / "All posts" / "Newer" / "Older" affordances, and the
+   closing CTA line on each post ("Reading about it is one thing. Come do
+   it."). Every headline, standfirst and body paragraph is the client's.
+
+**Flag for Ben:** the Billy Falco post (2025-01-16) announces him as
+interim head coach of the competition team. He is not on the Coaches page,
+which was built from the client's current live site. Either the post is
+stale or the Coaches page is incomplete. Worth confirming before launch,
+since it is a live claim about a real person either way.
+
+## Ben's revisions, round 19 (2026-09-08)
+Schedule corrected against the client's own schedule graphic, which Ben
+screenshotted off the live site. That image is now the source of truth for
+class times and supersedes the 2026-08-26 WordPress export, which turned
+out to be materially out of date. Every provisional time in this build is
+gone, and `verify: true` no longer appears anywhere in schedule.js.
+
+What the export had wrong, and what the graphic actually says:
+
+| | Export / provisional | Real |
+| --- | --- | --- |
+| Boxing Basics 6 AM | Not in export; added Mon-Fri on Ben's word | Monday and Wednesday only |
+| Boxing Basics 7 AM | Export had Monday only; built as Mon-Fri | Tuesday and Thursday only |
+| Intermediate Boxing | Not in export; guessed Tue + Fri 5:45 PM | Tuesday and Thursday 5:45 PM |
+| Youth Boxing 4:30 PM | Not in export; added Mon/Wed on Ben's word | Monday and Wednesday, confirmed |
+| Saturday open gym | "2AM-12PM", flagged as a suspected typo | 9 AM to 12 PM. It was a typo |
+| Saturday 9 AM class | "Bsics & Kardio KO" | "Boxing Basics" |
+| Competition Team | Monday and Wednesday | Monday, Wednesday and Thursday |
+| Competition Sparring | Thursday 5:45 PM | Gone from their schedule. Removed |
+| Foundational Sparring | Thursday 6 PM | Gone from their schedule. Removed |
+| Friday mornings | 6 AM and 7 AM Boxing Basics | No morning class. Open gym only |
+
+Session count 29, was 35.
+
+Also taken from the graphic, because it is operational information rather
+than decoration: its legend. "Coach permission required" now shows on
+Competition Team Training and Intermediate Boxing, and "Ages 8 to 13" on
+the youth classes, both rendered under the class name on every schedule
+grid. Added as a `note` field on the session shape and to the Sanity
+schema, so the gym can edit them like any other class detail.
+
+Worth recording for future rounds: the export was ~2 weeks stale on a
+detail nobody would have questioned, and three of these corrections were
+to things I had placed on Ben's verbal description rather than a document.
+A screenshot of the client's own artwork settled in one message what four
+rounds of conversation had not. Ask for the picture earlier.
