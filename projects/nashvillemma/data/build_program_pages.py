@@ -38,6 +38,11 @@ PANEL = ("background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(
 # pair, then compact rows. Square corners, per the kernel's --cornerRadius: 0.
 VARIED_CARDS = {"muay-thai"}
 
+# Pages using the full-bleed hero, from the reference Ben sent: photo
+# edge to edge, dissolving into the page at the bottom, headline left.
+# The rest keep the framed hero until this is approved.
+BLEED_HERO = {"muay-thai"}
+
 SQUARE = ("background: rgba(255,255,255,0.028); "
           "box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)")
 
@@ -273,6 +278,48 @@ def render(p):
     body_img = "prog-%s-body.jpg" % p["slug"]
 
     out = []
+    if p.get("hero_style") == "inset" and p.get("slug") in BLEED_HERO:
+        # Full-bleed hero, from the reference Ben sent: the photo runs edge to
+        # edge and dissolves into the page at the bottom rather than sitting
+        # in a frame, with the headline left over the dark side.
+        #
+        # The fade is a mask, not an overlay. An overlay would have to fade to
+        # a flat colour, and the page background here is the moving gold
+        # gradient, so a flat fade would band against it. Masking lets the
+        # gradient show through the photo's dissolved edge.
+        #
+        # The left veil is what carries the headline. White type over the
+        # gold wash alone is 2.10:1 at the wash's brightest, so the type needs
+        # its own dark ground rather than the photo's luck.
+        import re as _re
+        m = _re.match(r"^(.*?)\s+in\s+(.*)$", title, _re.I)
+        h1 = ('%s<br>In %s' % (esc(m.group(1)), esc(m.group(2)))) if m else esc(title)
+        lead = m.group(1) if m else title
+        mask = ("linear-gradient(to bottom, #000 0%, #000 54%, rgba(0,0,0,0.35) 82%, "
+                "rgba(0,0,0,0) 100%)")
+        out.append('<div class="bleedhero" style="position: relative; overflow: hidden; '
+                   'overflow: clip; min-height: 660px; isolation: isolate">')
+        out.append('  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; '
+                   '-webkit-mask-image: %s; mask-image: %s">' % (mask, mask))
+        out.append('    <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; '
+                   'height: 100%%; object-fit: cover; object-position: 68%% 38%%">'
+                   % (hero_img, esc(title)))
+        # Seat the photo back, then carry the headline on a near-solid left.
+        # This hero photo has a near-white wall in it, so a veil that looks
+        # strong on paper still lets the wall read through at 0.86.
+        out.append('    <div style="position: absolute; inset: 0; background: rgba(5,5,5,0.30)"></div>')
+        out.append('    <div class="bleedveil" style="position: absolute; inset: 0; background: linear-gradient('
+                   'to right, rgba(5,5,5,0.97) 0%, rgba(5,5,5,0.95) 32%, rgba(5,5,5,0.70) 55%, '
+                   'rgba(5,5,5,0.26) 76%, rgba(5,5,5,0.04) 100%)"></div>')
+        out.append('  </div>')
+        out.append('  <div style="position: relative; z-index: 2; max-width: 980px; '
+                   'padding: 132px 48px 150px 48px">')
+        out.append('    <h1 style="font-size: %dpx; line-height: 0.94; max-width: 760px">%s</h1>'
+                   % (96 if len(lead) < 30 else 74, h1))
+        out.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 30px"></div>' % GOLD)
+        out.append('  </div>\n</div>')
+        return _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img)
+
     if p.get("hero_style") == "inset":
         # framed hero: the photo sits in a rounded panel with black around it,
         # title centred inside. 8px radius per the standing picture-corner rule.

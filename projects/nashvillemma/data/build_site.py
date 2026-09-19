@@ -339,6 +339,20 @@ MOBILE_CSS = """
      next one can come over it. On a phone these run 631 to 840px against an
      844px viewport, so nothing overlaps and the sticky just costs scroll.
      They become ordinary cards below the breakpoint. */
+  /* The bleed hero needs real height on a phone or the photo is a strip,
+     and its veil runs left to right, which is meaningless at 390px where
+     the headline spans the width. Vertical veil instead, dark where the
+     type sits. The min-height cap below would otherwise crush it. */
+  .bleedhero { min-height: 540px !important; }
+  .bleedhero > div > div.bleedveil {
+    background: linear-gradient(to bottom, rgba(5,5,5,0.42) 0%,
+      rgba(5,5,5,0.80) 42%, rgba(5,5,5,0.94) 72%, rgba(5,5,5,0.97) 100%) !important;
+  }
+  .bleedhero > div[style*="z-index: 2"], .bleedhero > div:last-child {
+    padding-top: 64px !important; padding-bottom: 54px !important;
+    padding-left: 22px !important; padding-right: 22px !important;
+  }
+
   .stackwrap { perspective: none !important; padding-bottom: 0 !important; }
   .stackcard { position: static !important; transform: none !important;
                min-height: 0 !important; margin-bottom: 18px !important;
