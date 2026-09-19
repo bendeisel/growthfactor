@@ -29,8 +29,16 @@ for f in sorted(os.listdir(PAGES)):
 
 # nav label -> destination. Pages we have not designed yet still get their real
 # URL so the gap shows up as a broken link instead of silently vanishing.
+# THE header and footer menu. Labels and destinations both live here and
+# nowhere else. They used to be hard-coded in all three artboards, 14 links
+# apiece, while this list only rewrote hrefs by matching the label text. So
+# editing here changed nothing you could see, and editing an artboard left
+# the other two behind. That is why the header kept reverting.
+#
+# "Programs" and "Kids Programs" are out per Ben. Change a label here and it
+# changes on all 16 pages, header and footer, on the next build.
 NAV = [("About", "about.html"), ("Fitness", "programs/sports-performance.html"),
-       ("Programs", "programs/index.html"), ("Kids Programs", "programs/kids-martial-arts.html"),
+       ("Martial Arts", "programs/index.html"), ("Kids Classes", "programs/kids-martial-arts.html"),
        ("Schedule", "schedule.html"), ("Recovery", "recovery.html"),
        ("Events &amp; Sponsorships", "events.html")]
 
@@ -123,15 +131,14 @@ def to_plain(body, url):
     return body
 
 def wire_nav(body, url, active):
-    """Point the header/footer nav at real URLs instead of '#'."""
+    """Point the non-menu chrome at real URLs instead of '#'.
+
+    The menu itself is no longer patched here. build_header_nav writes the
+    header from NAV and build_footer writes the footer, so nothing matches on
+    label text any more. That matching is exactly what made a label change
+    look like it had been ignored.
+    """
     p = depth_prefix(url)
-    for label, dest in NAV:
-        href = p + dest
-        cur = ' style="color: #D7AD56"' if dest == active else ''
-        body = body.replace('<a href="#" class="nav">%s</a>' % label,
-                            '<a href="%s" class="nav"%s>%s</a>' % (href, cur, label))
-        body = body.replace('<li><a href="#" class="nav">%s</a></li>' % label,
-                            '<li><a href="%s" class="nav">%s</a></li>' % (href, label))
     # logo goes home. Wrap the whole img tag: the previous version inserted an
     # opening anchor and then stripped the closing one, so every page shipped
     # with an unclosed <a> around the header.
@@ -142,6 +149,26 @@ def wire_nav(body, url, active):
     body = re.sub(r'<a href="#" class="btn" style="padding: 15px 30px">View Our Location</a>',
                   '<a href="%scontact.html" class="btn" style="padding: 15px 30px">View Our Location</a>' % p, body)
     return body
+
+
+NAV_LINK = re.compile(r'<a href="[^"]*" class="nav"[^>]*>[^<]*</a>\s*')
+
+def build_header_nav(body, url):
+    """Rebuild the header links from NAV.
+
+    Runs after swap_footer, so the only nav anchors left in the body are the
+    header's, in one contiguous run. Replacing that run outright means the
+    artboards no longer decide what the menu says.
+    """
+    p = depth_prefix(url)
+    hits = list(NAV_LINK.finditer(body))
+    if not hits:
+        return body
+    links = "".join(
+        '<a href="%s%s" class="nav"%s>%s</a>\n          '
+        % (p, dest, ' style="color: #D7AD56"' if dest == url else "", label)
+        for label, dest in NAV)
+    return body[:hits[0].start()] + links + body[hits[-1].end():]
 
 def add_mobile_nav(body):
     """Tag the main nav and put a toggle in front of it.
@@ -589,6 +616,7 @@ for src, url, title, base in ROUTES:
         css_written = True
     body = wire_nav(to_plain(body, url), url, url)
     body = swap_footer(body, url)
+    body = build_header_nav(body, url)
     body = add_mobile_nav(body)
     seamless = (SEAMLESS == "ALL" or url in SEAMLESS)
     if seamless:
