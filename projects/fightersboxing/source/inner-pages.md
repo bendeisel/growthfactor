@@ -4,12 +4,12 @@ Source: `fightersnashville.WordPress.20260826.xml`, Ben's Tools > Export
 download. 16 real pages exist. Status per page:
 
 ## Real, finished content (ready to build as-is)
-- **Coaches** — real names/roles: Ernest Rodriguez, Sena Agbeko, Jeremiah
+- **Coaches**: real names/roles: Ernest Rodriguez, Sena Agbeko, Jeremiah
   Cline, Mindy Vernier, Steve Vernier, Nick Hicks, Evan Carr, Kayla
   Trotter, Dr. Christy Halbert (Founder, Director)
-- **Schedule** — a real full weekly class schedule
-- **Boxing Classes** (the index/overview page) — real intro copy
-- **What to Expect** — real, detailed first-visit copy
+- **Schedule**: a real full weekly class schedule
+- **Boxing Classes** (the index/overview page): real intro copy
+- **What to Expect**: real, detailed first-visit copy
 
 ## Mixed: real copy buried in leftover theme demo furniture
 **Beginners Boxing Class, Youth Boxing Class, Competition Team Training**
@@ -38,7 +38,7 @@ homepage marquee or the unconfigured lime accent color. Flagged here for
 Ben to override if any of it (a pricing table, especially) was actually
 wanted.
 
-**Our Gyms** — the first ~2/3 of the page is real, well-written, and
+**Our Gyms**: the first ~2/3 of the page is real, well-written, and
 directly matches the "Our Gyms" concept from the project kickoff (the
 light/dark interlink page between Fighters and Nashville MMA): intro,
 "Fighters Boxing Gym" section, "Nashville MMA Training Camp" section, the
@@ -50,7 +50,7 @@ pattern. Not yet built; when we get to it, ship the top real content,
 drop the bottom.
 
 ## Not ready: needs real content from Ben, nothing to build yet
-- **FAQs** — the dev-site export has real-looking questions ("How do I
+- **FAQs**: the dev-site export has real-looking questions ("How do I
   apply for a membership?", "Are there training classes for kids?", "What
   equipment do I need for boxing?") but every answer is Lorem Ipsum.
   Ben says his staff wrote the real FAQs on the production site,
