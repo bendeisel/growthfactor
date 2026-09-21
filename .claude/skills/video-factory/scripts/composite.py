@@ -59,14 +59,32 @@ def fit(d_src, d_av, max_speedup, max_slowdown):
     scale = max(1.0 / max_speedup, min(scale, max_slowdown))
     hold = max(0.0, final - d_src * scale)
     pad = max(0.0, final - d_av)
+    # Deliberately unrounded. Rounding each field independently makes the dict
+    # internally inconsistent by up to a millisecond, so `narration + pad`
+    # stops equalling `final` and anything downstream doing that arithmetic
+    # inherits the error. Rounding happens where it belongs: in the ffmpeg
+    # argument formatting below, and in what gets written to timing.json.
     return {
-        "final": round(final, 3),
-        "scale": round(scale, 5),
-        "hold": round(hold, 3),
-        "pad": round(pad, 3),
-        "footage": round(d_src, 3),
-        "narration": round(d_av, 3),
+        "final": final,
+        "scale": scale,
+        "hold": hold,
+        "pad": pad,
+        "footage": d_src,
+        "narration": d_av,
     }
+
+
+def rounded(timing):
+    """A copy for timing.json and for logs. Not for arithmetic."""
+    out = {}
+    for key, val in timing.items():
+        if key == "scale":
+            out[key] = round(val, 5)
+        elif isinstance(val, float):
+            out[key] = round(val, 3)
+        else:
+            out[key] = val
+    return out
 
 
 def make_mask(work, size):
@@ -260,7 +278,7 @@ def main():
         t = fit(beat["clip_duration"], d_av, max_speedup, max_slowdown)
         t["i"] = i
         t["clip_start"] = beat["clip_start"]
-        timings.append(t)
+        timings.append(rounded(t))
 
         dest = os.path.join(work, "clips", "seg_%03d.mp4" % i)
         parts.append(dest)

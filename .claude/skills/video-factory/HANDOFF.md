@@ -118,16 +118,25 @@ installing it, calibrating it, and running the library through it.
 
 ### Then the library
 
-- [ ] Loop `vf.sh prep` over the backlog, batch the review handoffs to Ben,
-      then loop render and build. Prep is cheap and parallel; renders are
-      neither, so queue those.
-- [ ] Keep `data/videos.csv` current with `registry.py set <slug> --status ...`.
-      `vf.sh` already does this at each stage; the manual command is for
-      review and publish.
-- [ ] **Optional n8n wrapper.** The pipeline is already resumable and every
-      step is a plain CLI call, so n8n only needs to trigger `prep`, notify
-      for review, then trigger `render` and `build` on approval. Do not move
-      the logic into n8n. It belongs in the scripts where it can be tested.
+Use `batch.py`, not a hand-written loop. It runs the same per-job scripts,
+carries on when one video fails, and prints the failures as a block at the end.
+
+- [ ] `batch.py intake <folder>` to make a job per source video. Safe to
+      re-run: it skips anything already in the registry.
+- [ ] `batch.py prep` to transcribe, segment and rewrite the whole backlog.
+- [ ] `batch.py queue` writes `video/REVIEW-QUEUE.md`, one checklist covering
+      every video waiting on a human, with the flagged beats named. Hand that
+      to Ben rather than forty separate files.
+- [ ] `batch.py render`, then `batch.py build`, then `batch.py verify`.
+      `render` only picks up what the registry marks `reviewed`.
+- [ ] `batch.py status` for the whole library on one screen.
+- [ ] Run the tests after touching any pipeline logic:
+      `python3 tests/test_pipeline.py`.
+- [ ] **Optional n8n wrapper.** Every step is a plain CLI call and the batch
+      commands already handle the looping, so n8n only needs to trigger
+      `batch.py prep`, notify Ben when the queue has entries, and trigger
+      `render`, `build` and `verify` once things are marked reviewed. Do not
+      move the logic into n8n. It belongs in the scripts where it is tested.
 
 ### Read before changing the timing code
 
@@ -137,26 +146,35 @@ that looks fine for the first minute and drifts after that.
 
 ---
 
-## Not built, on purpose or not yet
+## Not built
 
 Honest list, so nobody discovers these mid-project.
 
+- **No upload step.** Nothing pushes the finished file into GHL Memberships.
+  This one needs Ben's GHL API credentials and writes to a live system, so it
+  is a deliberate stop rather than an oversight. Say the word and it gets
+  built.
+- **No thumbnails.** Forty videos need forty of them and a course player will
+  show whatever frame it likes otherwise. Held back because it needs a design
+  call from Ben first, not because it is hard.
 - **No HeyGen webhook.** Renders are polled every 20 seconds. Fine for a batch
   of forty, wasteful for four hundred.
 - **No transparent-background render path.** The avatar comes back on a flat
   colour and is masked or keyed locally. If the plan supports real alpha
   output it is cleaner, especially around hair.
   `references/heygen-api.md` says what to change.
-- **No captions.** Neither burned in nor as a sidecar `.vtt`. The rewritten
-  script and the per-beat timings are both on disk, so generating a `.vtt` is
-  a short script against `work/scripts.json` and `work/timing.json`. Worth
-  doing before publishing, since course players expect captions.
-- **No upload step.** Nothing pushes the finished file into GHL Memberships.
-  Manual for now.
 - **Single speaker assumed.** A source video with two presenters talking over
   each other will transcribe into a mess. None of the GHL library is like
   this, but a webinar recording would be.
-- **No automated tests.** The composite math and the segment tiling were
-  verified by hand against synthetic footage, with predicted durations landing
-  to the millisecond. The `fit()` function in `composite.py` is pure
-  arithmetic and is the obvious first unit test if this grows.
+
+## What is tested, and how
+
+`tests/test_pipeline.py` covers the pure logic: the fitting arithmetic
+including several thousand fuzzed cases, the beat tiling, the rewrite
+validator and the caption cue builder. 27 tests, stdlib only, under a second.
+
+The ffmpeg work cannot be unit tested, so it was verified by building real
+footage and measuring it: every segment landed on its predicted duration to
+the millisecond across all three fitting branches, both overlay styles
+composite correctly, and each of the six `verify` checks was proven by
+deliberately breaking a finished video and confirming the check fired.

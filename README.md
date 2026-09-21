@@ -66,7 +66,7 @@ interface names locked, renders those lines on a HeyGen avatar, and composites
 the avatar over the footage with the narration kept under the cursor.
 
 ```
-transcribe -> segment -> rewrite -> REVIEW -> render -> composite
+transcribe -> segment -> rewrite -> REVIEW -> render -> composite -> caption -> verify
 ```
 
 The review stop is deliberate and it is where the value is. Renders are the
@@ -84,8 +84,15 @@ Jobs live in `video/jobs/<slug>/`, which is git-ignored: a full library runs
 to tens of gigabytes. The index of what exists and where it got to is
 `.claude/skills/video-factory/data/videos.csv`.
 
+One video goes through `vf.sh`. The whole library goes through `batch.py`,
+which runs the same scripts over every job, collects failures instead of
+stopping at the first, and writes one review checklist covering everything
+waiting on a human.
+
 Start at `.claude/skills/video-factory/HANDOFF.md` for who owns what, and
-`references/timing.md` before touching the timing arithmetic.
+`references/timing.md` before touching the timing arithmetic. Run
+`python3 .claude/skills/video-factory/tests/test_pipeline.py` after changing
+any of it.
 
 ## Layout
 

@@ -14,8 +14,14 @@ source.mp4
   ├─ rewrite       Claude, in our voice, interface names locked
   ├─ REVIEW        a human reads it against the screen. Not optional.
   ├─ render        HeyGen speaks each line as the cloned avatar
-  └─ composite     avatar over footage, footage fitted to the narration
+  ├─ composite     avatar over footage, footage fitted to the narration
+  ├─ captions      .vtt and .srt from the script we already wrote
+  └─ verify        QA gate before anything is handed over
 ```
+
+For one video use `vf.sh`. For the library use `batch.py`, which runs the same
+scripts over every job and collects the failures instead of stopping at the
+first one.
 
 Read `references/timing.md` before changing anything in `segment.py` or
 `composite.py`. It holds the arithmetic that keeps the narration under the
@@ -108,11 +114,60 @@ Check the log for beats that needed more than 1.5 seconds of freeze. Those are
 where the rewrite ran well over or under budget, and they are the ones worth
 watching before handover.
 
+`build` also writes captions, because a training library without them is not
+finished. The text comes from the script we wrote rather than from
+transcribing anything, so the words are exact and only the timing is
+estimated. `--precise` times them against the rendered audio instead:
+
+```bash
+scripts/captions.py ghl-workflows --precise      # real word timings
+scripts/captions.py ghl-workflows --burn         # also burn them in
+```
+
 Preview a single beat without rebuilding everything:
 
 ```bash
 scripts/composite.py ghl-workflows --beat 7 --force
 ```
+
+## Step 6: verify before handover
+
+```bash
+scripts/vf.sh verify ghl-workflows
+```
+
+Checks the things that are embarrassing to discover after sending a link: a
+missing segment, no audio track, silent audio, missing or overrunning
+captions, and any beat that got built while still flagged as unreviewed.
+
+## The whole library at once
+
+```bash
+scripts/batch.py intake ~/ghl-sources    # a job per video in the folder
+scripts/batch.py prep                    # transcribe, segment, rewrite, all
+scripts/batch.py queue                   # one review list, not forty files
+# review, then for each: registry.py set <slug> --status reviewed
+scripts/batch.py render                  # only what is marked reviewed
+scripts/batch.py build                   # composite and caption
+scripts/batch.py verify                  # QA everything
+```
+
+`batch.py` shells out to the same per-job scripts, so there is one copy of the
+logic and the batch path cannot drift from the single-job path. One video
+failing never stops the rest; failures are collected and printed at the end.
+
+`render` only picks up jobs the registry marks `reviewed`, and nothing sets
+that automatically. That is the gate.
+
+## Tests
+
+```bash
+python3 .claude/skills/video-factory/tests/test_pipeline.py
+```
+
+Covers the fitting arithmetic (including several thousand fuzzed cases), the
+beat tiling, the rewrite validator and the caption cue builder. Stdlib only,
+no ffmpeg, no keys, well under a second. Run it after touching any of them.
 
 ## Calibrate once, on the first video
 
@@ -131,3 +186,5 @@ later video needs less fitting.
 - It will not re-cut the footage. Clicks land where they landed.
 - It will not go from a raw source file to a finished video in one command.
   The review gate is deliberate.
+- It will not upload anything. The finished file and its captions are on
+  disk; putting them into GHL Memberships is still a manual step.

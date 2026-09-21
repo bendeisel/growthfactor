@@ -8,3 +8,4 @@ config.env
 # Tens of gigabytes for a full library, and none of it belongs in git.
 video/jobs/
 .claude/skills/video-factory/config.env
+video/REVIEW-QUEUE.md

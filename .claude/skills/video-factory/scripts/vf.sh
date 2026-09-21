@@ -6,8 +6,13 @@
 #   ./vf.sh new <slug> <source.mp4>    start a job
 #   ./vf.sh prep <slug>                transcribe, segment, rewrite, then STOP
 #   ./vf.sh render <slug>              HeyGen renders, after you have reviewed
-#   ./vf.sh build <slug>               composite and concat
+#   ./vf.sh build <slug>               composite, concat and caption
+#   ./vf.sh captions <slug>            captions only, after a build
+#   ./vf.sh verify <slug>              QA a finished video before handover
 #   ./vf.sh status <slug>              where a job got to
+#
+# For the whole library rather than one video, use batch.py:
+#   batch.py intake <folder> | prep | queue | render | build | verify | status
 #
 # prep stops on purpose. The renders are the expensive half and a wrong menu
 # name is the one mistake that makes the whole video worthless, so a human
@@ -26,7 +31,9 @@ die() { printf 'error: %s\n' "$*" >&2; exit 1; }
 note() { printf '%s\n' "$*" >&2; }
 rule() { printf '\n%s\n' "------------------------------------------------------------" >&2; }
 
-usage() { sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+# Print the header comment block, however long it grows, and stop at the first
+# line that is not a comment.
+usage() { awk 'NR>1 && /^#/ {sub(/^# ?/, ""); print; next} NR>1 {exit}' "$0"; exit "${1:-0}"; }
 
 cmd_doctor() {
   local bad=0
@@ -106,8 +113,25 @@ cmd_build() {
   local slug="${1:-}"; shift || true
   [ -n "$slug" ] || usage 1
   "$PY" "$HERE/composite.py" "$slug" "$@"
+  # Captions are part of a build, not an afterthought: course players expect
+  # them and the script is already on disk, so there is no reason to ship
+  # without them.
+  "$PY" "$HERE/captions.py" "$slug" --force
   "$PY" "$HERE/registry.py" set "$slug" --status built 2>/dev/null || true
   note "done: video/jobs/$slug/out/final.mp4"
+  note "next: ./vf.sh verify $slug"
+}
+
+cmd_captions() {
+  local slug="${1:-}"; shift || true
+  [ -n "$slug" ] || usage 1
+  "$PY" "$HERE/captions.py" "$slug" --force "$@"
+}
+
+cmd_verify() {
+  local slug="${1:-}"
+  [ -n "$slug" ] || usage 1
+  "$PY" "$HERE/batch.py" verify --only "$slug"
 }
 
 cmd_status() {
@@ -140,6 +164,8 @@ case "${1:-}" in
   prep)   shift; cmd_prep "$@" ;;
   render) shift; cmd_render "$@" ;;
   build)  shift; cmd_build "$@" ;;
+  captions) shift; cmd_captions "$@" ;;
+  verify) shift; cmd_verify "$@" ;;
   status) shift; cmd_status "$@" ;;
   ""|-h|--help|help) usage 0 ;;
   *) die "unknown command: $1" ;;
