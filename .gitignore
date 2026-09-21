@@ -3,3 +3,8 @@ __pycache__/
 .DS_Store
 config.env
 .claude/skills/site-factory/config.env
+
+# Video factory job directories: source footage, renders and finished videos.
+# Tens of gigabytes for a full library, and none of it belongs in git.
+video/jobs/
+.claude/skills/video-factory/config.env
