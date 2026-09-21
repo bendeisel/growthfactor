@@ -66,7 +66,8 @@ interface names locked, renders those lines on a HeyGen avatar, and composites
 the avatar over the footage with the narration kept under the cursor.
 
 ```
-transcribe -> segment -> rewrite -> REVIEW -> render -> composite -> caption -> verify
+transcribe -> segment -> rewrite -> REVIEW -> render -> composite
+           -> caption -> thumbnail -> verify -> publish
 ```
 
 The review stop is deliberate and it is where the value is. Renders are the
@@ -88,6 +89,10 @@ One video goes through `vf.sh`. The whole library goes through `batch.py`,
 which runs the same scripts over every job, collects failures instead of
 stopping at the first, and writes one review checklist covering everything
 waiting on a human.
+
+The last step imports the finished videos into a GoHighLevel course, media
+library upload first, then one course import. Nothing is sent without
+`--confirm`, and imports land as drafts.
 
 Start at `.claude/skills/video-factory/HANDOFF.md` for who owns what, and
 `references/timing.md` before touching the timing arithmetic. Run

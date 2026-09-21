@@ -6,9 +6,11 @@
 #   ./vf.sh new <slug> <source.mp4>    start a job
 #   ./vf.sh prep <slug>                transcribe, segment, rewrite, then STOP
 #   ./vf.sh render <slug>              HeyGen renders, after you have reviewed
-#   ./vf.sh build <slug>               composite, concat and caption
+#   ./vf.sh build <slug>               composite, caption and thumbnail
 #   ./vf.sh captions <slug>            captions only, after a build
+#   ./vf.sh thumbnail <slug>           thumbnail only, after a build
 #   ./vf.sh verify <slug>              QA a finished video before handover
+#   ./vf.sh publish <slug>             upload to GoHighLevel (dry run without --confirm)
 #   ./vf.sh status <slug>              where a job got to
 #
 # For the whole library rather than one video, use batch.py:
@@ -44,12 +46,16 @@ cmd_doctor() {
       printf '  MISSING %s\n' "$bin"; bad=1
     fi
   done
-  for mod in anthropic faster_whisper; do
+  for mod in anthropic faster_whisper PIL; do
     if "$PY" -c "import $mod" >/dev/null 2>&1; then
       printf '  ok      python module %s\n' "$mod"
     else
-      printf '  MISSING python module %s (pip install %s)\n' "$mod" \
-        "$([ "$mod" = faster_whisper ] && echo faster-whisper || echo "$mod")"
+      case "$mod" in
+        faster_whisper) pkg=faster-whisper ;;
+        PIL) pkg=Pillow ;;
+        *) pkg="$mod" ;;
+      esac
+      printf '  MISSING python module %s (pip install %s)\n' "$mod" "$pkg"
       [ "$mod" = anthropic ] && bad=1
     fi
   done
@@ -65,6 +71,16 @@ cmd_doctor() {
       printf '  ok      %s\n' "$key"
     else
       printf '  MISSING %s\n' "$key"; bad=1
+    fi
+  done
+  # GoHighLevel keys are only needed at publish time, so they are reported
+  # rather than treated as a blocker: everything through verify runs without
+  # them.
+  for key in GHL_API_TOKEN GHL_LOCATION_ID GHL_COURSE_TITLE; do
+    if [ -n "${!key:-}" ]; then
+      printf '  ok      %s\n' "$key"
+    else
+      printf '  unset   %s (only needed for ./vf.sh publish)\n' "$key"
     fi
   done
   [ "$bad" -eq 0 ] || die "fix the above before running a job"
@@ -117,9 +133,24 @@ cmd_build() {
   # them and the script is already on disk, so there is no reason to ship
   # without them.
   "$PY" "$HERE/captions.py" "$slug" --force
+  # A thumbnail is part of a finished video too. Without one the course player
+  # picks its own frame, and forty mismatched tiles look abandoned.
+  "$PY" "$HERE/thumbnail.py" "$slug" --force || note "thumbnail skipped (is Pillow installed?)"
   "$PY" "$HERE/registry.py" set "$slug" --status built 2>/dev/null || true
   note "done: video/jobs/$slug/out/final.mp4"
   note "next: ./vf.sh verify $slug"
+}
+
+cmd_thumbnail() {
+  local slug="${1:-}"; shift || true
+  [ -n "$slug" ] || usage 1
+  "$PY" "$HERE/thumbnail.py" "$slug" --force "$@"
+}
+
+cmd_publish() {
+  local slug="${1:-}"; shift || true
+  [ -n "$slug" ] || usage 1
+  "$PY" "$HERE/publish.py" media "$slug" "$@"
 }
 
 cmd_captions() {
@@ -165,6 +196,8 @@ case "${1:-}" in
   render) shift; cmd_render "$@" ;;
   build)  shift; cmd_build "$@" ;;
   captions) shift; cmd_captions "$@" ;;
+  thumbnail) shift; cmd_thumbnail "$@" ;;
+  publish) shift; cmd_publish "$@" ;;
   verify) shift; cmd_verify "$@" ;;
   status) shift; cmd_status "$@" ;;
   ""|-h|--help|help) usage 0 ;;

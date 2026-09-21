@@ -20,13 +20,13 @@ Two backends, picked by GF_WHISPER_BACKEND:
 """
 
 import argparse
-import json
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (  # noqa: E402
-    Manifest, cfg, die, log, probe_duration, require_binary, run, write_json,
+    Manifest, cfg, die, log, post_multipart, probe_duration, require_binary, run,
+    write_json,
 )
 
 OPENAI_LIMIT_BYTES = 24 * 1024 * 1024
@@ -89,60 +89,25 @@ def transcribe_local(audio):
     return {"language": info.language, "segments": out}
 
 
-def _multipart(fields, filename, filedata, field_name="file"):
-    """Minimal multipart body. Avoids a requests dependency for one call."""
-    import uuid
-    boundary = "----gf%s" % uuid.uuid4().hex
-    crlf = b"\r\n"
-    parts = []
-    for key, value in fields:
-        parts.append(("--%s" % boundary).encode())
-        parts.append(('Content-Disposition: form-data; name="%s"' % key).encode())
-        parts.append(b"")
-        parts.append(str(value).encode())
-    parts.append(("--%s" % boundary).encode())
-    parts.append((
-        'Content-Disposition: form-data; name="%s"; filename="%s"'
-        % (field_name, filename)
-    ).encode())
-    parts.append(b"Content-Type: application/octet-stream")
-    parts.append(b"")
-    body = crlf.join(parts) + crlf + filedata + crlf
-    body += ("--%s--" % boundary).encode() + crlf
-    return body, "multipart/form-data; boundary=%s" % boundary
-
-
 def transcribe_openai(audio):
-    import urllib.error
-    import urllib.request
-
     key = cfg("OPENAI_API_KEY", required=True)
     size = os.path.getsize(audio)
     if size > OPENAI_LIMIT_BYTES:
         die("%s is %.1f MB, over the 25 MB upload cap. Split the source video "
             "or use GF_WHISPER_BACKEND=local." % (audio, size / 1e6))
-    with open(audio, "rb") as fh:
-        data = fh.read()
-    fields = [
-        ("model", cfg("GF_OPENAI_STT_MODEL", "whisper-1")),
-        ("response_format", "verbose_json"),
-        ("timestamp_granularities[]", "word"),
-        ("timestamp_granularities[]", "segment"),
-    ]
-    body, content_type = _multipart(fields, os.path.basename(audio), data)
     log("uploading %.1f MB to the hosted transcription endpoint" % (size / 1e6))
-    req = urllib.request.Request(
+    payload = post_multipart(
         "https://api.openai.com/v1/audio/transcriptions",
-        data=body,
-        headers={"Authorization": "Bearer %s" % key, "Content-Type": content_type},
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=900) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        die("transcription failed: HTTP %s\n%s"
-            % (exc.code, exc.read().decode("utf-8", "replace")[:1000]))
+        {"Authorization": "Bearer %s" % key},
+        [
+            ("model", cfg("GF_OPENAI_STT_MODEL", "whisper-1")),
+            ("response_format", "verbose_json"),
+            ("timestamp_granularities[]", "word"),
+            ("timestamp_granularities[]", "segment"),
+        ],
+        [("file", os.path.basename(audio), audio)],
+        timeout=900,
+        error_hints={401: "OPENAI_API_KEY was rejected."})
 
     words = payload.get("words") or []
     out = []

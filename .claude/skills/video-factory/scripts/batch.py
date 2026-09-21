@@ -7,6 +7,7 @@
     batch.py render               render everything marked reviewed
     batch.py build                composite and caption everything rendered
     batch.py verify               QA every built video before handover
+    batch.py publish [--confirm]  upload to GoHighLevel and import the course
     batch.py status               the whole library on one screen
 
 Common flags: --only slug,slug   restrict to named jobs
@@ -64,12 +65,18 @@ def rows(only=None, status=None):
     return out
 
 
-def run_step(slug, argv, dry_run):
-    """Returns None on success, or the failure text."""
+def run_step(slug, argv, dry_run, stream=False):
+    """Returns None on success, or the failure text.
+
+    Output is normally captured so forty successful videos do not bury the
+    failures. `stream` turns that off for steps whose whole purpose is to show
+    you what they would do, such as a publish dry run.
+    """
     if dry_run:
         log("  would run: %s" % " ".join(argv[1:]))
         return None
-    proc = subprocess.run(argv, stdout=None, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.run(argv, stdout=None,
+                          stderr=None if stream else subprocess.PIPE, text=True)
     if proc.returncode != 0:
         tail = "\n".join((proc.stderr or "").strip().splitlines()[-6:])
         return tail or "exit %d" % proc.returncode
@@ -252,6 +259,12 @@ def cmd_build(args):
             if args.stop_on_error:
                 break
             continue
+        why = run_step(slug, script("thumbnail.py") + [slug, "--force"], args.dry_run)
+        if why:
+            failures.append((slug, "thumbnail: %s" % why))
+            if args.stop_on_error:
+                break
+            continue
         if not args.dry_run:
             man = Manifest(slug)
             dur = (man.data.get("steps", {}).get("composite") or {}).get("duration", 0)
@@ -314,6 +327,13 @@ def check_one(slug):
                                     % mean)
                 break
 
+    thumb = os.path.join(man.dir, "out", "thumbnail.jpg")
+    if not os.path.exists(thumb):
+        problems.append("has no thumbnail")
+    elif os.path.getsize(thumb) < 5_000:
+        problems.append("the thumbnail is suspiciously small (%d bytes)"
+                        % os.path.getsize(thumb))
+
     vtt = os.path.join(man.dir, "out", "final.vtt")
     if not os.path.exists(vtt):
         problems.append("has no captions")
@@ -365,6 +385,50 @@ def cmd_verify(args):
     return 0
 
 
+def cmd_publish(args):
+    """Upload every built video, then import them all as one course.
+
+    Two phases on purpose. Uploads are per video and resumable; the course
+    import is a single call describing the whole product, so it only makes
+    sense once every video it references has a URL.
+    """
+    todo = rows(args.only, {"built"})
+    if not todo:
+        log("nothing built and waiting to publish")
+        return 0
+    if not args.confirm:
+        log("DRY RUN. Nothing is sent. Add --confirm to publish for real.\n")
+
+    failures = []
+    for r in todo:
+        slug = r["slug"]
+        log("=== %s ===" % slug)
+        argv = script("publish.py") + ["media", slug]
+        if args.confirm:
+            argv.append("--confirm")
+        why = run_step(slug, argv, args.dry_run, stream=not args.confirm)
+        if why:
+            failures.append((slug, "media upload: %s" % why))
+            if args.stop_on_error:
+                break
+    if failures:
+        report(failures, "uploaded")
+        log("\nnot importing the course while uploads are failing: the import "
+            "references those URLs.")
+        return 1
+
+    log("\n=== course import ===")
+    argv = script("publish.py") + ["course", "--visibility", args.visibility]
+    if args.only:
+        argv += ["--only", args.only]
+    if args.confirm:
+        argv.append("--confirm")
+    why = run_step("course", argv, args.dry_run, stream=not args.confirm)
+    if why:
+        return report([("course import", why)], "imported")
+    return 0
+
+
 def cmd_status(args):
     todo = rows(args.only)
     if not todo:
@@ -399,6 +463,11 @@ def add_common(parser, suppress):
     parser.add_argument("--precise-captions", action="store_true",
                         help="time captions against the rendered audio (slower)",
                         **kw)
+    parser.add_argument("--confirm", action="store_true",
+                        help="actually write to GoHighLevel", **kw)
+    parser.add_argument("--visibility", choices=["draft", "published"],
+                        default=argparse.SUPPRESS if suppress else "draft",
+                        help="how the imported course lands")
 
 
 def main():
@@ -413,7 +482,7 @@ def main():
     i.set_defaults(func=cmd_intake)
     for name, fn in (("prep", cmd_prep), ("queue", cmd_queue), ("render", cmd_render),
                      ("build", cmd_build), ("verify", cmd_verify),
-                     ("status", cmd_status)):
+                     ("publish", cmd_publish), ("status", cmd_status)):
         p = sub.add_parser(name)
         add_common(p, suppress=True)
         p.set_defaults(func=fn)

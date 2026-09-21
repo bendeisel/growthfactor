@@ -26,9 +26,13 @@ installing it, calibrating it, and running the library through it.
 - [ ] **Clone the voice** in the HeyGen UI. Read varied material, not a
       monotone script. Instructional content has more pitch range than people
       expect.
-- [ ] **Hand Lorenz the keys**: HeyGen API key, Anthropic API key. Both bill
-      per use, so they go in `config.env`, which is git-ignored, and nowhere
-      else.
+- [ ] **Hand Lorenz the keys**: HeyGen API key, Anthropic API key, and a
+      GoHighLevel Private Integration token from the SUB-ACCOUNT the course
+      lives in, with `medias.write` and `courses.write`. All three bill or
+      write somewhere real, so they go in `config.env`, which is git-ignored,
+      and nowhere else.
+- [ ] **Name the course** and give Lorenz the GHL location ID. These go in
+      `GHL_COURSE_TITLE` and `GHL_LOCATION_ID`.
 
 ### Brand calls, needed before the first build
 
@@ -42,6 +46,12 @@ installing it, calibrating it, and running the library through it.
 - [ ] **Corner and size** (`GF_PIP_POSITION`, `GF_PIP_SIZE`). Whichever corner
       the source videos leave emptiest. GHL's own UI puts a lot in the top
       left, so bottom right is the usual answer.
+- [ ] **Thumbnail accent colour** (`GF_THUMB_ACCENT`). This is the rule and
+      the module label on every tile in the course. Usually the only
+      thumbnail setting worth changing; the rest have sensible defaults and
+      are all config.
+- [ ] **A logo.png** if you want one on the tiles. Drop it in a job's
+      `assets/` folder and it lands top right. Left out entirely if absent.
 - [ ] **Voice note for the rewrite** (`GF_EXTRA_VOICE`). One line of anything
       the prompt template does not already cover. The banned-words list and
       the no-em-dash rule are already in
@@ -128,7 +138,14 @@ carries on when one video fails, and prints the failures as a block at the end.
       every video waiting on a human, with the flagged beats named. Hand that
       to Ben rather than forty separate files.
 - [ ] `batch.py render`, then `batch.py build`, then `batch.py verify`.
-      `render` only picks up what the registry marks `reviewed`.
+      `render` only picks up what the registry marks `reviewed`. `build` now
+      also writes captions and a thumbnail for every video.
+- [ ] `publish.py probe` BEFORE the first upload. A 401 discovered forty
+      videos into a batch is an expensive way to learn the token is wrong.
+- [ ] `batch.py publish` to see what would be sent, then
+      `batch.py publish --confirm` to upload everything and import the course.
+      It lands as a draft. Look at the module order in GHL before publishing
+      it to students.
 - [ ] `batch.py status` for the whole library on one screen.
 - [ ] Run the tests after touching any pipeline logic:
       `python3 tests/test_pipeline.py`.
@@ -148,15 +165,8 @@ that looks fine for the first minute and drifts after that.
 
 ## Not built
 
-Honest list, so nobody discovers these mid-project.
+Short list now, and nothing on it blocks shipping the library.
 
-- **No upload step.** Nothing pushes the finished file into GHL Memberships.
-  This one needs Ben's GHL API credentials and writes to a live system, so it
-  is a deliberate stop rather than an oversight. Say the word and it gets
-  built.
-- **No thumbnails.** Forty videos need forty of them and a course player will
-  show whatever frame it likes otherwise. Held back because it needs a design
-  call from Ben first, not because it is hard.
 - **No HeyGen webhook.** Renders are polled every 20 seconds. Fine for a batch
   of forty, wasteful for four hundred.
 - **No transparent-background render path.** The avatar comes back on a flat
@@ -167,14 +177,31 @@ Honest list, so nobody discovers these mid-project.
   each other will transcribe into a mess. None of the GHL library is like
   this, but a webinar recording would be.
 
+## One thing that is genuinely create-only
+
+The course import has no idempotency key. Run it twice and GHL has two
+courses. That is why `publish.py course` dry-runs by default and why there is
+no flag to skip the confirmation. Treat the import as a one-shot per course
+and fix small mistakes in the GHL interface rather than re-importing.
+
 ## What is tested, and how
 
 `tests/test_pipeline.py` covers the pure logic: the fitting arithmetic
 including several thousand fuzzed cases, the beat tiling, the rewrite
-validator and the caption cue builder. 27 tests, stdlib only, under a second.
+validator, the caption cue builder, the GHL course payload, the thumbnail
+text fitting, and the config environment handling. 41 tests, stdlib only,
+under a second.
 
-The ffmpeg work cannot be unit tested, so it was verified by building real
-footage and measuring it: every segment landed on its predicted duration to
-the millisecond across all three fitting branches, both overlay styles
-composite correctly, and each of the six `verify` checks was proven by
-deliberately breaking a finished video and confirming the check fired.
+The parts that talk to ffmpeg or the network cannot be unit tested, so they
+were exercised for real:
+
+- Real footage built and measured. Every segment landed on its predicted
+  duration to the millisecond across all three fitting branches, and both
+  overlay styles composite correctly.
+- Each of the ten `verify` checks proven by deliberately breaking a finished
+  video and confirming the check fired.
+- The multipart uploader round-tripped through a local HTTP server: headers
+  correct, a 3 MB file byte-exact on the other side, content type set.
+- The whole publish path run against a stand-in GoHighLevel server: probe,
+  two media uploads, course import, with the manifest, the payload URLs and
+  the registry status all lining up afterwards.

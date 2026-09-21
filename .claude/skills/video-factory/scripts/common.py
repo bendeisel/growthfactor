@@ -16,6 +16,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.abspath(os.path.join(HERE, os.pardir))
@@ -23,6 +24,11 @@ REPO = os.path.abspath(os.path.join(SKILL, os.pardir, os.pardir, os.pardir))
 JOBS = os.path.join(REPO, "video", "jobs")
 
 _CONFIG = None
+
+# Environment variables this pipeline will adopt. GF_ is our own settings,
+# GHL_ is everything aimed at GoHighLevel.
+ENV_PREFIXES = ("GF_", "GHL_")
+THIRD_PARTY_KEYS = ("HEYGEN_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY")
 
 
 def log(msg):
@@ -49,8 +55,12 @@ def load_config():
                     continue
                 key, _, val = line.partition("=")
                 values[key.strip()] = val.strip().strip('"').strip("'")
-    values.update({k: v for k, v in os.environ.items() if k.startswith("GF_")})
-    for k in ("HEYGEN_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):
+    # Anything namespaced to this pipeline, plus the third-party keys, which
+    # have names we do not get to choose. Miss a prefix here and an exported
+    # variable is silently ignored, which looks exactly like a missing key.
+    values.update({k: v for k, v in os.environ.items()
+                   if k.startswith(ENV_PREFIXES)})
+    for k in THIRD_PARTY_KEYS:
         if os.environ.get(k):
             values[k] = os.environ[k]
     _CONFIG = values
@@ -237,3 +247,84 @@ def fmt_ts(seconds):
     m, s = divmod(float(seconds), 60)
     h, m = divmod(int(m), 60)
     return "%d:%02d:%05.2f" % (h, m, s)
+
+
+def multipart_to_file(fields, files, dest):
+    """Write a multipart/form-data body to disk and return (path, content_type).
+
+    On disk rather than in memory on purpose: a finished walkthrough is
+    routinely a few hundred megabytes, and building that body as a bytes
+    object means holding the whole video in RAM twice.
+
+    `fields` is a list of (name, value). `files` is a list of
+    (field_name, filename, path_on_disk).
+    """
+    import uuid
+    boundary = "----gf%s" % uuid.uuid4().hex
+    crlf = b"\r\n"
+    with open(dest, "wb") as out:
+        for name, value in fields:
+            out.write(("--%s" % boundary).encode() + crlf)
+            out.write(('Content-Disposition: form-data; name="%s"' % name).encode() + crlf)
+            out.write(crlf)
+            out.write(str(value).encode() + crlf)
+        for name, filename, path in files:
+            out.write(("--%s" % boundary).encode() + crlf)
+            out.write((
+                'Content-Disposition: form-data; name="%s"; filename="%s"'
+                % (name, filename)).encode() + crlf)
+            out.write(("Content-Type: %s" % guess_type(filename)).encode() + crlf)
+            out.write(crlf)
+            with open(path, "rb") as fh:
+                shutil.copyfileobj(fh, out, 1024 * 1024)
+            out.write(crlf)
+        out.write(("--%s--" % boundary).encode() + crlf)
+    return dest, "multipart/form-data; boundary=%s" % boundary
+
+
+def guess_type(filename):
+    import mimetypes
+    return mimetypes.guess_type(filename)[0] or "application/octet-stream"
+
+
+def post_multipart(url, hdrs, fields, files, timeout=3600, error_hints=None):
+    """POST a multipart body that is streamed from disk, and parse the JSON.
+
+    The one multipart implementation in this codebase. Both the transcription
+    upload and the media upload go through it, so there is a single place
+    where a boundary bug or a header mistake can live.
+
+    `error_hints` maps an HTTP status to a sentence worth more than the raw
+    body, e.g. {401: "the token lacks medias.write"}.
+    """
+    import urllib.error
+    import urllib.request
+
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".multipart")
+    tmp.close()
+    try:
+        body_path, content_type = multipart_to_file(fields, files, tmp.name)
+        size = os.path.getsize(body_path)
+        with open(body_path, "rb") as body:
+            req = urllib.request.Request(url, data=body, method="POST")
+            for key, value in (hdrs or {}).items():
+                req.add_header(key, value)
+            req.add_header("Content-Type", content_type)
+            req.add_header("Content-Length", str(size))
+            try:
+                with urllib.request.urlopen(req, timeout=timeout) as resp:
+                    raw = resp.read().decode("utf-8")
+            except urllib.error.HTTPError as exc:
+                detail = exc.read().decode("utf-8", "replace")[:1500]
+                hint = (error_hints or {}).get(exc.code)
+                die("HTTP %s posting to %s%s\n%s"
+                    % (exc.code, url, "\n" + hint if hint else "", detail))
+            except urllib.error.URLError as exc:
+                die("could not reach %s: %s" % (url, exc.reason))
+    finally:
+        if os.path.exists(tmp.name):
+            os.unlink(tmp.name)
+    try:
+        return json.loads(raw)
+    except ValueError:
+        die("non-JSON response from %s:\n%s" % (url, raw[:500]))

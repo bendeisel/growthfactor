@@ -21,10 +21,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 os.pardir, "scripts"))
 
 import captions      # noqa: E402
+import common        # noqa: E402
 import composite     # noqa: E402
+import publish       # noqa: E402
 import registry      # noqa: E402
 import rewrite       # noqa: E402
 import segment       # noqa: E402
+import thumbnail     # noqa: E402
+
+try:
+    import PIL  # noqa: F401
+    HAVE_PIL = True
+except ImportError:
+    HAVE_PIL = False
 
 TOL = 1e-9   # fit() returns exact floats; rounding happens at format time
 
@@ -271,6 +280,128 @@ class TestRegistry(unittest.TestCase):
                         registry.ORDER.index("reviewed"))
         self.assertLess(registry.ORDER.index("reviewed"),
                         registry.ORDER.index("rendered"))
+
+
+class TestCoursePayload(unittest.TestCase):
+    """The import payload has to match HighLevel's PublicExporterPayload
+    schema exactly. A wrong key is a 422 forty videos into a batch."""
+
+    ITEMS = [
+        {"title": "Connecting your first integration", "module": "Setup",
+         "description": "", "video_url": "https://cdn/x1.mp4",
+         "thumbnail_url": "https://cdn/t1.jpg"},
+        {"title": "Inviting your team", "module": "Setup", "description": "",
+         "video_url": "https://cdn/x2.mp4", "thumbnail_url": None},
+        {"title": "Building a workflow", "module": "Automations",
+         "description": "", "video_url": "https://cdn/x3.mp4",
+         "thumbnail_url": "https://cdn/t3.jpg"},
+    ]
+
+    def payload(self, **kw):
+        return publish.build_course_payload(
+            "loc_ABC", "Platform Training", "Everything in one place",
+            self.ITEMS, **kw)
+
+    def test_required_top_level_fields(self):
+        p = self.payload()
+        self.assertEqual(p["locationId"], "loc_ABC")
+        self.assertIsInstance(p["products"], list)
+        self.assertNotIn("userId", p, "userId must be omitted when unset")
+
+    def test_user_id_included_when_given(self):
+        self.assertEqual(self.payload(user_id="u1")["userId"], "u1")
+
+    def test_modules_become_categories_in_first_seen_order(self):
+        cats = self.payload()["products"][0]["categories"]
+        self.assertEqual([c["title"] for c in cats], ["Setup", "Automations"])
+        self.assertEqual(len(cats[0]["posts"]), 2)
+        self.assertEqual(len(cats[1]["posts"]), 1)
+
+    def test_posts_carry_the_video_url(self):
+        post = self.payload()["products"][0]["categories"][0]["posts"][0]
+        self.assertEqual(post["contentType"], "video")
+        self.assertEqual(post["bucketVideoUrl"], "https://cdn/x1.mp4")
+        self.assertEqual(post["thumbnailUrl"], "https://cdn/t1.jpg")
+
+    def test_absent_thumbnail_is_omitted_not_null(self):
+        post = self.payload()["products"][0]["categories"][0]["posts"][1]
+        self.assertNotIn("thumbnailUrl", post,
+                         "a null thumbnailUrl is not the same as no key")
+
+    def test_defaults_to_draft(self):
+        p = self.payload()
+        self.assertEqual(p["products"][0]["categories"][0]["visibility"], "draft")
+        self.assertEqual(
+            p["products"][0]["categories"][0]["posts"][0]["visibility"], "draft")
+
+    def test_visibility_is_honoured(self):
+        p = self.payload(visibility="published")
+        self.assertEqual(p["products"][0]["categories"][0]["visibility"], "published")
+
+    def test_items_without_a_module_land_in_one_default_category(self):
+        p = publish.build_course_payload(
+            "loc", "T", "d",
+            [{"title": "A", "module": "", "video_url": "u"},
+             {"title": "B", "module": None, "video_url": "u"}])
+        cats = p["products"][0]["categories"]
+        self.assertEqual(len(cats), 1)
+        self.assertEqual(len(cats[0]["posts"]), 2)
+
+
+class TestConfigEnvironment(unittest.TestCase):
+    """Regression: only GF_ prefixed variables were adopted from the
+    environment, so an exported GHL_API_TOKEN was silently ignored and looked
+    exactly like a missing key."""
+
+    def setUp(self):
+        common._CONFIG = None
+
+    def tearDown(self):
+        common._CONFIG = None
+        for key in ("GF_TEST_ONLY", "GHL_TEST_ONLY"):
+            os.environ.pop(key, None)
+
+    def test_both_namespaces_are_adopted(self):
+        os.environ["GF_TEST_ONLY"] = "one"
+        os.environ["GHL_TEST_ONLY"] = "two"
+        self.assertEqual(common.cfg("GF_TEST_ONLY"), "one")
+        self.assertEqual(common.cfg("GHL_TEST_ONLY"), "two")
+
+    def test_third_party_keys_are_named_explicitly(self):
+        for key in ("HEYGEN_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):
+            self.assertIn(key, common.THIRD_PARTY_KEYS)
+
+
+class TestThumbnailText(unittest.TestCase):
+
+    def test_hex_parsing(self):
+        self.assertEqual(thumbnail.hex_to_rgb("#F5A524"), (245, 165, 36))
+        self.assertEqual(thumbnail.hex_to_rgb("F5A524"), (245, 165, 36))
+        self.assertEqual(thumbnail.hex_to_rgb("#fff"), (255, 255, 255))
+
+    def test_bad_hex_falls_back_rather_than_crashing(self):
+        self.assertEqual(thumbnail.hex_to_rgb("not a colour", (1, 2, 3)), (1, 2, 3))
+        self.assertEqual(thumbnail.hex_to_rgb("", (1, 2, 3)), (1, 2, 3))
+        self.assertEqual(thumbnail.hex_to_rgb(None, (1, 2, 3)), (1, 2, 3))
+
+    @unittest.skipUnless(HAVE_PIL, "Pillow not installed")
+    def test_wrapping_never_drops_a_word(self):
+        from PIL import Image, ImageDraw, ImageFont
+        draw = ImageDraw.Draw(Image.new("RGB", (10, 10)))
+        font = ImageFont.load_default()
+        text = ("Building a multi step workflow that tags contacts and books "
+                "them straight into your calendar")
+        lines = thumbnail.wrap_to_width(draw, text, font, 200)
+        self.assertEqual(" ".join(lines).split(), text.split())
+
+    @unittest.skipUnless(HAVE_PIL, "Pillow not installed")
+    def test_long_title_shrinks_to_fit_the_line_budget(self):
+        from PIL import Image, ImageDraw
+        draw = ImageDraw.Draw(Image.new("RGB", (10, 10)))
+        long_title = " ".join(["verylongword"] * 18)
+        font, lines = thumbnail.fit_title(draw, long_title, 1152, 3, 76, 40)
+        self.assertLessEqual(len(lines), 3,
+                             "a long title must never overflow its box")
 
 
 if __name__ == "__main__":

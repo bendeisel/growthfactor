@@ -16,7 +16,9 @@ source.mp4
   ├─ render        HeyGen speaks each line as the cloned avatar
   ├─ composite     avatar over footage, footage fitted to the narration
   ├─ captions      .vtt and .srt from the script we already wrote
-  └─ verify        QA gate before anything is handed over
+  ├─ thumbnail     a frame, a scrim, the module label and the title
+  ├─ verify        QA gate before anything is handed over
+  └─ publish       media library upload, then a course import
 ```
 
 For one video use `vf.sh`. For the library use `batch.py`, which runs the same
@@ -130,15 +132,62 @@ Preview a single beat without rebuilding everything:
 scripts/composite.py ghl-workflows --beat 7 --force
 ```
 
+`build` also writes a thumbnail, because a course player left to choose its
+own frame produces forty mismatched tiles. Same treatment every time: a frame
+from 35 percent in, a gradient scrim, the module label over a short accent
+rule, then the title shrunk to fit at most three lines.
+
+```bash
+scripts/thumbnail.py ghl-workflows --at 0.6 --title "Something shorter"
+```
+
+Everything about the look is config, so changing it never means editing the
+script. `GF_THUMB_ACCENT` is usually the only one that matters. Drop a
+`logo.png` in the job's `assets/` and it lands top right.
+
 ## Step 6: verify before handover
 
 ```bash
 scripts/vf.sh verify ghl-workflows
 ```
 
-Checks the things that are embarrassing to discover after sending a link: a
-missing segment, no audio track, silent audio, missing or overrunning
-captions, and any beat that got built while still flagged as unreviewed.
+Ten checks, all of them things that are embarrassing to discover after
+sending a link: a missing segment, no audio track, silent audio, a missing or
+tiny thumbnail, missing or overrunning captions, and any beat that got built
+while still flagged as unreviewed.
+
+## Step 7: publish to GoHighLevel
+
+```bash
+scripts/publish.py probe                     # is the token good
+scripts/publish.py media ghl-workflows       # dry run
+scripts/publish.py media ghl-workflows --confirm
+scripts/publish.py course --confirm          # import the whole course
+```
+
+Two phases. Each video's MP4 and thumbnail go into the media library and the
+returned URLs are recorded in its manifest. The course import is then a
+single call describing the whole product, with one category per module and
+one video post per lesson, referencing those URLs.
+
+**Nothing is sent without `--confirm`.** Every write dry-runs by default and
+prints the exact payload and the location it would go to. A course import
+lands in a live sub-account, and reading the payload first is much easier
+than unpicking a half-imported course.
+
+Imports land as `draft` unless you pass `--visibility published`. Look at it
+in GHL before students can.
+
+For a video already sitting on the preview host, `--hosted <url>` has
+HighLevel fetch it instead of pushing a few hundred megabytes up:
+
+```bash
+scripts/publish.py media ghl-workflows --hosted https://preview.growth-factor.ai/train/x.mp4 --confirm
+```
+
+The endpoints and payload shape come from HighLevel's published OpenAPI
+specs, not from memory. `references/gohighlevel-api.md` records what was
+verified and when.
 
 ## The whole library at once
 
@@ -150,6 +199,8 @@ scripts/batch.py queue                   # one review list, not forty files
 scripts/batch.py render                  # only what is marked reviewed
 scripts/batch.py build                   # composite and caption
 scripts/batch.py verify                  # QA everything
+scripts/batch.py publish                 # dry run
+scripts/batch.py publish --confirm       # upload all, then one course import
 ```
 
 `batch.py` shells out to the same per-job scripts, so there is one copy of the
@@ -186,5 +237,5 @@ later video needs less fitting.
 - It will not re-cut the footage. Clicks land where they landed.
 - It will not go from a raw source file to a finished video in one command.
   The review gate is deliberate.
-- It will not upload anything. The finished file and its captions are on
-  disk; putting them into GHL Memberships is still a manual step.
+- It will not publish without `--confirm`. That gate is deliberate and there
+  is no flag to remove it.
