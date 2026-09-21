@@ -57,9 +57,52 @@ cp .claude/skills/site-factory/config.example.env \
 
 `config.env` is git-ignored — the token can delete websites.
 
+## Training video production
+
+A separate pipeline, same house rules. `video-factory` rebuilds a software
+walkthrough with our own cloned presenter over the original screen recording:
+it transcribes the source, rewrites every line to a duration budget with the
+interface names locked, renders those lines on a HeyGen avatar, and composites
+the avatar over the footage with the narration kept under the cursor.
+
+```
+transcribe -> segment -> rewrite -> REVIEW -> render -> composite
+           -> caption -> thumbnail -> verify -> publish
+```
+
+The review stop is deliberate and it is where the value is. Renders are the
+expensive half, and narration that names a button the cursor is not moving
+toward makes the video worse than useless, so a human reads the rewritten
+script against the source before anything is rendered.
+
+```bash
+cp .claude/skills/video-factory/config.example.env \
+   .claude/skills/video-factory/config.env
+.claude/skills/video-factory/scripts/vf.sh doctor
+```
+
+Jobs live in `video/jobs/<slug>/`, which is git-ignored: a full library runs
+to tens of gigabytes. The index of what exists and where it got to is
+`.claude/skills/video-factory/data/videos.csv`.
+
+One video goes through `vf.sh`. The whole library goes through `batch.py`,
+which runs the same scripts over every job, collects failures instead of
+stopping at the first, and writes one review checklist covering everything
+waiting on a human.
+
+The last step imports the finished videos into a GoHighLevel course, media
+library upload first, then one course import. Nothing is sent without
+`--confirm`, and imports land as drafts.
+
+Start at `.claude/skills/video-factory/HANDOFF.md` for who owns what, and
+`references/timing.md` before touching the timing arithmetic. Run
+`python3 .claude/skills/video-factory/tests/test_pipeline.py` after changing
+any of it.
+
 ## Layout
 
 ```
 .claude/skills/       the routines and the design law
 projects/<slug>/      one directory per client: kernel.json, intake.md, site.html
+video/jobs/<slug>/    one directory per training video (git-ignored)
 ```
