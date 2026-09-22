@@ -5,6 +5,29 @@
 - Ben (ben@growth-factor.ai) works on **Windows, not Mac**. Give Windows
   keyboard shortcuts and paths only, never "Cmd+..." alternatives.
 
+## Artifacts
+
+- **A site has one artifact, and it is edited, never replaced.** Every client
+  site has exactly one published artifact holding every page. Work goes into
+  that artifact by republishing it to its own URL. Version history is how we
+  go back, so a bad version costs nothing and is never a reason to start a
+  new one.
+
+- **Never publish a second artifact for a site that already has one.** Not for
+  a single page, not for one section, not "just to show you this hero", not
+  because the change is large, and not because the existing artifact is stale.
+  If it is part of the site, it goes in the site artifact. A new artifact URL
+  means Ben has to hunt for which one is current, and the last one he opened
+  is wrong.
+
+- **The artifact URL lives in the project README.** Before publishing anything
+  for a client, read it and publish to that URL. If a project has no URL
+  recorded, that is the thing to fix first, not a reason to make a new one.
+
+- **Building files is not delivering.** Generating artboards, HTML or a build
+  folder changes nothing Ben can see. The work is not done until the site
+  artifact has been republished and the version shows the change.
+
 ## Finishing work
 
 - **Do the whole set, or say plainly that you did not.** If a change applies

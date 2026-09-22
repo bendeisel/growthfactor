@@ -12,6 +12,26 @@ automatically at the start of every session. This copy is for me, so the rules
 are somewhere I can see and edit them too. If they diverge, the repo copy is the
 one Claude obeys, so change that one as well.
 
+## Artifacts
+
+**A site has one artifact, and it is edited, never replaced.** Every client site
+has exactly one published artifact holding every page. Work goes into that
+artifact by republishing it to its own URL. Version history is how we go back,
+so a bad version costs nothing and is never a reason to start a new one.
+
+**Never publish a second artifact for a site that already has one.** Not for a
+single page, not for one section, not "just to show you this hero", not because
+the change is large, and not because the existing artifact is stale. If it is
+part of the site, it goes in the site artifact.
+
+**The artifact URL lives in the project README.** Read it before publishing
+anything for a client. A project with no URL recorded means fix that first, not
+make a new one.
+
+**Building files is not delivering.** Artboards, HTML and a build folder change
+nothing I can see. The work is not done until the site artifact has been
+republished and the version shows the change.
+
 ## Finishing work
 
 **Do the whole set, or say plainly that you did not.** If a change applies to 14
