@@ -7,26 +7,32 @@
 
 ## Artifacts
 
-- **A site has one artifact, and it is edited, never replaced.** Every client
-  site has exactly one published artifact holding every page. Work goes into
-  that artifact by republishing it to its own URL. Version history is how we
-  go back, so a bad version costs nothing and is never a reason to start a
-  new one.
+- **Never create a new artifact for a client site.** Not for a page, a
+  section, a hero, a trial, or because the current one is stale or the change
+  is large. Ben names the artifact the work goes in, and it is republished to
+  that URL. Version history is the undo, so a bad version costs nothing and is
+  never a reason to start fresh.
 
-- **Never publish a second artifact for a site that already has one.** Not for
-  a single page, not for one section, not "just to show you this hero", not
-  because the change is large, and not because the existing artifact is stale.
-  If it is part of the site, it goes in the site artifact. A new artifact URL
-  means Ben has to hunt for which one is current, and the last one he opened
-  is wrong.
+- **Edit the artifact Ben points at, and only that one.** A site can have a
+  full-site artifact and a working artifact for a section, and Ben decides
+  which is which. If he says edit the Muay Thai page, edit it where he is
+  looking. If he says duplicate that onto the other pages, duplicate it in the
+  same artifact. When it is not clear which artifact or which pages he means,
+  ask before publishing, not after.
 
-- **The artifact URL lives in the project README.** Before publishing anything
-  for a client, read it and publish to that URL. If a project has no URL
-  recorded, that is the thing to fix first, not a reason to make a new one.
+- **Republishing the full site is not automatic.** Ben has said updating the
+  full-site artifact on every change is not working. It is republished when
+  he asks for it, from what he has approved, not as the tail of every task.
+  And when it is, the previous version is what it must build on: v19 of the
+  Nashville MMA site carried a header that existed nowhere in the repo, and
+  regenerating from the repo replaced it. Read the live version first.
 
-- **Building files is not delivering.** Generating artboards, HTML or a build
-  folder changes nothing Ben can see. The work is not done until the site
-  artifact has been republished and the version shows the change.
+- **Artifact URLs live in the project README.** Read it before publishing. A
+  project with no URL recorded means fix that first, not make a new one.
+
+- **Building files is not delivering.** Artboards, HTML and a build folder
+  change nothing Ben can see. Work is done when the artifact he named shows
+  the change.
 
 ## Finishing work
 

@@ -14,23 +14,25 @@ one Claude obeys, so change that one as well.
 
 ## Artifacts
 
-**A site has one artifact, and it is edited, never replaced.** Every client site
-has exactly one published artifact holding every page. Work goes into that
-artifact by republishing it to its own URL. Version history is how we go back,
-so a bad version costs nothing and is never a reason to start a new one.
+**Never create a new artifact for a client site.** Not for a page, a section, a
+hero, a trial, or because the current one is stale or the change is large. I
+name the artifact the work goes in, and it gets republished to that URL.
+Version history is the undo.
 
-**Never publish a second artifact for a site that already has one.** Not for a
-single page, not for one section, not "just to show you this hero", not because
-the change is large, and not because the existing artifact is stale. If it is
-part of the site, it goes in the site artifact.
+**Edit the artifact I point at, and only that one.** A site can have a full-site
+artifact and a working artifact for a section, and I decide which is which. If I
+say edit the Muay Thai page, edit it where I am looking. If I say duplicate that
+onto the other pages, do it in the same artifact. Unclear which artifact or which
+pages? Ask before publishing.
 
-**The artifact URL lives in the project README.** Read it before publishing
-anything for a client. A project with no URL recorded means fix that first, not
-make a new one.
+**Republishing the full site is not automatic.** It happens when I ask, from
+what I have approved, and it builds on the live version, not on a regeneration
+from the repo.
 
-**Building files is not delivering.** Artboards, HTML and a build folder change
-nothing I can see. The work is not done until the site artifact has been
-republished and the version shows the change.
+**Artifact URLs live in the project README.** Read it before publishing.
+
+**Building files is not delivering.** Work is done when the artifact I named
+shows the change.
 
 ## Finishing work
 
