@@ -31,12 +31,138 @@ SAND_GRADIENT = ('<div aria-hidden="true" class="dg" data-ax="135" data-ay="40" 
                  'radial-gradient(150% 46.8% at 53.18% 94%, rgba(138,98,36,0.92) 0%, rgba(138,98,36,0) 51%)"></div>')
 PANEL = ("background: rgba(255,255,255,0.028); box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30); "
          "border-radius: 10px")
+
+# Pages trialling the reworked card rhythm. One flat grid of identical panels
+# is both the "super basic" complaint and the top AI tell in the BMFG
+# standard, so the items descend in scale instead: one wide statement, then a
+# pair, then compact rows. Square corners, per the kernel's --cornerRadius: 0.
+VARIED_CARDS = "ALL"   # every program page, approved off the Muay Thai trial
+
+# Pages using the full-bleed hero, from the reference Ben sent: photo
+# edge to edge, dissolving into the page at the bottom, headline left.
+# The rest keep the framed hero until this is approved.
+BLEED_HERO = "ALL"     # every program page, approved off the Muay Thai trial
+
+SQUARE = ("background: rgba(255,255,255,0.028); "
+          "box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)")
+
+def _card(name, desc, scale):
+    """One item card. `scale` sets its weight in the rhythm.
+
+    No index numerals. Ben calls numbering on cards a hard no, and these
+    items are not a sequence anyone counts through. The gold rule already in
+    the brand's vocabulary does the same marking job without pretending the
+    cards are steps.
+    """
+    spec = {"lead":    (56, 46, 20.0, "40px 44px", 6, "4px"),
+            "mid":     (40, 32, 18.0, "32px 34px", 3, "3px"),
+            "compact": (28, 23, 16.5, "26px 28px", 2, "3px")}[scale]
+    rule_w, tsize, dsize, pad, span, rule_h = spec
+    rule = ('<div aria-hidden="true" style="width: %dpx; height: %s; background: %s"></div>'
+            % (rule_w, rule_h, GOLD))
+    head = ('<h3 style="font-size: %dpx; line-height: 1.02; margin: 0 0 10px; color: #FFFFFF">%s</h3>'
+            % (tsize, esc(name)) if name else "")
+    body = ('<p class="body" style="font-size: %.1fpx; line-height: 1.68; margin: 0; max-width: 64ch">%s</p>'
+            % (dsize, esc(desc)))
+    # the lead card sets its rule beside the copy; the rest stack it above, so
+    # the row shapes differ as well as their sizes
+    if scale == "lead":
+        inner = ('<div style="display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: start">'
+                 '<div style="padding-top: 16px">%s</div><div>%s%s</div></div>' % (rule, head, body))
+    else:
+        inner = '%s<div style="margin-top: 20px">%s%s</div>' % (rule, head, body)
+    return ('    <div style="%s; padding: %s; grid-column: span %d">%s</div>'
+            % (SQUARE, pad, span, inner))
+
+def varied_items(items):
+    """Cards that stack as you scroll, from the cards-stack component.
+
+    The original Ben sent is React with motion/react and Tailwind. None of
+    that does the work: the effect is position: sticky with a staggered top
+    per card, inside a container with perspective, which is what
+    ContainerScroll and CardSticky reduce to. So this is the same behaviour
+    with no library and no build step.
+
+    It is also not a CSS animation, so it cannot freeze in low-power mode
+    the way @keyframes does. Sticky is layout driven by scroll position.
+
+    Two things from the demo are deliberately dropped: rounded-2xl, against
+    the kernel's --cornerRadius: 0, and the padStart index numerals.
+    """
+    parsed = []
+    for it in items:
+        m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
+        parsed.append((m.group(1).strip(), m.group(2).strip()) if m else (None, it))
+
+    # Cards need a solid fill or the ones underneath show through the stack,
+    # and scroll distance between them or they pile up all at once.
+    FILL = ("background: #0E0E10; box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30), "
+            "0 -18px 40px rgba(0,0,0,0.55)")
+    # The gap is scroll distance between one card pinning and the next
+    # arriving. Too large and the section reads as voids between cards, which
+    # is what 46vh did. The padding-bottom gives the last card room to sit
+    # pinned before the section's clip edge reaches it.
+    # CardSticky sets `top: index * incrementY` and `z: index * incrementZ`.
+    # In motion, `z` is translateZ, not z-index, and that is the whole effect:
+    # against the container's perspective each card sits nearer the viewer
+    # than the one before, so it comes over the top of it rather than just
+    # painting above it. Defaults from the component: incrementY and
+    # incrementZ both 10, applied from index + 2 as the demo does.
+    TOP0, STEP_Y, STEP_Z, GAP = 26, 18, 10, "150px"
+
+    out = ['  <div class="stackwrap" style="position: relative; width: 100%; '
+           'perspective: 1000px; margin-top: 34px; padding-bottom: 220px">']
+    last = len(parsed) - 1
+    for i, (name, desc) in enumerate(parsed):
+        head = ('<h3 style="font-size: 34px; line-height: 1.04; margin: 0 0 12px; '
+                'color: #FFFFFF">%s</h3>' % esc(name)) if name else ""
+        out.append(
+            '    <div class="stackcard" style="position: sticky; top: %dpx; z-index: %d; '
+            'transform: translateZ(%dpx); backface-visibility: hidden; '
+            '%s; padding: 40px 44px; min-height: 210px%s">'
+            '<div aria-hidden="true" style="width: 52px; height: 4px; background: %s"></div>'
+            '<div style="margin-top: 22px">%s'
+            '<p class="body" style="font-size: 18px; line-height: 1.68; margin: 0; '
+            'max-width: 68ch">%s</p></div></div>'
+            % (TOP0 + i * STEP_Y, i + 1, (i + 2) * STEP_Z, FILL,
+               "" if i == last else "; margin-bottom: %s" % GAP,
+               GOLD, head, esc(desc)))
+    out.append('  </div>')
+    return out
 DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
 CLASSES  = json.load(open(os.path.join(HERE, "classes.json"), encoding="utf-8"))["classes"]
 PROGRAMS = json.load(open(os.path.join(HERE, "programs.json"), encoding="utf-8"))["programs"]
 
 def esc(s): return html.escape(s, quote=False)
+
+
+def meta_desc(content_name):
+    """The meta description harvested with the copy.
+
+    56 of these came through the harvest and none of them reached a built
+    page. They are the client's own, written for these pages, so they ship.
+    """
+    try:
+        md = open(os.path.join(CONTENT, content_name + ".md"), encoding="utf-8").read()
+    except OSError:
+        return ""
+    m = re.match(r"^---(.*?)---", md, re.S)
+    v = re.search(r'meta_description:\s*"(.*?)"\s*$', m.group(1), re.M) if m else None
+    if v:
+        return v.group(1).replace('\\"', '"')
+    # the two pages we wrote ourselves have no harvested front matter, so the
+    # description comes off their own opening paragraph rather than being
+    # written for them
+    for line in re.sub(r"^---.*?---\s*", "", md, flags=re.S).split("\n"):
+        t = line.strip()
+        if not t or t.startswith(("#", "-", "!", "[")):
+            continue
+        if len(t) <= 158:
+            return t
+        cut = t[:158].rsplit(" ", 1)[0]
+        return cut.rstrip(",;:") + "..."
+    return ""
 
 
 BTN_LINE = re.compile(r'(<a\b[^>]*class="btn-line"[^>]*>)(.*?)(</a>)', re.S)
@@ -180,6 +306,54 @@ def render(p):
     body_img = "prog-%s-body.jpg" % p["slug"]
 
     out = []
+    if p.get("hero_style") == "inset" and (BLEED_HERO == "ALL" or p.get("slug") in BLEED_HERO):
+        # Full-bleed hero, from the reference Ben sent: the photo runs edge to
+        # edge and dissolves into the page at the bottom rather than sitting
+        # in a frame, with the headline left over the dark side.
+        #
+        # The fade is a mask, not an overlay. An overlay would have to fade to
+        # a flat colour, and the page background here is the moving gold
+        # gradient, so a flat fade would band against it. Masking lets the
+        # gradient show through the photo's dissolved edge.
+        #
+        # The left veil is what carries the headline. White type over the
+        # gold wash alone is 2.10:1 at the wash's brightest, so the type needs
+        # its own dark ground rather than the photo's luck.
+        import re as _re
+        m = _re.match(r"^(.*?)\s+in\s+(.*)$", title, _re.I)
+        h1 = ('%s<br>In %s' % (esc(m.group(1)), esc(m.group(2)))) if m else esc(title)
+        lead = m.group(1) if m else title
+        mask = ("linear-gradient(to bottom, #000 0%, #000 54%, rgba(0,0,0,0.35) 82%, "
+                "rgba(0,0,0,0) 100%)")
+        # Solid ground under the hero. The page wash is fixed behind everything,
+        # so without this it shows through the photo's dissolved edge. Ben
+        # wants the gradient out of the hero, so the photo fades to black and
+        # the wash starts below. #050505 matches body.seamless, so where the
+        # wash is dark there is no boundary at all.
+        out.append('<div class="bleedhero" style="position: relative; overflow: hidden; '
+                   'overflow: clip; min-height: 660px; isolation: isolate; '
+                   'background: #050505">')
+        out.append('  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; '
+                   '-webkit-mask-image: %s; mask-image: %s">' % (mask, mask))
+        out.append('    <img src="%s" alt="%s" style="position: absolute; inset: 0; width: 100%%; '
+                   'height: 100%%; object-fit: cover; object-position: 50%% 26%%">'
+                   % (hero_img, esc(title)))
+        # Seat the photo back, then carry the headline on a near-solid left.
+        # This hero photo has a near-white wall in it, so a veil that looks
+        # strong on paper still lets the wall read through at 0.86.
+        out.append('    <div style="position: absolute; inset: 0; background: rgba(5,5,5,0.30)"></div>')
+        out.append('    <div class="bleedveil" style="position: absolute; inset: 0; background: linear-gradient('
+                   'to right, rgba(5,5,5,0.97) 0%, rgba(5,5,5,0.95) 32%, rgba(5,5,5,0.70) 55%, '
+                   'rgba(5,5,5,0.26) 76%, rgba(5,5,5,0.04) 100%)"></div>')
+        out.append('  </div>')
+        out.append('  <div style="position: relative; z-index: 2; max-width: 980px; '
+                   'padding: 132px 48px 150px 48px">')
+        out.append('    <h1 style="font-size: %dpx; line-height: 0.94; max-width: 760px">%s</h1>'
+                   % (96 if len(lead) < 30 else 74, h1))
+        out.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 30px"></div>' % GOLD)
+        out.append('  </div>\n</div>')
+        return _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img)
+
     if p.get("hero_style") == "inset":
         # framed hero: the photo sits in a rounded panel with black around it,
         # title centred inside. 8px radius per the standing picture-corner rule.
@@ -192,7 +366,8 @@ def render(p):
                    'radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.78) 100%)"></div>')
         out.append('    <div style="position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; '
                    'align-items: center; justify-content: center; text-align: center; padding: 0 60px">')
-        out.append('      <div class="micro" style="margin-bottom: 16px">Programs</div>')
+        # No eyebrow over the hero headline. Ben cut it: the nav already says
+        # where you are and the label was doing nothing the H1 does not.
         import re as _re
         m = _re.match(r"^(.*?)\s+in\s+(.*)$", title, _re.I)
         h1 = ('%s<br>In %s' % (esc(m.group(1)), esc(m.group(2)))) if m else esc(title)
@@ -257,7 +432,9 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
                 if not g: continue
                 out.append('    <div>' + "".join('<p class="body" style="font-size: 18px; line-height: 1.72">%s</p>' % esc(x) for x in g) + '</div>')
             out.append('  </div>')
-        if s["items"]:
+        if s["items"] and (VARIED_CARDS == "ALL" or p.get("slug") in VARIED_CARDS):
+            out.extend(varied_items(s["items"]))
+        elif s["items"]:
             out.append('  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px">')
             for it in s["items"]:
                 m = re.match(r"^([^:]{2,60}):\s*(.+)$", it)
@@ -338,6 +515,84 @@ def _finish(p, out, title, intro_head, intro_paras, sections, areas, body_img):
 
     return title, "\n".join(out), n_cls
 
+
+# ── the classes index ──────────────────────────────────────────────────────
+# "Martial Arts" in the header pointed at programs/index.html, which was one
+# of the five dead links. The copy for it was already harvested: services.md
+# is the old site's own classes landing page, a headline plus one section per
+# program. Nothing here is written, only placed.
+INDEX_SLUGS = {
+    "jiu-jitsu": "jiu-jitsu", "muay thai kickboxing": "muay-thai", "boxing": "boxing",
+    "mixed martial arts": "mixed-martial-arts", "mma fight team": "mma-fight-team",
+    "women's classes": "womens-classes", "wrestling": "wrestling",
+    "self defense classes & seminars": "self-defense",
+    "personal training": "personal-training", "sports performance": "sports-performance",
+    "kids martial arts": "kids-martial-arts", "kids fitness classes": "kids-fitness",
+    "kids brazilian jiu-jitsu": "kids-brazilian-jiu-jitsu",
+}
+
+def build_index_page():
+    md = open(os.path.join(CONTENT, "services.md"), encoding="utf-8").read()
+    head = re.search(r"^# (.+)$", md, re.M).group(1).strip()
+    secs = re.findall(r"^## (.+?)\n\n(.+?)\n", md, re.M)
+
+    o = []
+    mask = ("linear-gradient(to bottom, #000 0%, #000 54%, rgba(0,0,0,0.35) 82%, "
+            "rgba(0,0,0,0) 100%)")
+    o.append('<div class="bleedhero" style="position: relative; overflow: hidden; '
+             'min-height: 620px; isolation: isolate; background: #050505">')
+    o.append('  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; '
+             '-webkit-mask-image: %s; mask-image: %s">' % (mask, mask))
+    o.append('    <img src="about-bg.jpg" alt="Martial arts and fitness classes in Nashville" '
+             'style="position: absolute; inset: 0; width: 100%; height: 100%; '
+             'object-fit: cover; object-position: 55% 40%">')
+    o.append('    <div style="position: absolute; inset: 0; background: rgba(5,5,5,0.30)"></div>')
+    o.append('    <div class="bleedveil" style="position: absolute; inset: 0; background: '
+             'linear-gradient(to right, rgba(5,5,5,0.97) 0%, rgba(5,5,5,0.95) 32%, '
+             'rgba(5,5,5,0.70) 55%, rgba(5,5,5,0.26) 76%, rgba(5,5,5,0.04) 100%)"></div>')
+    o.append('  </div>')
+    o.append('  <div style="position: relative; z-index: 2; max-width: 980px; '
+             'padding: 122px 48px 140px 48px">')
+    o.append('    <h1 style="font-size: 74px; line-height: 0.96; max-width: 860px">%s</h1>' % esc(head))
+    o.append('    <div style="width: 110px; height: 4px; background: %s; margin-top: 30px"></div>' % GOLD)
+    o.append('  </div>\n</div>')
+
+    # one card per program, photo led. An index is for choosing, so every card
+    # carries its own picture and links straight through.
+    o.append('<div class="rv" style="background: transparent; padding: 78px 48px">')
+    # stretch, not start: cards size to their own copy otherwise and the rows
+    # come out ragged along the bottom
+    o.append('  <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); '
+             'gap: 20px; align-items: stretch">')
+    for i, (name, body) in enumerate(secs):
+        slug = INDEX_SLUGS.get(name.lower().strip())
+        if not slug:
+            continue
+        lead = (i == 0)
+        span, h, tsize = (6, 300, 46) if lead else (2, 210, 27)
+        # the index itself lives at programs/index.html, so its cards link
+        # within that folder, not back through it
+        o.append('    <a href="%s.html" class="idxcard" style="grid-column: span %d; '
+                 'display: block; text-decoration: none; background: #0E0E10; '
+                 'box-shadow: inset 0 0 0 1px rgba(215,173,86,0.30)">' % (slug, span))
+        o.append('      <div style="position: relative; height: %dpx; overflow: hidden">' % h)
+        o.append('        <img src="prog-%s-hero.jpg" alt="%s" style="position: absolute; '
+                 'inset: 0; width: 100%%; height: 100%%; object-fit: cover">' % (slug, esc(name)))
+        o.append('        <div style="position: absolute; inset: 0; background: linear-gradient('
+                 'to top, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.25) 55%, rgba(5,5,5,0.05) 100%)"></div>')
+        o.append('      </div>')
+        o.append('      <div style="padding: %s">' % ("30px 34px 34px 34px" if lead else "24px 26px 28px 26px"))
+        o.append('        <div aria-hidden="true" style="width: %dpx; height: 4px; background: %s"></div>'
+                 % (52 if lead else 34, GOLD))
+        o.append('        <h2 style="font-size: %dpx; line-height: 1.04; margin: 18px 0 10px; '
+                 'color: #FFFFFF">%s</h2>' % (tsize, esc(name)))
+        o.append('        <p class="body" style="font-size: %s; line-height: 1.66; margin: 0; '
+                 'max-width: 64ch">%s</p>' % ("18px" if lead else "16px", esc(body.strip())))
+        o.append('        <div class="micro" style="margin-top: 18px; color: %s">Learn more</div>' % GOLD)
+        o.append('      </div>\n    </a>')
+    o.append('  </div>\n</div>')
+    return head, "\n".join(o)
+
 # ── image prep ─────────────────────────────────────────────────────────────
 def find_image(name):
     direct = os.path.join(IMAGES, name)
@@ -349,7 +604,14 @@ def find_image(name):
 LIMIT = 52 * 1024   # base64 inflates ~1.34x, so this lands under the ~70 KB canvas guidance
 
 def prep(src, dst, width):
-    """Encode down until the file fits the canvas per-entry budget."""
+    """Encode down until the file fits the canvas per-entry budget.
+
+    Already-prepared images are left alone. Re-encoding them costs an ffmpeg
+    dependency on every run, and without it the whole generator used to die
+    here before writing a single page.
+    """
+    if os.path.exists(dst) and os.path.getsize(dst) <= LIMIT:
+        return
     import imageio_ffmpeg
     ff = imageio_ffmpeg.get_ffmpeg_exe()
     for w, q in ((width, 5), (width, 7), (int(width * 0.85), 8), (int(width * 0.72), 9), (int(width * 0.6), 11)):
@@ -375,9 +637,22 @@ for p in PROGRAMS:
             + HEADER + "\n\n" + body_html + "\n\n" + FOOTER + "\n</x-dc>\n" + SCRIPT)
     name = "Program-%s.dc.html" % p["slug"]
     open(os.path.join(PAGES, name), "w", encoding="utf-8").write(page)
-    made.append((name, title, n_cls))
+    made.append((name, title, n_cls, "programs/%s.html" % p["slug"], meta_desc(p["content"])))
     print("%-42s %-52s %2d classes" % (name, title[:50], n_cls))
 
-json.dump([{"file": f, "title": t} for f, t, _ in made],
+# the classes index, from services.md
+idx_title, idx_body = build_index_page()
+idx_body = spark_buttons(no_break_name(idx_body))
+open(os.path.join(PAGES, "ProgramsIndex.dc.html"), "w", encoding="utf-8").write(
+    '<!doctype html>\n<html>\n<head>\n  <meta charset="utf-8">\n'
+    '  <script src="./support.js"></script>\n</head>\n<body>\n'
+    '<x-dc>\n' + HELMET + '\n\n<div style="width: 1440px; overflow: hidden; '
+    'background: #000000; position: relative">\n\n'
+    + HEADER + "\n\n" + idx_body + "\n\n" + FOOTER + "\n</x-dc>\n" + SCRIPT)
+print("%-42s %-52s" % ("ProgramsIndex.dc.html", idx_title[:50]))
+
+json.dump([{"file": f, "title": t, "url": u, "description": d} for f, t, _, u, d in made]
+          + [{"file": "ProgramsIndex.dc.html", "url": "programs/index.html",
+              "title": idx_title, "description": meta_desc("services")}],
           open(os.path.join(HERE, "generated-pages.json"), "w", encoding="utf-8"), indent=2)
 print("\n%d program pages generated" % len(made))

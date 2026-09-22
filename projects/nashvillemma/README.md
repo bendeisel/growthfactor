@@ -1,17 +1,26 @@
 # Nashville MMA Training Camp
 
-## Two canvases — keep them separate
+## One artifact, and it is the site
 
-Homepage work and inner-page work live in **different artifacts** so that version
-history stays readable. A version bump on one never means "the other changed".
+| | |
+| --- | --- |
+| **Site artifact** | https://claude.ai/artifact/QtSo866CTUqKxEQGTGk67a |
+| Rebuild it with | `python3 data/build_site.py && python3 data/bundle_site.py` |
+| Then | republish `build/nmma-full-site.html` to that URL, with `site/assets/` as its files |
 
-| Canvas | Artifact | Working files |
-| --- | --- | --- |
-| Homepage (desktop + mobile, brand reference, hero explorations) | https://claude.ai/code/artifact/3e08f59d-8410-4071-a4e5-5c57c1dcd37c | `design/` |
-| Inner pages (schedule, program detail, and the rest as they land) | https://claude.ai/code/artifact/ca0d293b-96fd-43a5-ab2e-be808652dfac | `design-pages/` |
+Every page of this site lives in that one artifact, switched by hash routing.
+Republish it to that URL. Do not publish a second artifact for a page, a
+section or a hero, however big the change is. Version history is the undo, so
+there is never a reason to start a new one.
 
-Never add an inner-page artboard to the homepage canvas, and never repoint the
-homepage canvas's `launch` page at anything but the homepage.
+This used to say the opposite. Homepage work and inner-page work were split
+across two canvases so that version history stayed readable, and the result
+was three stray artifacts in one week and a site artifact three days out of
+date. Readable history is not worth a client opening the wrong URL.
+
+`design/` and `design-pages/` are still the working files the artboards are
+generated from. They are inputs. Nothing in them is delivered until
+`bundle_site.py` has run and the artifact has been republished.
 
 ## Contents
 
